@@ -2,6 +2,7 @@
 <html lang="pt-Ao">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teca Capital - Biblioteca Principal</title>
     <link rel="icon" href="frontend/Public/asset/icon/Teca Capital favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="frontend/Public/CSS/global/header.css">
@@ -18,10 +19,10 @@
     <script src="frontend/Public/javascript/Global/footer.js"></script>
 
     <!-- ARQUIVOS JS -->
-    <script src="frontend/Public/javascript/page"></script>
+    <script src="frontend/Public/javascript/page/biblioteca.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
-    <link rel="stylesheet" href="frontend/Public/CSS/">
+    <link rel="stylesheet" href="frontend/Public/CSS/biblioteca/biblioteca.css">
 </head>
 
 <body>
@@ -69,7 +70,225 @@
 
 
     <main>
+        <!-- SEÇÃO 1: CABEÇALHO DA BIBLIOTECA -->
+        <section class="library-header fade-in">
+            <div class="container">
+                <h1 class="library-title">Biblioteca <span class="highlight">do Saber</span></h1>
+                <p class="library-description">
+                    Explore nossa vasta coleção de recursos educacionais multimídia. A Biblioteca do Saber da Teca Capital reúne conteúdos de alta qualidade em áudio, vídeo, e-books e imagens, cuidadosamente selecionados para promover uma aprendizagem prática e eficaz.
+                </p>
+                
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" class="search-input" id="search-input" placeholder="Buscar recursos por título, autor ou palavra-chave...">
+                        <button class="btn btn-primary" id="search-btn">Buscar</button>
+                    </div>
+                    
+                    <div class="quick-filters">
+                        <button class="filter-btn active" data-filter="todos">Todos</button>
+                        <button class="filter-btn" data-filter="audio">Áudio</button>
+                        <button class="filter-btn" data-filter="video">Vídeo</button>
+                        <button class="filter-btn" data-filter="ebook">E-books</button>
+                        <button class="filter-btn" data-filter="imagem">Imagens</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SEÇÃO 2: CATEGORIAS PRINCIPAIS -->
+        <section class="categories-section fade-in">
+            <div class="container">
+                <h2 class="section-title text-center">Categorias <span class="highlight">Principais</span></h2>
+                <p class="section-subtitle text-center">Navegue por nossos principais tipos de recursos educacionais</p>
+                
+                <div class="categories-grid">
+                    <!-- Categoria 1: Áudio -->
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <h3 class="category-title">Áudio</h3>
+                        <p class="category-description">
+                            Podcasts e audiolivros sobre diversos temas educacionais e tecnológicos. Perfeito para aprender enquanto realiza outras atividades.
+                        </p>
+                        <div class="category-count"> +20 recursos</div>
+                        <a href="biblioteca-audio.html" class="btn btn-primary">Acessar</a>
+                    </div>
+                    
+                    <!-- Categoria 2: Vídeos -->
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3 class="category-title">Vídeos</h3>
+                        <p class="category-description">
+                            Conteúdos audiovisuais que facilitam a compreensão de conceitos complexos. Aulas, tutoriais e demonstrações práticas.
+                        </p>
+                        <div class="category-count">+20 recursos</div>
+                        <a href="biblioteca-vídeo.html" class="btn btn-primary">Acessar</a>
+                    </div>
+                    
+                    <!-- Categoria 3: E-books -->
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3 class="category-title">E-books</h3>
+                        <p class="category-description">
+                            Recursos digitais em formato de livro, com conteúdo técnico e teórico aprofundado. Ideal para estudo detalhado.
+                        </p>
+                        <div class="category-count">50+ recursos</div>
+                        <a href="biblioteca-ebook.html" class="btn btn-primary">Acessar</a>
+                    </div>
 
+                    <!-- Categoria 4: Imagem -->
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <h3 class="category-title">Imagens</h3>
+                        <p class="category-description">
+                            Recursos digitais em formato de imagem, com conteúdo técnico e teórico aprofundado. Ideal para estudo menos pesados e rápidos.
+                        </p>
+                        <div class="category-count">+1000 recursos</div>
+                        <a href="biblioteca-imagem.html" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SEÇÃO 3: CONTEÚDOS EM DESTAQUE -->
+        <section class="featured-section fade-in">
+            <div class="container">
+                <div class="results-header">
+                    <h2 class="section-title">Recursos <span class="highlight">em Destaque</span></h2>
+                    <div class="results-count" id="results-count">Mostrando 5 recursos</div>
+                </div>
+                
+                <div class="featured-grid" id="resources-container">
+                    <!-- Os recursos serão carregados dinamicamente via JavaScript -->
+                </div>
+
+                <div>
+                    <h1>Categoria: Aúdio</h1>
+                    <p>Resumo do livro:</p>
+                    <p>Autor:</p>
+                    <p>Nível: </p>
+                    <a href="frontend/Public/asset/audio/"></a>
+                    
+                </div>
+            </div>
+        </section>
+        
+        <!-- SEÇÃO 4: SISTEMA DE BUSCA AVANÇADA -->
+        <section class="advanced-search-section fade-in">
+            <div class="container">
+                <h2 class="section-title text-center">Busca <span class="highlight">Avançada</span></h2>
+                <p class="section-subtitle text-center">Refine sua busca com filtros específicos</p>
+                
+                <div class="filter-panel">
+                    <div class="filter-toggle" id="filter-toggle">
+                        <h3>Filtros de Busca</h3>
+                        <i class="fas fa-chevron-down" id="filter-icon"></i>
+                    </div>
+                    
+                    <div class="filter-content" id="filter-content">
+                        <div class="filter-grid">
+                            <!-- Filtro por Tipo de Conteúdo -->
+                            <div class="filter-group">
+                                <label>Tipo de Conteúdo</label>
+                                <div class="filter-options" id="filter-type">
+                                    <span class="filter-option selected" data-value="todos">Todos</span>
+                                    <span class="filter-option" data-value="audio">Áudio</span>
+                                    <span class="filter-option" data-value="video">Vídeo</span>
+                                    <span class="filter-option" data-value="ebook">E-book</span>
+                                    <button class="filter-btn" data-filter="imagem">Imagens</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Filtro por Área do Conhecimento -->
+                            <div class="filter-group">
+                                <label>Área do Conhecimento</label>
+                                <div class="filter-options" id="filter-category">
+                                    <span class="filter-option selected" data-value="todos">Todas</span>
+                                    <span class="filter-option" data-value="economia">Economia</span>
+                                    <span class="filter-option" data-value="tecnologia">Finaças</span>
+                                    <span class="filter-option" data-value="gestao">Gestão</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Filtro por Nível de Dificuldade -->
+                            <div class="filter-group">
+                                <label>Nível de Dificuldade</label>
+                                <div class="filter-options" id="filter-level">
+                                    <span class="filter-option selected" data-value="todos">Todos</span>
+                                    <span class="filter-option" data-value="basico">Básico</span>
+                                    <span class="filter-option" data-value="intermediario">Intermediário</span>
+                                    <span class="filter-option" data-value="avancado">Avançado</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-actions">
+                            <button class="btn btn-primary" id="apply-filters">Aplicar Filtros</button>
+                            <button class="btn btn-secondary" id="clear-filters">Limpar Filtros</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SEÇÃO 5: ESTATÍSTICAS DA BIBLIOTECA -->
+        <section class="stats-section fade-in">
+            <div class="container">
+                <h2 class="section-title text-center">Estatísticas da <span class="highlight">Biblioteca</span></h2>
+                <p class="section-subtitle text-center">Nossa coleção em números</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="1000">0</div>
+                        <div class="stat-label">Total de Recursos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="500">0</div>
+                        <div class="stat-label">Horas de Conteúdo</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="1">0</div>
+                        <div class="stat-label">Autores Parceiros</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SEÇÃO 6: COMO USAR A BIBLIOTECA -->
+        <section class="tutorial-section fade-in">
+            <div class="container">
+                <h2 class="section-title text-center">Como Usar a <span class="highlight">Biblioteca</span></h2>
+                <p class="section-subtitle text-center">Guia rápido em 3 passos simples</p>
+                
+                <div class="tutorial-steps">
+                    <div class="tutorial-step">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Explore Categorias</h3>
+                        <p class="step-description">Navegue pelas categorias principais (Áudio, Vídeo, E-books e Imagens) ou use a barra de busca para encontrar recursos específicos.</p>
+                    </div>
+                    
+                    <div class="tutorial-step">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Filtre por Interesse</h3>
+                        <p class="step-description">Use os filtros avançados para refinar sua busca por tipo, área do conhecimento, nível de dificuldade ou idioma.</p>
+                    </div>
+                    
+                    <div class="tutorial-step">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Acesse e Aprenda</h3>
+                        <p class="step-description">Clique no recurso desejado para acessar o conteúdo completo. Aprenda no seu próprio ritmo, quando e onde quiser.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
     </main>
     
     <footer class="site-footer">
