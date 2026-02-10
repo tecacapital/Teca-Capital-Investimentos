@@ -3,9 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teca Capital - Página Inicial</title>
+    <title>Teca Capital Investimentos - Página Inicial</title>
+    <link rel="icon" href="frontend/Public/asset/icon/Teca Capital favicon.png" type="image/x-icon">
 </head>
 <body>
     
+    <header>
+        <header class="site-header">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="frontend/Public/asset/icon/Teca Capital favicon.png" 
+                     alt="Teca Capital" 
+                     class="site-logo">
+            </a>
+        </div>
+        
+        <nav class="main-nav desktop-nav">
+            <ul class="nav-list">
+                <li><a href="index.html" class="active">Página Inicial</a></li>
+                <li><a href="frontend/Public/pages/biblioteca.html">Biblioteca</a></li>
+                <li><a href="frontend/Public/pages/simuladores.html">Simuladores</a></li>
+                <li><a href="frontend/Public/pages/+sobre.html">+Sobre Nós</a></li>
+                <li><a href="frontend/Public/pages/casdastro-logion.html">Login/Cadastro</a></li>
+                <li><a href="frontend/Public/pages/adm.html">Administrador</a></li>
+            </ul>
+        </nav>
+        
+        <button class="menu-toggle mobile-nav-toggle" aria-label="Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
+        <div class="mobile-nav-overlay">
+            <nav class="mobile-nav">
+                <ul class="mobile-nav-list">
+                    <li><a href="index.html" class="active">Página Inicial</a></li>
+                    <li><a href="frontend/Public/pages/biblioteca.html">Biblioteca</a></li>
+                    <li><a href="frontend/Public/pages/simuladores.html">Simuladores</a></li>
+                    <li><a href="frontend/Public/pages/+sobre.html">+Sobre Nós</a></li>
+                    <li><a href="frontend/Public/pages/casdastro-logion.html">Login/Cadastro</a></li>
+                    <li><a href="frontend/Public/pages/adm.html">Administrador</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- SEÇÃO 1: HERO/BANNER PRINCIPAL -->
+        <section class="hero-section fade-in">
+            <div class="hero-background">
+                <img src="frontend/Public/asset/imagem/imagem-promocao/do projecto/Imagem promocional Teca Capital Atualizado.png" width="100%" alt="">
+            </div>
+            <div class="hero-content container">
+                <h1 class="hero-title">Transformando <span class="highlight">Conhecimento</span> em <span class="highlight">Competência Prática</span></h1>
+                <p class="hero-subtitle">A primeira plataforma angolana de educação prática através de simulações</p>
+                
+                <div class="hero-buttons">
+                    <a href="login-cadastramento.html" class="btn btn-primary">Começar Agora</a>
+                    <a href="#presentation" class="btn btn-secondary">Ver Demonstração</a>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="1250">0</div>
+                        <div class="stat-label">Usuários</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="3">0</div>
+                        <div class="stat-label">Simuladores</div>
+                    </div>
+    
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="100">0</div>
+                        <div class="stat-label">Conteúdos</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+         <!-- SEÇÃO 2: APRESENTAÇÃO INSTITUCIONAL -->
+        <section id="presentation" class="presentation-section fade-in">
+            <div class="container">
+                <h2 class="section-title">Bem-vindo à <span class="highlight">Teca Capital</span></h2>
+                
+                <div class="presentation-content">
+                    <div class="presentation-text">
+                        <p>Teca Capital é uma EdTech angolana de educação e tecnologia que transforma conhecimento em competência prática. Unimos teoria sólida, conteúdos audiovisuais interativos e simuladores digitais para que estudantes, profissionais e instituições aprendam fazendo, testando decisões e aplicando conceitos em cenários reais.</p>
+                        <p>Nossa missão é democratizar o acesso à educação prática de alta qualidade, preparando os angolanos para os desafios do mercado de trabalho atual e futuro, com foco em competências técnicas, pensamento crítico e capacidade de inovação.</p>
+                    </div>
+                    
+                    <div class="presentation-video-container">
+                        <video class="presentation-video" autoplay muted loop playsinline>
+                            <source src="frontend/Public/asset/video/" type="video/mp4">
+                            Seu navegador não suporta o vídeo.
+                        </video>
+                    </div>
+                    
+                    <div class="presentation-text">
+                        <p>Acreditamos que a verdadeira aprendizagem acontece quando a teoria encontra a prática. Por isso, criamos ambientes simulados que replicam situações reais, permitindo que você experimente, erre sem riscos e aprenda com feedback imediato.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
 </body>
 </html>
