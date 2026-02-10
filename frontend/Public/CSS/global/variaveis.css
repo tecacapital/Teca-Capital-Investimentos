@@ -1,0 +1,232 @@
+/* ==========================================================================
+   TECA CAPITAL - GLOBAL VARIABLES
+   Arquivo: frontend/Public/CSS/global/global-variables.css
+   Descrição: Variáveis CSS compartilhadas em todo o projeto
+   Instrução: Linkar em TODAS as páginas antes dos outros CSS globais
+   ========================================================================== */
+
+:root {
+  /* -------------------------------------------------------------------------
+     PALETA DE CORES PRINCIPAL
+     ------------------------------------------------------------------------- */
+  --primary-black: #000000;
+  --primary-gold: rgb(214, 174, 100);
+  --primary-gold-rgb: 214, 174, 100;
+
+  --secondary-blue: #0066cc;
+  --secondary-red: #cc3333;
+  --secondary-green: #33cc33;
+
+  --text-white: #ffffff;
+  --text-gray: #cccccc;
+  --text-dark: #333333;
+
+  /* -------------------------------------------------------------------------
+     GRADIENTES
+     ------------------------------------------------------------------------- */
+  --border-gradient: linear-gradient(to right, 
+    rgb(214, 174, 100), 
+    #0066cc, 
+    #cc3333
+  );
+
+  --gold-gradient: linear-gradient(135deg, 
+    rgb(214, 174, 100) 0%, 
+    rgb(255, 215, 140) 50%, 
+    rgb(214, 174, 100) 100%
+  );
+
+  /* -------------------------------------------------------------------------
+     TIPOGRAFIA
+     ------------------------------------------------------------------------- */
+  --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-secondary: 'Arial', sans-serif;
+
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-md: 1.125rem;     /* 18px */
+  --font-size-lg: 1.25rem;      /* 20px */
+  --font-size-xl: 1.5rem;       /* 24px */
+  --font-size-2xl: 2rem;        /* 32px */
+  --font-size-3xl: 2.5rem;      /* 40px */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* -------------------------------------------------------------------------
+     ESPAÇAMENTO
+     ------------------------------------------------------------------------- */
+  --spacing-xs: 0.25rem;        /* 4px */
+  --spacing-sm: 0.5rem;         /* 8px */
+  --spacing-md: 1rem;           /* 16px */
+  --spacing-lg: 1.5rem;         /* 24px */
+  --spacing-xl: 2rem;           /* 32px */
+  --spacing-2xl: 3rem;          /* 48px */
+  --spacing-3xl: 4rem;          /* 64px */
+
+  /* -------------------------------------------------------------------------
+     BORDAS E RAIO
+     ------------------------------------------------------------------------- */
+  --border-width-thin: 1px;
+  --border-width-normal: 2px;
+  --border-width-thick: 3px;
+
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 50%;
+
+  /* -------------------------------------------------------------------------
+     SOMBRAS
+     ------------------------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-gold: 0 0 20px rgba(214, 174, 100, 0.3);
+  --shadow-gold-lg: 0 0 30px rgba(214, 174, 100, 0.5);
+
+  /* -------------------------------------------------------------------------
+     Z-INDEX
+     ------------------------------------------------------------------------- */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-mobile-menu: 800;
+
+  /* -------------------------------------------------------------------------
+     LAYOUT
+     ------------------------------------------------------------------------- */
+  --header-height: 80px;
+  --header-height-mobile: 70px;
+  --footer-height: auto;
+  --max-content-width: 1200px;
+  --container-padding: 20px;
+
+  /* -------------------------------------------------------------------------
+     ANIMAÇÕES
+     ------------------------------------------------------------------------- */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ==========================================================================
+   VARIÁVEIS PARA MODO ESCURO (padrão)
+   ========================================================================== */
+[data-theme="dark"] {
+  --bg-primary: #000000;
+  --bg-secondary: #111111;
+  --bg-tertiary: #222222;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-muted: #888888;
+  --border-color: rgba(214, 174, 100, 0.3);
+}
+
+/* ==========================================================================
+   VARIÁVEIS PARA MODO CLARO
+   ========================================================================== */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-tertiary: #eeeeee;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   RESET BÁSICO E ESTILOS GLOBAIS
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   UTILITÁRIOS DE TEXTO
+   ========================================================================== */
+.text-gold {
+  color: var(--primary-gold);
+}
+
+.text-white {
+  color: var(--text-white);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* ==========================================================================
+   UTILITÁRIOS DE VISIBILIDADE
+   ========================================================================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+/* ==========================================================================
+   BREAKPOINTS PARA REFERÊNCIA
+   - Desktop: > 1024px
+   - Tablet: 768px - 1024px
+   - Mobile: 350px - 767px
+   - Extra small: < 350px
+   ========================================================================== */

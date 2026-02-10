@@ -1,0 +1,279 @@
+/* ==========================================================================
+   TECA CAPITAL - GLOBAL HEADER
+   Arquivo: frontend/Public/CSS/global/global-header.css
+   Descrição: Estilos específicos do header fixo
+   Dependências: global-variables.css (deve ser carregado antes)
+   Instrução: Linkar em TODAS as páginas após global-variables.css
+   ========================================================================== */
+
+/* ==========================================================================
+   HEADER PRINCIPAL - ESTRUTURA BASE
+   ========================================================================== */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(--primary-black);
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Logo esquerda, nav direita */
+  padding: 0 var(--container-padding);
+  z-index: var(--z-fixed);
+
+  /* Borda inferior com gradiente gold → blue → red */
+  border-bottom: var(--border-width-thick) solid transparent;
+  border-image: var(--border-gradient) 1;
+  border-image-slice: 0 0 1 0; /* Apenas borda inferior */
+
+  /* Transição suave para mudanças */
+  transition: all var(--transition-normal);
+}
+
+/* ==========================================================================
+   LOGO CONTAINER - LADO ESQUERDO
+   ========================================================================== */
+.logo-container {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  /* Garante que fique na esquerda */
+  margin-right: auto;
+}
+
+.logo-container a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  height: 100%;
+  padding: var(--spacing-sm) 0;
+}
+
+.site-logo {
+  height: 50px;
+  width: auto;
+  max-height: 60px;
+  object-fit: contain;
+  transition: transform var(--transition-fast);
+}
+
+.site-logo:hover {
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   NAVEGAÇÃO DESKTOP - LADO DIREITO
+   ========================================================================== */
+.main-nav {
+  /* Fica na direita sem afetar o logo */
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: var(--spacing-lg);
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.nav-list li {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.nav-list a {
+  color: var(--text-white);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-fast);
+  position: relative;
+  white-space: nowrap;
+}
+
+/* Efeito hover nos links */
+.nav-list a:hover {
+  color: var(--primary-gold);
+  background-color: rgba(214, 174, 100, 0.1);
+}
+
+/* Estado ativo do link */
+.nav-list a.active {
+  color: var(--primary-gold);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Underline animado para links */
+.nav-list a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--primary-gold);
+  transition: all var(--transition-normal);
+  transform: translateX(-50%);
+}
+
+.nav-list a:hover::after,
+.nav-list a.active::after {
+  width: 80%;
+}
+
+/* ==========================================================================
+   BOTÃO TOGGLE MOBILE (HAMBURGER)
+   ========================================================================== */
+.menu-toggle {
+  display: none; /* Escondido em desktop */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: calc(var(--z-mobile-menu) + 10);
+  margin-left: var(--spacing-md);
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 3px;
+  background-color: var(--primary-gold);
+  border-radius: 2px;
+  transition: all var(--transition-normal);
+  transform-origin: center;
+}
+
+/* Animação do hamburger para X quando menu aberto */
+.menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - TABLET (768px - 1024px)
+   ========================================================================== */
+@media screen and (max-width: 1024px) {
+  .site-header {
+    padding: 0 var(--spacing-md);
+  }
+
+  .nav-list {
+    gap: var(--spacing-sm);
+  }
+
+  .nav-list a {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .site-logo {
+    height: 40px;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - MOBILE (< 768px)
+   ========================================================================== */
+@media screen and (max-width: 767px) {
+  .site-header {
+    height: var(--header-height-mobile);
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Esconde navegação desktop */
+  .desktop-nav {
+    display: none;
+  }
+
+  /* Mostra botão hamburger */
+  .menu-toggle {
+    display: flex;
+  }
+
+  .site-logo {
+    height: 35px;
+    max-height: 50px;
+  }
+
+  /* Ajusta container do logo */
+  .logo-container {
+    padding: var(--spacing-xs) 0;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - EXTRA SMALL (< 350px)
+   ========================================================================== */
+@media screen and (max-width: 349px) {
+  .site-header {
+    padding: 0 var(--spacing-sm);
+    height: 60px;
+  }
+
+  .site-logo {
+    height: 30px;
+  }
+
+  .menu-toggle {
+    width: 25px;
+    height: 20px;
+  }
+
+  .hamburger-line {
+    height: 2px;
+  }
+}
+
+/* ==========================================================================
+   ESTADOS ESPECIAIS DO HEADER
+   ========================================================================== */
+
+/* Header com scroll (adicionado via JS) */
+.site-header--scrolled {
+  background-color: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Header em modo transparente (para hero sections) */
+.site-header--transparent {
+  background-color: transparent;
+  border-image: none;
+  border-bottom: 1px solid rgba(214, 174, 100, 0.2);
+}
+
+/* ==========================================================================
+   SUPORTE A PREFERÊNCIA DE MOVIMENTO REDUZIDO
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .site-logo,
+  .nav-list a,
+  .hamburger-line {
+    transition: none;
+  }
+}

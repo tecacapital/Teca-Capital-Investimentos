@@ -1,0 +1,329 @@
+/* ==========================================================================
+   TECA CAPITAL - GLOBAL FOOTER
+   Arquivo: frontend/Public/CSS/global/global-footer.css
+   Descrição: Estilos do footer com borda superior gradiente
+   Dependências: global-variables.css
+   Instrução: Linkar em TODAS as páginas após global-variables.css
+   ========================================================================== */
+
+/* ==========================================================================
+   FOOTER PRINCIPAL
+   ========================================================================== */
+.site-footer {
+  background-color: var(--primary-black);
+  color: var(--text-white);
+  padding: var(--spacing-2xl) 0 var(--spacing-lg);
+  margin-top: auto; /* Empurra footer para baixo em layouts flex */
+  position: relative;
+
+  /* Borda superior com gradiente gold → blue → red */
+  border-top: var(--border-width-thick) solid transparent;
+  border-image: var(--border-gradient) 1;
+  border-image-slice: 1 0 0 0; /* Apenas borda superior */
+}
+
+/* ==========================================================================
+   CONTAINER DO FOOTER
+   ========================================================================== */
+.footer-content {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-2xl);
+  align-items: start;
+}
+
+/* ==========================================================================
+   SEÇÕES DO FOOTER
+   ========================================================================== */
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.footer-section h3 {
+  color: var(--primary-gold);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--spacing-sm) 0;
+  position: relative;
+  padding-bottom: var(--spacing-sm);
+}
+
+/* Underline decorativo nos títulos */
+.footer-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--border-gradient);
+}
+
+/* ==========================================================================
+   SEÇÃO DE REDES SOCIAIS
+   ========================================================================== */
+.social-section {
+  align-items: flex-start;
+}
+
+.social-icons {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  background-color: rgba(214, 174, 100, 0.1);
+  border: 2px solid var(--primary-gold);
+  border-radius: var(--border-radius-full);
+  color: var(--primary-gold);
+  font-size: var(--font-size-lg);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.social-icons a:hover {
+  background-color: var(--primary-gold);
+  color: var(--primary-black);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-gold);
+}
+
+/* Cores específicas para cada rede social no hover */
+.social-icons a[aria-label="YouTube"]:hover {
+  background-color: #ff0000;
+  border-color: #ff0000;
+  color: var(--text-white);
+}
+
+.social-icons a[aria-label="TikTok"]:hover {
+  background-color: #000000;
+  border-color: #ffffff;
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.social-icons a[aria-label="Facebook"]:hover {
+  background-color: #1877f2;
+  border-color: #1877f2;
+  color: var(--text-white);
+}
+
+.social-icons a[aria-label="WhatsApp"]:hover {
+  background-color: #25d366;
+  border-color: #25d366;
+  color: var(--text-white);
+}
+
+/* ==========================================================================
+   SEÇÃO DE CONTATO
+   ========================================================================== */
+.contact-section {
+  align-items: flex-start;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.contact-item p {
+  color: var(--primary-gold);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.contact-item a,
+.contact-item span {
+  color: var(--text-white);
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  transition: color var(--transition-fast);
+}
+
+.contact-item a:hover {
+  color: var(--primary-gold);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   SEÇÃO DE COPYRIGHT
+   ========================================================================== */
+.copyright-section {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  grid-column: 1 / -1; /* Ocupa todas as colunas */
+  border-top: 1px solid rgba(214, 174, 100, 0.2);
+  padding-top: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.copyright-text {
+  color: var(--text-gray);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.copyright-text span {
+  color: var(--primary-gold);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - TABLET (768px - 1024px)
+   ========================================================================== */
+@media screen and (max-width: 1024px) {
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  .copyright-section {
+    grid-column: 1 / -1;
+  }
+
+  .social-section,
+  .contact-section {
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-section h3::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - MOBILE (< 768px)
+   ========================================================================== */
+@media screen and (max-width: 767px) {
+  .site-footer {
+    padding: var(--spacing-xl) 0 var(--spacing-md);
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    text-align: center;
+  }
+
+  .footer-section {
+    align-items: center;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+
+  .contact-info {
+    align-items: center;
+  }
+
+  .contact-item {
+    align-items: center;
+  }
+
+  .footer-section h3::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .social-icons a {
+    width: 40px;
+    height: 40px;
+    font-size: var(--font-size-md);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - EXTRA SMALL (< 350px)
+   ========================================================================== */
+@media screen and (max-width: 349px) {
+  .site-footer {
+    padding: var(--spacing-lg) 0 var(--spacing-md);
+  }
+
+  .footer-content {
+    padding: 0 var(--spacing-md);
+    gap: var(--spacing-lg);
+  }
+
+  .footer-section h3 {
+    font-size: var(--font-size-md);
+  }
+
+  .social-icons {
+    gap: var(--spacing-sm);
+  }
+
+  .social-icons a {
+    width: 35px;
+    height: 35px;
+    font-size: var(--font-size-sm);
+  }
+
+  .contact-item a,
+  .contact-item span {
+    font-size: var(--font-size-sm);
+  }
+
+  .copyright-text {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* ==========================================================================
+   SUPORTE A PREFERÊNCIA DE MOVIMENTO REDUZIDO
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .social-icons a {
+    transition: none;
+  }
+
+  .social-icons a:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   TRATAMENTO DE FOCO PARA ACESSIBILIDADE
+   ========================================================================== */
+.social-icons a:focus-visible,
+.contact-item a:focus-visible {
+  outline: 2px solid var(--primary-gold);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   AJUSTE PARA CONTEÚDO PRINCIPAL
+   Garante que o footer não fique escondido atrás de conteúdo
+   ========================================================================== */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}

@@ -1,0 +1,253 @@
+/* ==========================================================================
+   TECA CAPITAL - MAIN RULES
+   Arquivo: frontend/Public/CSS/global/main-rules.css
+   Descrição: Regras globais para conteúdo principal (main)
+   Dependências: global-variables.css
+   Instrução: Linkar em TODAS as páginas após global-variables.css
+   ========================================================================== */
+
+/* ==========================================================================
+   MAIN - CONTAINER PRINCIPAL DE CONTEÚDO
+   ========================================================================== */
+main {
+  /* Altura mínima garante que o footer fique no bottom */
+  min-height: calc(100vh - var(--header-height) - 300px);
+
+  /* Previne overflow horizontal */
+  overflow-x: hidden;
+  max-width: 100%;
+
+  /* Espaçamento para o header fixo */
+  padding-top: var(--header-height);
+
+  /* Garante que ocupe o espaço disponível */
+  flex: 1;
+  width: 100%;
+}
+
+/* ==========================================================================
+   CONTAINER DE CONTEÚDO PADRÃO
+   ========================================================================== */
+.content-container,
+.container {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  width: 100%;
+}
+
+/* ==========================================================================
+   PREVENÇÃO DE PROBLEMAS COMUNS
+   ========================================================================== */
+main * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Previne que imagens estourem o container */
+main img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Previne que tabelas estourem o container */
+main table {
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+/* Previne que elementos posicionados absolutamente causem scroll */
+main {
+  position: relative;
+}
+
+/* ==========================================================================
+   SEÇÕES DE CONTEÚDO
+   ========================================================================== */
+.content-section {
+  padding: var(--spacing-3xl) 0;
+  width: 100%;
+}
+
+.content-section--sm {
+  padding: var(--spacing-xl) 0;
+}
+
+.content-section--lg {
+  padding: calc(var(--spacing-3xl) * 1.5) 0;
+}
+
+/* ==========================================================================
+   GRID SYSTEM BÁSICO
+   ========================================================================== */
+.grid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid--4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ==========================================================================
+   UTILITÁRIOS DE ESPAÇAMENTO
+   ========================================================================== */
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--spacing-xs); }
+.mt-2 { margin-top: var(--spacing-sm); }
+.mt-3 { margin-top: var(--spacing-md); }
+.mt-4 { margin-top: var(--spacing-lg); }
+.mt-5 { margin-top: var(--spacing-xl); }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--spacing-xs); }
+.mb-2 { margin-bottom: var(--spacing-sm); }
+.mb-3 { margin-bottom: var(--spacing-md); }
+.mb-4 { margin-bottom: var(--spacing-lg); }
+.mb-5 { margin-bottom: var(--spacing-xl); }
+
+.py-0 { padding-top: 0; padding-bottom: 0; }
+.py-1 { padding-top: var(--spacing-xs); padding-bottom: var(--spacing-xs); }
+.py-2 { padding-top: var(--spacing-sm); padding-bottom: var(--spacing-sm); }
+.py-3 { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
+.py-4 { padding-top: var(--spacing-lg); padding-bottom: var(--spacing-lg); }
+.py-5 { padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xl); }
+
+.px-0 { padding-left: 0; padding-right: 0; }
+.px-1 { padding-left: var(--spacing-xs); padding-right: var(--spacing-xs); }
+.px-2 { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+.px-3 { padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
+.px-4 { padding-left: var(--spacing-lg); padding-right: var(--spacing-lg); }
+.px-5 { padding-left: var(--spacing-xl); padding-right: var(--spacing-xl); }
+
+/* ==========================================================================
+   RESPONSIVIDADE - TABLET (768px - 1024px)
+   ========================================================================== */
+@media screen and (max-width: 1024px) {
+  main {
+    min-height: calc(100vh - var(--header-height) - 250px);
+  }
+
+  .content-container,
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .content-section {
+    padding: var(--spacing-2xl) 0;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - MOBILE (< 768px)
+   ========================================================================== */
+@media screen and (max-width: 767px) {
+  main {
+    min-height: calc(100vh - var(--header-height-mobile) - 400px);
+    padding-top: var(--header-height-mobile);
+  }
+
+  .content-container,
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .grid--2,
+  .grid--3,
+  .grid--4 {
+    grid-template-columns: 1fr;
+  }
+
+  .content-section {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .content-section--lg {
+    padding: var(--spacing-2xl) 0;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - EXTRA SMALL (< 350px)
+   ========================================================================== */
+@media screen and (max-width: 349px) {
+  main {
+    min-height: calc(100vh - 60px - 350px);
+    padding-top: 60px;
+  }
+
+  .content-container,
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .content-section {
+    padding: var(--spacing-lg) 0;
+  }
+}
+
+/* ==========================================================================
+   UTILITÁRIOS DE VISIBILIDADE RESPONSIVA
+   ========================================================================== */
+.hide-mobile {
+  display: block;
+}
+
+.hide-desktop {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+
+  .hide-desktop {
+    display: block !important;
+  }
+}
+
+/* ==========================================================================
+   ANIMAÇÕES DE ENTRADA DE CONTEÚDO
+   ========================================================================== */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   SUPORTE A PREFERÊNCIA DE MOVIMENTO REDUZIDO
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  main {
+    scroll-behavior: auto;
+  }
+
+  .fade-in {
+    animation: none;
+  }
+}
