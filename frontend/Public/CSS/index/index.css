@@ -1,0 +1,857 @@
+/* =================================================== */
+/* CONTEÚDO PRINCIPAL - CSS */
+/* =================================================== */
+
+/* 1. VARIÁVEIS E CONFIGURAÇÕES BASE */
+:root {
+    /* Cores principais - MANTIDAS */
+    --primary-black: #000000;
+    --primary-gold: rgb(214, 174, 100);
+    --primary-white: #FFFFFF;
+    --secondary-blue: #0066cc;
+    --secondary-red: #cc3333;
+    --text-gray: #CCCCCC;
+    
+    /* Variáveis para bordas animadas */
+    --border-animation-colors: rgb(214, 174, 100), #0066cc, #cc3333;
+    --animation-speed: 3s;
+}
+
+/* 2. RESET E BASE DO CONTEÚDO PRINCIPAL */
+main {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+main * {
+    box-sizing: border-box;
+}
+
+/* SEÇÃO 1: HERO/BANNER PRINCIPAL */
+.hero-section {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 80px 20px;
+    background-color: #000000 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hero-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.3;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: right; 
+    max-width: 600px; 
+    margin-left: auto; 
+    margin-right: 20px; 
+}
+
+.hero-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    color: #FFFFFF !important;
+    text-align: right; 
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    color: #FFFFFF !important;
+    margin-bottom: 40px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-left: 0; 
+    text-align: left; 
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center; /* MODIFICAÇÃO: Alinhar à direita */
+    margin-bottom: 60px;
+    text-decoration: none;
+}
+
+.hero-buttons a {
+    text-decoration: none;
+}
+
+/* MODIFICAÇÃO COMPLETA: Stats sem fundo, apenas bordas animadas */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-left: 0; 
+}
+
+.stat-card {
+    background-color: transparent !important; /* SEM FUNDO */
+    border: 2px solid transparent; /* Borda transparente para animação */
+    border-radius: 12px;
+    padding: 25px 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efeito de borda animada com 3 cores */
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        rgb(214, 174, 100),
+        #0066cc,
+        #cc3333,
+        rgb(3, 2, 0)
+    );
+    background-size: 400% 400%;
+    border-radius: 14px;
+    z-index: -1;
+    animation: borderRotate 3s linear infinite;
+}
+
+.stat-card:hover::before {
+    animation-duration: 1.5s; /* Acelerar no hover */
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: rgb(214, 174, 100) !important;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.95rem;
+    color: #FFFFFF !important;
+    text-align: center;
+}
+
+/* SEÇÃO 2: APRESENTAÇÃO INSTITUCIONAL */
+.presentation-section {
+    padding: 80px 20px;
+    background-color: #000000 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.presentation-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    width: 100%;
+}
+
+.presentation-text {
+    max-width: 100% !important;
+    text-align: justify !important; 
+    text-justify: inter-word;
+    hyphens: auto;
+    padding: 0 20px;
+}
+
+.presentation-text p {
+    font-size: 1.1rem;
+    color: #FFFFFF !important;
+    margin-bottom: 20px;
+    line-height: 1.8;
+    text-align: justify !important; 
+    text-align-last: left; 
+}
+
+.presentation-video-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    margin: 40px 0;
+    overflow: visible !important;
+}
+
+.presentation-video {
+    width: 100% !important;
+    max-width: 900px; 
+    height: auto;
+    display: block;
+    margin: 0 auto; 
+    object-fit: contain !important;
+}
+
+/* SEÇÃO 3: SERVIÇOS */
+.services-section {
+    padding: 80px 20px;
+    background-color: #000000 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100% !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+}
+
+.service-card {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 8px;
+    padding: 30px;
+    border: 2px solid transparent !important; 
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Borda animada para service cards */
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        rgb(214, 174, 100),
+        #0066cc,
+        #cc3333,
+        rgb(214, 174, 100)
+    );
+    background-size: 400% 400%;
+    border-radius: 10px;
+    z-index: -1;
+    animation: borderRotate 4s linear infinite;
+    opacity: 0.7;
+}
+
+.service-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(214, 174, 100, 0.5);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.service-card:hover::before {
+    opacity: 1;
+    animation-duration: 2s;
+}
+
+.service-icon {
+    font-size: 2.5rem;
+    color: rgb(214, 174, 100);
+    margin-bottom: 20px;
+}
+
+.service-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #FFFFFF !important;
+}
+
+.service-description {
+    color: #FFFFFF !important;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.service-link {
+    color: rgb(214, 174, 100);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    transition: gap 0.3s ease;
+    text-decoration: none;
+}
+
+.service-link:hover {
+    gap: 12px;
+}
+
+/* SEÇÃO 4: DIFERENCIAIS */
+.differentiators-section {
+    padding: 80px 20px;
+    background-color: #000000 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.differentiators-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 25px;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100% !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* MODIFICAÇÃO: Grid responsivo */
+}
+
+.differentiator-card {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    border-top: 4px solid rgb(214, 174, 100);
+    border: 2px solid transparent !important; /* MODIFICAÇÃO: Para borda animada */
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Borda animada para differentiator cards */
+.differentiator-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        rgb(214, 174, 100),
+        #0066cc,
+        #cc3333,
+        rgb(214, 174, 100)
+    );
+    background-size: 400% 400%;
+    border-radius: 10px;
+    z-index: -1;
+    animation: borderRotate 4s linear infinite;
+    opacity: 0.7;
+}
+
+.differentiator-card:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+
+.differentiator-card:hover::before {
+    opacity: 1;
+    animation-duration: 2s;
+}
+
+.differentiator-icon {
+    font-size: 2.5rem;
+    color: rgb(214, 174, 100);
+    margin-bottom: 20px;
+}
+
+.differentiator-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #FFFFFF !important;
+}
+
+.differentiator-description {
+    color: #FFFFFF !important;
+}
+
+/* SEÇÃO 5: SIMULADORES EM DESTAQUE */
+.simulators-section {
+    padding: 80px 20px;
+    background-color: #000000 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.simulators-carousel {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column; /* MODIFICAÇÃO: Colocar navegação abaixo */
+    gap: 30px;
+}
+
+.simulators-container {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 5px 30px;
+    scrollbar-width: none;
+    order: 1; /* MODIFICAÇÃO: Primeiro - os cards */
+}
+
+.simulators-container::-webkit-scrollbar {
+    display: none;
+}
+
+.simulator-card {
+    flex: 0 0 auto;
+    width: 280px;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid transparent !important; /* MODIFICAÇÃO: Para borda animada */
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Borda animada para simulator cards */
+.simulator-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        rgb(214, 174, 100),
+        #0066cc,
+        #cc3333,
+        rgb(214, 174, 100)
+    );
+    background-size: 400% 400%;
+    border-radius: 10px;
+    z-index: -1;
+    animation: borderRotate 4s linear infinite;
+    opacity: 0.7;
+}
+
+.simulator-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(214, 174, 100, 0.5);
+}
+
+.simulator-card:hover::before {
+    opacity: 1;
+    animation-duration: 2s;
+}
+
+.simulator-image {
+    width: 100%;
+    height: 180px;
+    background-color: rgba(214, 174, 100, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: rgb(214, 174, 100);
+}
+
+.simulator-content {
+    padding: 20px;
+}
+
+.simulator-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #FFFFFF !important;
+}
+
+.simulator-description {
+    color: #FFFFFF !important;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+/* MODIFICAÇÃO: Navegação abaixo dos itens */
+.carousel-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    order: 2; /* MODIFICAÇÃO: Segundo - a navegação */
+}
+
+.carousel-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: transparent; /* MODIFICAÇÃO: Transparente */
+    border: 2px solid rgb(214, 174, 100); /* MODIFICAÇÃO: Borda dourada */
+    color: rgb(214, 174, 100); /* MODIFICAÇÃO: Cor dourada */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.carousel-btn:hover {
+    background: rgb(214, 174, 100);
+    color: #000000;
+    transform: scale(1.1);
+}
+
+.carousel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.carousel-btn:disabled:hover {
+    background: transparent;
+    color: rgb(214, 174, 100);
+    transform: none;
+}
+
+
+/* SEÇÃO 6: CHAMADA PARA AÇÃO FINAL */
+.cta-section {
+    padding: 80px 20px;
+    background-color: #000000 !important;
+    text-align: center;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.cta-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #FFFFFF !important;
+}
+
+.cta-text {
+    font-size: 1.1rem;
+    color: #FFFFFF !important;
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.cta-buttons a {
+    text-decoration: none;
+}
+
+.cta-primary {
+    padding: 16px 40px;
+    font-size: 1.1rem;
+    min-width: 250px;
+}
+
+.login-link {
+    color: rgb(214, 174, 100);
+    font-weight: 600;
+    margin-top: 10px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+/* CLASSES UTILITÁRIAS ESPECÍFICAS DO CONTEÚDO */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #FFFFFF !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 20px;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: #FFFFFF !important;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 20px;
+}
+
+.highlight {
+    color: rgb(214, 174, 100);
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.btn-primary {
+    background-color: rgb(214, 174, 100);
+    color: #000000;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background-color: rgba(214, 174, 100, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(214, 174, 100, 0.3);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #FFFFFF;
+    border: 2px solid rgb(214, 174, 100);
+}
+
+.btn-secondary:hover {
+    background-color: rgba(214, 174, 100, 0.1);
+}
+
+/* ANIMAÇÕES ESPECÍFICAS */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* MODIFICAÇÃO: Animação de borda rotativa */
+@keyframes borderRotate {
+    0% {
+        background-position: 0% 50%;
+        border-color: rgb(214, 174, 100);
+    }
+    33% {
+        background-position: 100% 50%;
+        border-color: #0066cc;
+    }
+    66% {
+        background-position: 200% 50%;
+        border-color: #cc3333;
+    }
+    100% {
+        background-position: 0% 50%;
+        border-color: rgb(214, 174, 100);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease forwards;
+}
+
+/* Containers expandidos */
+.container {
+    width: 100% !important;
+    max-width: 1400px !important; /* MODIFICAÇÃO: Aumentar largura máxima */
+    padding: 0;
+    margin: 0 auto;
+}
+
+/* MEDIA QUERIES ESPECÍFICAS DO CONTEÚDO */
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 3.5rem;
+    }
+    
+    .stats-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .differentiators-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .cta-buttons {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+@media (min-width: 1024px) {
+    .services-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .hero-title {
+        font-size: 4rem;
+    }
+    
+    .section-title {
+        font-size: 3rem;
+    }
+}
+
+/* RESPONSIVIDADE ESPECIAL PARA <350px */
+@media (max-width: 349px) {
+    /* Banner ajustado para mobile */
+    .hero-content {
+        text-align: center !important; /* Centralizar em mobile */
+        margin: 0 auto !important;
+        margin-right: 0 !important;
+        padding: 0 10px;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem !important;
+        text-align: center !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem !important;
+        text-align: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    
+    .hero-buttons {
+        justify-content: center !important;
+    }
+    
+    /* Stats em coluna única */
+    .stats-container {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+        margin: 0 auto !important;
+    }
+    
+    /* Reduzir animações para performance */
+    .stat-card::before,
+    .service-card::before,
+    .differentiator-card::before,
+    .simulator-card::before {
+        animation-duration: 6s; /* Mais lento em mobile */
+    }
+    
+    /* Seção institucional ajustada */
+    .presentation-text {
+        text-align: left !important; /* Em mobile, left é melhor que justify */
+        padding: 0 10px;
+    }
+    
+    .presentation-text p {
+        text-align: left !important;
+    }
+    
+    /* Ajustar grids */
+    .services-grid,
+    .differentiators-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+    
+    /* Ajustar padding das seções */
+    .hero-section,
+    .presentation-section,
+    .services-section,
+    .differentiators-section,
+    .simulators-section,
+    .cta-section {
+        padding: 40px 10px !important;
+    }
+    
+    /* Carrossel ajustado */
+    .simulator-card {
+        width: 250px !important;
+    }
+    
+    .carousel-nav {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    /* Textos ajustados */
+    .section-title {
+        font-size: 1.8rem !important;
+        padding: 0 10px;
+    }
+    
+    .section-subtitle {
+        font-size: 0.95rem !important;
+        padding: 0 10px;
+    }
+    
+    /* Botões ajustados */
+    .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .hero-section {
+        min-height: auto;
+    }
+}
+
+/* Ajustes gerais para ocupar todo espaço */
+main > section {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.video-container {
+    overflow: visible !important;
+}
+
+video {
+    display: block;
+    margin: 0;
+    border-radius: 10px;
+}
