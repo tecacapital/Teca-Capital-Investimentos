@@ -568,6 +568,14 @@ main * {
     margin: 0 auto;
 }
 
+.stat-number {
+    color: rgb(214, 174, 100);
+}
+
+.stat-label {
+    color: rgb(214, 174, 100);
+}
+
 /* SEÇÃO 6: COMO USAR A BIBLIOTECA */
 .tutorial-section {
     padding: 80px 20px;
@@ -699,6 +707,7 @@ main * {
     background-color: rgb(214, 174, 100);
     color: #000000;
     border: none;
+    text-decoration: none;
 }
 
 .btn-primary:hover {
@@ -910,5 +919,317 @@ main * {
     
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =================================================== */
+/* ESTILOS ESPECÍFICOS PARA OS 8 DESTAQUES */
+/* =================================================== */
+
+/* Container principal dos destaques */
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Estilo específico para os cards de destaque */
+.resource-highlight {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 12px;
+    padding: 30px;
+    border: 2px solid transparent !important;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.resource-highlight::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        rgb(214, 174, 100),
+        #0066cc,
+        #cc3333,
+        rgb(214, 174, 100)
+    );
+    background-size: 400% 400%;
+    border-radius: 14px;
+    z-index: -1;
+    animation: borderRotate 6s linear infinite;
+    opacity: 0.7;
+}
+
+.resource-highlight:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.resource-highlight:hover::before {
+    opacity: 1;
+    animation-duration: 3s;
+}
+
+/* Cabeçalho do card */
+.resource-header {
+    display: flex;
+    justify-content: end;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(214, 174, 100, 0.3);
+}
+
+.resource-id {
+    background: rgb(214, 174, 100);
+    color: #000000;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.resource-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Badges por categoria */
+.badge-audio {
+    background: rgba(2, 2, 2, 0.2);
+    color: #020202;
+    border: 2px solid #0066cc;
+}
+
+.badge-ebook {
+    background: rgba(0, 0, 0, 0.2);
+    color: #000000;
+    border: 2px solid #00cc66;
+}
+
+.badge-video {
+    background: rgba(0, 0, 0, 0.2);
+    color: #000000;
+    border: 2px solid #cc3333;
+}
+
+.badge-imagem {
+    background: rgba(0, 0, 0, 0.2);
+    color: #000000;
+    border: 2px solid #9966cc;
+}
+
+/* Conteúdo do card */
+.resource-content h1 {
+    font-size: 1.5rem;
+    color: rgb(214, 174, 100) !important;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.resource-content p {
+    color: #CCCCCC !important;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+.resource-content p strong {
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+/* Elementos de mídia */
+.media-container {
+    margin: 20px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    
+}
+
+.media-container audio,
+.media-container video {
+    width: 100%;
+    display: block;
+}
+
+.media-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.media-container img:hover {
+    transform: scale(1.02);
+}
+
+/* Links de visualização */
+.resource-link {
+    display: inline-block;
+    background: rgb(214, 174, 100);
+    color: #000000;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    border: 2px solid rgb(214, 174, 100);
+}
+
+.resource-link:hover {
+    background: transparent;
+    color: rgb(214, 174, 100);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(214, 174, 100, 0.3);
+}
+
+/* Modal para visualização expandida */
+.resource-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #000000;
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 2px solid rgb(214, 174, 100);
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgb(214, 174, 100);
+    color: #000000;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    transform: rotate(90deg);
+    background: #cc3333;
+    color: #FFFFFF;
+}
+
+.modal-media {
+    width: 100%;
+    margin: 20px 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.modal-media audio,
+.modal-media video {
+    width: 100%;
+}
+
+.modal-media img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+}
+
+/* Tags de filtro */
+.resource-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.resource-tag {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    font-size: 0.85rem;
+    color: #CCCCCC;
+}
+
+/* Níveis de dificuldade */
+.level-basico {
+    color: #00cc66 !important;
+}
+
+.level-intermediario {
+    color: rgb(214, 174, 100) !important;
+}
+
+.level-avancado {
+    color: #cc3333 !important;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .featured-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+    
+    .resource-highlight {
+        padding: 20px;
+    }
+    
+    .modal-content {
+        padding: 20px;
+        margin: 10px;
+    }
+}
+
+@media (max-width: 349px) {
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .resource-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .resource-id {
+        align-self: flex-start;
     }
 }
