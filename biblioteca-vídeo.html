@@ -19,10 +19,10 @@
     <script src="frontend/Public/javascript/Global/footer.js"></script>
 
     <!-- ARQUIVOS JS -->
-    <script src="frontend/Public/javascript/page"></script>
+    <script src="frontend/Public/javascript/page/b_video.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
-    <link rel="stylesheet" href="frontend/Public/CSS/">
+    <link rel="stylesheet" href="frontend/Public/CSS/biblioteca/sub-biblioteca/b-video.css">
 </head>
 
 <body>
@@ -68,9 +68,9 @@
         </div>
     </header>
 
-
-    <main>
-        <!-- SEÇÃO 1: CABEÇALHO DA BIBLIOTECA DE VÍDEOS -->
+    <main id="biblioteca-main" class="biblioteca-futurista">
+    
+     <!-- SEÇÃO 1: CABEÇALHO DA BIBLIOTECA DE VÍDEOS -->
         <section class="video-header fade-in">
             <div class="container">
                 <div class="video-icon">
@@ -83,509 +83,488 @@
                     oferecer conhecimento visual de alta qualidade que complementa sua jornada 
                     de aprendizagem.
                 </p>
-                
-                <div class="video-search-container">
-                    <div class="video-search-box">
-                        <input type="text" class="video-search-input" id="video-search-input" 
-                               placeholder="Buscar vídeos por título, categoria ou palavra-chave...">
-                        <button class="btn btn-primary" id="video-search-btn">Buscar</button>
-                    </div>
-                    
-                    <div class="video-category-filters">
-                        <button class="video-filter-btn active" data-category="todos">Todos</button>
-                        <button class="video-filter-btn" data-category="finanças">Finanças</button>
-                        <button class="video-filter-btn" data-category="economia">Economia</button>
-                        <button class="video-filter-btn" data-category="gestao">Gestão</button>
-                        <button class="video-filter-btn" data-category="favoritos">Favoritos</button>
-                    </div>
+            
+            <div class="search-container">
+                <div class="search-wrapper animated-3d-border">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                        type="text" 
+                        id="video-search-input" 
+                        class="video-search-input" 
+                        placeholder="Buscar vídeos, conceitos, estratégias..."
+                        aria-label="Buscar vídeos"
+                    >
+                    <div class="search-glow"></div>
                 </div>
             </div>
-        </section>
+        </div>
         
-        <!-- SEÇÃO 2: CATEGORIA - FINANÇAS -->
-        <section class="category-section fade-in" id="financas-section">
-            <div class="container">
-                <div class="category-header">
-                    <h2 class="category-name">Finanças e Mercado Financeiro</h2>
-                    <p class="category-description">
-                        Vídeos educacionais sobre conceitos financeiros e análise de mercado. 
-                        Aprenda os fundamentos do mercado financeiro e tome decisões mais 
-                        informadas sobre investimentos e gestão financeira.
+        <div class="filters-section">
+            <div class="filter-header">
+                <span class="filter-label">FILTROS</span>
+                <div class="filter-divider"></div>
+            </div>
+            <div class="video-category-filters">
+                <button class="video-filter-btn active" data-category="todos">
+                    <i class="fas fa-layer-group"></i>
+                    Todos
+                </button>
+                <button class="video-filter-btn" data-category="financas">
+                    <i class="fas fa-chart-line"></i>
+                    Finanças
+                </button>
+                <button class="video-filter-btn" data-category="economia">
+                    <i class="fas fa-coins"></i>
+                    Economia
+                </button>
+                <button class="video-filter-btn" data-category="gestao">
+                    <i class="fas fa-crown"></i>
+                    Gestão
+                </button>
+                <button class="video-filter-btn" data-category="favoritos">
+                    <i class="fas fa-star"></i>
+                    Favoritos
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 2: CATEGORIA FINANÇAS -->
+    <section class="category-section" data-category="financas">
+        <div class="category-header">
+            <h2 class="category-name">
+                <i class="fas fa-chart-line category-icon"></i>
+                Finanças & Investimentos
+            </h2>
+            <div class="category-stats">
+                <span class="video-count">2 vídeos</span>
+                <span class="total-duration">14:09</span>
+            </div>
+        </div>
+        
+        <div class="videos-grid">
+            <!-- VÍDEO 1: Mercado Financeiro -->
+            <div class="video-card animated-3d-border" data-id="vid-001" data-category="financas">
+                <div class="video-thumbnail">
+                    <video 
+                        src="frontend/Public/asset/video/Educacionais/Conheça_o_Mercado_Financeiro.mp4" 
+                        preload="metadata"
+                        muted
+                        loop
+                        class="video-preview"
+                    ></video>
+                    <div class="video-overlay">
+                        <span class="video-duration">08:23</span>
+                        <button class="watch-btn" data-id="vid-001">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                    <div class="video-glow-effect"></div>
+                </div>
+                
+                <div class="video-info">
+                    <div class="video-header-card">
+                        <h3 class="video-title-card">Conheça o Mercado Financeiro</h3>
+                        <button class="favorite-btn" data-id="vid-001">
+                            <i class="far fa-star"></i>
+                        </button>
+                    </div>
+                    <p class="video-description">
+                        Aprenda os fundamentos do mercado financeiro, como funcionam os investimentos e as principais oportunidades para iniciantes.
                     </p>
+                    <div class="video-meta">
+                        <span class="meta-category">
+                            <i class="fas fa-tag"></i>
+                            Finanças
+                        </span>
+                        <span class="meta-views">
+                            <i class="fas fa-eye"></i>
+                            1.2k visualizações
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VÍDEO 2: Bitcoin -->
+            <div class="video-card animated-3d-border" data-id="vid-002" data-category="financas">
+                <div class="video-thumbnail">
+                    <video 
+                        src="frontend/Public/asset/video/Educacionais/O_que_é_a_Bitcoin_.mp4" 
+                        preload="metadata"
+                        muted
+                        loop
+                        class="video-preview"
+                    ></video>
+                    <div class="video-overlay">
+                        <span class="video-duration">05:46</span>
+                        <button class="watch-btn" data-id="vid-002">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                    <div class="video-glow-effect"></div>
                 </div>
                 
-                <div class="videos-grid" id="videos-container">
-                    <!-- Vídeo 1: Conheça o Mercado Financeiro-->
-                    <div class="video-card" data-id="1" data-category="finanças">
-                        <div class="video-thumbnail-container">
-                            <video src="frontend/Public/asset/video/Educacionais/Conheça_o_Mercado_Financeiro.mp4"></video>
-                            <img src="https://unsplash.com/pt-br/fotografias/grafico-financeiro-e-grafico-ascendente-com-linhas-e-numeros-e-diagramas-de-barras-que-ilustram-o-comportamento-do-mercado-de-acoes-conceito-de-negociacao-bem-sucedida-fundo-azul-escuro-renderizacao-3d-AM3wYIikxO4" 
-                                 alt="Thumbnail do vídeo: A Jornada do Contabilista" 
-                                 class="video-thumbnail">
-                            <div class="video-thumbnail-overlay">
-                                <div class="play-icon">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <div class="video-duration">06:15</div>
-                        </div>
-                        
-                        <div class="video-content">
-                            <h3 class="video-title-card">A Jornada do Contabilista</h3>
-                            
-                            <div class="video-meta">
-                                <span><i class="fas fa-calendar"></i> 22/12/2025</span>
-                                <span><i class="fas fa-eye"></i> <span id="view-count-1">450</span> visualizações</span>
-                                <span><i class="fas fa-tag"></i> Finanças</span>
-                            </div>
-                            
-                            <div class="video-actions">
-                                <div class="action-buttons">
-                                    <button class="btn btn-primary btn-small watch-btn" data-id="1">Assistir</button>
-                                    <button class="btn-icon details-btn" data-id="1" aria-label="Detalhes">
-                                        <i class="fas fa-info-circle"></i>
-                                    </button>
-                                    <button class="btn-icon favorite-btn" data-id="1" aria-label="Adicionar aos favoritos">
-                                        <i class="far fa-heart"></i>
-                                    </button>
-                                    <button class="btn-icon share-btn" data-id="1" aria-label="Compartilhar">
-                                        <i class="fas fa-share-alt"></i>
-                                    </button>
-                                </div>
-                                
-                                <div class="video-stats">
-                                    <span><i class="fas fa-thumbs-up"></i> <span id="like-count-1">25</span></span>
-                                    <span><i class="fas fa-comment"></i> <span id="comment-count-1">8</span></span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="video-info">
+                    <div class="video-header-card">
+                        <h3 class="video-title-card">O que é a Bitcoin?</h3>
+                        <button class="favorite-btn" data-id="vid-002">
+                            <i class="far fa-star"></i>
+                        </button>
                     </div>
-                    
-                    <!-- Vídeo 2: Conheça o Mercado Financeiro -->
-                    <div class="video-card" data-id="2" data-category="finanças">
-                        <div class="video-thumbnail-container">
-                            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                                 alt="Thumbnail do vídeo: Conheça o Mercado Financeiro" 
-                                 class="video-thumbnail">
-                            <div class="video-thumbnail-overlay">
-                                <div class="play-icon">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <div class="video-duration">08:45</div>
-                        </div>
-                        
-                        <div class="video-content">
-                            <h3 class="video-title-card">Conheça o Mercado Financeiro</h3>
-                            
-                            <div class="video-meta">
-                                <span><i class="fas fa-calendar"></i> 15/12/2025</span>
-                                <span><i class="fas fa-eye"></i> <span id="view-count-2">320</span> visualizações</span>
-                                <span><i class="fas fa-tag"></i> Finanças</span>
-                            </div>
-                            
-                            <div class="video-actions">
-                                <div class="action-buttons">
-                                    <button class="btn btn-primary btn-small watch-btn" data-id="2">Assistir</button>
-                                    <button class="btn-icon details-btn" data-id="2" aria-label="Detalhes">
-                                        <i class="fas fa-info-circle"></i>
-                                    </button>
-                                    <button class="btn-icon favorite-btn" data-id="2" aria-label="Adicionar aos favoritos">
-                                        <i class="far fa-heart"></i>
-                                    </button>
-                                    <button class="btn-icon share-btn" data-id="2" aria-label="Compartilhar">
-                                        <i class="fas fa-share-alt"></i>
-                                    </button>
-                                </div>
-                                
-                                <div class="video-stats">
-                                    <span><i class="fas fa-thumbs-up"></i> <span id="like-count-2">18</span></span>
-                                    <span><i class="fas fa-comment"></i> <span id="comment-count-2">5</span></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Vídeo 3: Destilando: As 48 Leis do Poder -->
-                    <div class="video-card" data-id="3" data-category="psicologia">
-                        <div class="video-thumbnail-container">
-                            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                                 alt="Thumbnail do vídeo: Destilando: As 48 Leis do Poder" 
-                                 class="video-thumbnail">
-                            <div class="video-thumbnail-overlay">
-                                <div class="play-icon">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <div class="video-duration">12:30</div>
-                        </div>
-                        
-                        <div class="video-content">
-                            <h3 class="video-title-card">Destilando: As 48 Leis do Poder</h3>
-                            
-                            <div class="video-meta">
-                                <span><i class="fas fa-calendar"></i> 10/12/2025</span>
-                                <span><i class="fas fa-eye"></i> <span id="view-count-3">280</span> visualizações</span>
-                                <span><i class="fas fa-tag"></i> Psicologia</span>
-                            </div>
-                            
-                            <div class="video-actions">
-                                <div class="action-buttons">
-                                    <button class="btn btn-primary btn-small watch-btn" data-id="3">Assistir</button>
-                                    <button class="btn-icon details-btn" data-id="3" aria-label="Detalhes">
-                                        <i class="fas fa-info-circle"></i>
-                                    </button>
-                                    <button class="btn-icon favorite-btn" data-id="3" aria-label="Adicionar aos favoritos">
-                                        <i class="far fa-heart"></i>
-                                    </button>
-                                    <button class="btn-icon share-btn" data-id="3" aria-label="Compartilhar">
-                                        <i class="fas fa-share-alt"></i>
-                                    </button>
-                                </div>
-                                
-                                <div class="video-stats">
-                                    <span><i class="fas fa-thumbs-up"></i> <span id="like-count-3">32</span></span>
-                                    <span><i class="fas fa-comment"></i> <span id="comment-count-3">12</span></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Vídeo 4: O que é a Bitcoin? -->
-                    <div class="video-card" data-id="4" data-category="tecnologia">
-                        <div class="video-thumbnail-container">
-                            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                                 alt="Thumbnail do vídeo: O que é a Bitcoin?" 
-                                 class="video-thumbnail">
-                            <div class="video-thumbnail-overlay">
-                                <div class="play-icon">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <div class="video-duration">09:20</div>
-                        </div>
-                        
-                        <div class="video-content">
-                            <h3 class="video-title-card">O que é a Bitcoin?</h3>
-                            
-                            <div class="video-meta">
-                                <span><i class="fas fa-calendar"></i> 05/12/2025</span>
-                                <span><i class="fas fa-eye"></i> <span id="view-count-4">510</span> visualizações</span>
-                                <span><i class="fas fa-tag"></i> Tecnologia</span>
-                            </div>
-                            
-                            <div class="video-actions">
-                                <div class="action-buttons">
-                                    <button class="btn btn-primary btn-small watch-btn" data-id="4">Assistir</button>
-                                    <button class="btn-icon details-btn" data-id="4" aria-label="Detalhes">
-                                        <i class="fas fa-info-circle"></i>
-                                    </button>
-                                    <button class="btn-icon favorite-btn" data-id="4" aria-label="Adicionar aos favoritos">
-                                        <i class="far fa-heart"></i>
-                                    </button>
-                                    <button class="btn-icon share-btn" data-id="4" aria-label="Compartilhar">
-                                        <i class="fas fa-share-alt"></i>
-                                    </button>
-                                </div>
-                                
-                                <div class="video-stats">
-                                    <span><i class="fas fa-thumbs-up"></i> <span id="like-count-4">45</span></span>
-                                    <span><i class="fas fa-comment"></i> <span id="comment-count-4">15</span></span>
-                                </div>
-                            </div>
-                        </div>
+                    <p class="video-description">
+                        Descubra o universo das criptomoedas, como a Bitcoin funciona, sua tecnologia blockchain e potencial de valorização.
+                    </p>
+                    <div class="video-meta">
+                        <span class="meta-category">
+                            <i class="fas fa-tag"></i>
+                            Criptomoedas
+                        </span>
+                        <span class="meta-views">
+                            <i class="fas fa-eye"></i>
+                            3.5k visualizações
+                        </span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 3: CATEGORIA ECONOMIA -->
+    <section class="category-section" data-category="economia">
+        <div class="category-header">
+            <h2 class="category-name">
+                <i class="fas fa-coins category-icon"></i>
+                Economia Prática
+            </h2>
+            <div class="category-stats">
+                <span class="video-count">1 vídeo</span>
+                <span class="total-duration">05:38</span>
+            </div>
+        </div>
         
-        <!-- SEÇÃO 3: CATEGORIAS ADICIONAIS (PLACEHOLDER) -->
-        <section class="placeholder-section fade-in">
-            <div class="container">
-                <h2 class="section-title text-center">Outras <span class="highlight">Categorias</span></h2>
-                <p class="section-subtitle text-center">Novos conteúdos em produção para expandir nossa biblioteca</p>
+        <div class="videos-grid">
+            <!-- VÍDEO 3: Aprender Fazendo -->
+            <div class="video-card featured-card animated-3d-border" data-id="vid-003" data-category="economia">
+                <div class="video-thumbnail">
+                    <video 
+                        src="frontend/Public/asset/video/Educacionais/O_Poder_de_Aprender_Fazendo.mp4" 
+                        preload="metadata"
+                        muted
+                        loop
+                        class="video-preview"
+                    ></video>
+                    <div class="video-overlay">
+                        <span class="video-duration">05:38</span>
+                        <button class="watch-btn" data-id="vid-003">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                    <div class="video-glow-effect"></div>
+                    <div class="featured-badge">
+                        <i class="fas fa-crown"></i>
+                        Destaque
+                    </div>
+                </div>
                 
-                <div class="placeholder-grid">
-                    <!-- Tecnologia -->
-                    <div class="placeholder-card">
-                        <div class="placeholder-icon">
-                            <i class="fas fa-laptop-code"></i>
-                        </div>
-                        <h3 class="placeholder-title">Tecnologia</h3>
-                        <p class="placeholder-text">
-                            Em breve - Vídeos sobre programação, análise de dados, 
-                            inteligência artificial e outras tecnologias emergentes.
-                        </p>
+                <div class="video-info">
+                    <div class="video-header-card">
+                        <h3 class="video-title-card">O Poder de Aprender Fazendo</h3>
+                        <button class="favorite-btn" data-id="vid-003">
+                            <i class="far fa-star"></i>
+                        </button>
                     </div>
-                    
-                    <!-- Economia -->
-                    <div class="placeholder-card">
-                        <div class="placeholder-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h3 class="placeholder-title">Economia</h3>
-                        <p class="placeholder-text">
-                            Em breve - Conteúdos sobre macroeconomia, microeconomia, 
-                            políticas econômicas e análise de mercado global.
-                        </p>
-                    </div>
-                    
-                    <!-- Metodologia -->
-                    <div class="placeholder-card">
-                        <div class="placeholder-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <h3 class="placeholder-title">Metodologia</h3>
-                        <p class="placeholder-text">
-                            Em breve - Vídeos sobre técnicas de estudo, métodos de 
-                            aprendizagem eficaz e desenvolvimento de habilidades.
-                        </p>
-                    </div>
-                    
-                    <!-- Ciência de Dados -->
-                    <div class="placeholder-card">
-                        <div class="placeholder-icon">
-                            <i class="fas fa-database"></i>
-                        </div>
-                        <h3 class="placeholder-title">Ciência de Dados</h3>
-                        <p class="placeholder-text">
-                            Em breve - Tutoriais sobre análise de dados, visualização, 
-                            machine learning e ferramentas de data science.
-                        </p>
+                    <p class="video-description">
+                        Metodologia prática de aprendizagem: como colocar em prática conceitos econômicos e financeiros no dia a dia.
+                    </p>
+                    <div class="video-meta">
+                        <span class="meta-category">
+                            <i class="fas fa-tag"></i>
+                            Economia
+                        </span>
+                        <span class="meta-views">
+                            <i class="fas fa-eye"></i>
+                            892 visualizações
+                        </span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 4: CATEGORIA GESTÃO -->
+    <section class="category-section" data-category="gestao">
+        <div class="category-header">
+            <h2 class="category-name">
+                <i class="fas fa-crown category-icon"></i>
+                Gestão & Poder
+            </h2>
+            <div class="category-stats">
+                <span class="video-count">1 vídeo</span>
+                <span class="total-duration">07:44</span>
+            </div>
+        </div>
         
-        <!-- SEÇÃO 5: LISTA DE REPRODUÇÃO RECOMENDADA -->
-        <section class="recommendations-section fade-in">
-            <div class="container">
-                <h2 class="section-title">Recomendados <span class="highlight">para você</span></h2>
-                <p class="section-subtitle">Baseado na sua categoria de interesse em finanças</p>
+        <div class="videos-grid">
+            <!-- VÍDEO 4: 48 Leis do Poder -->
+            <div class="video-card animated-3d-border" data-id="vid-004" data-category="gestao">
+                <div class="video-thumbnail">
+                    <video 
+                        src="frontend/Public/asset/video/Educacionais/Destilando__As_48_Leis_do_Poder_.mp4" 
+                        preload="metadata"
+                        muted
+                        loop
+                        class="video-preview"
+                    ></video>
+                    <div class="video-overlay">
+                        <span class="video-duration">07:44</span>
+                        <button class="watch-btn" data-id="vid-004">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                    <div class="video-glow-effect"></div>
+                </div>
                 
-                <div class="recommendations-list">
-                    <!-- Recomendação 1 -->
-                    <div class="recommendation-item" data-id="2">
-                        <div class="recommendation-thumbnail">
-                            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                                 alt="Thumbnail do vídeo recomendado">
-                        </div>
-                        <div class="recommendation-content">
-                            <h4 class="recommendation-title">Conheça o Mercado Financeiro</h4>
-                            <div class="recommendation-meta">
-                                <span>08:45</span>
-                                <span>•</span>
-                                <span>Finanças</span>
-                                <span>•</span>
-                                <span>320 visualizações</span>
-                            </div>
-                        </div>
+                <div class="video-info">
+                    <div class="video-header-card">
+                        <h3 class="video-title-card">Destilando: As 48 Leis do Poder</h3>
+                        <button class="favorite-btn" data-id="vid-004">
+                            <i class="far fa-star"></i>
+                        </button>
                     </div>
-                    
-                    <!-- Recomendação 2 -->
-                    <div class="recommendation-item" data-id="3">
-                        <div class="recommendation-thumbnail">
-                            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                                 alt="Thumbnail do vídeo recomendado">
-                        </div>
-                        <div class="recommendation-content">
-                            <h4 class="recommendation-title">Destilando: As 48 Leis do Poder</h4>
-                            <div class="recommendation-meta">
-                                <span>12:30</span>
-                                <span>•</span>
-                                <span>Psicologia</span>
-                                <span>•</span>
-                                <span>280 visualizações</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Recomendação 3 -->
-                    <div class="recommendation-item" data-id="4">
-                        <div class="recommendation-thumbnail">
-                            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                                 alt="Thumbnail do vídeo recomendado">
-                        </div>
-                        <div class="recommendation-content">
-                            <h4 class="recommendation-title">O que é a Bitcoin?</h4>
-                            <div class="recommendation-meta">
-                                <span>09:20</span>
-                                <span>•</span>
-                                <span>Tecnologia</span>
-                                <span>•</span>
-                                <span>510 visualizações</span>
-                            </div>
-                        </div>
+                    <p class="video-description">
+                        Análise profunda sobre estratégias de poder, influência e liderança baseada na obra clássica de Robert Greene.
+                    </p>
+                    <div class="video-meta">
+                        <span class="meta-category">
+                            <i class="fas fa-tag"></i>
+                            Liderança
+                        </span>
+                        <span class="meta-views">
+                            <i class="fas fa-eye"></i>
+                            2.1k visualizações
+                        </span>
                     </div>
                 </div>
             </div>
-        </section>
-        
-        <!-- SEÇÃO 6: SISTEMA DE COMENTÁRIOS SIMULADO -->
-        <section class="comments-section fade-in">
-            <div class="container">
-                <div class="comments-container">
-                    <h2 class="section-title">Comentários <span class="highlight">do Vídeo</span></h2>
-                    <p class="section-subtitle mb-40">Compartilhe sua opinião sobre o conteúdo assistido</p>
-                    
-                    <div class="comments-form">
-                        <textarea class="comment-input" id="comment-input" placeholder="Adicione um comentário público..."></textarea>
-                        <button class="btn btn-primary" id="submit-comment">Publicar Comentário</button>
-                    </div>
-                    
-                    <div class="comments-list" id="comments-list">
-                        <!-- Comentário 1 -->
-                        <div class="comment-item">
-                            <div class="comment-header">
-                                <span class="comment-author">Maria Silva</span>
-                                <span class="comment-date">2 dias atrás</span>
-                            </div>
-                            <p class="comment-text">
-                                Excelente explicação sobre mercado financeiro! Como iniciante, consegui entender 
-                                conceitos que antes pareciam complexos. Aguardando mais vídeos como este.
-                            </p>
-                            <div class="comment-actions">
-                                <div class="comment-action">
-                                    <i class="fas fa-thumbs-up"></i>
-                                    <span>12</span>
-                                </div>
-                                <div class="comment-action">
-                                    <i class="fas fa-thumbs-down"></i>
-                                    <span>1</span>
-                                </div>
-                                <div class="comment-action">
-                                    <i class="fas fa-reply"></i>
-                                    <span>Responder</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Comentário 2 -->
-                        <div class="comment-item">
-                            <div class="comment-header">
-                                <span class="comment-author">João Pereira</span>
-                                <span class="comment-date">1 semana atrás</span>
-                            </div>
-                            <p class="comment-text">
-                                Conteúdo muito bem estruturado. Gostaria de ver mais exemplos práticos 
-                                sobre aplicação dos conceitos no mercado angolano.
-                            </p>
-                            <div class="comment-actions">
-                                <div class="comment-action">
-                                    <i class="fas fa-thumbs-up"></i>
-                                    <span>8</span>
-                                </div>
-                                <div class="comment-action">
-                                    <i class="fas fa-thumbs-down"></i>
-                                    <span>0</span>
-                                </div>
-                                <div class="comment-action">
-                                    <i class="fas fa-reply"></i>
-                                    <span>Responder</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Comentário 3 -->
-                        <div class="comment-item">
-                            <div class="comment-header">
-                                <span class="comment-author">Ana Costa</span>
-                                <span class="comment-date">2 semanas atrás</span>
-                            </div>
-                            <p class="comment-text">
-                                A didática do instrutor é excelente. Consegui aplicar alguns conceitos 
-                                na minha gestão financeira pessoal. Recomendo este vídeo para quem está começando.
-                            </p>
-                            <div class="comment-actions">
-                                <div class="comment-action">
-                                    <i class="fas fa-thumbs-up"></i>
-                                    <span>15</span>
-                                </div>
-                                <div class="comment-action">
-                                    <i class="fas fa-thumbs-down"></i>
-                                    <span>2</span>
-                                </div>
-                                <div class="comment-action">
-                                    <i class="fas fa-reply"></i>
-                                    <span>Responder</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- SEÇÃO 7: ESTATÍSTICAS DE VÍDEOS -->
-        <section class="video-stats-section fade-in">
-            <div class="container">
-                <h2 class="section-title text-center">Nossa Biblioteca em <span class="highlight">Números</span></h2>
-                <p class="section-subtitle text-center">Conteúdo audiovisual de qualidade para seu aprendizado</p>
-                
-                <div class="video-stats-grid">
-                    <div class="video-stat-card">
-                        <div class="video-stat-number" data-target="4">0</div>
-                        <div class="video-stat-label">Total de Vídeos</div>
-                    </div>
-                    <div class="video-stat-card">
-                        <div class="video-stat-number" data-target="36">0</div>
-                        <div class="video-stat-label">Minutos de Conteúdo</div>
-                    </div>
-                    <div class="video-stat-card">
-                        <div class="video-stat-number" data-target="1560">0</div>
-                        <div class="video-stat-label">Visualizações</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-    
-    <!-- SEÇÃO 4: MODAL PLAYER PRINCIPAL -->
-    <div class="video-modal" id="video-modal">
-        <div class="video-modal-content">
-            <div class="video-modal-header">
-                <div class="video-modal-title" id="video-modal-title">A Jornada do Contabilista</div>
-                <button class="video-modal-close" id="video-modal-close" aria-label="Fechar">
+        </div>
+    </section>
+
+    <!-- SEÇÃO 5: PLAYER DE VÍDEO MODAL FUTURISTA -->
+    <div id="video-player-modal" class="video-player-modal">
+        <div class="modal-backdrop"></div>
+        <div class="video-player-container animated-3d-border">
+            <div class="player-header">
+                <h3 id="current-video-title" class="current-video-title">Título do Vídeo</h3>
+                <button id="close-player-btn" class="video-player-close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
-            <div class="video-modal-body">
-                <div class="video-player-container">
-                    <video class="video-player" id="video-player" controls preload="metadata">
-                        <source src="frontend/public/Video/A_Jornada_do_Contabilista.mp4" type="video/mp4">
-                        Seu navegador não suporta o elemento de vídeo.
-                    </video>
+            <div id="player-placeholder" class="player-placeholder">
+                <!-- Vídeo será inserido dinamicamente -->
+                <div class="player-initial-state">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Selecione um vídeo para assistir</span>
                 </div>
-                
-                <div class="video-modal-info">
-                    <div class="video-modal-meta">
-                        <span><i class="fas fa-calendar"></i> Publicado em: 22/12/2025</span>
-                        <span><i class="fas fa-clock"></i> Duração: 06:15</span>
-                        <span><i class="fas fa-eye"></i> Visualizações: <span id="modal-view-count">450</span></span>
-                        <span><i class="fas fa-tag"></i> Categoria: Finanças</span>
+            </div>
+            
+            <div class="player-controls-futuristic">
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 6: COMENTÁRIOS COM DESIGN FUTURISTA -->
+    <section class="comments-section">
+        <div class="comments-header">
+            <h3 class="comments-title">
+                <i class="fas fa-comments"></i>
+                Discussão
+                <span class="comment-count">3 comentários</span>
+            </h3>
+        </div>
+        
+        <div class="comment-form-container animated-3d-border">
+            <div class="comment-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="comment-input-wrapper">
+                <textarea 
+                    id="comment-input" 
+                    class="comment-input" 
+                    placeholder="Compartilhe seu conhecimento..."
+                    rows="1"
+                ></textarea>
+                <button id="submit-comment" class="btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                    Publicar
+                </button>
+            </div>
+        </div>
+        
+        <div id="comments-list" class="comments-list">
+            <!-- Comentários carregados dinamicamente -->
+            <div class="comment-item animated-3d-border" data-comment-id="1">
+                <div class="comment-avatar">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <span class="comment-author">Carlos Mendes</span>
+                        <span class="comment-date">2 dias atrás</span>
                     </div>
-                    
-                    <p class="video-modal-description">
-                        Explore a trajetória profissional do contabilista moderno e as habilidades necessárias para o sucesso na área contábil
+                    <p class="comment-text">
+                        Excelente análise sobre o mercado financeiro! A didática está impecável.
                     </p>
-                    
-                    <div class="video-modal-actions">
-                        <button class="btn-icon" id="modal-like-btn" aria-label="Curtir vídeo">
-                            <i class="far fa-thumbs-up"></i>
-                        </button>
-                        <button class="btn-icon" id="modal-favorite-btn" aria-label="Adicionar aos favoritos">
+                    <div class="comment-actions">
+                        <button class="comment-like">
                             <i class="far fa-heart"></i>
+                            12
                         </button>
-                        <button class="btn-icon" id="modal-share-btn" aria-label="Compartilhar vídeo">
-                            <i class="fas fa-share-alt"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comment-item animated-3d-border" data-comment-id="2">
+                <div class="comment-avatar">
+                    <i class="fas fa-user-astronaut"></i>
+                </div>
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <span class="comment-author">Ana Souza</span>
+                        <span class="comment-date">5 dias atrás</span>
+                    </div>
+                    <p class="comment-text">
+                        O vídeo sobre Bitcoin finalmente esclareceu minhas dúvidas sobre blockchain. Muito obrigada!
+                    </p>
+                    <div class="comment-actions">
+                        <button class="comment-like">
+                            <i class="far fa-heart"></i>
+                            8
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comment-item animated-3d-border" data-comment-id="3">
+                <div class="comment-avatar">
+                    <i class="fas fa-user-ninja"></i>
+                </div>
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <span class="comment-author">Ricardo Alves</span>
+                        <span class="comment-date">1 semana atrás</span>
+                    </div>
+                    <p class="comment-text">
+                        As 48 Leis do Poder é um livro transformador. Ótima interpretação e exemplos práticos!
+                    </p>
+                    <div class="comment-actions">
+                        <button class="comment-like">
+                            <i class="far fa-heart"></i>
+                            24
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    </main>
+    </section>
+
+    <!-- SEÇÃO 7: ESTATÍSTICAS ANIMADAS -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="video-stat-card animated-3d-border">
+                <i class="fas fa-video stat-icon"></i>
+                <div class="stat-info">
+                    <span class="video-stat-number" data-target="4">0</span>
+                    <span class="video-stat-label">Vídeos</span>
+                </div>
+            </div>
+            
+            <div class="video-stat-card animated-3d-border">
+                <i class="fas fa-clock stat-icon"></i>
+                <div class="stat-info">
+                    <span class="video-stat-number" data-target="2711">0</span>
+                    <span class="video-stat-label">Minutos</span>
+                </div>
+            </div>
+            
+            <div class="video-stat-card animated-3d-border">
+                <i class="fas fa-star stat-icon"></i>
+                <div class="stat-info">
+                    <span class="video-stat-number" data-target="127">0</span>
+                    <span class="video-stat-label">Favoritos</span>
+                </div>
+            </div>
+            
+            <div class="video-stat-card animated-3d-border">
+                <i class="fas fa-users stat-icon"></i>
+                <div class="stat-info">
+                    <span class="video-stat-number" data-target="7892">0</span>
+                    <span class="video-stat-label">Visualizações</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 8: VÍDEOS RECOMENDADOS -->
+    <section class="recommended-section">
+        <div class="recommended-header">
+            <h3 class="recommended-title">
+                <i class="fas fa-robot"></i>
+                Recomendações Inteligentes
+            </h3>
+            <div class="recommended-glow"></div>
+        </div>
+        
+        <div id="recommended-container" class="recommended-grid">
+            <!-- Carregado dinamicamente pelo JavaScript -->
+        </div>
+    </section>
+
+    <!-- SEÇÃO 9: NEWSLETTER FUTURISTA -->
+    <section class="newsletter-section">
+        <div class="newsletter-content animated-3d-border">
+            <div class="newsletter-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+            
+            <div class="newsletter-info">
+                <h3 class="newsletter-title">
+                    <i class="fas fa-satellite-dish"></i>
+                    Conecte-se ao Futuro
+                </h3>
+                <p class="newsletter-description">
+                    Receba análises exclusivas e conteúdo antecipado
+                </p>
+            </div>
+            
+            <form class="newsletter-form">
+                <div class="newsletter-input-group">
+                    <input 
+                        type="email" 
+                        class="newsletter-input" 
+                        placeholder="Seu e-mail profissional"
+                        aria-label="Email para newsletter"
+                    >
+                    <button type="submit" class="btn-primary newsletter-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Inscrever
+                    </button>
+                </div>
+                <p class="newsletter-disclaimer">
+                    Conteúdo premium semanal. Cancele quando quiser.
+                </p>
+            </form>
+        </div>
+    </section>
+</main>
     
     <footer class="site-footer">
             <div class="footer-content container">

@@ -19,10 +19,10 @@
     <script src="frontend/Public/javascript/Global/footer.js"></script>
 
     <!-- ARQUIVOS JS -->
-    <script src="frontend/Public/javascript/page"></script>
+    <script src="frontend/Public/javascript/page/b_ebook.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
-    <link rel="stylesheet" href="frontend/Public/CSS/">
+    <link rel="stylesheet" href="frontend/Public/CSS/biblioteca/sub-biblioteca/b-ebook.css">
 </head>
 
 <body>
@@ -68,11 +68,901 @@
         </div>
     </header>
 
-
     <main>
+    <!-- SEÇÃO 1: CABEÇALHO DA BIBLIOTECA DE E-BOOKS -->
+    <section class="section-header fade-in">
+        <div class="container">
+            <div class="header-icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <h1 class="page-title">Biblioteca de <span class="highlight">E-books</span></h1>
+            <p class="page-description">
+                Bem-vindo à seção de E-books da Biblioteca do Saber da Teca Capital! 
+                Aqui, você encontrará uma coleção cuidadosamente selecionada de recursos 
+                digitais em formato de livro, abrangendo uma variedade de temas técnicos e 
+                teóricos. Nossos e-books são projetados para fornecer conhecimento 
+                aprofundado e insights valiosos que complementam sua jornada de 
+                aprendizagem conosco.
+            </p>
+            
+            <!-- SISTEMA DE BUSCA UNIFICADO -->
+            <div class="search-system">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="global-search-input" 
+                           placeholder="Buscar e-books por título, autor ou tema...">
+                    <button class="btn btn-primary" id="global-search-btn">Buscar</button>
+                </div>
+                
+                <!-- FILTROS PRINCIPAIS -->
+                <div class="category-filters-main">
+                    <button class="filter-btn active" data-filter="todos">Todos</button>
+                    <button class="filter-btn" data-filter="financas">Finanças</button>
+                    <button class="filter-btn" data-filter="economia">Economia</button>
+                    <button class="filter-btn" data-filter="gestao">Gestão</button>
+                    <button class="filter-btn" data-filter="favoritos">Favoritos</button>
+                    <button class="filter-btn" data-filter="recentes">Adicionados Recentemente</button>
+                </div>
+            </div>
+        </div>
+        </section>
 
+        <!-- SEÇÃO 2: CATEGORIA FINANÇAS -->
+        <section id="categoria-financas" class="category-section" data-category="financas">
+            <div class="container">
+                <div class="category-header">
+                    <div class="category-title-wrapper">
+                        <i class="fas fa-chart-line category-icon"></i>
+                        <h2 class="category-title">Finanças e Mercado Financeiro</h2>
+                        <span class="ebook-count-badge" id="count-financas">3 e-books</span>
+                    </div>
+                    <p class="category-description">
+                        E-books sobre gestão financeira, investimentos e mercado de capitais. 
+                        Conteúdos selecionados para ajudar você a tomar decisões financeiras 
+                        mais inteligentes e entender as dinâmicas do mercado.
+                    </p>
+                </div>
+
+                <div class="ebooks-collection">
+                    <!-- E-BOOK 01: Bitcoin -->
+                    <article class="ebook-item" 
+                            data-id="ebook-001" 
+                            data-category="financas"
+                            data-author="Fernando Ulrich"
+                            data-year="2014"
+                            data-pages="7"
+                            data-language="portugues"
+                            data-type="resumo"
+                            data-downloads="50"
+                            data-favorite="false">
+                        <div class="ebook-card">
+                            <div class="ebook-badge badge-popular">Mais baixado</div>
+                            <div class="ebook-content">
+                                <div class="ebook-header">
+                                    <h3 class="ebook-title">Bitcoin: Alternativa Tecnológica Contra a Tirania Monetária</h3>
+                                    <p class="ebook-subtitle">Baseado em: Bitcoin – A Moeda Digital</p>
+                                </div>
+                                
+                                <div class="ebook-meta">
+                                    <span class="meta-item"><i class="fas fa-user"></i> Fernando Ulrich</span>
+                                    <span class="meta-item"><i class="fas fa-calendar"></i> 2014</span>
+                                    <span class="meta-item"><i class="fas fa-file-alt"></i> 7 páginas</span>
+                                    <span class="meta-item"><i class="fas fa-tag"></i> Finanças</span>
+                                    <span class="meta-item"><i class="fas fa-globe"></i> Português</span>
+                                </div>
+                                
+                                <div class="ebook-actions">
+                                    <div class="action-group">
+                                        <a href="frontend/Public/asset/PDF/Bitcoin - Alternativa Tecnológica Contra a Tirania Monetária.pdf" 
+                                        class="btn btn-primary btn-small" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer">
+                                            <i class="fas fa-book-open"></i> Ler
+                                        </a>
+                                        <button class="btn-icon btn-preview" data-id="ebook-001" aria-label="Pré-visualizar">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-favorite" data-id="ebook-001" aria-label="Adicionar aos favoritos">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                        <button class="btn-icon btn-share" data-id="ebook-001" aria-label="Compartilhar">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                        <button class="btn-icon btn-details" data-id="ebook-001" aria-label="Detalhes">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </div>
+                                    <div class="download-stats">
+                                        <i class="fas fa-download"></i>
+                                        <span class="download-count" data-ebook-id="ebook-001">50</span>
+                                        <span>downloads</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="ebook-tags">
+                                    <span class="tag">criptomoedas</span>
+                                    <span class="tag">tecnologia financeira</span>
+                                    <span class="tag">bitcoin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- E-BOOK 02: Mercado Financeiro -->
+                    <article class="ebook-item" 
+                            data-id="ebook-002" 
+                            data-category="financas"
+                            data-author="Alberto Teca Tomás"
+                            data-year="2025"
+                            data-pages="26"
+                            data-language="portugues"
+                            data-type="guia"
+                            data-downloads="5"
+                            data-favorite="false"
+                            data-recent="true">
+                        <div class="ebook-card">
+                            <div class="ebook-badge badge-new">Novo</div>
+                            <div class="ebook-content">
+                                <div class="ebook-header">
+                                    <h3 class="ebook-title">Mercado Financeiro: Um Guia para Iniciantes</h3>
+                                    <p class="ebook-subtitle">Aprenda os conceitos fundamentais</p>
+                                </div>
+                                
+                                <div class="ebook-meta">
+                                    <span class="meta-item"><i class="fas fa-user"></i> Alberto Teca Tomás</span>
+                                    <span class="meta-item"><i class="fas fa-calendar"></i> 2025</span>
+                                    <span class="meta-item"><i class="fas fa-file-alt"></i> 26 páginas</span>
+                                    <span class="meta-item"><i class="fas fa-tag"></i> Finanças</span>
+                                    <span class="meta-item"><i class="fas fa-globe"></i> Português</span>
+                                    <span class="meta-item"><i class="fas fa-graduation-cap"></i> Iniciante</span>
+                                </div>
+                                
+                                <div class="ebook-actions">
+                                    <div class="action-group">
+                                        <a href="frontend/Public/asset/PDF/Mini-Book de Mercado Financeiro - Teca Capital Investimentos.pdf" 
+                                        class="btn btn-primary btn-small" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer">
+                                            <i class="fas fa-book-open"></i> Ler
+                                        </a>
+                                        <button class="btn-icon btn-preview" data-id="ebook-002" aria-label="Pré-visualizar">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-favorite" data-id="ebook-002" aria-label="Adicionar aos favoritos">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                        <button class="btn-icon btn-share" data-id="ebook-002" aria-label="Compartilhar">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                        <button class="btn-icon btn-details" data-id="ebook-002" aria-label="Detalhes">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </div>
+                                    <div class="download-stats">
+                                        <i class="fas fa-download"></i>
+                                        <span class="download-count" data-ebook-id="ebook-002">5</span>
+                                        <span>downloads</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="ebook-tags">
+                                    <span class="tag">ações</span>
+                                    <span class="tag">renda variável</span>
+                                    <span class="tag">iniciantes</span>
+                                    <span class="tag">mercado financeiro</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- E-BOOK 03: Psicologia do Dinheiro -->
+                    <article class="ebook-item" 
+                            data-id="ebook-003" 
+                            data-category="financas"
+                            data-author="Morgan Housel"
+                            data-year="2021"
+                            data-pages="16"
+                            data-language="portugues"
+                            data-type="resumo"
+                            data-downloads="70"
+                            data-favorite="false">
+                        <div class="ebook-card">
+                            <div class="ebook-badge badge-trending">Trending</div>
+                            <div class="ebook-content">
+                                <div class="ebook-header">
+                                    <h3 class="ebook-title">Padrões de Sucesso e Fracasso na Psicologia do Dinheiro</h3>
+                                    <p class="ebook-subtitle">Baseado em: A Psicologia do Dinheiro</p>
+                                </div>
+                                
+                                <div class="ebook-meta">
+                                    <span class="meta-item"><i class="fas fa-user"></i> Morgan Housel</span>
+                                    <span class="meta-item"><i class="fas fa-calendar"></i> 2021</span>
+                                    <span class="meta-item"><i class="fas fa-file-alt"></i> 16 páginas</span>
+                                    <span class="meta-item"><i class="fas fa-tag"></i> Finanças</span>
+                                    <span class="meta-item"><i class="fas fa-globe"></i> Português</span>
+                                    <span class="meta-item"><i class="fas fa-brain"></i> Psicologia</span>
+                                </div>
+                                
+                                <div class="ebook-actions">
+                                    <div class="action-group">
+                                        <a href="frontend/Public/asset/PDF/Padrões de Sucesso e Fracasso na Psicologia do Dinheiro.pdf" 
+                                        class="btn btn-primary btn-small" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer">
+                                            <i class="fas fa-book-open"></i> Ler
+                                        </a>
+                                        <button class="btn-icon btn-preview" data-id="ebook-003" aria-label="Pré-visualizar">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-favorite" data-id="ebook-003" aria-label="Adicionar aos favoritos">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                        <button class="btn-icon btn-share" data-id="ebook-003" aria-label="Compartilhar">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                        <button class="btn-icon btn-details" data-id="ebook-003" aria-label="Detalhes">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </div>
+                                    <div class="download-stats">
+                                        <i class="fas fa-download"></i>
+                                        <span class="download-count" data-ebook-id="ebook-003">70</span>
+                                        <span>downloads</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="ebook-tags">
+                                    <span class="tag">comportamento</span>
+                                    <span class="tag">finanças comportamentais</span>
+                                    <span class="tag">psicologia econômica</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="category-footer">
+                    <button class="btn btn-text" data-category="financas">
+                        Ver todos de Finanças <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3: CATEGORIA GESTÃO -->
+        <section id="categoria-gestao" class="category-section" data-category="gestao">
+            <div class="container">
+                <div class="category-header">
+                    <div class="category-title-wrapper">
+                        <i class="fas fa-briefcase category-icon"></i>
+                        <h2 class="category-title">Gestão e Estratégia</h2>
+                        <span class="ebook-count-badge" id="count-gestao">1 e-book</span>
+                    </div>
+                    <p class="category-description">
+                        E-books sobre gestão empresarial, estratégia organizacional e desenvolvimento profissional. 
+                        Aprenda com os melhores autores como navegar no ambiente corporativo e desenvolver 
+                        habilidades de liderança e influência.
+                    </p>
+                </div>
+
+                <div class="ebooks-collection">
+                    <!-- E-BOOK 04: Gestão Estratégica - CORRIGIDO: categoria gestao -->
+                    <article class="ebook-item" 
+                            data-id="ebook-004" 
+                            data-category="gestao"
+                            data-author="Robert Greene"
+                            data-year="1998"
+                            data-pages="9"
+                            data-language="portugues"
+                            data-type="guia"
+                            data-downloads="8"
+                            data-favorite="false">
+                        <div class="ebook-card">
+                            <div class="ebook-content">
+                                <div class="ebook-header">
+                                    <h3 class="ebook-title">Manual de Gestão Estratégica de Relações Profissionais</h3>
+                                    <p class="ebook-subtitle">Baseado em: As 48 Leis do Poder</p>
+                                </div>
+                                
+                                <div class="ebook-meta">
+                                    <span class="meta-item"><i class="fas fa-user"></i> Robert Greene</span>
+                                    <span class="meta-item"><i class="fas fa-calendar"></i> 1998</span>
+                                    <span class="meta-item"><i class="fas fa-file-alt"></i> 9 páginas</span>
+                                    <span class="meta-item"><i class="fas fa-tag"></i> Gestão</span>
+                                    <span class="meta-item"><i class="fas fa-globe"></i> Português</span>
+                                    <span class="meta-item"><i class="fas fa-chart-bar"></i> Estratégia</span>
+                                </div>
+                                
+                                <div class="ebook-actions">
+                                    <div class="action-group">
+                                        <a href="frontend/Public/asset/PDF/Manual de Gestão Estratégica de Relações Profissionais.pdf" 
+                                        class="btn btn-primary btn-small" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer">
+                                            <i class="fas fa-book-open"></i> Ler
+                                        </a>
+                                        <button class="btn-icon btn-preview" data-id="ebook-004" aria-label="Pré-visualizar">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-favorite" data-id="ebook-004" aria-label="Adicionar aos favoritos">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                        <button class="btn-icon btn-share" data-id="ebook-004" aria-label="Compartilhar">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                        <button class="btn-icon btn-details" data-id="ebook-004" aria-label="Detalhes">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </div>
+                                    <div class="download-stats">
+                                        <i class="fas fa-download"></i>
+                                        <span class="download-count" data-ebook-id="ebook-004">8</span>
+                                        <span>downloads</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="ebook-tags">
+                                    <span class="tag">poder</span>
+                                    <span class="tag">influência</span>
+                                    <span class="tag">estratégia</span>
+                                    <span class="tag">liderança</span>
+                                    <span class="tag">negociação</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="category-footer">
+                    <button class="btn btn-text" data-category="gestao">
+                        Ver todos de Gestão <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: CATEGORIA ECONOMIA -->
+        <section id="categoria-economia" class="category-section" data-category="economia">
+            <div class="container">
+                <div class="category-header">
+                    <div class="category-title-wrapper">
+                        <i class="fas fa-landmark category-icon"></i>
+                        <h2 class="category-title">Economia</h2>
+                        <span class="ebook-count-badge" id="count-economia">1 e-book</span>
+                    </div>
+                    <p class="category-description">
+                        E-books sobre teoria econômica, história do pensamento econômico e aplicações práticas. 
+                        Entenda como os indicadores econômicos funcionam e como grandes pensadores moldaram 
+                        nossa compreensão sobre mercados, valor e trocas.
+                    </p>
+                </div>
+
+                <div class="ebooks-collection">
+                    <!-- E-BOOK 05: Adam Smith - CORRIGIDO: ID único -->
+                    <article class="ebook-item" 
+                            data-id="ebook-005" 
+                            data-category="economia"
+                            data-author="Adam Smith"
+                            data-year="1776"
+                            data-pages="8"
+                            data-language="portugues"
+                            data-type="resumo"
+                            data-downloads="8"
+                            data-favorite="false"
+                            data-classic="true">
+                        <div class="ebook-card">
+                            <div class="ebook-badge badge-classic">Clássico</div>
+                            <div class="ebook-content">
+                                <div class="ebook-header">
+                                    <h3 class="ebook-title">O Valor das Trocas na Era Moderna sob o Olhar de Adam Smith</h3>
+                                    <p class="ebook-subtitle">Baseado em: A Riqueza das Nações</p>
+                                </div>
+                                
+                                <div class="ebook-meta">
+                                    <span class="meta-item"><i class="fas fa-user"></i> Adam Smith</span>
+                                    <span class="meta-item"><i class="fas fa-calendar"></i> 1776</span>
+                                    <span class="meta-item"><i class="fas fa-file-alt"></i> 8 páginas</span>
+                                    <span class="meta-item"><i class="fas fa-tag"></i> Economia</span>
+                                    <span class="meta-item"><i class="fas fa-globe"></i> Português</span>
+                                    <span class="meta-item"><i class="fas fa-flask"></i> Teoria</span>
+                                </div>
+                                
+                                <div class="ebook-actions">
+                                    <div class="action-group">
+                                        <a href="frontend/Public/asset/PDF/O Valor das Trocas na Era Moderna sob o Olhar de Adam Smith.pdf" 
+                                        class="btn btn-primary btn-small" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer">
+                                            <i class="fas fa-book-open"></i> Ler
+                                        </a>
+                                        <button class="btn-icon btn-preview" data-id="ebook-005" aria-label="Pré-visualizar">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-favorite" data-id="ebook-005" aria-label="Adicionar aos favoritos">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                        <button class="btn-icon btn-share" data-id="ebook-005" aria-label="Compartilhar">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                        <button class="btn-icon btn-details" data-id="ebook-005" aria-label="Detalhes">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </div>
+                                    <div class="download-stats">
+                                        <i class="fas fa-download"></i>
+                                        <span class="download-count" data-ebook-id="ebook-005">8</span>
+                                        <span>downloads</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="ebook-tags">
+                                    <span class="tag">adam smith</span>
+                                    <span class="tag">valor</span>
+                                    <span class="tag">trocas</span>
+                                    <span class="tag">riqueza das nações</span>
+                                    <span class="tag">economia clássica</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="category-footer">
+                    <button class="btn btn-text" data-category="economia">
+                        Ver todos de Economia <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: SISTEMA DE FILTROS AVANÇADOS REFATORADO -->
+        <section class="section-advanced-filters fade-in">
+            <div class="container">
+                <div class="filters-header">
+                    <h2 class="section-title">Refine sua <span class="highlight">Busca</span></h2>
+                    <p class="section-subtitle">Utilize filtros avançados para encontrar exatamente o que precisa</p>
+                </div>
+                
+                <div class="filters-accordion">
+                    <div class="filters-toggle" id="filters-main-toggle">
+                        <div class="toggle-label">
+                            <i class="fas fa-sliders-h"></i>
+                            <h3>Filtros Avançados e Ordenação</h3>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon" id="toggle-icon"></i>
+                    </div>
+                    
+                    <div class="filters-panel" id="filters-panel">
+                        <div class="filters-grid">
+                            <!-- FILTRO POR ANO -->
+                            <div class="filter-block">
+                                <label class="filter-label">
+                                    <i class="fas fa-calendar-alt"></i> Ano de Publicação
+                                </label>
+                                <div class="filter-options-group" id="filter-year-group">
+                                    <span class="filter-chip active" data-filter-type="year" data-value="all">Todos</span>
+                                    <span class="filter-chip" data-filter-type="year" data-value="2025">2025</span>
+                                    <span class="filter-chip" data-filter-type="year" data-value="2021">2021</span>
+                                    <span class="filter-chip" data-filter-type="year" data-value="2014">2014</span>
+                                    <span class="filter-chip" data-filter-type="year" data-value="1998">1998</span>
+                                    <span class="filter-chip" data-filter-type="year" data-value="1776">1776</span>
+                                    <span class="filter-chip" data-filter-type="year" data-value="before">Anteriores a 2000</span>
+                                    <span class="filter-chip" data-filter-type="year" data-value="after">Posteriores a 2020</span>
+                                </div>
+                            </div>
+                            
+                            <!-- FILTRO POR NÚMERO DE PÁGINAS -->
+                            <div class="filter-block">
+                                <label class="filter-label">
+                                    <i class="fas fa-file-alt"></i> Número de Páginas
+                                </label>
+                                <div class="filter-options-group" id="filter-pages-group">
+                                    <span class="filter-chip active" data-filter-type="pages" data-value="all">Todos</span>
+                                    <span class="filter-chip" data-filter-type="pages" data-value="1-10">1-10 páginas</span>
+                                    <span class="filter-chip" data-filter-type="pages" data-value="11-20">11-20 páginas</span>
+                                    <span class="filter-chip" data-filter-type="pages" data-value="21-30">21-30 páginas</span>
+                                    <span class="filter-chip" data-filter-type="pages" data-value="31-50">31-50 páginas</span>
+                                    <span class="filter-chip" data-filter-type="pages" data-value="51+">Mais de 50 páginas</span>
+                                </div>
+                            </div>
+                            
+                            <!-- FILTRO POR IDIOMA -->
+                            <div class="filter-block">
+                                <label class="filter-label">
+                                    <i class="fas fa-language"></i> Idioma
+                                </label>
+                                <div class="filter-options-group" id="filter-language-group">
+                                    <span class="filter-chip active" data-filter-type="language" data-value="all">Todos</span>
+                                    <span class="filter-chip" data-filter-type="language" data-value="portugues">Português</span>
+                                    <span class="filter-chip" data-filter-type="language" data-value="ingles">Inglês</span>
+                                    <span class="filter-chip" data-filter-type="language" data-value="espanhol">Espanhol</span>
+                                    <span class="filter-chip" data-filter-type="language" data-value="frances">Francês</span>
+                                </div>
+                            </div>
+                            
+                            <!-- FILTRO POR TIPO DE CONTEÚDO -->
+                            <div class="filter-block">
+                                <label class="filter-label">
+                                    <i class="fas fa-tag"></i> Tipo de Conteúdo
+                                </label>
+                                <div class="filter-options-group" id="filter-type-group">
+                                    <span class="filter-chip active" data-filter-type="content-type" data-value="all">Todos</span>
+                                    <span class="filter-chip" data-filter-type="content-type" data-value="resumo">Resumo</span>
+                                    <span class="filter-chip" data-filter-type="content-type" data-value="guia">Guia</span>
+                                    <span class="filter-chip" data-filter-type="content-type" data-value="completo">Completo</span>
+                                    <span class="filter-chip" data-filter-type="content-type" data-value="artigo">Artigo</span>
+                                    <span class="filter-chip" data-filter-type="content-type" data-value="estudo-caso">Estudo de Caso</span>
+                                </div>
+                            </div>
+                            
+                            <!-- FILTRO POR AUTOR -->
+                            <div class="filter-block full-width">
+                                <label class="filter-label">
+                                    <i class="fas fa-user"></i> Autor
+                                </label>
+                                <div class="filter-options-group" id="filter-author-group">
+                                    <span class="filter-chip active" data-filter-type="author" data-value="all">Todos</span>
+                                    <span class="filter-chip" data-filter-type="author" data-value="fernando-ulrich">Fernando Ulrich</span>
+                                    <span class="filter-chip" data-filter-type="author" data-value="alberto-teca">Alberto Teca Tomás</span>
+                                    <span class="filter-chip" data-filter-type="author" data-value="morgan-housel">Morgan Housel</span>
+                                    <span class="filter-chip" data-filter-type="author" data-value="robert-greene">Robert Greene</span>
+                                    <span class="filter-chip" data-filter-type="author" data-value="adam-smith">Adam Smith</span>
+                                </div>
+                            </div>
+                            
+                            <!-- FILTRO POR POPULARIDADE -->
+                            <div class="filter-block">
+                                <label class="filter-label">
+                                    <i class="fas fa-fire"></i> Popularidade
+                                </label>
+                                <div class="filter-options-group" id="filter-popularity-group">
+                                    <span class="filter-chip active" data-filter-type="popularity" data-value="all">Todos</span>
+                                    <span class="filter-chip" data-filter-type="popularity" data-value="mais-baixados">Mais baixados</span>
+                                    <span class="filter-chip" data-filter-type="popularity" data-value="recentes">Recentes</span>
+                                    <span class="filter-chip" data-filter-type="popularity" data-value="classicos">Clássicos</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- SISTEMA DE ORDENAÇÃO -->
+                        <div class="sorting-system">
+                            <div class="sorting-controls">
+                                <label for="sort-select-main">
+                                    <i class="fas fa-sort-amount-down"></i> Ordenar por:
+                                </label>
+                                <select class="sort-select" id="sort-select-main">
+                                    <option value="relevance">Relevância</option>
+                                    <option value="title-asc">Título (A-Z)</option>
+                                    <option value="title-desc">Título (Z-A)</option>
+                                    <option value="year-desc">Ano (Mais recente)</option>
+                                    <option value="year-asc">Ano (Mais antigo)</option>
+                                    <option value="author-asc">Autor (A-Z)</option>
+                                    <option value="downloads-desc">Mais baixados</option>
+                                    <option value="downloads-asc">Menos baixados</option>
+                                    <option value="pages-asc">Menos páginas</option>
+                                    <option value="pages-desc">Mais páginas</option>
+                                </select>
+                            </div>
+                            
+                            <div class="view-options">
+                                <span class="view-option active" data-view="grid">
+                                    <i class="fas fa-th-large"></i> Grid
+                                </span>
+                                <span class="view-option" data-view="list">
+                                    <i class="fas fa-list"></i> Lista
+                                </span>
+                                <span class="view-option" data-view="compact">
+                                    <i class="fas fa-align-justify"></i> Compacto
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- AÇÕES DOS FILTROS -->
+                        <div class="filters-actions">
+                            <button class="btn btn-primary" id="apply-filters-btn">
+                                <i class="fas fa-check"></i> Aplicar Filtros
+                            </button>
+                            <button class="btn btn-secondary" id="clear-filters-btn">
+                                <i class="fas fa-undo-alt"></i> Limpar Filtros
+                            </button>
+                            <button class="btn btn-text" id="save-filter-preset">
+                                <i class="fas fa-save"></i> Salvar busca
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 6: ESTATÍSTICAS E MÉTRICAS ENRIQUECIDAS -->
+        <section class="section-stats fade-in">
+            <div class="container">
+                <div class="stats-header">
+                    <h2 class="section-title">Nossa Biblioteca em <span class="highlight">Números</span></h2>
+                    <p class="section-subtitle">Conteúdo digital de qualidade em constante crescimento</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <!-- CARD 01: TOTAL DE E-BOOKS -->
+                    <div class="stat-card stat-card-primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-target="5">5</div>
+                            <div class="stat-label">Total de E-books</div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i> +25% este mês
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CARD 02: TOTAL DE PÁGINAS -->
+                    <div class="stat-card stat-card-secondary">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-target="66">66</div>
+                            <div class="stat-label">Páginas de Conteúdo</div>
+                            <div class="stat-trend neutral">
+                                <i class="fas fa-minus"></i> 7 resumos
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CARD 03: AUTORES -->
+                    <div class="stat-card stat-card-tertiary">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-target="5">5</div>
+                            <div class="stat-label">Autores Especialistas</div>
+                            <div class="stat-detail">Nacionais: 1 | Internacionais: 4</div>
+                        </div>
+                    </div>
+                    
+                    <!-- CARD 04: DOWNLOADS TOTAIS - NOVO -->
+                    <div class="stat-card stat-card-quaternary">
+                        <div class="stat-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-target="141">141</div>
+                            <div class="stat-label">Downloads Totais</div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i> +32 este mês
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CARD 05: CATEGORIAS - NOVO -->
+                    <div class="stat-card stat-card-quinary">
+                        <div class="stat-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-target="3">3</div>
+                            <div class="stat-label">Categorias Ativas</div>
+                            <div class="stat-categories">
+                                <span class="category-badge-mini">Finanças</span>
+                                <span class="category-badge-mini">Gestão</span>
+                                <span class="category-badge-mini">Economia</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CARD 06: MÉDIA DE DOWNLOADS - NOVO -->
+                    <div class="stat-card stat-card-senary">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">28.2</div>
+                            <div class="stat-label">Média de Downloads</div>
+                            <div class="stat-detail">por e-book</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PROGRESSO DA BIBLIOTECA - NOVO -->
+                <div class="library-progress">
+                    <div class="progress-header">
+                        <h4><i class="fas fa-chart-bar"></i> Expansão da Biblioteca</h4>
+                        <span class="progress-goal">Meta: 100 e-books</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                            <span class="progress-text">25%</span>
+                        </div>
+                    </div>
+                    <div class="progress-details">
+                        <span><strong>5</strong> e-books atuais</span>
+                        <span><strong>15</strong> e-books planejados</span>
+                        <span>Próximo lançamento: Abril/2026</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 7: E-BOOKS RECOMENDADOS - NOVA FUNCIONALIDADE -->
+        <section class="section-recommendations fade-in">
+            <div class="container">
+                <div class="recommendations-header">
+                    <div class="header-left">
+                        <i class="fas fa-star"></i>
+                        <h2 class="section-title">Recomendados <span class="highlight">para você</span></h2>
+                    </div>
+                    <span class="recommendation-badge">Baseado nos seus interesses</span>
+                </div>
+                
+                <div class="recommendations-carousel">
+                    <!-- RECOMENDAÇÃO 01: Baseado em downloads -->
+                    <article class="recommendation-card" data-recommendation-type="popular">
+                        <div class="rec-badge">Mais popular</div>
+                        <div class="rec-content">
+                            <h4 class="rec-title">Padrões de Sucesso e Fracasso na Psicologia do Dinheiro</h4>
+                            <p class="rec-author">Morgan Housel</p>
+                            <div class="rec-meta">
+                                <span><i class="fas fa-download"></i> 70 downloads</span>
+                                <span class="rec-match"><i class="fas fa-bolt"></i> 98% match</span>
+                            </div>
+                            <button class="btn btn-small btn-outline" data-id="ebook-003">
+                                Ver e-book
+                            </button>
+                        </div>
+                    </article>
+                    
+                    <!-- RECOMENDAÇÃO 02: Baseado em categoria -->
+                    <article class="recommendation-card" data-recommendation-type="category">
+                        <div class="rec-badge">Finanças</div>
+                        <div class="rec-content">
+                            <h4 class="rec-title">Bitcoin: Alternativa Tecnológica Contra a Tirania Monetária</h4>
+                            <p class="rec-author">Fernando Ulrich</p>
+                            <div class="rec-meta">
+                                <span><i class="fas fa-download"></i> 50 downloads</span>
+                                <span class="rec-match"><i class="fas fa-bolt"></i> 85% match</span>
+                            </div>
+                            <button class="btn btn-small btn-outline" data-id="ebook-001">
+                                Ver e-book
+                            </button>
+                        </div>
+                    </article>
+                    
+                    <!-- RECOMENDAÇÃO 03: Clássico -->
+                    <article class="recommendation-card" data-recommendation-type="classic">
+                        <div class="rec-badge">Clássico</div>
+                        <div class="rec-content">
+                            <h4 class="rec-title">O Valor das Trocas na Era Moderna sob o Olhar de Adam Smith</h4>
+                            <p class="rec-author">Adam Smith</p>
+                            <div class="rec-meta">
+                                <span><i class="fas fa-history"></i> 1776</span>
+                                <span class="rec-match"><i class="fas fa-bolt"></i> 75% match</span>
+                            </div>
+                            <button class="btn btn-small btn-outline" data-id="ebook-005">
+                                Ver e-book
+                            </button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 8: MODAL DE PRÉ-VISUALIZAÇÃO REFATORADO -->
+        <div class="modal-preview" id="modal-preview" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+            <div class="modal-preview-overlay"></div>
+            <div class="modal-preview-container">
+                <div class="modal-preview-header">
+                    <div class="modal-title-wrapper">
+                        <i class="fas fa-file-pdf"></i>
+                        <h3 class="modal-preview-title" id="modal-title">Pré-visualização do E-book</h3>
+                    </div>
+                    <button class="modal-preview-close" id="modal-preview-close" aria-label="Fechar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-preview-body">
+                    <div class="pdf-placeholder">
+                        <div class="pdf-placeholder-content">
+                            <i class="fas fa-file-pdf pdf-icon-large"></i>
+                            <p id="pdf-filename">Selecione um e-book para visualizar</p>
+                            <small>O visualizador de PDF será carregado aqui</small>
+                            <div class="pdf-actions-placeholder">
+                                <button class="btn btn-primary btn-small" id="download-from-modal">
+                                    <i class="fas fa-download"></i> Baixar
+                                </button>
+                                <button class="btn btn-secondary btn-small" id="read-from-modal">
+                                    <i class="fas fa-book-open"></i> Ler completo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Iframe será inserido dinamicamente via JS -->
+                </div>
+                <div class="modal-preview-footer">
+                    <div class="preview-info">
+                        <span id="modal-ebook-title"></span>
+                    </div>
+                    <div class="preview-navigation">
+                        <button class="btn-icon" disabled><i class="fas fa-chevron-left"></i></button>
+                        <span>Página 1 de 1</span>
+                        <button class="btn-icon" disabled><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 9: MINHA BIBLIOTECA (FAVORITOS) - NOVA FUNCIONALIDADE -->
+        <section class="section-my-library fade-in" id="my-library">
+            <div class="container">
+                <div class="library-header">
+                    <div class="library-title-wrapper">
+                        <i class="fas fa-heart" style="color: #ff4757;"></i>
+                        <h2 class="section-title">Minha <span class="highlight">Biblioteca</span></h2>
+                    </div>
+                    <p class="section-subtitle">Seus e-books favoritos salvos para acesso rápido</p>
+                </div>
+                
+                <div class="library-empty-state" id="library-empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-heart-broken"></i>
+                    </div>
+                    <h3>Nenhum favorito ainda</h3>
+                    <p>Clique no ícone <i class="far fa-heart"></i> em qualquer e-book para adicioná-lo à sua biblioteca pessoal.</p>
+                    <button class="btn btn-primary" id="explore-ebooks-btn">
+                        Explorar e-books <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="library-collection" id="library-collection" style="display: none;">
+                    <!-- Favoritos serão carregados dinamicamente via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 10: TIMELINE DE LANÇAMENTOS - NOVA FUNCIONALIDADE -->
+        <section class="section-timeline fade-in">
+            <div class="container">
+                <div class="timeline-header">
+                    <i class="fas fa-clock"></i>
+                    <h2 class="section-title">Próximos <span class="highlight">Lançamentos</span></h2>
+                </div>
+                
+                <div class="timeline-grid">
+                    <div class="timeline-item">
+                        <div class="timeline-badge">Junho 2025</div>
+                        <div class="timeline-content">
+                            <h4>Introdução aos Derivativos Financeiros</h4>
+                            <p class="timeline-author">Alberto Teca Tomás</p>
+                            <span class="timeline-category">Finanças</span>
+                            <p class="timeline-description">Compreenda opções, futuros e swaps no mercado brasileiro.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-badge">Agosto 2025</div>
+                        <div class="timeline-content">
+                            <h4>Economia Comportamental: Decisões Irracionais</h4>
+                            <p class="timeline-author">Daniel Kahneman (adaptado)</p>
+                            <span class="timeline-category">Economia</span>
+                            <p class="timeline-description">Como os vieses cognitivos afetam nossas escolhas financeiras.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-badge">Outubro 2025</div>
+                        <div class="timeline-content">
+                            <h4>Gestão de Projetos com Métodos Ágeis</h4>
+                            <p class="timeline-author">Equipe Teca Capital</p>
+                            <span class="timeline-category">Gestão</span>
+                            <p class="timeline-description">Scrum, Kanban e Lean aplicados à realidade corporativa.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
-    
+   
     <footer class="site-footer">
             <div class="footer-content container">
                 <div class="footer-section social-section">
