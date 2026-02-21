@@ -1,0 +1,441 @@
+// ============================================
+// SISTEMA DE PRODUÇÃO DE SERVIÇOS
+// ============================================
+
+/ Configurações das classes de produção
+const classesProducao = {
+    A: {
+        nome: 'Produção Rápida',
+        tempoDias: 1,
+        tempoSegundos: 30,
+        custoUnitario: 25000,
+        multiplicadorProducao: 2,
+        eficiencia: 'alta'
+    },
+    B: {
+        nome: 'Produção Moderada',
+        tempoDias: 2,
+        tempoSegundos: 60,
+        custoUnitario: 15000,
+        multiplicadorProducao: 1.5,
+        eficiencia: 'media'
+    },
+    C: {
+        nome: 'Produção Económica',
+        tempoDias: 3,
+        tempoSegundos: 90,
+        custoUnitario: 5000,
+        multiplicadorProducao: 1,
+        eficiencia: 'baixa'
+    }
+};/
+
+let producoesServico = [];
+
+function mostrarProducaoServicos() {
+    const html = `
+        <div class="producao-container">
+            <h2>⚙️ Produção de Serviços</h2>
+            
+            <div class="info-box">
+                <p>💡 Os serviços são PRODUZIDOS pela sua empresa, não comprados de fornecedores.</p>
+                <p>⏱️ Tempo real: 1 dia = 30 segundos</p>
+                <p>👥 Necessário: Pelo menos 1 funcionário para produzir</p>
+            </div>
+            
+            <div class="campanhas-grid">
+                <!-- Classe A -->
+                <div class="campanha-card producao-card classe-a">
+                    <h3>🚀 Classe A - Produção Rápida</h3>
+                    <div class="producao-info">
+                        <p><span class="info-label">⏱️ Tempo:</span> 1 dia (30s)</p>
+                        <p><span class="info-label">💰 Custo unitário:</span> 25.000 Kz</p>
+                        <p><span class="info-label">⚡ Eficiência:</span> Produz o DOBRO</p>
+                        <p class="dica">📌 Indicado para: Demanda urgente</p>
+                    </div>
+                    
+                    <div class="producao-inputs">
+                        <label>Quantidade base:</label>
+                        <input type="number" id="qtd-producao-A" min="1" value="1" placeholder="Unidades">
+                        
+                        <div class="calculo-producao">
+                            <p>Total a pagar: <span class="text-gold" id="total-pagar-A">25.000 Kz</span></p>
+                            <p>Serviços produzidos: <span class="text-success" id="servicos-produzidos-A">2</span> unidades</p>
+                        </div>
+                        
+                        <button onclick="iniciarProducaoServico('A')" class="btn-producao classe-a">
+                            🚀 Iniciar Produção Rápida
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Classe B -->
+                <div class="campanha-card producao-card classe-b">
+                    <h3>⚖️ Classe B - Produção Moderada</h3>
+                    <div class="producao-info">
+                        <p><span class="info-label">⏱️ Tempo:</span> 2 dias (60s)</p>
+                        <p><span class="info-label">💰 Custo unitário:</span> 15.000 Kz</p>
+                        <p><span class="info-label">⚡ Eficiência:</span> Produz 1.5x</p>
+                        <p class="dica">📌 Indicado para: Equilíbrio custo-benefício</p>
+                    </div>
+                    
+                    <div class="producao-inputs">
+                        <label>Quantidade base:</label>
+                        <input type="number" id="qtd-producao-B" min="1" value="1" placeholder="Unidades">
+                        
+                        <div class="calculo-producao">
+                            <p>Total a pagar: <span class="text-gold" id="total-pagar-B">15.000 Kz</span></p>
+                            <p>Serviços produzidos: <span class="text-success" id="servicos-produzidos-B">1.5</span> unidades</p>
+                        </div>
+                        
+                        <button onclick="iniciarProducaoServico('B')" class="btn-producao classe-b">
+                            ⚖️ Iniciar Produção Moderada
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Classe C -->
+                <div class="campanha-card producao-card classe-c">
+                    <h3>🐢 Classe C - Produção Económica</h3>
+                    <div class="producao-info">
+                        <p><span class="info-label">⏱️ Tempo:</span> 3 dias (90s)</p>
+                        <p><span class="info-label">💰 Custo unitário:</span> 5.000 Kz</p>
+                        <p><span class="info-label">⚡ Eficiência:</span> Produz 1x</p>
+                        <p class="dica">📌 Indicado para: Produção em massa</p>
+                    </div>
+                    
+                    <div class="producao-inputs">
+                        <label>Quantidade base:</label>
+                        <input type="number" id="qtd-producao-C" min="1" value="1" placeholder="Unidades">
+                        
+                        <div class="calculo-producao">
+                            <p>Total a pagar: <span class="text-gold" id="total-pagar-C">5.000 Kz</span></p>
+                            <p>Serviços produzidos: <span class="text-success" id="servicos-produzidos-C">1</span> unidade</p>
+                        </div>
+                        
+                        <button onclick="iniciarProducaoServico('C')" class="btn-producao classe-c">
+                            🐢 Iniciar Produção Económica
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Produções em Andamento -->
+            <div class="producoes-andamento">
+                <h3>⏳ Produções em Andamento</h3>
+                <div id="lista-producoes-pendentes">
+                    ${gerarListaProducoesPendentes()}
+                </div>
+            </div>
+            
+            <!-- Serviços em Estoque -->
+            <div class="servicos-estoque">
+                <h3>📦 Serviços Disponíveis</h3>
+                <div id="lista-servicos-estoque">
+                    ${gerarListaServicosEstoque()}
+                </div>
+            </div>
+        </div>
+        
+        <style>
+            .producao-card.classe-a { border-left: 4px solid #4CAF50; }
+            .producao-card.classe-b { border-left: 4px solid #FFC107; }
+            .producao-card.classe-c { border-left: 4px solid #F44336; }
+            
+            .info-label { color: var(--accent-gold); font-weight: bold; }
+            .dica { font-size: 0.9em; color: var(--text-secondary); font-style: italic; }
+            
+            .btn-producao {
+                width: 100%;
+                padding: 10px;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: all 0.3s;
+            }
+            .btn-producao.classe-a { background: #4CAF50; color: white; }
+            .btn-producao.classe-b { background: #FFC107; color: black; }
+            .btn-producao.classe-c { background: #F44336; color: white; }
+            .btn-producao:hover { transform: translateY(-2px); filter: brightness(1.1); }
+            
+            .calculo-producao {
+                background: var(--bg-tertiary);
+                padding: 10px;
+                border-radius: 6px;
+                margin: 10px 0;
+            }
+        </style>
+    `;
+    
+    document.getElementById('conteudoPrincipal').innerHTML = html;
+    
+    // Adicionar listeners para cálculo automático
+    adicionarListenersProducao();
+}
+
+function adicionarListenersProducao() {
+    document.getElementById('qtd-producao-A')?.addEventListener('input', function() {
+        const qtd = parseInt(this.value) || 1;
+        const totalPagar = qtd * 25000;
+        const servicosProduzidos = Math.floor(qtd * 2);
+        
+        document.getElementById('total-pagar-A').textContent = formatarMoeda(totalPagar) + ' Kz';
+        document.getElementById('servicos-produzidos-A').textContent = servicosProduzidos;
+    });
+    
+    document.getElementById('qtd-producao-B')?.addEventListener('input', function() {
+        const qtd = parseInt(this.value) || 1;
+        const totalPagar = qtd * 15000;
+        const servicosProduzidos = Math.floor(qtd * 1.5);
+        
+        document.getElementById('total-pagar-B').textContent = formatarMoeda(totalPagar) + ' Kz';
+        document.getElementById('servicos-produzidos-B').textContent = servicosProduzidos;
+    });
+    
+    document.getElementById('qtd-producao-C')?.addEventListener('input', function() {
+        const qtd = parseInt(this.value) || 1;
+        const totalPagar = qtd * 5000;
+        const servicosProduzidos = qtd;
+        
+        document.getElementById('total-pagar-C').textContent = formatarMoeda(totalPagar) + ' Kz';
+        document.getElementById('servicos-produzidos-C').textContent = servicosProduzidos;
+    });
+}
+
+function iniciarProducaoServico(classe) {
+    // Verificar se tem funcionários
+    if (calcularTotalFuncionarios() === 0) {
+        notificar('❌ Não é possível produzir sem funcionários');
+        return false;
+    }
+    
+    const qtdInput = document.getElementById(`qtd-producao-${classe}`);
+    const quantidade = parseInt(qtdInput?.value) || 1;
+    
+    if (quantidade <= 0) {
+        notificar('❌ Quantidade inválida');
+        return false;
+    }
+    
+    const config = classesProducao[classe];
+    const custoTotal = quantidade * config.custoUnitario;
+    const servicosProduzidos = Math.floor(quantidade * config.multiplicadorProducao);
+    
+    // Verificar saldo
+    if (estadoJogo.carteiraKz < custoTotal) {
+        notificar('❌ Saldo insuficiente para produção');
+        return false;
+    }
+    
+    // Confirmar produção
+    if (!confirm(`📋 CONFIRMAR PRODUÇÃO:
+        \nClasse: ${config.nome}
+        \nQuantidade base: ${quantidade}
+        \nServiços a produzir: ${servicosProduzidos}
+        \nCusto total: ${formatarMoeda(custoTotal)} Kz
+        \nTempo: ${config.tempoDias} dia(s)
+        \n\nConfirmar?`)) {
+        return false;
+    }
+    
+    // Debitar custo
+    estadoJogo.carteiraKz -= custoTotal;
+    estadoJogo.custosMes += custoTotal;
+    contadoresMensais.custos.producao += custoTotal;
+    
+    // Calcular data de conclusão
+    const dataConclusao = new Date(dataSimulador);
+    dataConclusao.setDate(dataConclusao.getDate() + config.tempoDias);
+    
+    // Registrar produção pendente
+    const producao = {
+        id: Date.now(),
+        classe: classe,
+        nome: config.nome,
+        quantidadeBase: quantidade,
+        servicosProduzidos: servicosProduzidos,
+        custoTotal: custoTotal,
+        custoUnitario: config.custoUnitario,
+        dataInicio: dataSimulador.toLocaleDateString(),
+        dataConclusao: dataConclusao.toLocaleDateString(),
+        tempoDias: config.tempoDias,
+        segundosRestantes: config.tempoSegundos,
+        status: 'em_producao'
+    };
+    
+    producoesServico.push(producao);
+    
+    registrarTransacao('producao', 'saida', custoTotal, 'Kz', 
+        `Produção de ${servicosProduzidos} serviços (Classe ${classe})`);
+    
+    notificar(`✅ Produção iniciada! Conclusão: ${producao.dataConclusao}`);
+    salvarEstadoSimulacao();
+    
+    mostrarProducaoServicos();
+    atualizarCarteiras();
+    
+    return true;
+}
+
+function processarProducoesServico() {
+    const hoje = dataSimulador.toLocaleDateString();
+    const concluidas = [];
+    
+    producoesServico = producoesServico.filter(prod => {
+        if (prod.status !== 'em_producao') return true;
+        
+        if (prod.dataConclusao === hoje) {
+            // Adicionar serviços ao estoque
+            const novoServico = {
+                id: Date.now() + prod.id,
+                tipo: 'servico',
+                nome: `Serviço Classe ${prod.classe}`,
+                quantidade: prod.servicosProduzidos,
+                custoUnitario: prod.custoUnitario,
+                precoVenda: null,
+                margem: null,
+                dataEntrada: hoje,
+                producaoId: prod.id,
+                status: 'disponivel'
+            };
+            
+            estoque.push(novoServico);
+            concluidas.push(prod);
+            
+            notificar(`⚙️ Produção concluída! ${prod.servicosProduzidos} serviços disponíveis.`);
+            return false; // Remove da lista de pendentes
+        }
+        
+        // Atualizar dias restantes
+        const dataConc = new Date(prod.dataConclusao.split('/').reverse().join('-'));
+        const diffMs = dataConc - dataSimulador;
+        prod.segundosRestantes = Math.max(0, Math.floor(diffMs / 1000));
+        
+        return true;
+    });
+    
+    if (concluidas.length > 0) {
+        salvarEstadoSimulacao();
+    }
+}
+
+function gerarListaProducoesPendentes() {
+    const pendentes = producoesServico.filter(p => p.status === 'em_producao');
+    
+    if (pendentes.length === 0) {
+        return '<p class="text-center" style="padding: 20px;">Nenhuma produção em andamento</p>';
+    }
+    
+    let html = '<div class="tabela-container"><table><thead><tr>' +
+               '<th>Classe</th><th>Serviços</th><th>Custo</th><th>Início</th>' +
+               '<th>Conclusão</th><th>Tempo Restante</th></tr></thead><tbody>';
+    
+    pendentes.forEach(prod => {
+        const diasRestantes = calcularDiasRestantes(prod.dataConclusao);
+        const classeCor = prod.classe === 'A' ? 'text-success' : 
+                          prod.classe === 'B' ? 'text-gold' : 'text-danger';
+        
+        html += `
+            <tr>
+                <td class="${classeCor}"><strong>Classe ${prod.classe}</strong></td>
+                <td>${prod.servicosProduzidos} un</td>
+                <td>${formatarMoeda(prod.custoTotal)} Kz</td>
+                <td>${prod.dataInicio}</td>
+                <td>${prod.dataConclusao}</td>
+                <td><span class="${classeCor}">${diasRestantes} dias</span></td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table></div>';
+    return html;
+}
+
+function gerarListaServicosEstoque() {
+    const servicos = estoque.filter(item => item.tipo === 'servico' && item.status === 'disponivel');
+    
+    if (servicos.length === 0) {
+        return '<p class="text-center" style="padding: 20px;">Nenhum serviço disponível no estoque</p>';
+    }
+    
+    let html = '<div class="tabela-container"><table><thead><tr>' +
+               '<th>Serviço</th><th>Quantidade</th><th>Custo Unit.</th>' +
+               '<th>Preço Venda</th><th>Margem</th><th>Ações</th></tr></thead><tbody>';
+    
+    servicos.forEach(serv => {
+        html += `
+            <tr>
+                <td>${serv.nome}</td>
+                <td>${serv.quantidade}</td>
+                <td>${formatarMoeda(serv.custoUnitario)} Kz</td>
+                <td>${serv.precoVenda ? formatarMoeda(serv.precoVenda) + ' Kz' : 'Não definido'}</td>
+                <td>${serv.margem ? serv.margem + '%' : '-'}</td>
+                <td>
+                    ${!serv.precoVenda ? `
+                        <input type="number" id="margem-serv-${serv.id}" min="0" max="30" placeholder="0-30%" style="width: 70px;">
+                        <button onclick="definirMargemServico(${serv.id})">Definir</button>
+                    ` : `
+                        <button onclick="publicarServico(${serv.id})" class="btn-success">Publicar</button>
+                    `}
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table></div>';
+    return html;
+}
+
+function definirMargemServico(servicoId) {
+    const servico = estoque.find(item => item.id === servicoId);
+    if (!servico) {
+        notificar('❌ Serviço não encontrado');
+        return false;
+    }
+    
+    const margem = parseFloat(document.getElementById(`margem-serv-${servicoId}`).value);
+    
+    if (isNaN(margem) || margem < 0 || margem > 30) {
+        notificar('❌ Margem deve ser entre 0% e 30%');
+        return false;
+    }
+    
+    servico.margem = margem;
+    servico.precoVenda = servico.custoUnitario * (1 + margem / 100);
+    servico.status = 'pronto';
+    
+    notificar(`✅ Margem de ${margem}% definida. Preço: ${formatarMoeda(servico.precoVenda)} Kz`);
+    salvarEstadoSimulacao();
+    
+    mostrarProducaoServicos();
+    return true;
+}
+
+function publicarServico(servicoId) {
+    const servico = estoque.find(item => item.id === servicoId);
+    if (!servico) {
+        notificar('❌ Serviço não encontrado');
+        return false;
+    }
+    
+    if (!servico.precoVenda) {
+        notificar('❌ Defina a margem primeiro');
+        return false;
+    }
+    
+    servico.status = 'venda';
+    
+    notificar(`✅ Serviço publicado para venda por ${formatarMoeda(servico.precoVenda)} Kz`);
+    salvarEstadoSimulacao();
+    
+    mostrarProducaoServicos();
+    return true;
+}
+
+// Adicionar ao processarDia
+const originalProcessarDia = processarDia;
+processarDia = function() {
+    if (originalProcessarDia) originalProcessarDia();
+    processarProducoesServico();
+};

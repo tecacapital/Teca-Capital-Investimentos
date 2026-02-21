@@ -19,10 +19,10 @@
     <script src="frontend/Public/javascript/Global/footer.js"></script>
 
     <!-- ARQUIVOS JS -->
-    <script src="frontend/Public/javascript/page"></script>
+    <script src="frontend/Public/javascript/page/simulador-mercado-financeiro.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
-    <link rel="stylesheet" href="frontend/Public/CSS/">
+    <link rel="stylesheet" href="frontend/Public/CSS/simuladores/sub-simuladores/s-mercado-financeiro.css">
 </head>
 
 <body>
@@ -69,7 +69,521 @@
     </header>
 
 
-    <main>
+    <main id="simulador-mercado-financeiro-landing" class="landing-page">
+
+        <!-- ===== SEÇÃO 1: HERO ===== -->
+        <section class="hero-section fade-in">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <div class="hero-icon pulse-animation">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h1 class="hero-title">
+                            Simulador do <span class="highlight gold">Mercado Financeiro</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            Aprenda a investir na <strong>BODIVA</strong> e nos mercados globais · Desenvolvido por <strong>Alberto Teca Tomás</strong>
+                        </p>
+                        <p class="hero-description">
+                            Antes de arriscar o seu dinheiro real, aprenda com cenários realistas. Simule estratégias, analise de ativos, tome decisões e desenvolva perícia sem sustos, sem perdas, com conhecimento.
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="S-real-simulador-mercado-financeiro.html" class="btn btn-primary btn-large">
+                                <i class="fas fa-user-graduate"></i> Simular como Investidor <i class="fas fa-arrow-right"></i>
+                            </a>
+                            <a href="s-real-simulador-minha-empresa-na-bolsa.html" class="btn btn-secondary btn-large">
+                                <i class="fas fa-building"></i> Simular como Empresa <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="particles"></div>
+        </section>
+
+        <!-- ===== SEÇÃO 2: O QUE É INVESTIR? ===== -->
+        <section class="what-is-section fade-in">
+            <div class="container">
+                <h2 class="section-title">
+                    O que é <span class="highlight gold">investir</span> no mercado financeiro?
+                </h2>
+                
+                <!-- 2.1 MERCADO ANGOLANO -->
+                <div class="market-row">
+                    <div class="market-card local">
+                        <div class="market-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Mercado Angolano 🇦🇴</h3>
+                        <p>
+                            A <strong>BODIVA</strong> (Bolsa de Dívida e Valores de Angola) é a única bolsa de valores do país. 
+                            Fundada em 2014, opera atualmente com títulos públicos, obrigações corporativas e, gradualmente, 
+                            abre espaço para ações. O mercado de capitais angolano está em franco desenvolvimento e você pode 
+                            aprender a navegar nele antes mesmo da maioria dos investidores.
+                        </p>
+                        <div class="market-assets">
+                            <span><i class="fas fa-check-circle"></i> Títulos Públicos (OT's, BT's)</span>
+                            <span><i class="fas fa-check-circle"></i> Obrigações Corporativas</span>
+                            <span><i class="fas fa-check-circle"></i> Ações (em expansão)</span>
+                        </div>
+                        <a href="https://www.bodiva.ao/" target="_blank" rel="noopener noreferrer" class="market-link">
+                            Conhecer BODIVA <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- 2.2 MERCADO GLOBAL -->
+                    <div class="market-card global">
+                        <div class="market-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <h3>Mercado Global 🌍</h3>
+                        <p>
+                            NYSE, NASDAQ, Londres, Tóquio e o mundo investe 24/7. Ações de gigantes como Apple, Tesla, 
+                            Petrobras; ETFs que replicam índices; commodities (ouro, petróleo); moedas e criptomoedas. 
+                            Nosso simulador conecta a realidade angolana ao cenário internacional, preparando você para 
+                            qualquer mercado.
+                        </p>
+                        <div class="market-links-group">
+                            <a href="https://coinmarketcap.com/" target="_blank" rel="noopener noreferrer" class="market-link small">
+                                <i class="fas fa-coins"></i> CoinMarketCap
+                            </a>
+                            <a href="https://br.investing.com/" target="_blank" rel="noopener noreferrer" class="market-link small">
+                                <i class="fas fa-chart-simple"></i> Investing.com
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.3 TIPOS DE MERCADOS (TABELA) -->
+                <div class="market-types">
+                    <h3>Tipos de Mercados</h3>
+                    <div class="markets-grid">
+                        <div class="market-type-card">
+                            <div class="market-type-header primary">Mercado Primário</div>
+                            <p>Emissão de novos ativos</p>
+                            <small><strong>Exemplo Angola:</strong> Oferta pública de títulos</small>
+                            <small><strong>Exemplo Global:</strong> IPO (Oferta Pública Inicial)</small>
+                        </div>
+                        <div class="market-type-card">
+                            <div class="market-type-header secondary">Mercado Secundário</div>
+                            <p>Negociação entre investidores</p>
+                            <small><strong>Exemplo Angola:</strong> Compra/venda de ações BODIVA</small>
+                            <small><strong>Exemplo Global:</strong> NYSE, NASDAQ</small>
+                        </div>
+                        <div class="market-type-card">
+                            <div class="market-type-header derivative">Mercado de Derivativos</div>
+                            <p>Contratos futuros, opções</p>
+                            <small><strong>Exemplo Angola:</strong> Em desenvolvimento</small>
+                            <small><strong>Exemplo Global:</strong> Chicago Mercantile Exchange</small>
+                        </div>
+                        <div class="market-type-card">
+                            <div class="market-type-header crypto">Mercado de Criptomoedas</div>
+                            <p>Ativos digitais descentralizados</p>
+                            <small><strong>Exemplo Angola:</strong> Adoção crescente</small>
+                            <small><strong>Exemplo Global:</strong> Binance, Coinbase</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.4 ATIVOS FINANCEIROS (CARDS COM BORDA ANIMADA) -->
+                <div class="assets-section">
+                    <h3>Ativos Financeiros</h3>
+                    <div class="assets-grid">
+                        <div class="asset-card bordered-card">
+                            <div class="asset-icon"><i class="fas fa-chart-bar"></i></div>
+                            <h4>Ações</h4>
+                            <p>Frações do capital de empresas</p>
+                        </div>
+                        <div class="asset-card bordered-card">
+                            <div class="asset-icon"><i class="fas fa-file-invoice"></i></div>
+                            <h4>Títulos Públicos</h4>
+                            <p>Dívida do governo (BODIVA, Tesouro)</p>
+                        </div>
+                        <div class="asset-card bordered-card">
+                            <div class="asset-icon"><i class="fas fa-building"></i></div>
+                            <h4>Obrigações Corporativas</h4>
+                            <p>Dívida de empresas</p>
+                        </div>
+                        <div class="asset-card bordered-card">
+                            <div class="asset-icon"><i class="fas fa-chart-pie"></i></div>
+                            <h4>Fundos de Investimento</h4>
+                            <p>Carteiras diversificadas</p>
+                        </div>
+                        <div class="asset-card bordered-card">
+                            <div class="asset-icon"><i class="fas fa-layer-group"></i></div>
+                            <h4>ETFs</h4>
+                            <p>Fundos negociados em bolsa</p>
+                        </div>
+                        <div class="asset-card bordered-card">
+                            <div class="asset-icon"><i class="fas fa-coins"></i></div>
+                            <h4>Criptomoedas</h4>
+                            <p>Ativos digitais (Bitcoin, Ethereum)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 3: QUEM PODE INVESTIR? QUEM DEVE INVESTIR? ===== -->
+        <section class="qualification-section fade-in">
+            <div class="container">
+                <h2 class="section-title">
+                    Quem pode <span class="highlight gold">investir</span>? Quem <span class="highlight red">deve</span> investir?
+                </h2>
+                
+                <div class="qualification-grid">
+                    <div class="qualification-card warning-card">
+                        <div class="qualification-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>Qualquer um pode, mas nem todos deveriam</h3>
+                        <p>
+                            Investir no mercado financeiro é um direito de qualquer cidadão maior de 18 anos, 
+                            com documento de identificação e conta bancária. No entanto, <strong>TER ACESSO não significa 
+                            ESTAR PREPARADO</strong>.
+                        </p>
+                        <p>
+                            A renda importa. Investir exige consistência, disciplina e capacidade de manter 
+                            aportes regulares. Sem uma fonte de renda estável, o investidor tende a:
+                        </p>
+                        <ul>
+                            <li>Resgatar recursos no momento errado</li>
+                            <li>Não conseguir recompor posições em quedas</li>
+                            <li>Tomar decisões emocionais baseadas em necessidade imediata</li>
+                            <li>Abandonar a estratégia antes de colher resultados</li>
+                        </ul>
+                        <div class="qualification-highlight">
+                            <i class="fas fa-check-circle"></i> TODO MUNDO pode aprender sobre investimentos<br>
+                            <i class="fas fa-check-circle"></i> TODO MUNDO pode simular estratégias sem riscos<br>
+                            <i class="fas fa-exclamation-circle"></i> NEM TODO MUNDO deve começar a investir antes de ter:
+                            <ul style="margin-top: 10px; color: var(--text-gray);">
+                                <li>✓ Reserva de emergência constituída</li>
+                                <li>✓ Dívidas controladas</li>
+                                <li>✓ Renda recorrente e previsível</li>
+                                <li>✓ Conhecimento básico do funcionamento do mercado</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="qualification-card expertise-card">
+                        <div class="qualification-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3>É preciso perícia</h3>
+                        <p>
+                            Investir não é jogo de azar. É uma atividade que exige <strong>PERÍCIA</strong>, assim como 
+                            medicina, engenharia ou pilotagem.
+                        </p>
+                        <p>
+                            Um investidor perito:
+                        </p>
+                        <ul class="check-list">
+                            <li><i class="fas fa-check-circle"></i> Analisa balanços e indicadores fundamentais</li>
+                            <li><i class="fas fa-check-circle"></i> Compreende o cenário macroeconômico</li>
+                            <li><i class="fas fa-check-circle"></i> Gerencia riscos e diversifica carteira</li>
+                            <li><i class="fas fa-check-circle"></i> Mantém disciplina mesmo em momentos de volatilidade</li>
+                            <li><i class="fas fa-check-circle"></i> Aprende continuamente com erros e acertos</li>
+                        </ul>
+                        <p style="margin-top: 20px; color: var(--primary-gold); font-weight: 500;">
+                            Nossos simuladores são ferramentas para desenvolver essa perícia em 
+                            ambiente controlado, sem riscos reais.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 4: SOBRE OS SIMULADORES (CARDS COM BORDA ANIMADA) ===== -->
+        <section class="simulators-detail-section fade-in">
+            <div class="container">
+                <h2 class="section-title">
+                    Conheça os <span class="highlight gold">simuladores</span>
+                </h2>
+                <p class="section-subtitle">
+                    Dois ambientes completos para quem quer investir e para quem quer abrir capital.
+                </p>
+
+                <div class="simulators-detail-grid">
+                    <!-- CARD INVESTIDOR -->
+                    <div class="simulator-detail-card bordered-card">
+                        <div class="card-badge gold-badge">Investidor</div>
+                        <div class="simulator-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>Simulador do Investidor</h3>
+                        <p class="simulator-for">
+                            <i class="fas fa-users"></i> Para: Investidores individuais, estudantes, curiosos
+                        </p>
+                        <div class="simulator-learn">
+                            <h4>🎯 O que você vai aprender:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Análise de ações e títulos da BODIVA</li>
+                                <li><i class="fas fa-check"></i> Comparação com mercados globais (NYSE, NASDAQ)</li>
+                                <li><i class="fas fa-check"></i> Estratégias: buy & hold, value investing, day trade</li>
+                                <li><i class="fas fa-check"></i> Gestão de risco e diversificação de carteira</li>
+                                <li><i class="fas fa-check"></i> Impacto de custos (corretagem, impostos, emolumentos)</li>
+                            </ul>
+                        </div>
+                        <div class="simulator-features">
+                            <h4>🛠️ Recursos disponíveis:</h4>
+                            <ul>
+                                <li><i class="fas fa-wallet"></i> Carteira virtual com <span class="currency-aoa"> 10.000.000.000 Kz</span></li>
+                                <li><i class="fas fa-database"></i> Base de dados com ativos reais da BODIVA</li>
+                                <li><i class="fas fa-globe"></i> Cotações simuladas de ativos globais</li>
+                                <li><i class="fas fa-file-alt"></i> Relatórios de performance e rentabilidade</li>
+                                <li><i class="fas fa-history"></i> Histórico de operações e notas de corretagem simuladas</li>
+                            </ul>
+                        </div>
+                        <a href="S-real-simulador-mercado-financeiro.html" class="btn btn-primary btn-block">
+                            Simular como Investidor <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- CARD EMPRESA -->
+                    <div class="simulator-detail-card bordered-card">
+                        <div class="card-badge blue-badge">Empresa</div>
+                        <div class="simulator-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>Minha Empresa na Bolsa</h3>
+                        <p class="simulator-for">
+                            <i class="fas fa-briefcase"></i> Para: Empresários, CFOs, empreendedores, consultores
+                        </p>
+                        <div class="simulator-learn">
+                            <h4>🎯 O que você vai aprender:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Processo de abertura de capital (IPO)</li>
+                                <li><i class="fas fa-check"></i> Estruturação de ofertas públicas</li>
+                                <li><i class="fas fa-check"></i> Precificação de ações e valuation</li>
+                                <li><i class="fas fa-check"></i> Relação com investidores e mercado</li>
+                                <li><i class="fas fa-check"></i> Governança corporativa e compliance</li>
+                            </ul>
+                        </div>
+                        <div class="simulator-features">
+                            <h4>🛠️ Recursos disponíveis:</h4>
+                            <ul>
+                                <li><i class="fas fa-rocket"></i> Simulador completo de IPO</li>
+                                <li><i class="fas fa-calculator"></i> Calculadora de valuation (DCF, múltiplos)</li>
+                                <li><i class="fas fa-file-signature"></i> Modelos de prospecto e documentos regulatórios</li>
+                                <li><i class="fas fa-chart-line"></i> Simulação de bookbuilding e formação de preço</li>
+                                <li><i class="fas fa-tachometer-alt"></i> Dashboard de relações com investidores</li>
+                            </ul>
+                        </div>
+                        <a href="s-real-simulador-minha-empresa-na-bolsa.html" class="btn btn-secondary btn-block">
+                            Simular como Empresa <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 5: PLANOS E PREÇOS ===== -->
+        <section id="planos" class="pricing-section fade-in">
+            <div class="container">
+                <h2 class="section-title">
+                    Planos e <span class="highlight gold">preços</span>
+                </h2>
+                
+                <!-- 5.1 PESSOAS SINGULARES -->
+                <div class="pricing-category">
+                    <h3><i class="fas fa-user"></i> Para Pessoas Singulares</h3>
+                    <div class="pricing-grid">
+                        <div class="pricing-card bordered-card">
+                            <div class="pricing-header">
+                                <span class="pricing-badge">Mais popular</span>
+                                <h4>Acesso Total</h4>
+                                <div class="pricing-price">
+                                    <span class="price-currency">Kz</span>
+                                    <span class="price-value">5.000</span>
+                                    <span class="price-period">/3 meses</span>
+                                </div>
+                            </div>
+                            <div class="pricing-features">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> Acesso completo à biblioteca de conteúdo</li>
+                                    <li><i class="fas fa-check"></i> Vídeos, áudios, textos e imagens</li>
+                                    <li><i class="fas fa-check"></i> Simuladores liberados (Investidor + Empresa)</li>
+                                    <li><i class="fas fa-check"></i> Suporte via WhatsApp</li>
+                                    <li><i class="fas fa-check"></i> Senha enviada por e-mail e WhatsApp</li>
+                                </ul>
+                            </div>
+                            <div class="pricing-details">
+                                <p><i class="fas fa-check-circle" style="color: var(--secondary-green);"></i> Pagamento único para 3 meses</p>
+                                <p><i class="fas fa-check-circle" style="color: var(--secondary-green);"></i> Senha enviada em até 1 hora</p>
+                                <p><i class="fas fa-check-circle" style="color: var(--secondary-green);"></i> Acesso liberado para toda a plataforma</p>
+                                <p><i class="fas fa-times-circle" style="color: var(--secondary-red);"></i> Não inclui formação personalizada</p>
+                                <p><i class="fas fa-times-circle" style="color: var(--secondary-red);"></i> Não inclui certificado</p>
+                                <p><i class="fas fa-times-circle" style="color: var(--secondary-red);"></i> Não inclui suporte empresarial</p>
+                            </div>
+                            <a href="#contato" class="btn btn-primary btn-block">
+                                Selecionar Plano <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5.2 PARA EMPRESAS (FORMAÇÃO PRESENCIAL) -->
+                <div class="pricing-category corporate">
+                    <h3><i class="fas fa-building"></i> Para Empresas · Formação Presencial</h3>
+                    <div class="pricing-grid corporate-grid">
+                        <div class="pricing-card bordered-card">
+                            <div class="pricing-header">
+                                <h4>5 a 15 funcionários</h4>
+                                <div class="pricing-price">
+                                    <span class="price-currency">Kz</span>
+                                    <span class="price-value">150.000</span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Formação 100% prática</li>
+                                <li><i class="fas fa-check"></i> Material exclusivo</li>
+                                <li><i class="fas fa-check"></i> Suporte pós-formação (30 dias)</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card bordered-card">
+                            <div class="pricing-header">
+                                <h4>16 a 30 funcionários</h4>
+                                <div class="pricing-price">
+                                    <span class="price-currency">Kz</span>
+                                    <span class="price-value">250.000</span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Mesmo conteúdo + estudos de caso</li>
+                                <li><i class="fas fa-check"></i> Simulações personalizadas</li>
+                                <li><i class="fas fa-check"></i> Relatório de desempenho da turma</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card bordered-card">
+                            <div class="pricing-header">
+                                <h4>31 a 70 funcionários</h4>
+                                <div class="pricing-price">
+                                    <span class="price-currency">Kz</span>
+                                    <span class="price-value">400.000</span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Conteúdo avançado</li>
+                                <li><i class="fas fa-check"></i> Consultoria para implementação</li>
+                                <li><i class="fas fa-check"></i> Acompanhamento de 60 dias</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card bordered-card">
+                            <div class="pricing-header">
+                                <h4>71 a 100 funcionários</h4>
+                                <div class="pricing-price">
+                                    <span class="price-currency">Kz</span>
+                                    <span class="price-value">500.000</span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Programa completo de educação financeira corporativa</li>
+                                <li><i class="fas fa-check"></i> Diagnóstico organizacional</li>
+                                <li><i class="fas fa-check"></i> Projetos aplicados à realidade da empresa</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="corporate-alert">
+                        <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="alert-content">
+                            <h4>⚠️ FORMAÇÕES ONLINE CORPORATIVAS: Indisponíveis no momento.</h4>
+                            <p>Assim que houver novidades, avisaremos por e-mail e redes sociais.</p>
+                            <p><strong>Formação 100% PRESENCIAL</strong> · Valores negociáveis para mais de 100 funcionários · Conteúdo personalizável por setor · Disponível para todo o território nacional · Consulte condições especiais para instituições de ensino.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 6: LINKS ÚTEIS E FERRAMENTAS ===== -->
+        <section class="useful-links-section fade-in">
+            <div class="container">
+                <h2 class="section-title">
+                    Links úteis e <span class="highlight gold">ferramentas</span>
+                </h2>
+                <div class="links-grid">
+                    <a href="https://www.bodiva.ao/" target="_blank" rel="noopener noreferrer" class="link-card bordered-card">
+                        <div class="link-icon" style="color: var(--accent-bodiva);"><i class="fas fa-university"></i></div>
+                        <h4>BODIVA</h4>
+                        <p>Bolsa de Dívida e Valores de Angola</p>
+                        <span class="link-url">bodiva.ao →</span>
+                    </a>
+                    <a href="https://coinmarketcap.com/" target="_blank" rel="noopener noreferrer" class="link-card bordered-card">
+                        <div class="link-icon" style="color: var(--accent-crypto);"><i class="fas fa-coins"></i></div>
+                        <h4>CoinMarketCap</h4>
+                        <p>Cotações de criptomoedas em tempo real</p>
+                        <span class="link-url">coinmarketcap.com →</span>
+                    </a>
+                    <a href="https://br.investing.com/" target="_blank" rel="noopener noreferrer" class="link-card bordered-card">
+                        <div class="link-icon" style="color: var(--accent-investing);"><i class="fas fa-chart-simple"></i></div>
+                        <h4>Investing.com</h4>
+                        <p>Cotações, índices, commodities, forex</p>
+                        <span class="link-url">br.investing.com →</span>
+                    </a>
+                    <a href="https://www.bna.ao/" target="_blank" rel="noopener noreferrer" class="link-card bordered-card">
+                        <div class="link-icon" style="color: var(--secondary-blue);"><i class="fas fa-landmark"></i></div>
+                        <h4>Banco Nacional de Angola</h4>
+                        <p>Taxas de câmbio, política monetária</p>
+                        <span class="link-url">bna.ao →</span>
+                    </a>
+                    <a href="https://www.ceicdata.com/pt/country/angola" target="_blank" rel="noopener noreferrer" class="link-card bordered-card">
+                        <div class="link-icon" style="color: var(--primary-gold);"><i class="fas fa-chart-bar"></i></div>
+                        <h4>CEIC Data</h4>
+                        <p>Indicadores macroeconómicos de Angola</p>
+                        <span class="link-url">ceicdata.com →</span>
+                    </a>
+                    <a href="https://www.bna.ao/Conteudos/Regulacao/Mercado-Capitais" target="_blank" rel="noopener noreferrer" class="link-card bordered-card">
+                        <div class="link-icon" style="color: var(--secondary-red);"><i class="fas fa-file-signature"></i></div>
+                        <h4>BNA - Mercado de Capitais</h4>
+                        <p>Legislação e regulamentação</p>
+                        <span class="link-url">bna.ao →</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 7: FAQ ACCORDION ===== -->
+        <section class="faq-section fade-in">
+            <div class="container">
+                <h2 class="section-title">
+                    Perguntas <span class="highlight gold">frequentes</span>
+                </h2>
+                <div class="faq-container">
+                    <!-- FAQ será preenchido via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 8: CTA FINAL ===== -->
+        <section class="cta-section fade-in">
+            <div class="container">
+                <div class="cta-content">
+                    <h2 class="cta-title">Pronto para dominar o <span class="highlight gold">mercado financeiro</span>?</h2>
+                    <p class="cta-description">
+                        Comece agora mesmo a simular estratégias, testar cenários e desenvolver perícia em investimentos. 
+                        Sem riscos. Sem sustos. Com aprendizado real.
+                    </p>
+                    <div class="cta-buttons-grid">
+                        <a href="S-real-simulador-mercado-financeiro.html" class="btn btn-primary btn-large">
+                            <i class="fas fa-user-graduate"></i> Simular como Investidor
+                        </a>
+                        <a href="s-real-simulador-minha-empresa-na-bolsa.html" class="btn btn-secondary btn-large">
+                            <i class="fas fa-building"></i> Simular como Empresa
+                        </a>
+                        <a href="#planos" class="btn btn-outline btn-large">
+                            <i class="fas fa-tag"></i> Quero o plano individual
+                        </a>
+                        <a href="#planos" class="btn btn-outline-gold btn-large">
+                            <i class="fas fa-file-invoice"></i> Solicitar orçamento empresarial
+                        </a>
+                    </div>
+                    <p class="cta-footnote">
+                        <i class="fas fa-shield-alt"></i> Pagamento 100% seguro · Acesso imediato · Suporte via WhatsApp
+                    </p>
+                </div>
+            </div>
+        </section>
 
     </main>
     

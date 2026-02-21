@@ -19,10 +19,10 @@
     <script src="frontend/Public/javascript/Global/footer.js"></script>
 
     <!-- ARQUIVOS JS -->
-    <script src="frontend/Public/javascript/page"></script>
+    <script src="frontend/Public/javascript/page/b_imagem.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
-    <link rel="stylesheet" href="frontend/Public/CSS/">
+    <link rel="stylesheet" href="frontend/Public/CSS/biblioteca/sub-biblioteca/b-imagem.css">
 </head>
 
 <body>
@@ -69,8 +69,641 @@
     </header>
 
 
-    <main>
+    
 
+    <main id="biblioteca-slides-main" data-auto-detect="true">
+        
+        <!-- ================================
+             SEÇÃO 1: CABEÇALHO E BUSCA
+             ================================ -->
+        <section class="section-header fade-in">
+            <div class="container">
+                <div class="header-icon">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
+                <h1 class="page-title">Biblioteca de <span class="highlight">Infográficos</span></h1>
+                <p class="page-description">
+                    Explore nossos conjuntos completos de infográficos educacionais. 
+                    Cada card representa uma coleção visual completa sobre um tema específico, 
+                    desenvolvida por Alberto Teca Tomás (2025). Navegue pelos slides internos 
+                    para ver todas as imagens do conjunto.
+                </p>
+                
+                <div class="search-system">
+                    <div class="search-box">
+                        <input type="text" class="search-input" id="slide-search-input" 
+                               placeholder="Buscar conjuntos de infográficos...">
+                        <button class="btn btn-primary" id="slide-search-btn">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </div>
+                    <div class="category-filters-main" id="dynamic-category-filters">
+                        <!-- Filtros gerados dinamicamente pelo JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================
+             SEÇÃO 2: FINANÇAS - 1 CONJUNTO COM 13 IMAGENS
+             ================================ -->
+        <section id="categoria-financas" 
+                 class="category-section" 
+                 data-category="financas"
+                 data-category-name="Finanças e Mercado Financeiro">
+            
+            <div class="container">
+                <div class="category-header">
+                    <div class="category-title-wrapper">
+                        <i class="fas fa-chart-line category-icon"></i>
+                        <h2 class="category-title">Finanças e Mercado Financeiro</h2>
+                        <span class="set-count-badge">1 conjunto · 13 infográficos</span>
+                    </div>
+                    <p class="category-description">
+                        Conjunto completo sobre a evolução do mercado financeiro, criptomoedas, 
+                        bolsa de valores, tokenização e BODIVA. Navegue pelos slides para explorar 
+                        a linha do tempo das inovações financeiras (1776-2025).
+                    </p>
+                </div>
+
+                <!-- ===== CONJUNTO ÚNICO COM 13 IMAGENS ===== -->
+                <div class="sets-grid">
+                    <article class="slide-set" 
+                             data-set-id="set-financas-01"
+                             data-category="financas"
+                             data-title="Evolução do Mercado Financeiro"
+                             data-subtitle="13 infográficos · 1776-2025"
+                             data-author="Alberto Teca Tomás"
+                             data-year="2025"
+                             data-tags="mercado financeiro,criptomoedas,bolsa de valores,tokenização,BODIVA,evolução,1776,1929,2008,bitcoin"
+                             data-total-images="13"
+                             data-views="1243">
+                        
+                        <div class="slide-card animated-border">
+                            
+                            <!-- BADGE DO CONJUNTO MULTI-IMAGEM -->
+                            <div class="set-badge">
+                                <i class="fas fa-layer-group"></i> Conjunto de 13 infográficos
+                            </div>
+                            
+                            <!-- ===== SLIDER/CARROSSEL INTERNO (13 SLIDES) ===== -->
+                            <div class="slider-container" id="slider-financas-01">
+                                <div class="slider-track" id="track-financas-01">
+                                    
+                                    <!-- IMAGEM 1/13 -->
+                                    <div class="slider-slide active">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M1.png" 
+                                             alt="Evolução do Mercado Financeiro - 1/13: Feiras Medievais"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 2/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M2.png" 
+                                             alt="Evolução do Mercado Financeiro - 2/13: Bolsa de Valores"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 3/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M3.png" 
+                                             alt="Evolução do Mercado Financeiro - 3/13: Ações e Obrigações"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 4/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M4.png" 
+                                             alt="Evolução do Mercado Financeiro - 4/13: Crise de 1929"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 5/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M5.png" 
+                                             alt="Evolução do Mercado Financeiro - 5/13: Bretton Woods"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 6/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M6.png" 
+                                             alt="Evolução do Mercado Financeiro - 6/13: Trading Floor"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 7/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M7.png" 
+                                             alt="Evolução do Mercado Financeiro - 7/13: Internet e Home Broker"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 8/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M8.png" 
+                                             alt="Evolução do Mercado Financeiro - 8/13: Crise de 2008"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 9/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M9.png" 
+                                             alt="Evolução do Mercado Financeiro - 9/13: Bitcoin e Blockchain"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 10/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M10.png" 
+                                             alt="Evolução do Mercado Financeiro - 10/13: Fintechs"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 11/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M11.png" 
+                                             alt="Evolução do Mercado Financeiro - 11/13: Tokenização"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 12/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M12.png" 
+                                             alt="Evolução do Mercado Financeiro - 12/13: BODIVA"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM 13/13 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/M13.png" 
+                                             alt="Evolução do Mercado Financeiro - 13/13: DeFi e Futuro"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                </div> <!-- FIM SLIDER TRACK -->
+                                
+                                <!-- CONTROLES DO SLIDER (VISÍVEIS) -->
+                                <button class="slider-nav slider-prev" data-slider="financas-01" aria-label="Slide anterior">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button class="slider-nav slider-next" data-slider="financas-01" aria-label="Próximo slide">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                                
+                                <!-- INDICADORES (DOTS) GERADOS PELO JS -->
+                                <div class="slider-indicators" id="indicators-financas-01"></div>
+                            </div> <!-- FIM SLIDER CONTAINER -->
+                            
+                            <!-- INFORMAÇÕES DO CONJUNTO -->
+                            <div class="slide-content">
+                                <div class="slide-header">
+                                    <h3 class="slide-title">Evolução do Mercado Financeiro</h3>
+                                    <p class="slide-subtitle">Das feiras medievais à tokenização · 13 infográficos</p>
+                                </div>
+                                
+                                <div class="slide-meta">
+                                    <span class="meta-item"><i class="fas fa-user"></i> Alberto Teca Tomás</span>
+                                    <span class="meta-item"><i class="fas fa-calendar"></i> 2025</span>
+                                    <span class="meta-item"><i class="fas fa-tag"></i> Finanças</span>
+                                    <span class="meta-item"><i class="fas fa-layer-group"></i> 13 imagens</span>
+                                    <span class="meta-item"><i class="fas fa-eye"></i> <span class="view-count">1.2k</span> visualizações</span>
+                                </div>
+                                
+                                <div class="slide-tags">
+                                    <span class="tag">criptomoedas</span>
+                                    <span class="tag">bolsa de valores</span>
+                                    <span class="tag">tokenização</span>
+                                    <span class="tag">BODIVA</span>
+                                    <span class="tag">evolução histórica</span>
+                                    <span class="tag">finanças descentralizadas</span>
+                                </div>
+                                
+                                <div class="slide-actions">
+                                    <button class="btn btn-primary btn-view-set" data-set-id="set-financas-01">
+                                        <i class="fas fa-eye"></i> Visualizar conjunto
+                                    </button>
+                                    <button class="btn-icon btn-favorite" data-set-id="set-financas-01" aria-label="Favoritar">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                    <button class="btn-icon btn-share" data-set-id="set-financas-01" aria-label="Compartilhar">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                    <button class="btn-icon btn-download-set" data-set-id="set-financas-01" aria-label="Download">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </div>
+                            </div> <!-- FIM SLIDE CONTENT -->
+                        </div> <!-- FIM SLIDE CARD -->
+                    </article>
+                </div> <!-- FIM SETS GRID -->
+            </div> <!-- FIM CONTAINER -->
+        </section> <!-- FIM SEÇÃO FINANÇAS -->
+
+        <!-- ================================
+             SEÇÃO 3: GESTÃO - 1 CONJUNTO COM 1 IMAGEM
+             ================================ -->
+        <section id="categoria-gestao" 
+                 class="category-section" 
+                 data-category="gestao"
+                 data-category-name="Gestão e Estratégia Educacional">
+            
+            <div class="container">
+                <div class="category-header">
+                    <div class="category-title-wrapper">
+                        <i class="fas fa-briefcase category-icon"></i>
+                        <h2 class="category-title">Gestão e Estratégia Educacional</h2>
+                        <span class="set-count-badge">1 conjunto · 1 infográfico</span>
+                    </div>
+                    <p class="category-description">
+                        Framework educacional "Aprender Fazendo" - metodologia proprietária da Teca Capital 
+                        para capacitação profissional, retenção de conhecimento e simulação educacional.
+                    </p>
+                </div>
+
+                <!-- ===== CONJUNTO ÚNICO COM 1 IMAGEM (CONTROLES OCULTOS) ===== -->
+                <div class="sets-grid">
+                    <article class="slide-set" 
+                             data-set-id="set-gestao-01"
+                             data-category="gestao"
+                             data-title="Framework Aprender Fazendo"
+                             data-subtitle="Metodologia educacional Teca Capital"
+                             data-author="Alberto Teca Tomás"
+                             data-year="2025"
+                             data-tags="edtech,metodologia ativa,simuladores,capacitação,retenção,educação prática,pbl"
+                             data-total-images="1"
+                             data-views="567">
+                        
+                        <div class="slide-card animated-border">
+                            
+                            <!-- BADGE DO CONJUNTO SINGLE-IMAGEM -->
+                            <div class="set-badge set-badge-single">
+                                <i class="fas fa-image"></i> Infográfico individual
+                            </div>
+                            
+                            <!-- ===== SLIDER COM 1 IMAGEM (SEM CONTROLES) ===== -->
+                            <div class="slider-container" id="slider-gestao-01">
+                                <div class="slider-track" id="track-gestao-01">
+                                    <!-- ÚNICA IMAGEM -->
+                                    <div class="slider-slide active">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/Aprender fazendo Teca Capital Investimentos.png" 
+                                             alt="Framework Aprender Fazendo - Metodologia Teca Capital"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                </div>
+                                <!-- CONTROLES NÃO INSERIDOS (1 IMAGEM) -->
+                                <!-- INDICADORES NÃO INSERIDOS -->
+                            </div>
+                            
+                            <!-- INFORMAÇÕES DO CONJUNTO -->
+                            <div class="slide-content">
+                                <div class="slide-header">
+                                    <h3 class="slide-title">Framework Aprender Fazendo</h3>
+                                    <p class="slide-subtitle">Metodologia proprietária de educação prática</p>
+                                </div>
+                                
+                                <div class="slide-meta">
+                                    <span class="meta-item"><i class="fas fa-user"></i> Alberto Teca Tomás</span>
+                                    <span class="meta-item"><i class="fas fa-calendar"></i> 2025</span>
+                                    <span class="meta-item"><i class="fas fa-tag"></i> Gestão/Edtech</span>
+                                    <span class="meta-item"><i class="fas fa-layer-group"></i> 1 infográfico</span>
+                                    <span class="meta-item"><i class="fas fa-eye"></i> <span class="view-count">567</span> visualizações</span>
+                                </div>
+                                
+                                <div class="slide-tags">
+                                    <span class="tag">edtech</span>
+                                    <span class="tag">metodologia ativa</span>
+                                    <span class="tag">simuladores</span>
+                                    <span class="tag">capacitação</span>
+                                    <span class="tag">retenção</span>
+                                    <span class="tag">aprendizagem prática</span>
+                                </div>
+                                
+                                <div class="slide-actions">
+                                    <button class="btn btn-primary btn-view-set" data-set-id="set-gestao-01">
+                                        <i class="fas fa-eye"></i> Visualizar infográfico
+                                    </button>
+                                    <button class="btn-icon btn-favorite" data-set-id="set-gestao-01">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                    <button class="btn-icon btn-share" data-set-id="set-gestao-01">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                    <button class="btn-icon btn-download-set" data-set-id="set-gestao-01">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================
+             SEÇÃO 4: ECONOMIA - 1 CONJUNTO COM 4 IMAGENS
+             ================================ -->
+        <section id="categoria-economia" 
+                 class="category-section" 
+                 data-category="economia"
+                 data-category-name="Economia e Ecossistema Educacional">
+            
+            <div class="container">
+                <div class="category-header">
+                    <div class="category-title-wrapper">
+                        <i class="fas fa-landmark category-icon"></i>
+                        <h2 class="category-title">Economia e Ecossistema Educacional</h2>
+                        <span class="set-count-badge">1 conjunto · 4 infográficos</span>
+                    </div>
+                    <p class="category-description">
+                        Conjunto de infográficos sobre o impacto dos simuladores educacionais, 
+                        educação virada à prática, ecossistema de aprendizagem de qualidade 
+                        e transformação social através da educação.
+                    </p>
+                </div>
+
+                <!-- ===== CONJUNTO ÚNICO COM 4 IMAGENS ===== -->
+                <div class="sets-grid">
+                    <article class="slide-set" 
+                             data-set-id="set-economia-01"
+                             data-category="economia"
+                             data-title="Ecossistema Educacional de Qualidade"
+                             data-subtitle="4 infográficos · Educação prática e transformação social"
+                             data-author="Alberto Teca Tomás"
+                             data-year="2025"
+                             data-tags="ecossistema educacional,simuladores,educação prática,transformação social,qualidade,inclusão"
+                             data-total-images="4"
+                             data-views="378">
+                        
+                        <div class="slide-card animated-border">
+                            
+                            <!-- BADGE DO CONJUNTO -->
+                            <div class="set-badge">
+                                <i class="fas fa-layer-group"></i> Conjunto de 4 infográficos
+                            </div>
+                            
+                            <!-- ===== SLIDER COM 4 IMAGENS ===== -->
+                            <div class="slider-container" id="slider-economia-01">
+                                <div class="slider-track" id="track-economia-01">
+                                    
+                                    <!-- IMAGEM A8 - 1/4 -->
+                                    <div class="slider-slide active">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/A8.png" 
+                                             alt="Ecossistema Educacional - 1/4: Impacto dos Simuladores"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM A9 - 2/4 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/A9.png" 
+                                             alt="Ecossistema Educacional - 2/4: Educação Virada à Prática"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM A10 - 3/4 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/A10.png" 
+                                             alt="Ecossistema Educacional - 3/4: Ecossistema de Aprendizagem"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                    <!-- IMAGEM A11 - 4/4 -->
+                                    <div class="slider-slide">
+                                        <img src="frontend/Public/asset/imagem/imagens-apresentações/A11.png" 
+                                             alt="Ecossistema Educacional - 4/4: Transformação Social"
+                                             loading="lazy"
+                                             class="slider-image">
+                                    </div>
+                                    
+                                </div> <!-- FIM TRACK -->
+                                
+                                <!-- CONTROLES DO SLIDER (VISÍVEIS) -->
+                                <button class="slider-nav slider-prev" data-slider="economia-01" aria-label="Slide anterior">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button class="slider-nav slider-next" data-slider="economia-01" aria-label="Próximo slide">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                                
+                                <!-- INDICADORES (DOTS) GERADOS PELO JS -->
+                                <div class="slider-indicators" id="indicators-economia-01"></div>
+                            </div> <!-- FIM SLIDER CONTAINER -->
+                            
+                            <!-- INFORMAÇÕES DO CONJUNTO -->
+                            <div class="slide-content">
+                                <div class="slide-header">
+                                    <h3 class="slide-title">Ecossistema Educacional de Qualidade</h3>
+                                    <p class="slide-subtitle">Educação prática, simuladores e transformação social</p>
+                                </div>
+                                
+                                <div class="slide-meta">
+                                    <span class="meta-item"><i class="fas fa-user"></i> Alberto Teca Tomás</span>
+                                    <span class="meta-item"><i class="fas fa-calendar"></i> 2025</span>
+                                    <span class="meta-item"><i class="fas fa-tag"></i> Economia</span>
+                                    <span class="meta-item"><i class="fas fa-layer-group"></i> 4 infográficos</span>
+                                    <span class="meta-item"><i class="fas fa-eye"></i> <span class="view-count">378</span> visualizações</span>
+                                </div>
+                                
+                                <div class="slide-tags">
+                                    <span class="tag">ecossistema educacional</span>
+                                    <span class="tag">simuladores</span>
+                                    <span class="tag">educação prática</span>
+                                    <span class="tag">transformação social</span>
+                                    <span class="tag">qualidade</span>
+                                    <span class="tag">inclusão</span>
+                                </div>
+                                
+                                <div class="slide-actions">
+                                    <button class="btn btn-primary btn-view-set" data-set-id="set-economia-01">
+                                        <i class="fas fa-eye"></i> Visualizar conjunto
+                                    </button>
+                                    <button class="btn-icon btn-favorite" data-set-id="set-economia-01">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                    <button class="btn-icon btn-share" data-set-id="set-economia-01">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                    <button class="btn-icon btn-download-set" data-set-id="set-economia-01">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================
+             SEÇÃO 5: FILTROS AVANÇADOS
+             ================================ -->
+        <section class="section-advanced-filters fade-in">
+            <div class="container">
+                <div class="filters-header">
+                    <h2 class="section-title">Refine sua <span class="highlight">Busca</span></h2>
+                    <p class="section-subtitle">Encontre conjuntos de infográficos por filtros específicos</p>
+                </div>
+                
+                <div class="filters-accordion">
+                    <div class="filters-toggle" id="filters-toggle">
+                        <div class="toggle-label">
+                            <i class="fas fa-sliders-h"></i>
+                            <h3>Filtros Avançados de Conjuntos</h3>
+                        </div>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                    
+                    <div class="filters-panel" id="filters-panel">
+                        <div class="filters-grid">
+                            <!-- FILTRO POR CATEGORIA -->
+                            <div class="filter-block">
+                                <label class="filter-label"><i class="fas fa-tag"></i> Categoria</label>
+                                <div class="filter-options-group" id="filter-category-group">
+                                    <!-- Gerado dinamicamente -->
+                                </div>
+                            </div>
+                            
+                            <!-- FILTRO POR ANO -->
+                            <div class="filter-block">
+                                <label class="filter-label"><i class="fas fa-calendar"></i> Ano</label>
+                                <div class="filter-options-group" id="filter-year-group">
+                                    <!-- Gerado dinamicamente -->
+                                </div>
+                            </div>
+                            
+                            <!-- FILTRO POR AUTOR -->
+                            <div class="filter-block">
+                                <label class="filter-label"><i class="fas fa-user"></i> Autor</label>
+                                <div class="filter-options-group" id="filter-author-group">
+                                    <!-- Gerado dinamicamente -->
+                                </div>
+                            </div>
+                            
+                            <!-- FILTRO POR QUANTIDADE DE IMAGENS -->
+                            <div class="filter-block">
+                                <label class="filter-label"><i class="fas fa-layer-group"></i> Tamanho do Conjunto</label>
+                                <div class="filter-options-group" id="filter-size-group">
+                                    <!-- Gerado dinamicamente -->
+                                </div>
+                            </div>
+                            
+                            <!-- FILTRO POR TAGS (FULL WIDTH) -->
+                            <div class="filter-block full-width">
+                                <label class="filter-label"><i class="fas fa-tags"></i> Tags</label>
+                                <div class="filter-options-group" id="filter-tags-group">
+                                    <!-- Gerado dinamicamente -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- ORDENAÇÃO -->
+                        <div class="sorting-system">
+                            <div class="sorting-controls">
+                                <label><i class="fas fa-sort-amount-down"></i> Ordenar conjuntos por:</label>
+                                <select class="sort-select" id="sort-select">
+                                    <option value="relevancia">Relevância</option>
+                                    <option value="titulo-asc">Título (A-Z)</option>
+                                    <option value="ano-desc">Ano (Mais recente)</option>
+                                    <option value="ano-asc">Ano (Mais antigo)</option>
+                                    <option value="views-desc">Mais visualizados</option>
+                                    <option value="tamanho-desc">Mais imagens</option>
+                                    <option value="tamanho-asc">Menos imagens</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- AÇÕES -->
+                        <div class="filters-actions">
+                            <button class="btn btn-primary" id="apply-filters-btn">
+                                <i class="fas fa-check"></i> Aplicar Filtros
+                            </button>
+                            <button class="btn btn-secondary" id="clear-filters-btn">
+                                <i class="fas fa-undo-alt"></i> Limpar Filtros
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================
+             SEÇÃO 6: ESTATÍSTICAS
+             ================================ -->
+        <section class="section-stats fade-in">
+            <div class="container">
+                <div class="stats-header">
+                    <h2 class="section-title">Nossa Biblioteca em <span class="highlight">Conjuntos</span></h2>
+                    <p class="section-subtitle">Infográficos organizados em coleções visuais completas</p>
+                </div>
+                
+                <div class="stats-grid" id="stats-grid">
+                    <!-- Estatísticas geradas dinamicamente pelo JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================
+             SEÇÃO 7: MODAL DE VISUALIZAÇÃO DE CONJUNTO
+             ================================ -->
+        <div class="modal-set-viewer" id="modal-set-viewer" role="dialog" aria-hidden="true" aria-labelledby="modal-set-title">
+            <div class="modal-overlay"></div>
+            <div class="modal-container">
+                <div class="modal-header">
+                    <div class="modal-title-wrapper">
+                        <i class="fas fa-layer-group"></i>
+                        <h3 class="modal-title" id="modal-set-title">Visualizar Conjunto</h3>
+                    </div>
+                    <button class="modal-close" id="modal-close" aria-label="Fechar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-slider-container">
+                        <div class="modal-slider-track" id="modal-slider-track"></div>
+                        <button class="modal-nav modal-prev" id="modal-prev" aria-label="Slide anterior">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="modal-nav modal-next" id="modal-next" aria-label="Próximo slide">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <div class="modal-indicators" id="modal-indicators"></div>
+                    </div>
+                    <div class="modal-info" id="modal-info"></div>
+                </div>
+                <div class="modal-footer">
+                    <div class="modal-actions">
+                        <button class="btn btn-primary" id="modal-download">
+                            <i class="fas fa-download"></i> Download do conjunto
+                        </button>
+                        <button class="btn btn-secondary" id="modal-share">
+                            <i class="fas fa-share-alt"></i> Compartilhar
+                        </button>
+                        <button class="btn-icon btn-favorite" id="modal-favorite">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="modal-counter" id="modal-counter"></div>
+                </div>
+            </div>
+        </div>
+        
     </main>
     
     <footer class="site-footer">

@@ -1,0 +1,272 @@
+        /* === style.css – todos os estilos exigidos === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-black: #000000;
+            --primary-white: #ffffff;
+            --primary-gold: rgb(214, 174, 100);
+            --secondary-blue: #0066cc;
+            --secondary-red: #cc3333;
+            --text-gray: #cccccc;
+            --text-dim: #aaaaaa;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--primary-black);
+            color: var(--primary-white);
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .teca-page.sobre-teca-capital {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            margin-top: 70px;
+        }
+
+        /* TIPOGRAFIA */
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1.8rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-white);
+        }
+        .section-subhead {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+        }
+
+        /* ÍCONES exclusivamente dourados */
+        i, .fas {
+            color: var(--primary-gold);
+        }
+        h2 i, h3 i, .card-title i, p i, table i {
+            margin-right: 0.75rem;
+        }
+        p i {
+            font-size: 1.1rem;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        h2 i { font-size: 2.2rem; }
+        h3 i { font-size: 1.8rem; }
+        .card-principal i { font-size: 2rem; }
+        .valor-grid i { font-size: 1.6rem; }
+        table i { font-size: 1rem; margin-right: 0.4rem; }
+
+        /* BORDA ANIMADA (regra absoluta #4) */
+        .card-com-borda {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 1.8rem 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            z-index: 1;
+            border: 1px solid transparent;
+        }
+        .card-com-borda::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 22px;
+            padding: 2px;
+            background: linear-gradient(60deg, 
+                rgb(214,174,100), 
+                #0066cc, 
+                #cc3333, 
+                rgb(214,174,100), 
+                #0066cc, 
+                #cc3333);
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.5;
+            transition: opacity 0.4s ease, background-position 0.6s;
+            animation: bordaGradiente 6s ease infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .card-com-borda:hover::before {
+            opacity: 0.9;
+            animation-duration: 3s;
+        }
+        @keyframes bordaGradiente {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* grids */
+        .grid-valores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+        .grid-equipa {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+        .grid-objetivos {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        .card-objetivo {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            border: 1px solid var(--border-light);
+        }
+        .card-objetivo i {
+            font-size: 2rem;
+            min-width: 2.8rem;
+        }
+
+        /* destaques dourados */
+        .highlight, strong, .gold-text {
+            color: var(--primary-gold);
+            font-weight: 600;
+        }
+
+        /* TABELAS profissionais – sem text-decoration none */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.2);
+        }
+        th {
+            background: rgba(214, 174, 100, 0.12);
+            color: var(--primary-gold);
+            font-weight: 600;
+            padding: 1rem 1.2rem;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+        td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-gray);
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* CARDS DE EQUIPA com imagens reais */
+        .card-equipa {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: transform 0.3s ease, border-color 0.2s;
+        }
+        .card-equipa:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+        }
+        .team-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1.2rem;
+            border: 2px solid var(--primary-gold);
+            box-shadow: 0 5px 15px rgba(214,174,100,0.2);
+        }
+        .team-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .card-equipa h3 {
+            font-size: 1.4rem;
+            color: var(--primary-gold);
+            margin: 0.5rem 0 0.2rem;
+        }
+        .card-equipa h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--primary-white);
+            margin-bottom: 0.75rem;
+        }
+        .card-equipa p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        /* responsividade */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; flex-wrap: wrap; }
+            .teca-page.sobre-teca-capital { padding: 1.5rem 1rem; }
+            .card-com-borda { padding: 1.5rem; }
+            .grid-equipa { grid-template-columns: 1fr; }
+            .grid-valores { grid-template-columns: 1fr; }
+            .team-image { width: 120px; height: 120px; }
+            table { display: block; overflow-x: auto; white-space: nowrap; }
+            td, th { white-space: normal; }
+        }
+        @media (min-width: 480px) and (max-width: 768px) {
+            .grid-equipa { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* touch targets */
+        .card-com-borda, .card-equipa, button, a { 
+            min-height: 44px; 
+            min-width: 44px; 
+        }
+
+        .kz-value {
+            font-weight: 700;
+            color: var(--primary-gold);
+        }
+
+        /* listas com ícones */
+        .flex-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+        .flex-list li {
+            margin-bottom: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+    

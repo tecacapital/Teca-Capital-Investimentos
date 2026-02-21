@@ -1,0 +1,392 @@
+ /* === style.css – todas as regras absolutas do projeto === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-black: #000000;
+            --primary-white: #ffffff;
+            --primary-gold: rgb(214, 174, 100);
+            --gold-rgb: 214, 174, 100;
+            --text-gray: #cccccc;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --border-light: rgba(255, 255, 255, 0.1);
+            --secondary-blue: #0066cc;
+            --secondary-red: #cc3333;
+            --accent-green: #2e8b57;      /* subtil para gestão */
+            --accent-orange: #cc7a2b;      /* subtil para economia */
+            --border-radius-card: 20px;
+            --border-radius-table: 8px;
+            --transition-default: 0.3s ease;
+        }
+
+        body {
+            background-color: var(--primary-black);
+            color: var(--primary-white);
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* MAIN — único container, sem header/footer globais */
+        .teca-page.formacoes-presenciais {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* tipografia */
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); }
+        h2 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 2rem; }
+        h3 { font-size: 1.4rem; margin-bottom: 1rem; }
+
+        /* todas as listas SEM text-decoration (apenas links podem ter, mas aqui não usamos sublinhados) */
+        ul, ol, dl {
+            list-style: none;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        /* garantia absoluta para tabelas */
+        table, td, th, tr {
+            text-decoration: none !important;
+            list-style: none;
+        }
+
+        /* ícones dourados (global) */
+        i[class^="fa-"], i[class*=" fa-"] {
+            color: var(--primary-gold);
+        }
+        /* excepções apenas para botões onde o ícone herda cor do texto */
+        .btn-primary i, .btn-secondary i, .btn-link i {
+            color: currentColor;
+            margin-left: 8px;
+            margin-right: 0;
+        }
+
+        /* === BORDAS ANIMADAS (REGRA #4) === */
+        .animated-border {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            z-index: 0;
+        }
+        .animated-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: calc(var(--border-radius-card) + 2px);
+            padding: 2px;
+            background: linear-gradient(300deg, 
+                rgba(var(--gold-rgb), 0.5), 
+                rgba(0, 102, 204, 0.5), 
+                rgba(204, 51, 51, 0.5), 
+                rgba(var(--gold-rgb), 0.5));
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderRotate 6s ease infinite;
+            transition: opacity 0.3s, animation-duration 0.3s;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .animated-border:hover::before {
+            opacity: 0.9;
+            animation-duration: 3s;
+        }
+
+        @keyframes borderRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* badges */
+        .badge {
+            display: inline-block;
+            border: 1px solid var(--primary-gold);
+            color: var(--primary-gold);
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: transparent;
+        }
+        .badge-gold {
+            background: var(--primary-gold);
+            color: #000;
+            border: none;
+        }
+        .badge-gold i {
+            color: #000;
+            margin-right: 5px;
+        }
+
+        /* cards */
+        .card-categoria {
+            background: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            padding: 1.8rem 1.5rem;
+            height: 100%;
+            transition: transform var(--transition-default);
+        }
+        .card-categoria:hover {
+            transform: translateY(-8px);
+        }
+        /* overlay subtil por categoria (opcional, mantém dourado nos ícones) */
+        .card-categoria.mercado {
+            border-left: 4px solid var(--secondary-blue);
+        }
+        .card-categoria.gestao {
+            border-left: 4px solid var(--accent-green);
+        }
+        .card-categoria.economia {
+            border-left: 4px solid var(--accent-orange);
+        }
+
+        /* tabelas – perfeitas, sem quebras */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: var(--border-radius-table);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            min-width: 600px;  /* garante estrutura em mobile com scroll */
+        }
+        th, td {
+            padding: 15px 20px;
+            border: 1px solid var(--border-light);
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background: rgba(214, 174, 100, 0.1);
+            color: var(--primary-gold);
+            font-weight: 600;
+        }
+        td {
+            background: transparent;
+        }
+        tbody tr:nth-child(even) td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        tbody tr:hover td {
+            background: rgba(214, 174, 100, 0.05);
+        }
+        td i {
+            font-size: 18px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        /* alinhamento primeira coluna à esquerda, demais centralizado */
+        th:first-child, td:first-child {
+            text-align: left;
+        }
+        th:not(:first-child), td:not(:first-child) {
+            text-align: center;
+        }
+
+        /* botões */
+        .btn-primary, .btn-secondary, .btn-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all var(--transition-default);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            gap: 0.5rem;
+        }
+        .btn-primary {
+            background: var(--primary-gold);
+            color: #000;
+        }
+        .btn-primary:hover {
+            background: #c49b4c;
+            transform: scale(1.02);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--primary-gold);
+            color: var(--primary-white);
+        }
+        .btn-secondary:hover {
+            background: rgba(214, 174, 100, 0.1);
+        }
+        .btn-link {
+            background: transparent;
+            color: var(--primary-gold);
+            padding: 0.5rem 1rem;
+        }
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        /* grids */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        @media (min-width: 768px) {
+            .grid-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .grid-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* seções */
+        section {
+            margin-bottom: 5rem;
+        }
+        .section-title i {
+            font-size: 28px;
+            margin-right: 12px;
+        }
+
+        /* feedbacks (depoimentos) */
+        .feedback-card {
+            background: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            padding: 2rem 1.8rem;
+            height: 100%;
+        }
+        .avatar-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-gold);
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        .estrelas i {
+            color: var(--primary-gold);
+            margin-right: 3px;
+            font-size: 16px;
+        }
+        .fa-quote-left {
+            font-size: 2rem;
+            opacity: 0.4;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ accordion */
+        .faq-item {
+            background: var(--bg-card);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-light);
+        }
+        .faq-question {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .faq-question i {
+            font-size: 24px;
+            width: 32px;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            padding: 0 1.5rem 0 3.5rem;
+            background: rgba(0,0,0,0.2);
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+        .faq-answer p {
+            padding-bottom: 1.5rem;
+            color: var(--text-gray);
+        }
+        .faq-question[aria-expanded="true"] + .faq-answer {
+            max-height: 300px; /* valor grande o suficiente */
+        }
+
+        /* call to action final */
+        .cta-duo {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            background: linear-gradient(145deg, #0a0a0a, #000);
+            border-radius: 32px;
+            padding: 3rem;
+            margin-top: 3rem;
+        }
+        @media (min-width: 700px) {
+            .cta-duo {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .cta-card {
+            background: rgba(255,255,255,0.02);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* utilitários */
+        .text-gold {
+            color: var(--primary-gold);
+        }
+        .text-small {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        .mt-2 { margin-top: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .flex-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid var(--border-light);
+            margin: 2rem 0;
+        }
+
+        /* mobile touch */
+        button, a, [role="button"] {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        /* garantir que nenhum elemento de lista ou tabela recebe text-decoration */
+        td, th, tr, tbody, thead, table, ul, ol, dl, li {
+            text-decoration: none !important;
+        }
+   

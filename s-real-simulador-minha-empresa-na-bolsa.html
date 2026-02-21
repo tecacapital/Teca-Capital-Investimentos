@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="pt-Ao">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teca Capital - Gestão Simulador</title>
+    <link rel="icon" href="frontend/Public/asset/icon/Teca Capital favicon.png" type="image/x-icon">
+   <link rel="stylesheet" href="frontend/Public/CSS/global/header.css">
+    <link rel="stylesheet" href="frontend/Public/CSS/global/main.css">
+    <link rel="stylesheet" href="frontend/Public/CSS/global/footer.css">
+    <link rel="stylesheet" href="frontend/Public/CSS/global/variaveis.css">
+    <link rel="stylesheet" href="frontend/Public/CSS/global/nav.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- ARQUIVOS JS GLOBAL -->
+    <script src="frontend/Public/javascript/Global/header.js"></script>
+    <script src="frontend/Public/javascript/Global/nav.js"></script>
+    <script src="frontend/Public/javascript/Global/mobile-menu-toggle.js"></script>
+    <script src="frontend/Public/javascript/Global/footer.js"></script>
+
+    <!-- ARQUIVOS JS -->
+    <script src="frontend/Public/javascript/page/s-real-simulador-minha-empresa-na-bolsa.js"></script>
+
+    <!-- CSS CONTEUDO PRINCIPAL -->
+    <link rel="stylesheet" href="frontend/Public/CSS/simuladores/sub-simuladores/s.perfeitos/simulador-minha-empresa-na-bolsa.css">
+</head>
+
+<body>
+
+     <header>
+       <header class="site-header">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="frontend/Public/asset/icon/Teca Capital favicon.png" 
+                     alt="Teca Capital" 
+                     class="site-logo">
+            </a>
+        </div>
+        
+        <nav class="main-nav desktop-nav">
+            <ul class="nav-list">
+                <li><a href="index.html" class="active">Página Inicial</a></li>
+                <li><a href="biblioteca.html">Biblioteca</a></li>
+                <li><a href="simuladores.html">Simuladores</a></li>
+                <li><a href="+sobre.html">+Sobre a Teca Capital</a></li>
+                <li><a href="casdastro-logion.html">Login/Cadastro</a></li>
+                <li><a href="adm.html">Administrador</a></li>
+            </ul>
+        </nav>
+        
+        <button class="menu-toggle mobile-nav-toggle" aria-label="Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
+        <div class="mobile-nav-overlay">
+            <nav class="mobile-nav">
+                <ul class="mobile-nav-list">
+                    <li><a href="index.html" class="active">Página Inicial</a></li>
+                    <li><a href="biblioteca.html">Biblioteca</a></li>
+                    <li><a href="simuladores.html">Simuladores</a></li>
+                    <li><a href="+sobre.html">+Sobre a Teca Capital</a></li>
+                    <li><a href="casdastro-logion.html">Login/Cadastro</a></li>
+                    <li><a href="adm.html">Administrador</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+
+    <main>
+
+        <div class="container">
+            <!-- FASE 1: INTRODUÇÃO -->
+            <section id="fase-introducao" class="fase">
+                <div class="card text-center">
+                    <h1>SIMULADOR TECA CAPITAL INVESTIMENTOS</h1>
+                    <h2>Minha Empresa na Bolsa de Valores</h2>
+                    <p class="mb-30">Desenvolvido por <strong>Alberto Teca Tomás</strong></p>
+                    
+                    <div class="card" style="max-width: 800px; margin: 0 auto;">
+                        <h3>🎯 Objetivo Educativo</h3>
+                        <p>Este simulador tem como objetivo educar sobre o processo completo de cotação de empresas na <strong>BODIVA (Bolsa de Dívida e Valores de Angola)</strong>, abrangendo desde a preparação inicial até a operação no mercado secundário.</p>
+                        
+                        <p>Você aprenderá sobre:</p>
+                        <ul style="text-align: left; margin: 15px 0 15px 30px; color: var(--cor-texto-secundario);">
+                            <li>Processo completo de listagem na BODIVA</li>
+                            <li>Mercado Primário (OPV - Oferta Pública de Venda)</li>
+                            <li>Mercado Secundário com trading em tempo real</li>
+                            <li>Eventos corporativos (dividendos, emissões, recompras)</li>
+                            <li>Múltiplos cenários econômicos</li>
+                            <li>Tipos de instrumentos: Ações, Obrigações e Híbrido</li>
+                        </ul>
+                        
+                        <div class="alert alert-warning">
+                            <strong>⚠️ AVISO IMPORTANTE:</strong> Esta é uma simulação fictícia para fins educacionais. Os valores, cenários e resultados não representam a realidade do mercado financeiro angolano nem constituem recomendação de investimento.
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button id="btnIniciar" class="btn">🚀 INICIAR SIMULAÇÃO</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- FASE 2: FORMULÁRIO DE CONFIGURAÇÃO -->
+            <section id="fase-configuracao" class="fase hidden">
+                <div class="etapas-container">
+                    <div class="etapa ativa">
+                        <div class="etapa-indicador">1</div>
+                        <div class="etapa-nome">Configuração</div>
+                    </div>
+                    <div class="etapa">
+                        <div class="etapa-indicador">2</div>
+                        <div class="etapa-nome">Educação</div>
+                    </div>
+                    <div class="etapa">
+                        <div class="etapa-indicador">3</div>
+                        <div class="etapa-nome">OPV</div>
+                    </div>
+                    <div class="etapa">
+                        <div class="etapa-indicador">4</div>
+                        <div class="etapa-nome">Mercado</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>📋 Configuração da Sua Empresa</h2>
+                    <p>Preencha os dados da empresa que será listada na BODIVA:</p>
+                    
+                    <form id="formConfiguracao">
+                        <div class="form-group">
+                            <label for="nomeEmpresa">1. Nome da Empresa *</label>
+                            <input type="text" id="nomeEmpresa" required placeholder="Ex: TECA CAPITAL INVESTIMENTOS S.A.">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nomePresidente">2. Nome do Presidente *</label>
+                            <input type="text" id="nomePresidente" required placeholder="Ex: Alberto Teca Tomás">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="provincia">3. Província *</label>
+                            <select id="provincia" required>
+                                <option value="">Selecione uma província</option>
+                                <option value="Luanda">Luanda</option>
+                                <option value="Bengo">Bengo</option>
+                                <option value="Benguela">Benguela</option>
+                                <option value="Bié">Bié</option>
+                                <option value="Cabinda">Cabinda</option>
+                                <option value="Cuando Cubango">Cuando Cubango</option>
+                                <option value="Cuanza Norte">Cuanza Norte</option>
+                                <option value="Cuanza Sul">Cuanza Sul</option>
+                                <option value="Cunene">Cunene</option>
+                                <option value="Huambo">Huambo</option>
+                                <option value="Huíla">Huíla</option>
+                                <option value="Lunda Norte">Lunda Norte</option>
+                                <option value="Lunda Sul">Lunda Sul</option>
+                                <option value="Malanje">Malanje</option>
+                                <option value="Moxico">Moxico</option>
+                                <option value="Namibe">Namibe</option>
+                                <option value="Uíge">Uíge</option>
+                                <option value="Zaire">Zaire</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="setor">4. Setor de Atuação *</label>
+                            <select id="setor" required>
+                                <option value="">Selecione um setor</option>
+                                <option value="Financeiro">Financeiro</option>
+                                <option value="Agrícola">Agrícola</option>
+                                <option value="Energético">Energético</option>
+                                <option value="Telecomunicações">Telecomunicações</option>
+                                <option value="Educacional">Educacional</option>
+                                <option value="Tecnológico">Tecnológico</option>
+                                <option value="Infraestrutura">Infraestrutura</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Saúde">Saúde</option>
+                                <option value="Comércio">Comércio</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cenarioEconomico">5. Cenário Econômico *</label>
+                            <select id="cenarioEconomico" required>
+                                <option value="">Selecione um cenário</option>
+                                <option value="estavel">Estável - Variações moderadas (±5%)</option>
+                                <option value="crescimento">Crescimento - Alta valorização frequente (10-20%)</option>
+                                <option value="instavel">Instável - Alta desvalorização frequente</option>
+                                <option value="angola-novo">Angola Novo (0-5 anos) - Baixa volatilidade diária</option>
+                                <option value="angola-maduro">Angola Maduro (5-10+ anos) - Alta volatilidade</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="capitalSocial">6. Capital Social (AOA Kwanzas) *</label>
+                            <input type="number" id="capitalSocial" required min="1000000" value="1000000000">
+                            <small>Valor mínimo recomendado: AOA 1.000.000,00</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>7. Tipo de Emissão *</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="tipoAcoes" name="tipoEmissao" value="acoes" checked>
+                                    <label for="tipoAcoes">Ações</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="tipoObrigacoes" name="tipoEmissao" value="obrigacoes">
+                                    <label for="tipoObrigacoes">Obrigações</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="tipoHibrido" name="tipoEmissao" value="hibrido">
+                                    <label for="tipoHibrido">Híbrido (Ações + Obrigações)</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" id="tipoAcaoGroup">
+                            <label>8. Tipo de Ação (se aplicável)</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="acaoOrdinaria" name="tipoAcao" value="ordinaria" checked>
+                                    <label for="acaoOrdinaria">Ordinária</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="acaoPreferencial" name="tipoAcao" value="preferencial">
+                                    <label for="acaoPreferencial">Preferencial</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>9. Alcance de Investidores *</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="alcanceAngola" name="alcance" value="angola" checked>
+                                    <label for="alcanceAngola">Angola (26,6M potenciais)</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="alcanceGlobal" name="alcance" value="global">
+                                    <label for="alcanceGlobal">Global (7 bilhões de pessoas)</label>
+                                </div>
+                            </div>
+                            
+                            <div class="slider-container">
+                                <label for="alcancePercentual">Percentual do mercado a atingir:</label>
+                                <input type="range" id="alcancePercentual" min="0" max="100" value="10" step="1">
+                                <div class="slider-value" id="alcancePercentualValue">10%</div>
+                                <small>Quanto maior o alcance, maior a liquidez potencial no mercado secundário.</small>
+                            </div>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button type="button" id="btnVoltarIntro" class="btn btn-secondary">⬅️ VOLTAR</button>
+                            <button type="submit" id="btnAvancarEducacao" class="btn">PRÓXIMO ➡️</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            
+            <!-- FASE 3: PROCESSOS EDUCATIVOS -->
+            <section id="fase-educacao" class="fase hidden">
+                <div class="etapas-container">
+                    <div class="etapa etapa-concluida">
+                        <div class="etapa-indicador">✓</div>
+                        <div class="etapa-nome">Configuração</div>
+                    </div>
+                    <div class="etapa ativa">
+                        <div class="etapa-indicador">2</div>
+                        <div class="etapa-nome">Educação</div>
+                    </div>
+                    <div class="etapa">
+                        <div class="etapa-indicador">3</div>
+                        <div class="etapa-nome">OPV</div>
+                    </div>
+                    <div class="etapa">
+                        <div class="etapa-indicador">4</div>
+                        <div class="etapa-nome">Mercado</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>📚 Processo de Listagem na BODIVA</h2>
+                    <p>Etapas educativas sobre como uma empresa se torna uma sociedade aberta e é listada na bolsa de valores.</p>
+                    
+                    <div id="conteudoEducacao">
+                        <!-- Conteúdo será carregado dinamicamente -->
+                        <div class="etapa-educativa ativa" id="etapa-1">
+                            <h3>1. Transformação em Sociedade Aberta (S.A.)</h3>
+                            <p>Para ser listada na BODIVA, uma empresa deve primeiro se constituir como uma Sociedade Aberta (S.A.). Isso envolve:</p>
+                            <ul style="margin-left: 30px; margin-bottom: 15px; color: var(--cor-texto-secundario);">
+                                <li>Registro nos órgãos competentes</li>
+                                <li>Adaptação do estatuto social</li>
+                                <li>Criação de órgãos de governança corporativa</li>
+                                <li>Divulgação pública de informações</li>
+                            </ul>
+                            <p>A transformação em S.A. permite que a empresa tenha capital aberto ao público, com ações negociáveis no mercado de capitais.</p>
+                        </div>
+                        
+                        <div class="etapa-educativa hidden" id="etapa-2">
+                            <h3>2. Requisitos Mínimos de Capital e Documentação</h3>
+                            <p>A BODIVA estabelece requisitos mínimos para a listagem:</p>
+                            <ul style="margin-left: 30px; margin-bottom: 15px; color: var(--cor-texto-secundario);">
+                                <li><strong>Capital Social Mínimo:</strong> Valor definido conforme o segmento</li>
+                                <li><strong>Demonstrações Financeiras:</strong> Últimos 3 anos auditadas</li>
+                                <li><strong>Prospecto:</strong> Documento detalhado sobre a empresa e a emissão</li>
+                                <li><strong>Histórico Corporativo:</strong> Pelo menos 2 anos de operação</li>
+                            </ul>
+                            <p>A documentação deve ser submetida à CMC (Comissão do Mercado de Capitais) para aprovação.</p>
+                        </div>
+                        
+                        <div class="etapa-educativa hidden" id="etapa-3">
+                            <h3>3. Auditoria e Demonstrações Financeiras</h3>
+                            <p>Todas as demonstrações financeiras devem ser auditadas por uma firma de auditoria independente registrada na CMC:</p>
+                            <ul style="margin-left: 30px; margin-bottom: 15px; color: var(--cor-texto-secundario);">
+                                <li>Balanço Patrimonial</li>
+                                <li>Demonstração de Resultados</li>
+                                <li>Demonstração de Fluxos de Caixa</li>
+                                <li>Demonstração de Mutações do Patrimônio Líquido</li>
+                            </ul>
+                            <p>A auditoria garante a confiabilidade das informações financeiras fornecidas aos investidores.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" id="btnVoltarConfig" class="btn btn-secondary">⬅️ ANTERIOR</button>
+                        <button type="button" id="btnAvancarEtapa" class="btn">PRÓXIMO ETAPA ➡️</button>
+                        <button type="button" id="btnPularParaOPV" class="btn">PULAR PARA OPV</button>
+                    </div>
+                    
+                    <div class="mt-20">
+                        <div class="alert alert-warning">
+                            <strong>Nota:</strong> O processo completo de listagem tem 10 etapas educativas. Você pode avançar por todas ou pular para a Oferta Pública de Venda (OPV).
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- FASE 4: MERCADO PRIMÁRIO (OPV) -->
+            <section id="fase-opv" class="fase hidden">
+                <div class="etapas-container">
+                    <div class="etapa etapa-concluida">
+                        <div class="etapa-indicador">✓</div>
+                        <div class="etapa-nome">Configuração</div>
+                    </div>
+                    <div class="etapa etapa-concluida">
+                        <div class="etapa-indicador">✓</div>
+                        <div class="etapa-nome">Educação</div>
+                    </div>
+                    <div class="etapa ativa">
+                        <div class="etapa-indicador">3</div>
+                        <div class="etapa-nome">OPV</div>
+                    </div>
+                    <div class="etapa">
+                        <div class="etapa-indicador">4</div>
+                        <div class="etapa-nome">Mercado</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>💰 Mercado Primário - Oferta Pública (OPV)</h2>
+                    <p>Configure os detalhes da oferta pública de venda para captar recursos no mercado primário.</p>
+                    
+                    <div id="opvContainer">
+                        <!-- Conteúdo será carregado dinamicamente conforme o tipo de emissão -->
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" id="btnVoltarEducacao" class="btn btn-secondary">⬅️ ANTERIOR</button>
+                        <button type="button" id="btnConcluirOPV" class="btn btn-success">CONCLUIR OPV</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- FASE 5: CONCLUSÃO DA OPV -->
+            <section id="fase-conclusao-opv" class="fase hidden">
+                <div class="card text-center">
+                    <h2>✅ Oferta Pública Concluída com Sucesso!</h2>
+                    
+                    <div class="card" style="max-width: 800px; margin: 20px auto;">
+                        <h3>Resumo da OPV</h3>
+                        <div id="resumoOPV" class="metricas-container mt-20">
+                            <!-- Conteúdo será carregado dinamicamente -->
+                        </div>
+                        
+                        <div class="alert alert-success mt-20">
+                            <strong>🎉 Parabéns!</strong> Sua empresa concluiu com sucesso a Oferta Pública de Venda na BODIVA. Agora suas ações/obrigações estão prontas para negociação no mercado secundário.
+                        </div>
+                        
+                        <div class="btn-group mt-30">
+                            <button type="button" id="btnIrMercadoSecundario" class="btn">🚀 IR PARA MERCADO SECUNDÁRIO</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- FASE 6: MERCADO SECUNDÁRIO -->
+            <section id="fase-mercado-secundario" class="fase hidden">
+                <!-- CABEÇALHO DA CARTEIRA -->
+                <div class="carteira-header">
+                    <h2>🏦 SIMULADOR TECA CAPITAL INVESTIMENTOS</h2>
+                    <p>Desenvolvido por Alberto Teca Tomás</p>
+                    
+                    <div class="empresa-info" id="empresaInfoHeader">
+                        <!-- Preenchido dinamicamente -->
+                    </div>
+                </div>
+                
+                <!-- SE AÇÕES/HÍBRIDO: CARTEIRA DE AÇÕES -->
+                <div id="carteiraAcoes" class="card hidden">
+                    <h2>📊 Carteira de Ações</h2>
+                    
+                    <div class="metricas-container" id="metricasAcoes">
+                        <!-- Métricas em tempo real -->
+                    </div>
+                    
+                    <h3>Eventos Corporativos</h3>
+                    <p>Clique nos eventos abaixo para simular seu impacto no mercado:</p>
+                    
+                    <div class="eventos-container">
+                        <div class="evento-btn" data-evento="lucro-recorde">☑️ Anunciar Lucro Recorde</div>
+                        <div class="evento-btn" data-evento="lucro-normal">☑️ Anunciar Lucro Normal</div>
+                        <div class="evento-btn" data-evento="lucro-abaixo">☑️ Anunciar Lucro Abaixo</div>
+                        <div class="evento-btn" data-evento="escandalo">☑️ Escândalo de Corrupção</div>
+                        <div class="evento-btn" data-evento="parceria">☑️ Nova Parceria Estratégica</div>
+                    </div>
+                    
+                    <div class="flex wrap gap-20 mt-30">
+                        <!-- Gestão de Dividendos -->
+                        <div class="card" style="flex: 1; min-width: 300px;">
+                            <h3>Gestão de Dividendos</h3>
+                            
+                            <div class="form-group">
+                                <label for="lucroAnual">Lucro esperado anual (AOA):</label>
+                                <input type="number" id="lucroAnual" min="0" value="100000000">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="resultadoAnunciar">Resultado a anunciar:</label>
+                                <select id="resultadoAnunciar">
+                                    <option value="extraordinario">Extraordinário</option>
+                                    <option value="normal" selected>Normal</option>
+                                    <option value="ruim">Ruim</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="percentualDividendos">% de dividendos a distribuir:</label>
+                                <input type="range" id="percentualDividendos" min="0" max="100" value="25" step="1">
+                                <div class="slider-value" id="percentualDividendosValue">25%</div>
+                            </div>
+                            
+                            <div id="alertaDividendos" class="alert" style="margin-top: 15px;">
+                                <!-- Alertas serão exibidos aqui -->
+                            </div>
+                            
+                            <button type="button" id="btnDistribuirDividendos" class="btn">💸 DISTRIBUIR DIVIDENDOS</button>
+                        </div>
+                        
+                        <!-- Emissão Adicional de Ações -->
+                        <div class="card" style="flex: 1; min-width: 300px;">
+                            <h3>Emissão Adicional de Ações</h3>
+                            
+                            <div class="form-group">
+                                <label for="novasAcoes">Quantidade de novas ações:</label>
+                                <input type="number" id="novasAcoes" min="0" value="0">
+                                <small>Ou use o slider abaixo para % das ações retidas</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="percentualRetidas">% das ações retidas a emitir:</label>
+                                <input type="range" id="percentualRetidas" min="0" max="100" value="0" step="1">
+                                <div class="slider-value" id="percentualRetidasValue">0%</div>
+                            </div>
+                            
+                            <div id="alertaEmissao" class="alert" style="margin-top: 15px;">
+                                <!-- Alertas serão exibidos aqui -->
+                            </div>
+                            
+                            <button type="button" id="btnEmitirAcoes" class="btn">📈 EMITIR NOVAS AÇÕES</button>
+                        </div>
+                        
+                        <!-- Recompra de Ações -->
+                        <div class="card" style="flex: 1; min-width: 300px;">
+                            <h3>Recompra de Ações (Buyback)</h3>
+                            
+                            <div class="form-group">
+                                <label for="acoesRecomprar">Quantidade a recomprar:</label>
+                                <input type="number" id="acoesRecomprar" min="0" value="0">
+                                <small>Ou use o slider abaixo para % das ações em circulação</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="percentualRecompra">% das ações em circulação:</label>
+                                <input type="range" id="percentualRecompra" min="0" max="100" value="0" step="1">
+                                <div class="slider-value" id="percentualRecompraValue">0%</div>
+                            </div>
+                            
+                            <div id="custoRecompra" class="metrica-card mt-15">
+                                <div>Custo estimado:</div>
+                                <div class="metrica-valor" id="custoRecompraValor">AOA 0</div>
+                            </div>
+                            
+                            <button type="button" id="btnRecomprarAcoes" class="btn mt-15">🔄 EXECUTAR RECOMPRA</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SE OBRIGAÇÕES/HÍBRIDO: CARTEIRA DE OBRIGAÇÕES -->
+                <div id="carteiraObrigacoes" class="card hidden">
+                    <h2>📄 Carteira de Obrigações</h2>
+                    
+                    <div class="metricas-container" id="metricasObrigacoes">
+                        <!-- Métricas de obrigações -->
+                    </div>
+                </div>
+                
+                <!-- SE HÍBRIDO: ALERTAS ESPECIAIS -->
+                <div id="alertasHibrido" class="card hidden">
+                    <h3>⚠️ Alertas Especiais - Modo Híbrido</h3>
+                    <div id="alertasHibridoConteudo">
+                        <!-- Alertas de endividamento e cobertura de juros -->
+                    </div>
+                </div>
+                
+                <!-- GRÁFICO EM TEMPO REAL -->
+                <div class="card">
+                    <h2>📈 Gráfico em Tempo Real</h2>
+                    
+                    <div id="graficoContainer">
+                        <canvas id="canvasGrafico"></canvas>
+                    </div>
+                    
+                    <div class="info-grafico">
+                        <div>
+                            <strong>Empresa:</strong> <span id="infoEmpresaGrafico">-</span>
+                            <strong>Ticker:</strong> <span id="infoTickerGrafico">-</span>
+                        </div>
+                        <div>
+                            <strong>Preço atual:</strong> <span id="infoPrecoAtualGrafico" class="positivo">AOA 0 (USD 0)</span>
+                        </div>
+                        <div>
+                            <strong>Variação:</strong> <span id="infoVariacaoGrafico" class="positivo">0%</span>
+                        </div>
+                        <div>
+                            <strong>Última atualização:</strong> <span id="infoAtualizacaoGrafico">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning mt-15">
+                        <small><strong>Legenda de tempo fictício:</strong> 3 segundos real = 1 atualização | 1 minuto real = 1 dia fictício | 3 minutos real = 1 mês fictício | 36 minutos real = 1 ano fictício</small>
+                    </div>
+                </div>
+                
+                <!-- NOTÍCIAS EM LOOP -->
+                <div class="noticias-container">
+                    <h2>📰 Notícias do Mercado</h2>
+                    <p>Notícias rotativas relacionadas ao setor da empresa (apenas para fins educativos):</p>
+                    
+                    <div class="noticia-item noticia-boa ativa" id="noticia-1">
+                        <h3>Boa notícia: Crescimento no setor</h3>
+                        <p>O setor de tecnologia apresenta crescimento de 15% no último trimestre, impulsionado por investimentos em infraestrutura digital.</p>
+                    </div>
+                    
+                    <div class="noticia-item noticia-neutra" id="noticia-2">
+                        <h3>Notícia neutra: Estabilidade cambial</h3>
+                        <p>O kwanza mantém estabilidade frente ao dólar, com variação de apenas 0,5% no mês. Especialistas preveem manutenção da política cambial.</p>
+                    </div>
+                    
+                    <div class="noticia-item noticia-ruim" id="noticia-3">
+                        <h3>Notícia preocupante: Inflação alta</h3>
+                        <p>Índice de inflação atinge 18% no acumulado do ano, acima da meta estabelecida pelo banco central. Economistas alertam para possível aumento da taxa básica de juros.</p>
+                    </div>
+                    
+                    <div class="alert alert-warning mt-15">
+                        <small><strong>⚠️ IMPORTANTE:</strong> As notícias influenciam a percepção dos investidores na vida real, mas neste simulador, o preço é determinado exclusivamente pelos eventos especiais que você aciona e pelo cenário econômico selecionado.</small>
+                    </div>
+                </div>
+                
+                <!-- SEÇÕES EDUCATIVAS -->
+                <div class="accordion">
+                    <h2>📚 Seções Educativas</h2>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>1. Análise Fundamentalista vs Técnica</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p><strong>Análise Fundamentalista:</strong> Avalia o valor intrínseco de uma empresa com base em indicadores financeiros, setoriais e econômicos. Inclui análise de balanços, lucros, dividendos, endividamento, etc.</p>
+                            <p><strong>Análise Técnica:</strong> Estuda o movimento dos preços e volumes no gráfico para prever tendências futuras. Utiliza indicadores como médias móveis, suportes, resistências e padrões gráficos.</p>
+                            <p><strong>No simulador:</strong> Use a análise fundamentalista para tomar decisões sobre dividendos, emissões e recompras. Observe o gráfico para identificar tendências de preço.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>2. Como a Empresa Usa o Dinheiro Captado</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p><strong>Fluxo do Mercado Primário:</strong> Investidor → Mercado Primário (OPV) → Empresa recebe os recursos</p>
+                            <p><strong>Usos possíveis do capital captado:</strong></p>
+                            <ul style="margin-left: 30px; margin-bottom: 15px; color: var(--cor-texto-secundario);">
+                                <li><strong>Expansão:</strong> Abertura de novas unidades, entrada em novos mercados</li>
+                                <li><strong>Quitação de dívidas:</strong> Redução do endividamento, melhoria do balanço</li>
+                                <li><strong>Capital de giro:</strong> Financiamento das operações do dia a dia</li>
+                                <li><strong>Pesquisa e Desenvolvimento (P&D):</strong> Inovação, novos produtos</li>
+                                <li><strong>Aquisições:</strong> Compra de outras empresas</li>
+                            </ul>
+                            <p><strong>Diferença crucial:</strong> No Mercado Primário a empresa recebe o dinheiro. No Mercado Secundário apenas os investidores negociam entre si.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>3. Valorização e Desvalorização de Ações</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>O preço das ações é determinado pela <strong>lei da oferta e demanda</strong>:</p>
+                            <ul style="margin-left: 30px; margin-bottom: 15px; color: var(--cor-texto-secundario);">
+                                <li><strong>Fatores de valorização (alta):</strong>
+                                    <ul style="margin-left: 20px;">
+                                        <li>Lucros acima das expectativas</li>
+                                        <li>Parcerias estratégicas importantes</li>
+                                        <li>Expectativas positivas sobre o futuro</li>
+                                        <li>Redução da oferta (recompra de ações)</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Fatores de desvalorização (baixa):</strong>
+                                    <ul style="margin-left: 20px;">
+                                        <li>Prejuízos ou lucros abaixo do esperado</li>
+                                        <li>Escândalos corporativos</li>
+                                        <li>Aumento excessivo da oferta (emissão adicional)</li>
+                                        <li>Perspectivas econômicas negativas</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p>No simulador, você pode acionar eventos que simulam esses fatores e observar o impacto imediato no gráfico.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group mt-30">
+                    <button type="button" id="btnReiniciarSimulacao" class="btn btn-secondary">🔄 REINICIAR SIMULAÇÃO</button>
+                </div>
+            </section>
+        </div>
+    
+
+    </main>
+    
+    <footer class="site-footer">
+            <div class="footer-content container">
+                <div class="footer-section social-section">
+                    <h3>Redes Sociais</h3>
+                    <div class="social-icons">
+                        <a href="https://www.youtube.com/watch?v=_lbwST_xK_E" target="_blank" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@tecacapital" target="_blank" aria-label="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=61579163578380" target="_blank" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://wa.me/message/2X43ZA7RMITSJ1" target="_blank" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section contact-section">
+                    <h3>Contato</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <p>Gmail:</p>
+                            <a href="mailto:tecacapitaledtech@gmail.com">
+                                tecacapitaledtech@gmail.com
+                            </a>
+                        </div>
+                        <div class="contact-item">
+                            <p>Telefone:</p>
+                            <a href="tel:+244974235284">
+                                +244 974 235 284
+                            </a>
+                        </div>
+                        <div class="contact-item">
+                            <p>Endereço:</p>
+                            <span>Huambo, Cidade alta, Angola</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-section copyright-section">
+                    <p class="copyright-text">
+                        &copy; <span id="current-year">2026</span> Teca Capital | Todos os direitos reservados
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+</body>
+</html>

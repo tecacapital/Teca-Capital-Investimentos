@@ -19,10 +19,10 @@
     <script src="frontend/Public/javascript/Global/footer.js"></script>
 
     <!-- ARQUIVOS JS -->
-    <script src="frontend/Public/javascript/page"></script>
+    <script src="frontend/Public/javascript/page/cursos_online.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
-    <link rel="stylesheet" href="frontend/Public/CSS/">
+    <link rel="stylesheet" href="frontend/Public/CSS/serviços/cursos_online.css">
 </head>
 
 <body>
@@ -70,6 +70,353 @@
 
 
     <main>
+
+        
+        <!-- SEÇÃO 1: HERO -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>
+                        <i class="fas fa-graduation-cap" aria-hidden="true"></i> 
+                        <span class="gold-text">Cursos Online</span>
+                    </h1>
+                    <p class="hero-subtitle">Formação completa em Mercado Financeiro, Gestão e Economia</p>
+                    <p class="hero-description">
+                        Acesso a apoio técnico especializado, simuladores interativos, bibliotecas completas, 
+                        palestras exclusivas, grupo de aportes, aulas gravadas 24/7 e lives de dúvidas semanais.
+                    </p>
+                    <div class="hero-badges">
+                        <span class="badge"><i class="fas fa-headset"></i> Apoio Técnico</span>
+                        <span class="badge"><i class="fas fa-laptop-code"></i> Simuladores</span>
+                        <span class="badge"><i class="fas fa-book-open"></i> Biblioteca</span>
+                        <span class="badge"><i class="fas fa-chalkboard-teacher"></i> Palestras</span>
+                        <span class="badge"><i class="fas fa-users"></i> Grupo de Aportes</span>
+                        <span class="badge"><i class="fas fa-video"></i> Aulas Gravadas</span>
+                        <span class="badge"><i class="fas fa-comments"></i> Lives</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: BENEFÍCIOS INCLUSOS -->
+        <section class="benefits-section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-gift" aria-hidden="true"></i> Todos os cursos incluem</h2>
+                <div class="benefits-grid">
+                    <!-- Apoio Técnico -->
+                    <article class="benefit-card animated-border">
+                        <div class="benefit-icon"><i class="fas fa-headset"></i></div>
+                        <h3>Apoio Técnico</h3>
+                        <p>Suporte especializado durante toda a formação</p>
+                    </article>
+                    <!-- Simuladores Inclusos -->
+                    <article class="benefit-card animated-border">
+                        <div class="benefit-icon"><i class="fas fa-laptop-code"></i></div>
+                        <h3>Simuladores Inclusos</h3>
+                        <p>Acesso aos simuladores de Mercado Financeiro, Gestão e Economia</p>
+                    </article>
+                    <!-- Bibliotecas Completas -->
+                    <article class="benefit-card animated-border">
+                        <div class="benefit-icon"><i class="fas fa-book-open"></i></div>
+                        <h3>Bibliotecas Completas</h3>
+                        <p>Conteúdo aprofundado sobre cada área</p>
+                    </article>
+                    <!-- Palestras Exclusivas -->
+                    <article class="benefit-card animated-border">
+                        <div class="benefit-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <h3>Palestras Exclusivas</h3>
+                        <p>Acesso às nossas palestras semanais</p>
+                    </article>
+                    <!-- Grupo de Aportes -->
+                    <article class="benefit-card animated-border">
+                        <div class="benefit-icon"><i class="fas fa-users"></i></div>
+                        <h3>Grupo de Aportes</h3>
+                        <p>2x por semana, todos os meses</p>
+                    </article>
+                    <!-- Aulas Gravadas -->
+                    <article class="benefit-card animated-border">
+                        <div class="benefit-icon"><i class="fas fa-video"></i></div>
+                        <h3>Aulas Gravadas</h3>
+                        <p>Conteúdo disponível 24/7 para revisão</p>
+                    </article>
+                    <!-- Lives de Dúvidas -->
+                    <article class="benefit-card animated-border">
+                        <div class="benefit-icon"><i class="fas fa-comments"></i></div>
+                        <h3>Lives de Dúvidas</h3>
+                        <p>Sessões ao vivo para esclarecimentos</p>
+                    </article>
+                    <!-- Duração Destaque -->
+                    <article class="benefit-card animated-border highlight-card">
+                        <div class="benefit-icon"><i class="fas fa-clock"></i></div>
+                        <h3>Duração: 1 ano</h3>
+                        <p>Acesso completo por 12 meses</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3,4,5: CATEGORIAS (cards com borda animada) -->
+        <section class="categories-section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-layer-group" aria-hidden="true"></i> Escolha a sua trilha</h2>
+                <div class="categories-grid">
+                    <!-- MERCADO FINANCEIRO (card com borda animada + tom azul no título) -->
+                    <article class="category-card animated-border" data-category="finance">
+                        <div class="category-header" style="border-bottom-color: rgba(0,102,204,0.3);">
+                            <i class="fas fa-chart-line category-icon"></i>
+                            <h3 class="category-title" style="color: #0066cc;">MERCADO FINANCEIRO</h3>
+                        </div>
+                        <div class="category-content">
+                            <p class="category-intro">Curso completo sobre:</p>
+                            <ul class="category-list">
+                                <li>Análise de ações e ativos</li>
+                                <li>Mercado de capitais angolano e internacional</li>
+                                <li>Renda fixa e variável</li>
+                                <li>Análise técnica e fundamentalista</li>
+                                <li>Gestão de risco e portfolio</li>
+                            </ul>
+                            <div class="category-meta">
+                                <span><i class="fas fa-tag"></i> Investimento: <span class="format-price" data-price="50000">50.000 Kz</span></span>
+                                <span><i class="fas fa-calendar-alt"></i> Acesso: 1 ano</span>
+                            </div>
+                            <div class="category-modules">
+                                <p><strong>Módulos:</strong> Introdução ao Sistema Financeiro · Análise de Ações e Valuation · Derivativos e Estratégias Avançadas · Mercado de Câmbio e Commodities · Psicologia do Investidor · Construção de Carteiras</p>
+                            </div>
+                            <a href="subscricao-financeiro.html" class="btn-primary" target="_blank" rel="noopener">
+                                SUBCREVER AGORA <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- GESTÃO (card com borda animada + tom esverdeado no título) -->
+                    <article class="category-card animated-border" data-category="gestao">
+                        <div class="category-header" style="border-bottom-color: rgba(76,175,80,0.3);">
+                            <i class="fas fa-building category-icon"></i>
+                            <h3 class="category-title" style="color: #4CAF50;">GESTÃO</h3>
+                        </div>
+                        <div class="category-content">
+                            <p class="category-intro">Curso completo sobre:</p>
+                            <ul class="category-list">
+                                <li>Gestão de pessoas e liderança</li>
+                                <li>Planeamento estratégico</li>
+                                <li>Finanças corporativas</li>
+                                <li>Processos e operações</li>
+                                <li>Tomada de decisão baseada em dados</li>
+                            </ul>
+                            <div class="category-meta">
+                                <span><i class="fas fa-tag"></i> Investimento: <span class="format-price" data-price="50000">50.000 Kz</span></span>
+                                <span><i class="fas fa-calendar-alt"></i> Acesso: 1 ano</span>
+                            </div>
+                            <div class="category-modules">
+                                <p><strong>Módulos:</strong> Fundamentos da Gestão Moderna · Liderança e Desenvolvimento de Equipas · Estratégia e Planeamento · Finanças para Não Financeiros · Gestão de Projetos (PMI) · Tomada de Decisão e Resolução de Problemas</p>
+                            </div>
+                            <a href="subscricao-gestao.html" class="btn-primary" target="_blank" rel="noopener">
+                                SUBCREVER AGORA <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- ECONOMIA (card com borda animada + tom alaranjado no título) -->
+                    <article class="category-card animated-border" data-category="economia">
+                        <div class="category-header" style="border-bottom-color: rgba(255,152,0,0.3);">
+                            <i class="fas fa-landmark category-icon"></i>
+                            <h3 class="category-title" style="color: #FF9800;">ECONOMIA</h3>
+                        </div>
+                        <div class="category-content">
+                            <p class="category-intro">Curso completo sobre:</p>
+                            <ul class="category-list">
+                                <li>Microeconomia e Macroeconomia</li>
+                                <li>Indicadores económicos</li>
+                                <li>Políticas monetária e fiscal</li>
+                                <li>Economia angolana e africana</li>
+                                <li>Crises e ciclos económicos</li>
+                            </ul>
+                            <div class="category-meta">
+                                <span><i class="fas fa-tag"></i> Investimento: <span class="format-price" data-price="50000">50.000 Kz</span></span>
+                                <span><i class="fas fa-calendar-alt"></i> Acesso: 1 ano</span>
+                            </div>
+                            <div class="category-modules">
+                                <p><strong>Módulos:</strong> Princípios de Microeconomia · Macroeconomia Aplicada · Economia Internacional e Globalização · Economia de Angola e África · Análise de Cenários e Previsões · Economia Comportamental</p>
+                            </div>
+                            <a href="subscricao-economia.html" class="btn-primary" target="_blank" rel="noopener">
+                                SUBCREVER AGORA <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 7: COMO FUNCIONA O GRUPO DE APORTES -->
+        <section class="aportes-section">
+            <div class="container">
+                <div class="aportes-card animated-border">
+                    <div class="aportes-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <h2 class="section-title" style="margin-bottom: 1rem;">Como funciona o Grupo de Aportes</h2>
+                    <ul class="aportes-list">
+                        <li><i class="fas fa-calendar-check"></i> <strong>Frequência:</strong> 2 vezes por semana, todos os meses</li>
+                        <li><i class="fas fa-chalkboard-teacher"></i> <strong>Formato:</strong> Sessões ao vivo com especialistas</li>
+                        <li><i class="fas fa-bullseye"></i> <strong>Objetivo:</strong> Discussão de casos reais, análise de cenários, troca de experiências</li>
+                        <li><i class="fas fa-handshake"></i> <strong>Bónus:</strong> Networking com outros alunos e profissionais da área</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 8: FEEDBACKS FALSOS (depoimentos) -->
+        <section class="testimonials-section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-star" aria-hidden="true"></i> O que nossos alunos dizem</h2>
+                <div class="testimonials-grid">
+                    <!-- Aluno Mercado Financeiro -->
+                    <article class="testimonial-card animated-border">
+                        <div class="testimonial-header">
+                            <div class="avatar" style="background: rgb(214,174,100); color: #000;">JM</div>
+                            <div>
+                                <h4>João M.</h4>
+                                <p>Mercado Financeiro</p>
+                                <div class="stars">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            <i class="fas fa-quote-left"></i>
+                            <p>"Comecei do zero e em 6 meses já consigo analisar ações com confiança. Os simuladores foram essenciais para praticar sem riscos. O grupo de aportes me deu uma rede de contatos incrível!"</p>
+                        </div>
+                    </article>
+                    <!-- Aluno Gestão -->
+                    <article class="testimonial-card animated-border">
+                        <div class="testimonial-header">
+                            <div class="avatar" style="background: rgb(214,174,100); color: #000;">AR</div>
+                            <div>
+                                <h4>Ana R.</h4>
+                                <p>Gestão</p>
+                                <div class="stars">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            <i class="fas fa-quote-left"></i>
+                            <p>"Os módulos de liderança e gestão de projetos transformaram minha carreira. Fui promovida a coordenadora de equipa e aplico diariamente o que aprendi nas aulas."</p>
+                        </div>
+                    </article>
+                    <!-- Aluno Economia -->
+                    <article class="testimonial-card animated-border">
+                        <div class="testimonial-header">
+                            <div class="avatar" style="background: rgb(214,174,100); color: #000;">PS</div>
+                            <div>
+                                <h4>Paulo S.</h4>
+                                <p>Economia</p>
+                                <div class="stars">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            <i class="fas fa-quote-left"></i>
+                            <p>"Agora consigo interpretar indicadores macroeconómicos e fazer previsões mais precisas para o meu trabalho. Valeu cada kwanza investido!"</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 9: PERGUNTAS FREQUENTES (FAQ com accordion) -->
+        <section class="faq-section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-question-circle" aria-hidden="true"></i> Perguntas Frequentes</h2>
+                <div class="faq-accordion">
+                    <!-- FAQ 1 -->
+                    <div class="faq-item animated-border">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer" id="faq1">
+                            <i class="fas fa-question-circle" aria-hidden="true"></i> Posso fazer mais de um curso?
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                        <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1">
+                            <p>Sim! Pode subscrever quantos cursos desejar. Cada curso tem investimento de 50.000 Kz.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ 2 -->
+                    <div class="faq-item animated-border">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer" id="faq2">
+                            <i class="fas fa-video"></i> Como funcionam as lives de dúvidas?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2">
+                            <p>Sessões semanais ao vivo com os instrutores para esclarecer questões do curso.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ 3 -->
+                    <div class="faq-item animated-border">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq3-answer" id="faq3">
+                            <i class="fas fa-users"></i> O que é o grupo de aportes?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
+                            <p>Encontros 2x por semana para discutir casos práticos e trocar experiências.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ 4 -->
+                    <div class="faq-item animated-border">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq4-answer" id="faq4">
+                            <i class="fas fa-laptop-code"></i> Os simuladores são os mesmos das landing pages?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4">
+                            <p>Sim! Incluímos os simuladores de Mercado Financeiro, Gestão e Economia.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ 5 -->
+                    <div class="faq-item animated-border">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq5-answer" id="faq5">
+                            <i class="fas fa-mobile-alt"></i> Posso aceder pelo telemóvel?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
+                            <p>Sim! Todo o conteúdo é responsivo e acessível de qualquer dispositivo.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ 6 -->
+                    <div class="faq-item animated-border">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq6-answer" id="faq6">
+                            <i class="fas fa-certificate"></i> Há certificado de conclusão?
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" id="faq6-answer" role="region" aria-labelledby="faq6">
+                            <p>Sim! Certificado reconhecido pelo mercado.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 10: CALL-TO-ACTION FINAL -->
+        <section class="cta-final-section">
+            <div class="container">
+                <div class="cta-card animated-border">
+                    <div class="cta-icons">
+                        <i class="fas fa-graduation-cap"></i>
+                        <i class="fas fa-tag"></i>
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h2 class="cta-title">Invista no seu futuro</h2>
+                    <p class="cta-subtitle">A partir de <span class="format-price" data-price="50000">50.000 Kz</span> · 1 ano de acesso completo</p>
+                    <div class="cta-buttons">
+                        <a href="subscricao-financeiro.html" class="btn-primary btn-large" target="_blank" rel="noopener">
+                            Subscrever Mercado Financeiro <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="subscricao-gestao.html" class="btn-primary btn-large" target="_blank" rel="noopener">
+                            Subscrever Gestão <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="subscricao-economia.html" class="btn-primary btn-large" target="_blank" rel="noopener">
+                            Subscrever Economia <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
     </main>
     

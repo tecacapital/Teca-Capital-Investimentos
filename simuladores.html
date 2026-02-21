@@ -19,10 +19,10 @@
     <script src="frontend/Public/javascript/Global/footer.js"></script>
 
     <!-- ARQUIVOS JS -->
-    <script src="frontend/Public/javascript/page"></script>
+    <script src="frontend/Public/javascript/page/simuladores.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
-    <link rel="stylesheet" href="frontend/Public/CSS/">
+    <link rel="stylesheet" href="frontend/Public/CSS/simuladores/simulador.css">
 </head>
 
 <body>
@@ -69,7 +69,274 @@
     </header>
 
 
-    <main>
+    <main id="simuladores-landing" class="landing-page">
+        
+        <!-- ===== SEÇÃO 1: HERO ===== -->
+        <section class="hero-section fade-in">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-icon pulse-animation">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h1 class="hero-title">
+                        Aprenda <span class="highlight gold">Fazendo</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Simuladores que Preparam para o Mercado Real
+                    </p>
+                    <p class="hero-description">
+                        Desenvolvidos para a <strong>realidade angolana</strong> com padrões globais. 
+                        Experimente cenários reais de investimento, gestão e economia 
+                        sem riscos. Desenvolva habilidades práticas e tome decisões 
+                        com confiança da <strong>BODIVA</strong> às <strong>criptomoedas</strong>, do <strong>Kwanza</strong> ao <strong>dólar</strong>.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#simuladores" class="btn btn-primary btn-large">
+                            Conhecer Simuladores <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- partículas sutis (decor) -->
+            <div class="particles"></div>
+        </section>
+
+        <!-- ===== SEÇÃO 2: BENEFÍCIOS (3 PILARES) ===== -->
+        <section class="benefits-section fade-in">
+            <div class="container">
+                <h2 class="section-title">
+                    Por que <span class="highlight blue">simular</span> antes de agir?
+                </h2>
+                <div class="benefits-grid">
+                    <!-- Benefício 1: Decisões sem risco -->
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Decisões sem Risco</h3>
+                        <p>Experimente estratégias de investimento, gestão e políticas econômicas sem colocar capital real em jogo. Aprenda com os erros em ambiente controlado.</p>
+                    </div>
+                    <!-- Benefício 2: Cenários Realistas -->
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Cenários Realistas</h3>
+                        <p>Simulações baseadas em dados reais do mercado angolano (BODIVA, inflação, taxas de juros do BNA) combinados com cenários globais (NYSE, NASDAQ, commodities).</p>
+                    </div>
+                    <!-- Benefício 3: Imersão Profunda -->
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Imersão Profunda</h3>
+                        <p>Desenvolva intuição financeira, visão estratégica e pensamento econômico através da repetição e análise de resultados.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 3: OS 3 SIMULADORES (CARDS PRINCIPAIS COM BORDA ANIMADA) ===== -->
+        <section id="simuladores" class="simulators-section fade-in">
+            <div class="container">
+                <h2 class="section-title">
+                    Nossos <span class="highlight red">Simuladores</span>
+                </h2>
+                <p class="section-subtitle">
+                    Ferramentas poderosas desenvolvidas por <strong>Alberto Teca Tomás (2025)</strong> para transformar teoria em prática pensadas para Angola, conectadas ao mundo.
+                </p>
+                
+                <div class="simulators-grid">
+                    
+                    <!-- CARD 01 – SIMULADOR MERCADO FINANCEIRO (borda animada) -->
+                    <div class="simulator-card" data-simulator="financas">
+                        <div class="card-badge gold-badge">Finanças</div>
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="card-title">Simulador do Mercado Financeiro</h3>
+                        <p class="card-subtitle">Invista como um profissional: da BODIVA às criptomoedas</p>
+                        <div class="card-description">
+                            Desenvolvido para a realidade angolana com perspectiva global. Aprenda a analisar ações, títulos públicos, derivativos e ativos digitais. Entenda como funciona a BODIVA e compare com NYSE e NASDAQ.
+                        </div>
+                        <ul class="card-features">
+                            <li><i class="fas fa-check-circle"></i> Carteira virtual de ativos (ações, títulos, cripto)</li>
+                            <li><i class="fas fa-check-circle"></i> Análise técnica e fundamentalista simplificada</li>
+                            <li><i class="fas fa-check-circle"></i> Cenários: estabilidade, inflação, recessão</li>
+                            <li><i class="fas fa-check-circle"></i> Comparativo BODIVA x NYSE x NASDAQ</li>
+                            <li><i class="fas fa-check-circle"></i> Relatórios de performance e risco</li>
+                        </ul>
+                        <div class="card-scenario">
+                            <strong><i class="fas fa-map-pin"></i> Cenário Angola:</strong> Invista <span class="currency-aoa">100.000 Kz</span> em títulos da dívida pública angolana. Compare com ações globais. Analise impacto cambial.
+                        </div>
+                        <div class="card-metric">
+                            <span class="metric-number">+3.200</span> simulações realizadas
+                        </div>
+                        <a href="simulador-mercado-financeiro.html" class="card-btn">
+                            Acessar Simulador <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- CARD 02 – SIMULADOR DE GESTÃO ESTRATÉGICA (borda animada) -->
+                    <div class="simulator-card" data-simulator="gestao">
+                        <div class="card-badge blue-badge">Gestão</div>
+                        <div class="card-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3 class="card-title">Simulador de Gestão Estratégica</h3>
+                        <p class="card-subtitle">Liderança, produtividade e ROI em cenários reais</p>
+                        <div class="card-description">
+                            Simule a gestão de equipes, projetos e recursos em ambientes corporativos angolanos e multinacionais. Desenvolva liderança, alocação de recursos e análise de performance. Calcule ROI, payback e decisões baseadas em dados.
+                        </div>
+                        <ul class="card-features">
+                            <li><i class="fas fa-check-circle"></i> Gestão de equipes (tamanho, senioridade, custos)</li>
+                            <li><i class="fas fa-check-circle"></i> Alocação de orçamento por departamento</li>
+                            <li><i class="fas fa-check-circle"></i> Indicadores: ROI, ROE, Payback, Produtividade</li>
+                            <li><i class="fas fa-check-circle"></i> Cenários: expansão, crise, transformação digital</li>
+                            <li><i class="fas fa-check-circle"></i> Capacitação e treinamento de talentos</li>
+                        </ul>
+                        <div class="card-scenario">
+                            <strong><i class="fas fa-map-pin"></i> Cenário Angola:</strong> Gestor de telecom em Luanda. Aloque <span class="currency-aoa">10.000.000 Kz</span> entre marketing, capacitação e infraestrutura. Maximize o ROI.
+                        </div>
+                        <div class="card-metric">
+                            <span class="metric-number">+1.800</span> gestores impactados
+                        </div>
+                        <a href="simulador-gestao.html" class="card-btn">
+                            Acessar Simulador <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- CARD 03 – SIMULADOR DE ECONOMIA E POLÍTICAS PÚBLICAS (borda animada) -->
+                    <div class="simulator-card" data-simulator="economia">
+                        <div class="card-badge red-badge">Economia</div>
+                        <div class="card-icon">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <h3 class="card-title">Simulador Econômico</h3>
+                        <p class="card-subtitle">Políticas fiscais, monetárias e impacto social</p>
+                        <div class="card-description">
+                            Entenda como decisões econômicas afetam crescimento, emprego e inflação. Simule políticas fiscais e monetárias em cenários inspirados na economia angolana e mercados emergentes. Visualize efeito multiplicador, curva de Phillips e ciclos.
+                        </div>
+                        <ul class="card-features">
+                            <li><i class="fas fa-check-circle"></i> Definição de taxa de juros (BNA)</li>
+                            <li><i class="fas fa-check-circle"></i> Controle de gastos públicos e tributação</li>
+                            <li><i class="fas fa-check-circle"></i> Investimento em setores estratégicos (petróleo, diamantes, agricultura, telecom)</li>
+                            <li><i class="fas fa-check-circle"></i> Indicadores: PIB, inflação, desemprego</li>
+                            <li><i class="fas fa-check-circle"></i> Efeito multiplicador e ciclos econômicos</li>
+                        </ul>
+                        <div class="card-scenario">
+                            <strong><i class="fas fa-map-pin"></i> Cenário Angola:</strong> Inflação 25%, crescimento 1,5%. Aumentar juros ou reduzir gastos? Simule impacto em 2, 5 e 10 anos.
+                        </div>
+                        <div class="card-metric">
+                            <span class="metric-number">+950</span> simulações de cenários macro
+                        </div>
+                        <a href="simulador-economia.html" class="card-btn">
+                            Acessar Simulador <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 4: COMO FUNCIONA (PASSO A PASSO) ===== -->
+        <section class="how-it-works-section fade-in">
+            <div class="container">
+                <h2 class="section-title">
+                    Como <span class="highlight gold">funciona</span>
+                </h2>
+                <div class="steps-grid">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-icon"><i class="fas fa-hand-pointer"></i></div>
+                        <h4>Escolha</h4>
+                        <p>Selecione o simulador de acordo com seu objetivo: investir, gerir ou formular políticas.</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-icon"><i class="fas fa-sliders-h"></i></div>
+                        <h4>Configure</h4>
+                        <p>Defina parâmetros como valor, prazo, alocação, taxa de juros ou cenário econômico.</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-icon"><i class="fas fa-play-circle"></i></div>
+                        <h4>Simule</h4>
+                        <p>Execute e visualize resultados em tempo real, com gráficos e indicadores.</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-icon"><i class="fas fa-chart-simple"></i></div>
+                        <h4>Aprenda</h4>
+                        <p>Analise os dados, compare estratégias e tome decisões mais assertivas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 5: DEPOIMENTOS / STATS (CONTADORES ANIMADOS) ===== -->
+        <section class="testimonials-section fade-in" id="stats-section">
+            <div class="container">
+                <h2 class="section-title">
+                    Confiança que <span class="highlight blue">movimenta</span>
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="2500">0</div>
+                        <p class="stat-label">+ estudantes</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="15000">0</div>
+                        <p class="stat-label">+ simulações realizadas</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="12">0</div>
+                        <p class="stat-label">escolas e universidades</p>
+                    </div>
+                </div>
+                <div class="testimonial-box">
+                    <div class="testimonial-content">
+                        <i class="fas fa-quote-left quote-icon"></i>
+                        <p>"Criámos os simuladores para responder a uma lacuna: faltam ferramentas práticas que reflitam a realidade angolana, mas que também preparem para o mercado global. Ver estudantes e profissionais a ganhar confiança para investir na BODIVA ou gerir empresas em Luanda é a nossa maior recompensa."</p>
+                        <div class="testimonial-author">
+                            <strong>Alberto Teca Tomás</strong>
+                            <span>Criador, Teca Capital - 2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 6: PERGUNTAS FREQUENTES (FAQ ACCORDION) ===== -->
+        <section class="faq-section fade-in">
+            <div class="container">
+                <h2 class="section-title">
+                    Dúvidas <span class="highlight red">frequentes</span>
+                </h2>
+                <div class="faq-container">
+                    <!-- FAQ será preenchido via JS, mas deixamos estrutura semântica -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEÇÃO 7: CTA FINAL ===== -->
+        <section class="cta-section fade-in">
+            <div class="container">
+                <div class="cta-content">
+                    <h2 class="cta-title">Pronto para transformar sua aprendizagem?</h2>
+                    <p class="cta-description">
+                        Comece agora mesmo a explorar os simuladores Teca Capital e desenvolva habilidades práticas para o mercado financeiro, gestão e economia.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="#simuladores" class="btn btn-primary btn-large">
+                            Acessar Simuladores <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <p class="cta-footnote">
+                        <i class="fas fa-check-circle"></i> Se cadastra · Paga e receba o código de acesso · Imediato
+                    </p>
+                </div>
+            </div>
+        </section>
 
     </main>
     

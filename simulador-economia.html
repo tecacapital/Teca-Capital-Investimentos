@@ -19,10 +19,10 @@
     <script src="frontend/Public/javascript/Global/footer.js"></script>
 
     <!-- ARQUIVOS JS -->
-    <script src="frontend/Public/javascript/page"></script>
+    <script src="frontend/Public/javascript/page/simuladores-economia.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
-    <link rel="stylesheet" href="frontend/Public/CSS/">
+    <link rel="stylesheet" href="frontend/Public/CSS/simuladores/sub-simuladores/s-economia.CSS">
 </head>
 
 <body>
@@ -69,7 +69,269 @@
     </header>
 
 
-    <main>
+    <main class="teca-page simulador-economia">
+
+        
+        <!-- ========== HERO ========== -->
+        <section class="hero-section">
+            <div class="container">
+                <h1 class="main-title">
+                    <i class="fas fa-landmark" style="color: rgb(214, 174, 100); margin-right: 10px;"></i>
+                    Simulador de <span class="gold-text">Economia</span> + Biblioteca
+                </h1>
+                <p class="hero-subtitle">Ambiente imersivo para aprender conceitos económicos na prática. Simule cenários, entenda indicadores e domine a lógica dos mercados.</p>
+                <div class="hero-cta">
+                    <a href="S-real-simulador-economia.html" class="btn-primary">
+                        Acessar Simulador <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                    </a>
+                    <span class="hero-meta"><i class="fas fa-tag"></i> 7.500 Kz · 90 dias</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== O QUE É ECONOMIA? ========== -->
+        <section class="section-definicao">
+            <div class="container">
+                <h2><i class="fas fa-scale-balanced gold-icon"></i> O que é Economia?</h2>
+                <p class="lead">Ciência que estuda a gestão dos recursos escassos para satisfazer necessidades ilimitadas. Mais do que números, é a base das decisões individuais e coletivas.</p>
+                
+                <div class="timeline-economia">
+                    <h3><i class="fas fa-clock gold-icon"></i> Como a economia mudou</h3>
+                    <div class="timeline-grid">
+                        <div class="timeline-item"><span>🌾 Economia agrária</span></div>
+                        <div class="timeline-item"><span>🏭 Revolução Industrial</span></div>
+                        <div class="timeline-item"><span>💻 Era da Informação</span></div>
+                        <div class="timeline-item"><span>⚡ Economia Digital</span></div>
+                    </div>
+                </div>
+
+                <div class="importancia-grid">
+                    <div class="importancia-card"><i class="fas fa-users gold-icon fa-2x"></i> <h4>Pessoas</h4> <p>Gestão financeira, poder de compra, poupança</p></div>
+                    <div class="importancia-card"><i class="fas fa-building gold-icon fa-2x"></i> <h4>Empresas</h4> <p>Custos, investimentos, expansão</p></div>
+                    <div class="importancia-card"><i class="fas fa-flag gold-icon fa-2x"></i> <h4>Governos</h4> <p>Políticas públicas, arrecadação, bem‑estar</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== INDICADORES ECONÓMICOS (cards com borda animada) ========== -->
+        <section class="section-indicadores">
+            <div class="container">
+                <h2><i class="fas fa-chart-simple gold-icon"></i> Principais Indicadores</h2>
+                <div class="indicadores-grid">
+                    <!-- PIB -->
+                    <article class="card-animated">
+                        <div class="card-header"><i class="fas fa-chart-line gold-icon"></i> <strong>PIB</strong></div>
+                        <div class="card-compare"><span class="badge good">Saudável: >2%</span> <span class="badge bad">Crise: negativo ou <0.5%</span></div>
+                        <p class="card-note">Recessão técnica: 2 trimestres consecutivos de queda</p>
+                    </article>
+                    <!-- Inflação -->
+                    <article class="card-animated">
+                        <div class="card-header"><i class="fas fa-fire gold-icon"></i> <strong>Inflação</strong></div>
+                        <div class="card-compare"><span class="badge good">2% a 4% (meta)</span> <span class="badge bad">>6% ou hiper >50% mês</span></div>
+                    </article>
+                    <!-- Desemprego -->
+                    <article class="card-animated">
+                        <div class="card-header"><i class="fas fa-briefcase gold-icon"></i> <strong>Desemprego</strong></div>
+                        <div class="card-compare"><span class="badge good">4%‑6%</span> <span class="badge bad">>10% (dois dígitos)</span></div>
+                        <p class="card-note">>10% = crise social profunda</p>
+                    </article>
+                    <!-- Taxas de Juro -->
+                    <article class="card-animated">
+                        <div class="card-header"><i class="fas fa-percent gold-icon"></i> <strong>Taxas de Juro</strong></div>
+                        <div class="card-compare"><span class="badge good">estáveis na média</span> <span class="badge bad">muito acima da média</span></div>
+                        <p class="card-note">Taxas altas asfixiam consumo/investimento</p>
+                    </article>
+                    <!-- Dívida Pública/PIB -->
+                    <article class="card-animated">
+                        <div class="card-header"><i class="fas fa-chart-pie gold-icon"></i> <strong>Dívida Pública/PIB</strong></div>
+                        <div class="card-compare"><span class="badge good"><60‑70% (emerg.)</span> <span class="badge bad">>70‑100% (risco)</span></div>
+                    </article>
+                    <!-- Confiança -->
+                    <article class="card-animated">
+                        <div class="card-header"><i class="fas fa-smile gold-icon"></i> <strong>Confiança</strong></div>
+                        <div class="card-compare"><span class="badge good">>100 pontos</span> <span class="badge bad"><100 pontos</span></div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== CLASSIFICAÇÃO DOS PAÍSES (1º,2º,3º mundo) ========== -->
+        <section class="section-classificacao">
+            <div class="container">
+                <h2><i class="fas fa-globe gold-icon"></i> Classificação histórica: 1º, 2º e 3º Mundo</h2>
+                <div class="paises-grid">
+                    <article class="card-animated"><i class="fas fa-star gold-icon fa-2x"></i><h3>1º Mundo (desenvolvidos)</h3><ul><li>Suíça</li><li>Noruega</li><li>Islândia</li><li>Alemanha</li><li>Estados Unidos</li></ul></article>
+                    <article class="card-animated"><i class="fas fa-hammer gold-icon fa-2x"></i><h3>2º Mundo (ex‑bloco)</h3><ul><li>Rússia</li><li>Cazaquistão</li><li>Uzbequistão</li><li>Vietname</li><li>Azerbaijão</li></ul></article>
+                    <article class="card-animated"><i class="fas fa-seedling gold-icon fa-2x"></i><h3>3º Mundo (emergentes)</h3><ul><li>Angola</li><li>Moçambique</li><li>Etiópia</li><li>Bangladesh</li><li>Haiti</li></ul></article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== CRISES (TIMELINE) ========== -->
+        <section class="section-crises">
+            <div class="container">
+                <h2><i class="fas fa-triangle-exclamation gold-icon"></i> Grandes Crises Económicas</h2>
+                <div class="crises-grid">
+                    <article class="card-animated"><i class="fas fa-chart-line gold-icon"></i><h4>1929 – Grande Depressão</h4><p>Superprodução + especulação. Desemprego 25% EUA. Terça‑Feira Negra.</p></article>
+                    <article class="card-animated"><i class="fas fa-gas-pump gold-icon"></i><h4>1973 – Choque do Petróleo</h4><p>Embargo árabe. Preço do barril +400%, estagflação global.</p></article>
+                    <article class="card-animated"><i class="fas fa-home gold-icon"></i><h4>2008 – Crise Financeira</h4><p>Bolha subprime, falência Lehman Brothers, recessão global.</p></article>
+                    <article class="card-animated"><i class="fas fa-biohazard gold-icon"></i><h4>2020 – Pandemia COVID</h4><p>Paragem forçada, maior queda do PIB desde 2ª Guerra, crise inflacionária.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== TECNOLOGIA ========== -->
+        <section class="section-tech">
+            <div class="container">
+                <h2><i class="fas fa-microchip gold-icon"></i> Impacto Tecnológico</h2>
+                <div class="tech-grid">
+                    <article class="card-animated"><i class="fas fa-brain gold-icon"></i><span>IA – automatização cognitiva, +15 tri até 2030</span></article>
+                    <article class="card-animated"><i class="fab fa-bitcoin gold-icon"></i><span>Bitcoin – ouro digital, transferências instantâneas</span></article>
+                    <article class="card-animated"><i class="fas fa-link gold-icon"></i><span>Blockchain – confiança digital, tokenização de ativos</span></article>
+                    <article class="card-animated"><i class="fas fa-robot gold-icon"></i><span>Robótica avançada – agro, logística, eficiência</span></article>
+                    <article class="card-animated"><i class="fas fa-coins gold-icon"></i><span>Tokenização – frações de imóveis/arte</span></article>
+                </div>
+                <p class="note-tech"><i class="fas fa-info-circle gold-icon"></i> BNA e Banco de Portugal estudam Moedas Digitais (CBDC).</p>
+            </div>
+        </section>
+
+        <!-- ========== PERFIL DO ECONOMISTA ========== -->
+        <section class="section-perfil">
+            <div class="container">
+                <h2><i class="fas fa-user-tie gold-icon"></i> Perfil do economista</h2>
+                <div class="perfil-dual">
+                    <div class="bom-perfil">
+                        <h3><i class="fas fa-thumbs-up gold-icon"></i> Bom analista</h3>
+                        <ul>
+                            <li><i class="fas fa-globe gold-icon"></i> Visão multidisciplinar</li>
+                            <li><i class="fas fa-search gold-icon"></i> Pensamento crítico</li>
+                            <li><i class="fas fa-balance-scale gold-icon"></i> Ética</li>
+                            <li><i class="fas fa-laptop-code gold-icon"></i> Python, Power BI, SQL</li>
+                        </ul>
+                    </div>
+                    <div class="mau-perfil">
+                        <h3><i class="fas fa-thumbs-down gold-icon"></i> Péssimo economista</h3>
+                        <ul>
+                            <li><i class="fas fa-lock gold-icon"></i> Dogmatismo</li>
+                            <li><i class="fas fa-crown gold-icon"></i> Excesso de confiança</li>
+                            <li><i class="fas fa-chess-rook gold-icon"></i> Isolamento</li>
+                            <li><i class="fas fa-check-double gold-icon"></i> Viés de confirmação</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="habilidades">
+                    <h3>Habilidades a desenvolver</h3>
+                    <div class="skills-grid">
+                        <span><i class="fas fa-microscope gold-icon"></i> Literacia de dados</span>
+                        <span><i class="fas fa-comments gold-icon"></i> Comunicação assertiva</span>
+                        <span><i class="fas fa-sitemap gold-icon"></i> Análise de cenários</span>
+                        <span><i class="fas fa-globe-africa gold-icon"></i> Curiosidade geopolítica</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== ADAM SMITH ========== -->
+        <section class="section-adam">
+            <div class="container">
+                <h2><i class="fas fa-hand-sparkles gold-icon"></i> Adam Smith · Mão invisível</h2>
+                <blockquote>
+                    <i class="fas fa-quote-left gold-icon"></i> Não é da benevolência do açougueiro, do cervejeiro ou do padeiro que esperamos o nosso jantar, mas da consideração que eles têm pelo seu próprio interesse. <footer>— A Riqueza das Nações (1776)</footer>
+                </blockquote>
+                <div class="smith-grid">
+                    <div><i class="fas fa-running gold-icon"></i> Interesse próprio (motor)</div>
+                    <div><i class="fas fa-hand-sparkles gold-icon"></i> Mão invisível (preços)</div>
+                    <div><i class="fas fa-gavel gold-icon"></i> Estado mínimo: defesa, justiça, obras</div>
+                </div>
+                <p class="reflexao">🇦🇴 Equilíbrio: ambição privada + infraestruturas (luz, água, estradas).</p>
+            </div>
+        </section>
+
+        <!-- ========== HIERARQUIA ECONOMIAS ========== -->
+        <section class="section-ranking">
+            <div class="container">
+                <h2><i class="fas fa-trophy gold-icon"></i> Top 10 Economias</h2>
+                <div class="rank-duplo">
+                    <div class="rank-mundo">
+                        <h4>🌍 Mundo (PIB nominal)</h4>
+                        <ol>
+                            <li><i class="fas fa-globe-americas gold-icon"></i> EUA</li>
+                            <li><i class="fas fa-globe-asia gold-icon"></i> China</li>
+                            <li><i class="fas fa-industry gold-icon"></i> Alemanha</li>
+                            <li><i class="fas fa-microchip gold-icon"></i> Japão</li>
+                            <li><i class="fas fa-chart-bar gold-icon"></i> Índia</li>
+                            <li><i class="fas fa-pound-sign gold-icon"></i> Reino Unido</li>
+                            <li><i class="fas fa-wine-glass-alt gold-icon"></i> França</li>
+                            <li><i class="fas fa-coffee gold-icon"></i> Brasil</li>
+                            <li><i class="fas fa-utensils gold-icon"></i> Itália</li>
+                            <li><i class="fas fa-maple-leaf gold-icon"></i> Canadá</li>
+                        </ol>
+                    </div>
+                    <div class="rank-africa">
+                        <h4>🦁 África (PIB)</h4>
+                        <ol>
+                            <li><i class="fas fa-pyramid gold-icon"></i> Egito</li>
+                            <li><i class="fas fa-oil-can gold-icon"></i> Nigéria</li>
+                            <li><i class="fas fa-gem gold-icon"></i> África do Sul</li>
+                            <li><i class="fas fa-desert gold-icon"></i> Argélia</li>
+                            <li><i class="fas fa-chart-line gold-icon"></i> Etiópia</li>
+                            <li><i class="fas fa-mosque gold-icon"></i> Marrocos</li>
+                            <li><i class="fas fa-paw gold-icon"></i> Quénia</li>
+                            <li><i class="fas fa-diamond gold-icon"></i> Angola</li>
+                            <li><i class="fas fa-seedling gold-icon"></i> Costa do Marfim</li>
+                            <li><i class="fas fa-mountain gold-icon"></i> Tanzânia</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="angola-foco">
+                    <i class="fas fa-diamond gold-icon"></i> Angola: 2º maior produtor de petróleo de África, estratégia 2026: diversificação (agricultura, pescas, lítio, cobre).
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== FEEDBACKS FALSOS (cards com borda animada) ========== -->
+        <section class="section-feedbacks">
+            <div class="container">
+                <h2><i class="fas fa-comment-dots gold-icon"></i> O que dizem</h2>
+                <div class="feedbacks-grid">
+                    <article class="card-animated feedback-card">
+                        <i class="fas fa-quote-left gold-icon"></i>
+                        <div class="avatar-circle">AC</div>
+                        <p class="feedback-text">“O simulador descomplicou indicadores que eu só via na teoria. Hoje consigo analisar PIB e inflação como analista.”</p>
+                        <div class="feedback-author">Ana Castro, <span>estudante economia</span></div>
+                        <div class="stars">★★★★★</div>
+                    </article>
+                    <article class="card-animated feedback-card">
+                        <i class="fas fa-quote-left gold-icon"></i>
+                        <div class="avatar-circle">MR</div>
+                        <p class="feedback-text">“Usei os cenários de crise para rebalancear a carteira de clientes. A biblioteca é um diferencial.”</p>
+                        <div class="feedback-author">Moisés Rocha, <span>analista financeiro</span></div>
+                        <div class="stars">★★★★★</div>
+                    </article>
+                    <article class="card-animated feedback-card">
+                        <i class="fas fa-quote-left gold-icon"></i>
+                        <div class="avatar-circle">LS</div>
+                        <p class="feedback-text">“Como empreendedor, entender ciclos evitou que eu fizesse dívidas caras. Ferramenta essencial.”</p>
+                        <div class="feedback-author">Luciana Silva, <span>empreendedora</span></div>
+                        <div class="stars">★★★★★</div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== CTA FINAL (borda animada + preço) ========== -->
+        <section class="section-cta">
+            <div class="container">
+                <article class="card-animated cta-card">
+                    <h2><i class="fas fa-tag gold-icon"></i> 7.500 Kz · 90 dias</h2>
+                    <p><i class="fas fa-book-open gold-icon"></i> Simulador + Biblioteca completa</p>
+                    <a href="S-real-simulador-economia.html" class="btn-primary btn-large">
+                        Acessar Agora <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <span class="cta-meta">acesso imediato · 90 dias de conteúdo</span>
+                </article>
+            </div>
+        </section>
 
     </main>
     

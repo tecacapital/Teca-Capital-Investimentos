@@ -19,10 +19,12 @@
     <script src="frontend/Public/javascript/Global/footer.js"></script>
 
     <!-- ARQUIVOS JS -->
-    <script src="frontend/Public/javascript/page"></script>
+    <script src="frontend/Public/javascript/page/s-real.simulador-gestao.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
-    <link rel="stylesheet" href="frontend/Public/CSS/">
+    <link rel="stylesheet" href="frontend/Public/CSS/simuladores/sub-simuladores/s.perfeitos/simulador-gestao.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 
 <body>
@@ -69,7 +71,70 @@
     </header>
 
 
-    <main>
+    <main class="simulador-container">
+
+        <!-- CABEÇALHO DO SIMULADOR -->
+        <div class="simulador-header">
+            <div class="data-display" id="dataDisplay">01/01/2025</div>
+            <div class="carteiras">
+            <div class="carteira-kz" id="carteiraKz">Kz: 1.000.000</div>
+            <div class="carteira-usd" id="carteiraUsd">USD: 0</div>
+            </div>
+            <div class="empresa-info" id="empresaInfo">
+            <span class="empresa-nome" id="empresaNome"></span>
+            <span class="empresa-dimensao" id="empresaDimensao"></span>
+            </div>
+            <div class="controle-tempo">
+            <span class="velocidade-label">⏱️ Velocidade:</span>
+            <div class="velocidade-botoes">
+                <button class="velocidade-btn ${velocidadeTempo === 1 ? 'active' : ''}" onclick="alterarVelocidade(1)" title="Normal">1x</button>
+                <button class="velocidade-btn ${velocidadeTempo === 7 ? 'active' : ''}" onclick="alterarVelocidade(7)" title="1 semana = 30s">7x</button>
+                <button class="velocidade-btn ${velocidadeTempo === 30 ? 'active' : ''}" onclick="alterarVelocidade(30)" title="1 mês = 30s">30x</button>
+                <button class="velocidade-btn ${velocidadeTempo === 90 ? 'active' : ''}" onclick="alterarVelocidade(90)" title="1 trimestre = 30s">90x</button>
+                <button class="velocidade-btn ${velocidadeTempo === 180 ? 'active' : ''}" onclick="alterarVelocidade(180)" title="1 semestre = 30s">180x</button>
+                <button class="velocidade-btn ${velocidadeTempo === 300 ? 'active' : ''}" onclick="alterarVelocidade(300)" title="1 ano = 36s">300x</button>
+            </div>
+            <span class="velocidade-atual">velocidade Tempo</span>
+    
+        </div>
+
+        <!-- DASHBOARD PRINCIPAL -->
+        <div class="dashboard">
+            <div class="card">Clientes: <span id="totalClientes">0</span></div>
+            <div class="card">Funcionários: <span id="totalFuncionarios">0</span></div>
+            <div class="card">Lucro Mês: <span id="lucroMes">0</span> Kz</div>
+            <div class="card">Estoque: <span id="totalEstoque">0</span></div>
+            <div class="card">Reserva USD: <span id="reservaUsd">0</span></div>
+            <div class="card">Licença Exportação: <span id="statusLicenca">❌</span></div>
+        </div>
+
+        <!-- MENU HAMBÚRGUER -->
+        <div class="menu-hamburguer">
+            <button class="menu-toggle">☰</button>
+            <div class="menu-conteudo">
+            <button onclick="mostrarRH()">👥 RH</button>
+            <button onclick="mostrarFinanceiro()">💰 Financeiro</button>
+            <button onclick="mostrarFornecedores()">📦 Fornecedores</button>
+            <button onclick="mostrarEstoque()">📋 Estoque</button>
+            <button onclick="mostrarMarketing()">📢 Marketing</button>
+            <button onclick="mostrarEstrategia()">🎯 Estratégia</button>
+            <button onclick="mostrarHistorico()">📊 Histórico</button>
+            <button onclick="mostrarInvestimentos()">📈 Investimentos</button>
+            <button onclick="mostrarCambio()">💱 Câmbio</button>
+            <button onclick="salvarEstadoSimulacao()">💾 Salvar</button>
+            <button onclick="reiniciarSimulacao()">🔄 Novo Jogo</button>
+            </div>
+        </div>
+
+        <!-- ÁREA DE CONTEÚDO DINÂMICO -->
+        <div class="conteudo-dinamico" id="conteudoPrincipal">
+            <!-- Conteúdo será injetado via JavaScript -->
+            <div class="welcome-screen">
+            <h1>Bem-vindo ao Simulador de Gestão</h1>
+            <p>Clique no menu ☰ para começar</p>
+            <button onclick="mostrarFormularioCriacaoEmpresa()" class="btn-grande">Criar Nova Empresa</button>
+            </div>
+        </div>
 
     </main>
     

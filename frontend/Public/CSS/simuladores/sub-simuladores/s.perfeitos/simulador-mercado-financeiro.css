@@ -1,0 +1,5726 @@
+/* CSS COMPLETO - HEADER, NAV, FOOTER */
+
+/* ============================================
+   VARIÁVEIS DE CORES E FONTES (PADRÃO)
+   ============================================ */
+:root {
+    /* PALETA DE CORES PRINCIPAL */
+    --color-primary: #000000;
+    --color-secondary: #0a0a0a;
+    --color-tertiary: #1a1a1a;
+    --color-accent: rgb(214, 174, 100);
+    --color-accent-rgba: rgba(214, 174, 100, 0.1);
+    --color-accent-dark: rgba(214, 174, 100, 0.8);
+    
+    /* CORES DE TEXTO */
+    --text-primary: #FFFFFF;
+    --text-secondary: #CCCCCC;
+    --text-muted: #999999;
+    
+    /* CORES DE BORDA */
+    --border-light: rgba(255, 255, 255, 0.1);
+    --border-medium: rgba(255, 255, 255, 0.2);
+    --border-accent: rgba(214, 174, 100, 0.3);
+    --border-accent-solid: rgb(214, 174, 100);
+    
+    /* FONTES */
+    --font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* TRANSITIONS */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* BORDER RADIUS */
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-full: 50%;
+}
+
+/* ============================================
+   RESET E CONFIGURAÇÕES GERAIS
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--color-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--transition-normal);
+}
+
+ul, ol {
+    list-style: none;
+}
+
+
+ /* Main */
+
+ /* ========================================
+           RESET E BASE
+        ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: rgb(0, 0, 0);
+            --accent-green: rgb(214, 174, 100);
+            --text-white: rgb(255, 255, 255);
+            --success: rgb(34, 197, 94);
+            --danger: rgb(239, 68, 68);
+            --warning: rgb(234, 179, 8);
+            --gray-dark: rgb(23, 23, 23);
+            --gray-medium: rgb(38, 38, 38);
+            --gray-light: rgb(64, 64, 64);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        main {
+            margin-top: 80px;
+            width: 100%;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* ========================================
+           ONBOARDING
+        ======================================== */
+        #onboarding {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .onboarding-container h1 {
+            font-size: 2.5rem;
+            color: var(--accent-green);
+            text-align: center;
+            margin-bottom: 10px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .onboarding-container h2 {
+            font-size: 1.5rem;
+            color: var(--text-white);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 300;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .info-box {
+            background: var(--gray-dark);
+            border: 2px solid var(--accent-green);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            animation: fadeIn 1s ease;
+        }
+
+        .info-box .icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .info-box p {
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .info-box strong {
+            color: var(--accent-green);
+        }
+
+        /* Formulário */
+        #user-setup {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        #user-setup input,
+        #user-setup select {
+            width: 100%;
+            padding: 15px;
+            background: var(--gray-dark);
+            border: 2px solid var(--gray-medium);
+            border-radius: 8px;
+            color: var(--text-white);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        #user-setup input:focus,
+        #user-setup select:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(214, 174, 100, 0.1);
+        }
+
+        /* Cards de perfil */
+        .profile-selector,
+        .scenario-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-selector label,
+        .scenario-selector label,
+        .balance-selector label,
+        .update-interval label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-green);
+            margin-bottom: 10px;
+        }
+
+        .profile-cards,
+        .scenario-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .profile-card,
+        .scenario-card {
+            background: var(--gray-dark);
+            border: 2px solid var(--gray-medium);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .profile-card:hover,
+        .scenario-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(214, 174, 100, 0.2);
+        }
+
+        .profile-card.selected,
+        .scenario-card.selected {
+            border-color: var(--accent-green);
+            background: rgba(214, 174, 100, 0.1);
+            box-shadow: 0 0 20px rgba(214, 174, 100, 0.3);
+        }
+
+        .profile-card .icon,
+        .scenario-card .icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .profile-card h3,
+        .scenario-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--accent-green);
+        }
+
+        .profile-card p,
+        .scenario-card p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        /* Seleção de saldo */
+        .balance-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .balance-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .balance-options button {
+            padding: 15px;
+            background: var(--gray-dark);
+            border: 2px solid var(--gray-medium);
+            border-radius: 8px;
+            color: var(--text-white);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .balance-options button:hover {
+            border-color: var(--accent-green);
+            background: rgba(214, 174, 100, 0.1);
+        }
+
+        .balance-options button.selected {
+            border-color: var(--accent-green);
+            background: var(--accent-green);
+            color: var(--bg-primary);
+        }
+
+        /* Botões */
+        .btn-primary,
+        .btn-secondary,
+        .btn-danger {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            box-shadow: 0 5px 15px rgba(214, 174, 100, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: rgb(194, 154, 80);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(214, 174, 100, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gray-dark);
+            color: var(--text-white);
+            border: 2px solid var(--gray-medium);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-green);
+            background: rgba(214, 174, 100, 0.1);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--text-white);
+        }
+
+        .btn-danger:hover {
+            background: rgb(220, 50, 50);
+        }
+
+        /* ========================================
+           DASHBOARD
+        ======================================== */
+        #dashboard {
+            max-width: 1600px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--gray-dark);
+            border-radius: 12px;
+            border: 2px solid var(--gray-medium);
+        }
+
+        .dashboard-header h2 {
+            font-size: 1.8rem;
+            color: var(--accent-green);
+        }
+
+        .scenario-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(214, 174, 100, 0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Grid principal */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 20px;
+        }
+
+        /* Sidebar - Resumo do portfólio */
+        .portfolio-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .summary-card {
+            background: var(--gray-dark);
+            border: 2px solid var(--gray-medium);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .summary-card h3 {
+            font-size: 1.3rem;
+            color: var(--accent-green);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .balance-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .balance-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+
+        .balance-item.highlight {
+            border: none;
+            padding: 15px;
+            background: rgba(214, 174, 100, 0.1);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .balance-item .label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .balance-item .value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .value.pnl.positive {
+            color: var(--success);
+        }
+
+        .value.pnl.negative {
+            color: var(--danger);
+        }
+
+        /* Gráfico de alocação */
+        .allocation-chart {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .allocation-chart h4 {
+            font-size: 1rem;
+            color: var(--accent-green);
+            margin-bottom: 15px;
+        }
+
+        /* Detalhes de Alocação */
+        .portfolio-allocation-details {
+            background: var(--gray-dark);
+            border: 2px solid var(--gray-medium);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .portfolio-allocation-details h4 {
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            margin-bottom: 15px;
+        }
+
+        .allocation-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: var(--gray-medium);
+            border-radius: 8px;
+            cursor: help;
+            transition: var(--transition);
+        }
+
+        .allocation-item:hover {
+            background: var(--gray-light);
+            transform: translateX(5px);
+        }
+
+        .allocation-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .allocation-name {
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .allocation-percent {
+            font-weight: 700;
+            color: var(--text-white);
+            font-size: 1.1rem;
+        }
+
+        .allocation-bar-container {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .allocation-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), rgb(194, 154, 80));
+            border-radius: 4px;
+            transition: width 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .allocation-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        .allocation-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .allocation-value {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .allocation-pnl {
+            font-weight: 600;
+        }
+
+        /* Ranking de Desempenho */
+        .performance-ranking {
+            background: var(--gray-dark);
+            border: 2px solid var(--gray-medium);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .performance-ranking > h4 {
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            margin-bottom: 20px;
+        }
+
+        .ranking-section {
+            margin-bottom: 20px;
+        }
+
+        .ranking-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .ranking-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--gray-medium);
+        }
+
+        .ranking-title.positive {
+            color: var(--success);
+        }
+
+        .ranking-title.negative {
+            color: var(--danger);
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--gray-medium);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .ranking-item:hover {
+            background: var(--gray-light);
+            transform: translateX(5px);
+        }
+
+        .ranking-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Badge especial para 1º lugar */
+        .ranking-item:first-child {
+            border-left-color: gold;
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), var(--gray-medium));
+        }
+
+        .ranking-item:first-child .ranking-position {
+            color: gold;
+            font-size: 1.1rem;
+        }
+
+        /* Badge para 2º lugar */
+        .ranking-item:nth-child(2) {
+            border-left-color: silver;
+            background: linear-gradient(90deg, rgba(192, 192, 192, 0.1), var(--gray-medium));
+        }
+
+        /* Badge para 3º lugar */
+        .ranking-item:nth-child(3) {
+            border-left-color: #cd7f32;
+            background: linear-gradient(90deg, rgba(205, 127, 50, 0.1), var(--gray-medium));
+        }
+
+        .ranking-position {
+            font-weight: 700;
+            color: var(--accent-green);
+            min-width: 30px;
+        }
+
+        .ranking-ticker {
+            flex: 1;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .ranking-value {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .ranking-value.positive {
+            color: var(--success);
+        }
+
+        .ranking-value.negative {
+            color: var(--danger);
+        }
+
+        /* Badge de Diversificação */
+        .diversification-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            border: 2px solid;
+        }
+
+        .diversification-badge.danger {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .diversification-badge.warning {
+            background: rgba(234, 179, 8, 0.2);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .diversification-badge.accent-green {
+            background: rgba(214, 174, 100, 0.2);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .diversification-badge.success {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .badge-icon {
+            font-size: 1rem;
+        }
+
+        /* Posições abertas */
+        .positions-list {
+            background: var(--gray-dark);
+            border: 2px solid var(--gray-medium);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .positions-list h4 {
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            margin-bottom: 15px;
+        }
+
+        .position-item {
+            background: var(--gray-medium);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .position-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .position-header strong {
+            color: var(--accent-green);
+            font-size: 1.1rem;
+        }
+
+        .quantity {
+            background: rgba(214, 174, 100, 0.2);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .position-details p {
+            font-size: 0.85rem;
+            margin: 5px 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .position-details .positive {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .position-details .negative {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .btn-sell-small {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .btn-sell-small:hover {
+            background: rgb(220, 50, 50);
+        }
+
+        /* Seção de ativos */
+        .assets-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .asset-tabs {
+            display: flex;
+            gap: 10px;
+            background: var(--gray-dark);
+            padding: 10px;
+            border-radius: 12px;
+            border: 2px solid var(--gray-medium);
+            overflow-x: auto;
+        }
+
+        .asset-tabs .tab {
+            padding: 12px 20px;
+            background: transparent;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .asset-tabs .tab:hover {
+            color: var(--accent-green);
+            background: rgba(214, 174, 100, 0.1);
+        }
+
+        .asset-tabs .tab.active {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            border-color: var(--accent-green);
+        }
+
+        /* Explicação Educacional */
+        .asset-explanation {
+            margin-bottom: 15px;
+        }
+
+        .btn-info {
+            padding: 10px 20px;
+            background: rgba(214, 174, 100, 0.2);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            color: var(--accent-green);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-info:hover {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+        }
+
+        .explanation-box {
+            margin-top: 15px;
+            padding: 20px;
+            background: var(--gray-dark);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-box h4 {
+            color: var(--accent-green);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .explanation-box p {
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Container de ativos */
+        .assets-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .asset-card {
+            background: var(--gray-dark);
+            border: 2px solid var(--gray-medium);
+            border-radius: 12px;
+            padding: 20px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .asset-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(214, 174, 100, 0.2);
+        }
+
+        .asset-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .asset-icon {
+            font-size: 2.5rem;
+        }
+
+        .asset-info h4 {
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            margin-bottom: 5px;
+        }
+
+        .ticker {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+        }
+
+        .asset-price {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .price-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-white);
+        }
+
+        .price-change {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .price-change.positive {
+            color: var(--success);
+        }
+
+        .price-change.negative {
+            color: var(--danger);
+        }
+
+        /* Informações de Crypto Expandidas */
+        .crypto-info {
+            background: var(--gray-medium);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .supply-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .supply-item .label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .supply-item .value {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .bond-info {
+            background: var(--gray-medium);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .bond-info p {
+            margin: 5px 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Gráficos maiores */
+        .asset-chart-mini {
+            height: 100px;
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .asset-chart-mini canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .asset-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-buy,
+        .btn-sell {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-buy {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-buy:hover {
+            background: rgb(25, 175, 75);
+        }
+
+        .btn-sell {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sell:hover {
+            background: rgb(220, 50, 50);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--gray-dark);
+            border: 2px solid var(--accent-green);
+            margin: 5% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close:hover {
+            color: var(--danger);
+        }
+
+        .asset-details {
+            margin: 20px 0;
+            padding: 15px;
+            background: var(--gray-medium);
+            border-radius: 8px;
+        }
+
+        .asset-details h4 {
+            color: var(--accent-green);
+            margin-bottom: 10px;
+        }
+
+        .trade-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .trade-form label {
+            color: var(--accent-green);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .trade-form input {
+            padding: 12px;
+            background: var(--gray-medium);
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            color: var(--text-white);
+            font-size: 1rem;
+        }
+
+        .trade-form input:focus {
+            outline: none;
+            border-color: var(--accent-green);
+        }
+
+        .trade-summary {
+            padding: 15px;
+            background: rgba(214, 174, 100, 0.1);
+            border-radius: 8px;
+        }
+
+        .trade-summary p {
+            margin: 5px 0;
+            font-size: 1rem;
+        }
+
+        .trade-summary .warning {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+        }
+
+        /* Histórico de transações */
+        .transaction-history {
+            margin-top: 40px;
+            background: var(--gray-dark);
+            border: 2px solid var(--gray-medium);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .transaction-history h3 {
+            color: var(--accent-green);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .history-table-container {
+            overflow-x: auto;
+        }
+
+        #transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #transactions-table th {
+            background: var(--gray-medium);
+            padding: 12px;
+            text-align: left;
+            color: var(--accent-green);
+            font-weight: 600;
+            border-bottom: 2px solid var(--gray-light);
+        }
+
+        #transactions-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+
+        #transactions-table tbody tr:hover {
+            background: var(--gray-medium);
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge.buy {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .badge.sell {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .positive {
+            color: var(--success);
+        }
+
+        .negative {
+            color: var(--danger);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            font-style: italic;
+        }
+
+        /* Notificações */
+        .notification {
+            position: fixed;
+            top: -100px;
+            right: 20px;
+            background: var(--gray-dark);
+            border: 2px solid var(--accent-green);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            transition: top 0.3s ease;
+            max-width: 400px;
+        }
+
+        .notification.show {
+            top: 20px;
+        }
+
+        .notification.success {
+            border-color: var(--success);
+        }
+
+        .notification.error {
+            border-color: var(--danger);
+        }
+
+        .notification.warning {
+            border-color: var(--warning);
+        }
+
+        /* ========================================
+           RESPONSIVIDADE
+        ======================================== */
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .portfolio-summary {
+                order: 2;
+            }
+            
+            .assets-section {
+                order: 1;
+            }
+            
+            .assets-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            main {
+                padding: 10px;
+            }
+            
+            .onboarding-container h1 {
+                font-size: 1.75rem;
+            }
+            
+            .onboarding-container h2 {
+                font-size: 1.25rem;
+            }
+            
+            .profile-cards,
+            .scenario-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .balance-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .header-actions button {
+                width: 100%;
+            }
+            
+            .asset-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .asset-tabs .tab {
+                font-size: 0.85rem;
+                padding: 10px 15px;
+            }
+            
+            .assets-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .asset-card {
+                padding: 15px;
+            }
+            
+            .asset-icon {
+                font-size: 2rem;
+            }
+            
+            .asset-info h4 {
+                font-size: 1rem;
+            }
+            
+            .price-value {
+                font-size: 1.25rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+                margin: 10% auto;
+            }
+            
+            #transactions-table {
+                font-size: 0.85rem;
+            }
+            
+            #transactions-table th,
+            #transactions-table td {
+                padding: 8px;
+            }
+            
+            .notification {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+
+            /* Responsividade para alocação e ranking */
+            .portfolio-allocation-details,
+            .performance-ranking {
+                padding: 15px;
+            }
+            
+            .allocation-item {
+                padding: 10px;
+            }
+            
+            .allocation-header {
+                font-size: 0.9rem;
+            }
+            
+            .allocation-percent {
+                font-size: 1rem;
+            }
+            
+            .ranking-item {
+                padding: 8px;
+                font-size: 0.85rem;
+            }
+            
+            .ranking-position {
+                min-width: 25px;
+                font-size: 0.9rem;
+            }
+            
+            .ranking-value {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .onboarding-container h1 {
+                font-size: 1.5rem;
+            }
+            
+            .onboarding-container h2 {
+                font-size: 1rem;
+            }
+            
+            .info-box {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-card .icon,
+            .scenario-card .icon {
+                font-size: 2.5rem;
+            }
+            
+            .profile-card h3,
+            .scenario-card h3 {
+                font-size: 1.1rem;
+            }
+            
+            .profile-card p,
+            .scenario-card p {
+                font-size: 0.85rem;
+            }
+            
+            .balance-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-primary,
+            .btn-secondary,
+            .btn-danger {
+                font-size: 1rem;
+                padding: 12px 20px;
+            }
+            
+            .dashboard-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .summary-card h3 {
+                font-size: 1.1rem;
+            }
+            
+            .balance-item .label {
+                font-size: 0.85rem;
+            }
+            
+            .balance-item .value {
+                font-size: 0.9rem;
+            }
+            
+            #transactions-table {
+                font-size: 0.75rem;
+            }
+            
+            #transactions-table th,
+            #transactions-table td {
+                padding: 6px 4px;
+            }
+
+            .portfolio-allocation-details h4,
+            .performance-ranking h4 {
+                font-size: 1rem;
+            }
+            
+            .allocation-name,
+            .ranking-ticker {
+                font-size: 0.85rem;
+            }
+            
+            .allocation-details {
+                font-size: 0.75rem;
+            }
+            
+            .ranking-title {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* ========================================
+           ANIMAÇÕES
+        ======================================== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes shimmer {
+            to {
+                left: 100%;
+            }
+        }
+
+        /* Efeito de hover nos cards */
+        .asset-card,
+        .profile-card,
+        .scenario-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .asset-card::before,
+        .profile-card::before,
+        .scenario-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(214, 174, 100, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .asset-card:hover::before,
+        .profile-card:hover::before,
+        .scenario-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-green);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgb(194, 154, 80);
+        }
+
+        /* ========================================
+   CSS DE RESPONSIVIDADE CORRIGIDO
+   PARA RESOLVER PROBLEMAS DE LAYOUT
+======================================== */
+
+/* ========================================
+   CORREÇÕES GERAIS DE LAYOUT
+======================================== */
+@media screen and (max-width: 1200px) {
+    /* Garantir que o main tenha padding adequado */
+    main {
+        padding: 15px !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Corrigir container do dashboard */
+    #dashboard {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+    }
+    
+    /* Corrigir grid principal */
+    .dashboard-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 20px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Sidebar ocupando 100% da largura */
+    .portfolio-summary {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Seção de ativos ocupando 100% */
+    .assets-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+/* ========================================
+   CORREÇÕES PARA TELAS < 1000px
+======================================== */
+@media screen and (max-width: 999px) {
+    /* CORREÇÃO CRÍTICA: Reset completo do layout */
+    * {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    main {
+        padding: 10px !important;
+        min-width: 100vw !important;
+        overflow-x: hidden !important;
+    }
+    
+    /* Dashboard container corrigido */
+    #dashboard {
+        width: 100% !important;
+        min-width: 100% !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+    
+    /* HEADER DO DASHBOARD - Corrigido */
+    .dashboard-header {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto 20px auto !important;
+        padding: 15px !important;
+        gap: 15px !important;
+    }
+    
+    .user-info {
+        width: 100% !important;
+        text-align: center !important;
+    }
+    
+    .dashboard-header h2 {
+        font-size: 1.4rem !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .header-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+        align-items: center !important;
+    }
+    
+    .header-actions button {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 44px !important;
+        font-size: 0.9rem !important;
+        padding: 12px !important;
+        margin: 0 !important;
+    }
+    
+    /* GRID PRINCIPAL - Corrigido */
+    .dashboard-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 20px !important;
+    }
+    
+    /* SIDEBAR - Corrigido */
+    .portfolio-summary {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+    
+    .summary-card, 
+    .portfolio-allocation-details, 
+    .performance-ranking, 
+    .positions-list {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 15px !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* SEÇÃO DE ATIVOS - Corrigido */
+    .assets-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+    
+    /* TABS - Corrigido */
+    .asset-tabs {
+        display: flex !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px !important;
+        margin: 0 !important;
+        gap: 8px !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+    }
+    
+    .asset-tabs .tab {
+        flex-shrink: 0 !important;
+        padding: 10px 15px !important;
+        font-size: 0.85rem !important;
+        min-width: auto !important;
+    }
+    
+    /* CONTAINER DE ATIVOS - CRÍTICO CORRIGIDO */
+    .assets-container {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+        gap: 15px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        justify-items: center !important;
+    }
+    
+    /* CARTÕES DE ATIVOS - CORREÇÃO COMPLETA */
+    .asset-card {
+        width: 100% !important;
+        min-width: 280px !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 15px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        border: 2px solid var(--gray-medium) !important;
+        border-radius: 12px !important;
+        background: var(--gray-dark) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    /* Garantir que os cards não quebrem */
+    .asset-card > * {
+        max-width: 100% !important;
+        overflow: hidden !important;
+    }
+    
+    /* Header do card */
+    .asset-header {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        width: 100% !important;
+    }
+    
+    .asset-icon {
+        font-size: 2rem !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .asset-info {
+        flex: 1 !important;
+        min-width: 0 !important; /* Permite que o texto quebre */
+    }
+    
+    .asset-info h4 {
+        font-size: 1rem !important;
+        line-height: 1.2 !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .ticker {
+        font-size: 0.85rem !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+    
+    /* Preço do ativo */
+    .asset-price {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 5px !important;
+    }
+    
+    .price-value {
+        font-size: 1.3rem !important;
+        font-weight: 700 !important;
+        word-break: break-word !important;
+    }
+    
+    .price-change {
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Informações de crypto/bonds */
+    .crypto-info,
+    .bond-info {
+        width: 100% !important;
+        padding: 10px !important;
+        margin: 0 !important;
+        font-size: 0.85rem !important;
+        box-sizing: border-box !important;
+    }
+    
+    .crypto-info p,
+    .bond-info p {
+        margin: 5px 0 !important;
+        line-height: 1.3 !important;
+    }
+    
+    /* Gráfico mini */
+    .asset-chart-mini {
+        width: 100% !important;
+        height: 80px !important;
+        margin: 10px 0 !important;
+        position: relative !important;
+    }
+    
+    .asset-chart-mini canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block !important;
+    }
+    
+    /* AÇÕES DO CARD - CORREÇÃO CRÍTICA */
+    .asset-actions {
+        display: flex !important;
+        width: 100% !important;
+        gap: 10px !important;
+        margin-top: 10px !important;
+        justify-content: space-between !important;
+    }
+    
+    .btn-buy,
+    .btn-sell {
+        flex: 1 !important;
+        min-width: 0 !important; /* Permite que os botões encolham */
+        min-height: 44px !important;
+        padding: 10px !important;
+        font-size: 0.9rem !important;
+        border: none !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        font-weight: 600 !important;
+        text-align: center !important;
+        transition: all 0.2s ease !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    .btn-buy {
+        background: var(--success) !important;
+        color: white !important;
+    }
+    
+    .btn-sell {
+        background: var(--danger) !important;
+        color: white !important;
+    }
+    
+    /* Garantir que os botões sejam clicáveis */
+    .btn-buy:hover,
+    .btn-sell:hover {
+        opacity: 0.9 !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    /* HISTÓRICO DE TRANSAÇÕES - Scroll obrigatório */
+    .transaction-history {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 20px 0 0 0 !important;
+        padding: 15px !important;
+        box-sizing: border-box !important;
+    }
+    
+    .history-table-container {
+        overflow-x: auto !important;
+        width: 100% !important;
+        -webkit-overflow-scrolling: touch !important;
+        border: 1px solid var(--gray-medium) !important;
+        border-radius: 8px !important;
+        margin-top: 10px !important;
+        position: relative !important;
+    }
+    
+    #transactions-table {
+        min-width: 800px !important;
+        width: 100% !important;
+        font-size: 0.85rem !important;
+        border-collapse: collapse !important;
+    }
+    
+    #transactions-table th {
+        background: var(--gray-medium) !important;
+        padding: 12px 8px !important;
+        text-align: left !important;
+        position: sticky !important;
+        left: 0 !important;
+        white-space: nowrap !important;
+    }
+    
+    #transactions-table td {
+        padding: 10px 8px !important;
+        border-bottom: 1px solid var(--gray-medium) !important;
+        white-space: nowrap !important;
+    }
+    
+    /* MODAL - Correção */
+    .modal-content {
+        width: 95% !important;
+        max-width: 500px !important;
+        margin: 10% auto !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* ONBOARDING - Correção */
+    #onboarding {
+        padding: 20px 15px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    .onboarding-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    
+    .profile-cards,
+    .scenario-cards {
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+    }
+    
+    .balance-options {
+        grid-template-columns: repeat(2, 1fr) !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+    
+    .balance-options button {
+        width: 100% !important;
+        padding: 12px !important;
+        min-height: 44px !important;
+    }
+}
+
+/* ========================================
+   CORREÇÕES PARA TELAS < 768px (MOBILE)
+======================================== */
+@media screen and (max-width: 767px) {
+    main {
+        padding: 8px !important;
+        min-width: 100vw !important;
+    }
+    
+    /* Dashboard header mais compacto */
+    .dashboard-header {
+        padding: 12px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .dashboard-header h2 {
+        font-size: 1.2rem !important;
+    }
+    
+    /* Cards em grid de 1 coluna */
+    .assets-container {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+    
+    .asset-card {
+        min-width: 100% !important;
+        padding: 12px !important;
+    }
+    
+    /* Botões maiores para touch */
+    .btn-buy,
+    .btn-sell {
+        min-height: 46px !important;
+        font-size: 0.95rem !important;
+        padding: 12px !important;
+    }
+    
+    /* Tabela com scroll mais visível */
+    .history-table-container {
+        border-width: 2px !important;
+    }
+    
+    @keyframes pulseArrow {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+    }
+    
+    /* Modal ocupa tela cheia */
+    .modal-content {
+        width: 100% !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        padding: 20px !important;
+    }
+    
+    /* Ajustar fontes */
+    .asset-info h4 {
+        font-size: 0.95rem !important;
+    }
+    
+    .price-value {
+        font-size: 1.2rem !important;
+    }
+    
+    .balance-item {
+        font-size: 0.85rem !important;
+    }
+    
+    /* Balance options em coluna única */
+    .balance-options {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .balance-options button {
+        padding: 14px !important;
+        min-height: 50px !important;
+    }
+}
+
+/* ========================================
+   CORREÇÕES PARA TELAS < 480px (MOBILE PEQUENO)
+======================================== */
+@media screen and (max-width: 479px) {
+    main {
+        padding: 5px !important;
+    }
+    
+    /* Header ultra compacto */
+    .dashboard-header {
+        padding: 10px !important;
+        gap: 10px !important;
+    }
+    
+    .dashboard-header h2 {
+        font-size: 1.1rem !important;
+    }
+    
+    .scenario-badge {
+        font-size: 0.8rem !important;
+        padding: 4px 10px !important;
+    }
+    
+    /* Cards ainda mais compactos */
+    .asset-card {
+        padding: 10px !important;
+        gap: 10px !important;
+    }
+    
+    .asset-icon {
+        font-size: 1.8rem !important;
+    }
+    
+    .asset-info h4 {
+        font-size: 0.9rem !important;
+    }
+    
+    .price-value {
+        font-size: 1.1rem !important;
+    }
+    
+    /* Botões em coluna se necessário */
+    @media screen and (max-width: 350px) {
+        .asset-actions {
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        
+        .btn-buy,
+        .btn-sell {
+            width: 100% !important;
+        }
+    }
+    
+    /* Tabela com scroll mínimo */
+    #transactions-table {
+        min-width: 700px !important;
+        font-size: 0.8rem !important;
+    }
+    
+    /* Balance items em coluna */
+    .balance-item {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 4px !important;
+    }
+    
+    .balance-item .label {
+        font-size: 0.75rem !important;
+    }
+    
+    .balance-item .value {
+        font-size: 0.8rem !important;
+        width: 100% !important;
+        text-align: left !important;
+    }
+}
+
+/* ========================================
+   CORREÇÕES PARA CENTRALIZAÇÃO
+======================================== */
+@media screen and (max-width: 999px) {
+    /* Centralizar tudo no main */
+    main {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        width: 100vw !important;
+        min-height: 100vh !important;
+        overflow-x: hidden !important;
+    }
+    
+    /* Centralizar o dashboard */
+    #dashboard {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    /* Centralizar o onboarding */
+    #onboarding {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+    
+    .onboarding-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+    
+    /* Centralizar cards de ativos */
+    .assets-container {
+        justify-items: center !important;
+    }
+    
+    .asset-card {
+        align-items: flex-start !important;
+    }
+    
+    /* Centralizar elementos da sidebar */
+    .summary-card,
+    .portfolio-allocation-details,
+    .performance-ranking,
+    .positions-list {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .balance-info {
+        width: 100% !important;
+    }
+    
+    /* Centralizar botões */
+    .btn-primary,
+    .btn-secondary,
+    .btn-danger {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 auto !important;
+    }
+}
+
+/* ========================================
+   CORREÇÕES PARA EVITAR QUEBRA DE ELEMENTOS
+======================================== */
+@media screen and (max-width: 999px) {
+    /* Prevenir quebra de texto */
+    * {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+    
+    /* Garantir que containers não quebrem */
+    .dashboard-header,
+    .portfolio-summary,
+    .assets-section,
+    .transaction-history {
+        flex-shrink: 0 !important;
+        min-width: 0 !important;
+    }
+    
+    /* Prevenir overflow horizontal */
+    body, html {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+    }
+    
+    /* Fixar largura máxima dos cards */
+    .asset-card {
+        max-width: calc(100vw - 20px) !important;
+    }
+    
+    /* Scroll horizontal suave para tabelas */
+    .history-table-container {
+        scroll-behavior: smooth !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Estilizar scrollbar */
+    .history-table-container::-webkit-scrollbar {
+        height: 8px !important;
+    }
+    
+    .history-table-container::-webkit-scrollbar-track {
+        background: var(--gray-dark) !important;
+        border-radius: 4px !important;
+    }
+    
+    .history-table-container::-webkit-scrollbar-thumb {
+        background: var(--accent-green) !important;
+        border-radius: 4px !important;
+    }
+    
+    .history-table-container::-webkit-scrollbar-thumb:hover {
+        background: rgb(194, 154, 80) !important;
+    }
+}
+
+/* ========================================
+   CORREÇÕES ESPECÍFICAS PARA ELEMENTOS QUEBRADOS
+======================================== */
+@media screen and (max-width: 999px) {
+    /* Corrigir posição de elementos flutuantes */
+    .asset-actions {
+        position: relative !important;
+        bottom: auto !important;
+        left: auto !important;
+        right: auto !important;
+    }
+    
+    /* Corrigir altura dos containers */
+    .asset-card {
+        min-height: auto !important;
+        height: auto !important;
+    }
+    
+    /* Garantir que gráficos fiquem visíveis */
+    .asset-chart-mini {
+        min-height: 80px !important;
+        max-height: 80px !important;
+    }
+    
+    /* Corrigir alinhamento de ícones */
+    .asset-header {
+        align-items: flex-start !important;
+    }
+    
+    /* Corrigir espaçamento entre elementos */
+    .asset-card > * {
+        margin-bottom: 8px !important;
+    }
+    
+    .asset-card > *:last-child {
+        margin-bottom: 0 !important;
+    }
+    
+    /* Garantir que botões sejam sempre visíveis */
+    .btn-buy,
+    .btn-sell {
+        opacity: 1 !important;
+        visibility: visible !important;
+        position: relative !important;
+        z-index: 10 !important;
+    }
+}
+
+/* ========================================
+   AJUSTES FINAIS DE VISUALIZAÇÃO
+======================================== */
+@media screen and (max-width: 999px) {
+    /* Melhorar contraste em telas pequenas */
+    .asset-card {
+        border: 2px solid var(--gray-medium) !important;
+        background: var(--gray-dark) !important;
+    }
+    
+    /* Aumentar área de toque */
+    .btn-buy,
+    .btn-sell,
+    .btn-sell-small,
+    .tab,
+    .profile-card,
+    .scenario-card {
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: rgba(214, 174, 100, 0.3) !important;
+    }
+    
+    /* Feedback visual para toque */
+    .btn-buy:active,
+    .btn-sell:active {
+        transform: scale(0.98) !important;
+    }
+    
+    /* Garantir que textos não desapareçam */
+    .price-value,
+    .asset-info h4 {
+        color: var(--text-white) !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+    }
+    
+    /* Indicador de que há mais conteúdo */
+    .asset-tabs {
+        position: relative !important;
+    }
+    
+    .asset-tabs::after {
+        content: '›' !important;
+        position: absolute !important;
+        right: 5px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        font-size: 1.5rem !important;
+        color: var(--accent-green) !important;
+        pointer-events: none !important;
+    }
+}
+
+/* ========================================
+   OTIMIZAÇÃO AVANÇADA PARA MOBILE (≤ 450px)
+   Versão profissional compacta
+======================================== */
+
+@media screen and (max-width: 450px) {
+    /* ========== LAYOUT E CONTAINERS ========== */
+    main {
+        padding: 8px !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+    }
+    
+    #dashboard {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    
+    /* ========== HEADER DO DASHBOARD ========== */
+    .dashboard-header {
+        padding: 10px !important;
+        margin-bottom: 12px !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        text-align: center !important;
+    }
+    
+    .dashboard-header h2 {
+        font-size: 1.1rem !important;
+        line-height: 1.2 !important;
+        margin-bottom: 6px !important;
+    }
+    
+    .scenario-badge {
+        font-size: 0.75rem !important;
+        padding: 3px 10px !important;
+        display: inline-block !important;
+        margin: 4px auto !important;
+    }
+    
+    .header-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        width: 100% !important;
+        margin-top: 8px !important;
+    }
+    
+    .header-actions button {
+        width: 100% !important;
+        min-height: 44px !important;
+        padding: 10px !important;
+        font-size: 0.9rem !important;
+        margin: 0 !important;
+    }
+    
+    /* ========== GRID PRINCIPAL ========== */
+    .dashboard-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        width: 100% !important;
+    }
+    
+    /* ========== SIDEBAR - RESUMO ========== */
+    .portfolio-summary {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    .summary-card,
+    .portfolio-allocation-details,
+    .performance-ranking,
+    .positions-list {
+        padding: 12px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .summary-card h3,
+    .portfolio-allocation-details h4,
+    .performance-ranking h4,
+    .positions-list h4 {
+        font-size: 1rem !important;
+        margin-bottom: 12px !important;
+    }
+    
+    /* ========== INFORMAÇÕES DE SALDO ========== */
+    .balance-info {
+        gap: 8px !important;
+    }
+    
+    .balance-item {
+        padding: 6px 0 !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .balance-item.highlight {
+        padding: 10px !important;
+        margin-top: 8px !important;
+    }
+    
+    .balance-item .label {
+        font-size: 0.85rem !important;
+    }
+    
+    .balance-item .value {
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+    }
+    
+    /* ========== GRÁFICO DE ALOAÇÃO ========== */
+    .allocation-chart {
+        margin-top: 15px !important;
+    }
+    
+    .allocation-chart h4 {
+        font-size: 0.9rem !important;
+        margin-bottom: 10px !important;
+    }
+    
+    #allocation-pie {
+        width: 150px !important;
+        height: 150px !important;
+        margin: 0 auto !important;
+    }
+    
+    /* ========== DETALHES DE ALOAÇÃO ========== */
+    #diversification-badge {
+        margin-bottom: 10px !important;
+    }
+    
+    .diversification-badge {
+        font-size: 0.8rem !important;
+        padding: 5px 10px !important;
+    }
+    
+    .allocation-item {
+        padding: 10px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .allocation-header {
+        font-size: 0.85rem !important;
+        margin-bottom: 6px !important;
+    }
+    
+    .allocation-name {
+        font-size: 0.85rem !important;
+    }
+    
+    .allocation-percent {
+        font-size: 0.9rem !important;
+    }
+    
+    .allocation-bar-container {
+        height: 6px !important;
+        margin-bottom: 6px !important;
+    }
+    
+    .allocation-details {
+        font-size: 0.8rem !important;
+    }
+    
+    /* ========== RANKING DE DESEMPENHO ========== */
+    .ranking-section {
+        margin-bottom: 15px !important;
+    }
+    
+    .ranking-title {
+        font-size: 0.85rem !important;
+        margin-bottom: 8px !important;
+        padding-bottom: 5px !important;
+    }
+    
+    .ranking-item {
+        padding: 8px !important;
+        margin-bottom: 6px !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .ranking-position {
+        min-width: 25px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .ranking-ticker {
+        font-size: 0.85rem !important;
+    }
+    
+    .ranking-value {
+        font-size: 0.85rem !important;
+    }
+    
+    /* ========== POSIÇÕES ABERTAS ========== */
+    .position-item {
+        padding: 12px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .position-header {
+        margin-bottom: 8px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .position-header strong {
+        font-size: 0.9rem !important;
+    }
+    
+    .quantity {
+        font-size: 0.8rem !important;
+        padding: 2px 8px !important;
+    }
+    
+    .position-details p {
+        font-size: 0.8rem !important;
+        margin: 3px 0 !important;
+    }
+    
+    .btn-sell-small {
+        margin-top: 8px !important;
+        padding: 8px !important;
+        font-size: 0.85rem !important;
+        min-height: 36px !important;
+    }
+    
+    /* ========== SEÇÃO DE ATIVOS ========== */
+    .assets-section {
+        gap: 12px !important;
+    }
+    
+    /* Tabs otimizadas */
+    .asset-tabs {
+        padding: 8px !important;
+        gap: 6px !important;
+        border-radius: 8px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+        border: 1px solid var(--gray-medium) !important;
+    }
+    
+    .asset-tabs .tab {
+        padding: 8px 12px !important;
+        font-size: 0.8rem !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        min-height: 36px !important;
+    }
+    
+    /* Explicação educacional */
+    .asset-explanation {
+        margin-bottom: 10px !important;
+    }
+    
+    .btn-info {
+        padding: 8px 16px !important;
+        font-size: 0.85rem !important;
+        min-height: 38px !important;
+    }
+    
+    .explanation-box {
+        padding: 12px !important;
+        margin-top: 10px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .explanation-box h4 {
+        font-size: 0.9rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    /* Container de ativos - Layout denso */
+    .assets-container {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+    
+    .asset-card {
+        padding: 12px !important;
+        gap: 10px !important;
+        border: 1px solid var(--gray-medium) !important;
+    }
+    
+    .asset-header {
+        gap: 10px !important;
+    }
+    
+    .asset-icon {
+        font-size: 1.8rem !important;
+    }
+    
+    .asset-info h4 {
+        font-size: 0.9rem !important;
+        line-height: 1.2 !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .ticker {
+        font-size: 0.8rem !important;
+    }
+    
+    .asset-price {
+        gap: 4px !important;
+    }
+    
+    .price-value {
+        font-size: 1.1rem !important;
+    }
+    
+    .price-change {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Informações de Crypto */
+    .crypto-info,
+    .bond-info {
+        padding: 10px !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .supply-item {
+        font-size: 0.8rem !important;
+        margin: 4px 0 !important;
+    }
+    
+    .supply-item .label,
+    .supply-item .value {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Gráfico mini otimizado */
+    .asset-chart-mini {
+        height: 60px !important;
+        margin: 8px 0 !important;
+    }
+    
+    /* Botões de ação mais compactos */
+    .asset-actions {
+        gap: 8px !important;
+        margin-top: 8px !important;
+    }
+    
+    .btn-buy,
+    .btn-sell {
+        padding: 10px !important;
+        font-size: 0.85rem !important;
+        min-height: 40px !important;
+        flex: 1 !important;
+        text-align: center !important;
+    }
+    
+    /* ========== MODAL OTIMIZADO ========== */
+    .modal-content {
+        width: 95% !important;
+        max-width: none !important;
+        margin: 5% auto !important;
+        padding: 15px !important;
+        border-radius: 8px !important;
+    }
+    
+    .modal-content h3 {
+        font-size: 1rem !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .asset-details {
+        padding: 10px !important;
+        margin: 10px 0 !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .trade-form {
+        gap: 12px !important;
+    }
+    
+    .trade-form label {
+        font-size: 0.9rem !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .trade-form input {
+        padding: 10px !important;
+        font-size: 0.9rem !important;
+        min-height: 44px !important;
+    }
+    
+    .trade-summary {
+        padding: 10px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .modal-actions {
+        gap: 8px !important;
+    }
+    
+    .modal-actions button {
+        min-height: 44px !important;
+        padding: 10px !important;
+        font-size: 0.9rem !important;
+    }
+    
+    /* ========== HISTÓRICO DE TRANSAÇÕES ========== */
+    .transaction-history {
+        margin-top: 20px !important;
+        padding: 12px !important;
+    }
+    
+    .transaction-history h3 {
+        font-size: 1rem !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .history-table-container {
+        border: 1px solid var(--gray-medium) !important;
+        border-radius: 6px !important;
+        overflow-x: auto !important;
+        position: relative !important;
+        padding-bottom: 8px !important;
+    }
+    
+    #transactions-table {
+        min-width: 600px !important;
+        font-size: 0.8rem !important;
+    }
+    
+    #transactions-table th {
+        padding: 8px !important;
+        font-size: 0.85rem !important;
+        white-space: nowrap !important;
+        position: sticky !important;
+        left: 0 !important;
+        background: var(--gray-medium) !important;
+    }
+    
+    #transactions-table td {
+        padding: 8px !important;
+        white-space: nowrap !important;
+    }
+    
+    .badge {
+        font-size: 0.75rem !important;
+        padding: 3px 8px !important;
+    }
+    
+    /* ========== ONBOARDING MOBILE ========== */
+    #onboarding {
+        padding: 10px !important;
+    }
+    
+    .onboarding-container h1 {
+        font-size: 1.4rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .onboarding-container h2 {
+        font-size: 1rem !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .info-box {
+        padding: 12px !important;
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 10px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .info-box .icon {
+        font-size: 1.5rem !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .info-box p {
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
+    }
+    
+    /* Formulário de configuração */
+    #user-setup {
+        gap: 15px !important;
+    }
+    
+    #user-setup input,
+    #user-setup select {
+        padding: 12px !important;
+        font-size: 0.9rem !important;
+        min-height: 44px !important;
+    }
+    
+    .profile-selector label,
+    .scenario-selector label,
+    .balance-selector label,
+    .update-interval label {
+        font-size: 1rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    /* Cards de perfil */
+    .profile-cards,
+    .scenario-cards {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+    
+    .profile-card,
+    .scenario-card {
+        padding: 12px !important;
+    }
+    
+    .profile-card .icon,
+    .scenario-card .icon {
+        font-size: 2rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .profile-card h3,
+    .scenario-card h3 {
+        font-size: 1rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .profile-card p,
+    .scenario-card p {
+        font-size: 0.8rem !important;
+        line-height: 1.4 !important;
+    }
+    
+    /* Balance options */
+    .balance-options {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+    
+    .balance-options button {
+        padding: 10px !important;
+        font-size: 0.85rem !important;
+        min-height: 40px !important;
+    }
+    
+    /* Botão principal */
+    .btn-primary {
+        padding: 12px !important;
+        font-size: 1rem !important;
+        min-height: 48px !important;
+        margin-top: 10px !important;
+    }
+    
+    /* ========== ANIMAÇÕES OTIMIZADAS ========== */
+    @keyframes pulseScrollHint {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+    }
+    
+    /* ========== UTILITÁRIOS MOBILE ========== */
+    /* Esconder elementos menos importantes */
+    .asset-card::before,
+    .profile-card::before,
+    .scenario-card::before {
+        display: none !important;
+    }
+    
+    /* Melhorar área de toque */
+    .btn-buy, .btn-sell, .btn-sell-small, .tab, .profile-card, .scenario-card {
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(214, 174, 100, 0.2);
+    }
+    
+    /* Feedback visual para toque */
+    .btn-buy:active,
+    .btn-sell:active,
+    .btn-sell-small:active {
+        transform: scale(0.98) !important;
+        opacity: 0.9 !important;
+    }
+    
+    /* Scrollbar fina para mobile */
+    .asset-tabs::-webkit-scrollbar,
+    .history-table-container::-webkit-scrollbar {
+        height: 4px !important;
+    }
+    
+    .asset-tabs::-webkit-scrollbar-track,
+    .history-table-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 2px !important;
+    }
+    
+    .asset-tabs::-webkit-scrollbar-thumb,
+    .history-table-container::-webkit-scrollbar-thumb {
+        background: var(--accent-green) !important;
+        border-radius: 2px !important;
+    }
+    
+    /* ========== AJUSTES ESPECÍFICOS PARA TELAS MUITO PEQUENAS ========== */
+    @media screen and (max-width: 350px) {
+        .balance-options {
+            grid-template-columns: 1fr !important;
+        }
+        
+        .asset-actions {
+            flex-direction: column !important;
+            gap: 6px !important;
+        }
+        
+        .btn-buy,
+        .btn-sell {
+            width: 100% !important;
+        }
+        
+        .header-actions button {
+            font-size: 0.85rem !important;
+            padding: 8px !important;
+        }
+        
+        #transactions-table {
+            font-size: 0.75rem !important;
+        }
+        
+        #transactions-table th,
+        #transactions-table td {
+            padding: 6px !important;
+        }
+    }
+    
+    /* ========== ESTADOS ESPECIAIS ========== */
+    /* Quando em modo simulação ativa */
+    body.simulation-active #onboarding {
+        display: none !important;
+    }
+    
+    body.simulation-active .dashboard-header {
+        margin-bottom: 8px !important;
+    }
+}
+
+/* ========================================
+   OTIMIZAÇÕES ADICIONAIS PARA DENSIDADE
+======================================== */
+
+/* Estado compacto para melhor visualização */
+.compact-mode .asset-card {
+    padding: 10px !important;
+    gap: 8px !important;
+}
+
+.compact-mode .balance-item {
+    padding: 4px 0 !important;
+    font-size: 0.8rem !important;
+}
+
+.compact-mode .ranking-item {
+    padding: 6px !important;
+    font-size: 0.75rem !important;
+}
+
+/* Indicador de que há mais conteúdo nos tabs */
+.asset-tabs {
+    position: relative !important;
+}
+
+.asset-tabs.has-overflow::after {
+    content: '⋯' !important;
+    position: absolute !important;
+    right: 5px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 1.2rem !important;
+    color: var(--accent-green) !important;
+    background: var(--gray-dark) !important;
+    padding: 0 8px !important;
+    pointer-events: none !important;
+}
+
+/* Classe utilitária para ocultar elementos não críticos em mobile */
+.mobile-hidden {
+    display: none !important;
+}
+
+/* Classe para elementos que devem ser sempre visíveis */
+.mobile-visible {
+    display: block !important;
+}
+
+/* ========== LIGHT MODE ========== */
+[data-theme="light"] {
+    --bg-primary: #f8f9fa;
+    --text-white: #212529;
+    --gray-dark: #e9ecef;
+    --gray-medium: #ced4da;
+    --gray-light: #adb5bd;
+    --accent-green: #9c7c38;
+}
+
+[data-theme="light"] body {
+    background-color: var(--bg-primary);
+    color: var(--text-white);
+}
+
+[data-theme="light"] .onboarding-container h1 {
+    color: var(--accent-green);
+}
+
+[data-theme="light"] .onboarding-container h2 {
+    color: var(--text-white);
+}
+
+[data-theme="light"] .info-box {
+    background: #ffffff;
+    border: 2px solid var(--accent-green);
+}
+
+[data-theme="light"] .info-box p {
+    color: #495057;
+}
+
+[data-theme="light"] #user-setup input,
+[data-theme="light"] #user-setup select {
+    background: #ffffff;
+    border: 2px solid var(--gray-medium);
+    color: var(--text-white);
+}
+
+[data-theme="light"] #user-setup input:focus,
+[data-theme="light"] #user-setup select:focus {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 3px rgba(156, 124, 56, 0.1);
+}
+
+[data-theme="light"] .profile-card,
+[data-theme="light"] .scenario-card {
+    background: #ffffff;
+    border: 2px solid var(--gray-medium);
+}
+
+[data-theme="light"] .profile-card:hover,
+[data-theme="light"] .scenario-card:hover {
+    border-color: var(--accent-green);
+}
+
+[data-theme="light"] .profile-card p,
+[data-theme="light"] .scenario-card p {
+    color: #6c757d;
+}
+
+[data-theme="light"] .balance-options button {
+    background: #ffffff;
+    border: 2px solid var(--gray-medium);
+    color: var(--text-white);
+}
+
+[data-theme="light"] .balance-options button:hover {
+    border-color: var(--accent-green);
+    background: rgba(156, 124, 56, 0.1);
+}
+
+[data-theme="light"] .btn-secondary {
+    background: #ffffff;
+    color: var(--text-white);
+    border: 2px solid var(--gray-medium);
+}
+
+[data-theme="light"] .btn-secondary:hover {
+    border-color: var(--accent-green);
+    background: rgba(156, 124, 56, 0.1);
+}
+
+[data-theme="light"] .dashboard-header {
+    background: #ffffff;
+    border: 2px solid var(--gray-medium);
+}
+
+[data-theme="light"] .dashboard-header h2 {
+    color: var(--accent-green);
+}
+
+[data-theme="light"] .summary-card,
+[data-theme="light"] .portfolio-allocation-details,
+[data-theme="light"] .performance-ranking,
+[data-theme="light"] .positions-list {
+    background: #ffffff;
+    border: 2px solid var(--gray-medium);
+}
+
+[data-theme="light"] .summary-card h3,
+[data-theme="light"] .portfolio-allocation-details h4,
+[data-theme="light"] .performance-ranking h4,
+[data-theme="light"] .positions-list h4 {
+    color: var(--accent-green);
+}
+
+[data-theme="light"] .balance-item {
+    border-bottom: 1px solid var(--gray-medium);
+}
+
+[data-theme="light"] .balance-item .label {
+    color: #6c757d;
+}
+
+[data-theme="light"] .balance-item.highlight {
+    background: rgba(156, 124, 56, 0.05);
+}
+
+[data-theme="light"] .allocation-item {
+    background: var(--gray-dark);
+}
+
+[data-theme="light"] .allocation-item:hover {
+    background: var(--gray-medium);
+}
+
+[data-theme="light"] .allocation-name {
+    color: var(--accent-green);
+}
+
+[data-theme="light"] .ranking-item {
+    background: var(--gray-dark);
+}
+
+[data-theme="light"] .ranking-item:hover {
+    background: var(--gray-medium);
+}
+
+[data-theme="light"] .ranking-ticker {
+    color: var(--text-white);
+}
+
+[data-theme="light"] .asset-tabs {
+    background: #ffffff;
+    border: 2px solid var(--gray-medium);
+}
+
+[data-theme="light"] .asset-tabs .tab {
+    color: #6c757d;
+}
+
+[data-theme="light"] .asset-tabs .tab:hover {
+    color: var(--accent-green);
+}
+
+[data-theme="light"] .btn-info {
+    background: rgba(156, 124, 56, 0.1);
+    border: 2px solid var(--accent-green);
+    color: var(--accent-green);
+}
+
+[data-theme="light"] .btn-info:hover {
+    background: var(--accent-green);
+    color: #ffffff;
+}
+
+[data-theme="light"] .explanation-box {
+    background: #ffffff;
+    border: 2px solid var(--accent-green);
+}
+
+[data-theme="light"] .explanation-box h4 {
+    color: var(--accent-green);
+}
+
+[data-theme="light"] .explanation-box p {
+    color: #495057;
+}
+
+[data-theme="light"] .asset-card {
+    background: #ffffff;
+    border: 2px solid var(--gray-medium);
+}
+
+[data-theme="light"] .asset-card:hover {
+    border-color: var(--accent-green);
+}
+
+[data-theme="light"] .asset-info h4 {
+    color: var(--accent-green);
+}
+
+[data-theme="light"] .ticker {
+    color: #6c757d;
+}
+
+[data-theme="light"] .price-value {
+    color: var(--text-white);
+}
+
+[data-theme="light"] .crypto-info,
+[data-theme="light"] .bond-info {
+    background: var(--gray-dark);
+}
+
+[data-theme="light"] .crypto-info .label,
+[data-theme="light"] .bond-info p {
+    color: #6c757d;
+}
+
+[data-theme="light"] .crypto-info .value {
+    color: var(--accent-green);
+}
+
+[data-theme="light"] .modal-content {
+    background: #ffffff;
+    border: 2px solid var(--accent-green);
+}
+
+[data-theme="light"] .asset-details {
+    background: var(--gray-dark);
+}
+
+[data-theme="light"] .asset-details h4 {
+    color: var(--accent-green);
+}
+
+[data-theme="light"] .trade-form input {
+    background: #ffffff;
+    border: 2px solid var(--gray-medium);
+    color: var(--text-white);
+}
+
+[data-theme="light"] .trade-summary {
+    background: rgba(156, 124, 56, 0.05);
+}
+
+[data-theme="light"] .transaction-history {
+    background: #ffffff;
+    border: 2px solid var(--gray-medium);
+}
+
+[data-theme="light"] .transaction-history h3 {
+    color: var(--accent-green);
+}
+
+[data-theme="light"] #transactions-table th {
+    background: var(--gray-dark);
+    color: var(--accent-green);
+    border-bottom: 2px solid var(--gray-medium);
+}
+
+[data-theme="light"] #transactions-table td {
+    border-bottom: 1px solid var(--gray-medium);
+}
+
+[data-theme="light"] #transactions-table tbody tr:hover {
+    background: var(--gray-dark);
+}
+
+[data-theme="light"] .notification {
+    background: #ffffff;
+    border: 2px solid var(--accent-green);
+}
+
+[data-theme="light"] .notification.success {
+    border-color: var(--success);
+}
+
+[data-theme="light"] .notification.error {
+    border-color: var(--danger);
+}
+
+[data-theme="light"] .notification.warning {
+    border-color: var(--warning);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track {
+    background: var(--gray-dark);
+}
+
+/* ========== RESPONSIVIDADE DO MENU HORIZONTAL (1000px → 450px) ========== */
+@media (max-width: 1000px) and (min-width: 450px) {
+    .simulator-nav {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: var(--accent-green) transparent !important;
+        padding: 10px 15px !important;
+        margin: 20px 0 !important;
+        gap: 8px !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+    }
+    
+    .simulator-nav::-webkit-scrollbar {
+        height: 6px !important;
+    }
+    
+    .simulator-nav::-webkit-scrollbar-track {
+        background: transparent !important;
+    }
+    
+    .simulator-nav::-webkit-scrollbar-thumb {
+        background-color: var(--accent-green) !important;
+        border-radius: 3px !important;
+    }
+    
+    .nav-btn {
+        flex: 0 0 auto !important;
+        min-width: max-content !important;
+        width: auto !important;
+        padding: 10px 16px !important;
+        font-size: clamp(11px, 1.8vw, 14px) !important;
+        min-height: 40px !important;
+    }
+}
+
+/* Ajustes específicos para telas muito pequenas */
+@media (max-width: 600px) {
+    .simulator-nav {
+        margin: 15px 0 !important;
+        padding: 8px 10px !important;
+    }
+    
+    .nav-btn {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+        min-height: 36px !important;
+    }
+}
+
+/* ========================================
+   OCULTAÇÃO PARA MOBILE (≤450px)
+   Após iniciar simulação
+======================================== */
+
+/* Estado inicial - mostra tudo */
+body.simulation-active #onboarding,
+body.simulation-active .dashboard-header {
+    display: block;
+}
+
+/* Em telas de telefone, ocultar elementos de configuração */
+@media screen and (max-width: 450px) {
+    /* Quando a simulação está ativa, ocultar elementos */
+    body.simulation-active #onboarding {
+        display: none !important;
+    }
+    
+    body.simulation-active .dashboard-header {
+        display: none !important;
+    }
+    
+    /* Ajustar dashboard para ocupar tela completa */
+    body.simulation-active #dashboard {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+    
+    /* Ajustar grid para melhor uso do espaço */
+    body.simulation-active .dashboard-grid {
+        gap: 10px !important;
+    }
+    
+    /* Melhorar visibilidade dos cards de ativos */
+    body.simulation-active .asset-card {
+        border: 2px solid var(--accent-green) !important;
+        background: var(--gray-dark) !important;
+    }
+}
+
+/* Desktop mantém comportamento normal */
+@media screen and (min-width: 451px) {
+    body.simulation-active #onboarding {
+        display: none;
+    }
+    
+    body.simulation-active #dashboard {
+        display: block;
+    }
+}
+
+    /* MOBILE: Header do dashboard VISÍVEL e otimizado */
+    body.simulation-active .dashboard-header {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 10px !important;
+        margin-bottom: 10px !important;
+        background: var(--gray-dark) !important;
+        border: 2px solid var(--gray-medium) !important;
+        border-radius: 8px !important;
+        gap: 8px !important;
+    }
+    
+    body.simulation-active .user-info {
+        text-align: center !important;
+        width: 100% !important;
+    }
+    
+    body.simulation-active .dashboard-header h2 {
+        font-size: 0.95rem !important;
+        line-height: 1.2 !important;
+        margin-bottom: 4px !important;
+        color: var(--accent-green) !important;
+        word-wrap: break-word !important;
+    }
+    
+    body.simulation-active .scenario-badge {
+        font-size: 0.75rem !important;
+        padding: 3px 10px !important;
+        background: rgba(214, 174, 100, 0.2) !important;
+        border-radius: 15px !important;
+        display: inline-block !important;
+        margin-top: 4px !important;
+    }
+    
+    /* Botões de ação em linha horizontal (scroll se necessário) */
+    body.simulation-active .header-actions {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 6px !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        padding-bottom: 5px !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    body.simulation-active .header-actions button {
+        flex-shrink: 0 !important; /* Não encolher */
+        font-size: 0.75rem !important;
+        padding: 8px 12px !important;
+        min-height: 36px !important;
+        white-space: nowrap !important;
+    }
+    
+    /* Ajustar ícones nos botões */
+    body.simulation-active .header-actions button::before {
+        margin-right: 4px !important;
+        font-size: 0.9rem !important;
+    }
+
+        /* GARANTIR que o botão de reiniciar está visível */
+    body.simulation-active #reset-simulation {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        order: 3; /* Colocar como último botão */
+    }
+    
+    /* Estilo específico para o botão de reiniciar (vermelho/danger) */
+    body.simulation-active #reset-simulation.btn-danger {
+        background: var(--danger) !important;
+        color: white !important;
+        border: none !important;
+    }
+    
+    body.simulation-active #reset-simulation.btn-danger:hover {
+        background: rgb(220, 50, 50) !important;
+    }
+
+    /* ===== ESTILOS PARA DIVIDENDOS ===== */
+.ext-dividends-panel {
+    margin-top: 40px;
+    animation: fadeIn 0.5s ease;
+}
+
+.ext-dividends-panel .transaction-history {
+    background: var(--gray-dark);
+    border: 2px solid var(--accent-green);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+#ext-dividends-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+#ext-dividends-table th {
+    background: var(--gray-medium);
+    padding: 12px 10px;
+    text-align: left;
+    color: var(--accent-green);
+    font-weight: 600;
+    border-bottom: 2px solid var(--gray-light);
+    white-space: nowrap;
+}
+
+#ext-dividends-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--gray-medium);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#ext-dividends-table tbody tr:hover {
+    background: var(--gray-medium);
+}
+
+/* ===== ESTILOS PARA FUNDAMENTALS ===== */
+.ext-fundamentals-panel {
+    margin-top: 30px;
+    animation: fadeIn 0.6s ease;
+}
+
+#ext-indicators-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+#ext-indicators-table th {
+    background: var(--gray-medium);
+    padding: 12px 8px;
+    text-align: center;
+    color: var(--accent-green);
+    font-weight: 600;
+    border-bottom: 2px solid var(--gray-light);
+}
+
+#ext-indicators-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--gray-medium);
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#ext-indicators-table .positive {
+    color: var(--success);
+    font-weight: 600;
+}
+
+#ext-indicators-table .negative {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+/* ===== ESTILOS PARA MODAIS DE FINANÇAS ===== */
+.ext-financials-tabs {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gray-medium);
+}
+
+.ext-financials-tabs .tab {
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.ext-financials-tabs .tab:hover {
+    color: var(--accent-green);
+    background: rgba(214, 174, 100, 0.1);
+}
+
+.ext-financials-tabs .tab.active {
+    background: var(--accent-green);
+    color: var(--bg-primary);
+    border-color: var(--accent-green);
+}
+
+.ext-statement-container {
+    margin-top: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.ext-statement-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.ext-statement-table th {
+    background: var(--gray-medium);
+    padding: 12px;
+    text-align: left;
+    color: var(--accent-green);
+    font-weight: 600;
+    border-bottom: 2px solid var(--gray-light);
+}
+
+.ext-statement-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gray-medium);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.ext-statement-table tr.total-row td {
+    font-weight: 700;
+    color: var(--accent-green);
+    border-top: 2px solid var(--gray-medium);
+    background: rgba(214, 174, 100, 0.1);
+}
+
+/* ===== ESTILOS PARA BOTÕES ADICIONAIS NOS CARDS ===== */
+.ext-asset-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.ext-btn-info {
+    padding: 8px 12px;
+    background: rgba(214, 174, 100, 0.2);
+    border: 2px solid var(--accent-green);
+    border-radius: 6px;
+    color: var(--accent-green);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: var(--transition);
+    flex: 1;
+    min-width: 100px;
+    text-align: center;
+}
+
+.ext-btn-info:hover {
+    background: var(--accent-green);
+    color: var(--bg-primary);
+}
+
+/* ===== INDICADORES MINI NOS CARDS ===== */
+.ext-mini-indicators {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+    padding: 10px;
+    background: var(--gray-medium);
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
+
+.ext-indicator-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ext-indicator-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75rem;
+}
+
+.ext-indicator-value {
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.ext-indicator-value.positive {
+    color: var(--success);
+}
+
+.ext-indicator-value.negative {
+    color: var(--danger);
+}
+
+/* ===== ESTILOS PARA DETALHES DE TÍTULOS ===== */
+.ext-bond-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 15px 0;
+    padding: 15px;
+    background: var(--gray-medium);
+    border-radius: 8px;
+}
+
+.ext-bond-summary p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.ext-bond-summary strong {
+    color: var(--accent-green);
+}
+
+/* ===== ESTILOS PARA DETALHES DE CRIPTO ===== */
+.ext-crypto-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+    padding: 15px;
+    background: var(--gray-medium);
+    border-radius: 8px;
+}
+
+.ext-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ext-stat-row:last-child {
+    border-bottom: none;
+}
+
+.ext-stat-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.ext-stat-value {
+    font-weight: 600;
+    color: var(--accent-green);
+}
+
+.ext-crypto-performance {
+    margin-top: 20px;
+}
+
+.ext-performance-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.ext-performance-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    background: var(--gray-dark);
+    border-radius: 8px;
+    border: 2px solid var(--gray-medium);
+    transition: var(--transition);
+}
+
+.ext-performance-item:hover {
+    border-color: var(--accent-green);
+    transform: translateY(-2px);
+}
+
+.ext-performance-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 5px;
+}
+
+.ext-performance-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.ext-performance-value.positive {
+    color: var(--success);
+}
+
+.ext-performance-value.negative {
+    color: var(--danger);
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .ext-dividends-panel .transaction-history,
+    .ext-fundamentals-panel .transaction-history {
+        padding: 15px;
+    }
+    
+    #ext-dividends-table,
+    #ext-indicators-table {
+        font-size: 0.8rem;
+    }
+    
+    #ext-dividends-table th,
+    #ext-dividends-table td,
+    #ext-indicators-table th,
+    #ext-indicators-table td {
+        padding: 8px 6px;
+    }
+    
+    .ext-financials-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .ext-financials-tabs .tab {
+        flex: 1;
+        min-width: 120px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .ext-bond-summary {
+        grid-template-columns: 1fr;
+    }
+    
+    .ext-performance-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .ext-asset-actions {
+        flex-direction: column;
+    }
+    
+    .ext-btn-info {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    #ext-dividends-table,
+    #ext-indicators-table {
+        font-size: 0.75rem;
+    }
+    
+    #ext-dividends-table th,
+    #ext-dividends-table td {
+        padding: 6px 4px;
+    }
+    
+    .ext-mini-indicators {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   ESTILOS PARA MARKET CAP E INFORMAÇÕES
+   ============================================ */
+
+.ext-market-cap-info {
+    background: var(--gray-medium);
+    padding: 12px;
+    border-radius: 8px;
+    margin: 12px 0;
+    border-left: 3px solid var(--accent-green);
+}
+
+.ext-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.ext-info-row.highlight {
+    background: rgba(214, 174, 100, 0.15);
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 8px;
+    border: 1px solid var(--accent-green);
+}
+
+.ext-label {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.ext-value {
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.ext-market-cap {
+    color: var(--accent-green) !important;
+    font-size: 1.1rem;
+}
+
+/* ============================================
+   RANKING DE MARKET CAP
+   ============================================ */
+
+.ext-market-cap-ranking {
+    background: var(--gray-dark);
+    border: 2px solid var(--gray-medium);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.ext-market-cap-ranking h4 {
+    color: var(--accent-green);
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.ext-ranking-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+}
+
+.ext-ranking-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--gray-medium);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: var(--transition);
+    border-left: 3px solid transparent;
+}
+
+.ext-ranking-item:hover {
+    background: var(--gray-light);
+    transform: translateX(5px);
+}
+
+.ext-ranking-item[data-position="1"] {
+    border-left-color: gold;
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.15), var(--gray-medium));
+}
+
+.ext-ranking-item[data-position="2"] {
+    border-left-color: silver;
+    background: linear-gradient(90deg, rgba(192, 192, 192, 0.15), var(--gray-medium));
+}
+
+.ext-ranking-item[data-position="3"] {
+    border-left-color: #cd7f32;
+    background: linear-gradient(90deg, rgba(205, 127, 50, 0.15), var(--gray-medium));
+}
+
+.ext-rank-position {
+    font-weight: 700;
+    color: var(--accent-green);
+    min-width: 35px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.ext-rank-info {
+    flex: 1;
+}
+
+.ext-rank-ticker {
+    font-weight: 700;
+    color: var(--text-white);
+    font-size: 0.95rem;
+}
+
+.ext-rank-market-cap {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin-top: 2px;
+}
+
+.ext-rank-change {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   MODAL DE NOTÍCIAS
+   ============================================ */
+
+.ext-news-modal-content {
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.ext-news-disclaimer {
+    background: rgba(234, 179, 8, 0.2);
+    border: 2px solid var(--warning);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 20px;
+    color: var(--warning);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+#ext-news-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ext-news-item {
+    background: var(--gray-medium);
+    border-radius: 10px;
+    padding: 15px;
+    border-left: 4px solid var(--accent-green);
+    transition: var(--transition);
+}
+
+.ext-news-item:hover {
+    background: var(--gray-light);
+    transform: translateX(5px);
+}
+
+.ext-news-item.ext-news-positive {
+    border-left-color: var(--success);
+    background: linear-gradient(90deg, rgba(34, 197, 94, 0.1), var(--gray-medium));
+}
+
+.ext-news-item.ext-news-negative {
+    border-left-color: var(--danger);
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), var(--gray-medium));
+}
+
+.ext-news-item.ext-news-neutral {
+    border-left-color: var(--accent-green);
+}
+
+.ext-news-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.ext-news-icon {
+    font-size: 1.3rem;
+}
+
+.ext-news-ticker {
+    font-weight: 700;
+    color: var(--accent-green);
+    font-size: 0.95rem;
+}
+
+.ext-news-time {
+    margin-left: auto;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+}
+
+.ext-news-body {
+    color: var(--text-white);
+    line-height: 1.5;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+}
+
+.ext-news-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ext-news-source {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+}
+
+/* ============================================
+   SELETOR DE TIPO DE ORDEM
+   ============================================ */
+
+.ext-order-type-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.ext-order-type-label {
+    cursor: pointer;
+    position: relative;
+}
+
+.ext-order-type-label input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ext-order-type-card {
+    background: var(--gray-medium);
+    border: 2px solid var(--gray-light);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.ext-order-type-label:hover .ext-order-type-card {
+    border-color: var(--accent-green);
+    background: rgba(214, 174, 100, 0.1);
+}
+
+.ext-order-type-label input[type="radio"]:checked + .ext-order-type-card {
+    border-color: var(--accent-green);
+    background: rgba(214, 174, 100, 0.2);
+    box-shadow: 0 0 15px rgba(214, 174, 100, 0.3);
+}
+
+.ext-order-type-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.ext-order-type-title {
+    font-weight: 700;
+    color: var(--text-white);
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.ext-order-type-desc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#ext-limit-price-input {
+    margin-bottom: 15px;
+}
+
+.ext-limit-hint {
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: var(--accent-green);
+}
+
+/* ============================================
+   PROCESSAMENTO DE ORDEM LIMITE
+   ============================================ */
+
+.ext-limit-processing {
+    background: var(--gray-dark);
+    border: 2px solid var(--accent-green);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.ext-processing-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.ext-processing-text h4 {
+    color: var(--accent-green);
+    margin-bottom: 10px;
+}
+
+.ext-processing-text p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 15px;
+}
+
+.ext-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--gray-medium);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.ext-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-green), rgb(194, 154, 80));
+    width: 0%;
+    transition: width 1s linear;
+}
+
+.ext-time-remaining {
+    color: var(--accent-green);
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* ============================================
+   ESTATÍSTICAS DO MERCADO
+   ============================================ */
+
+.ext-market-stats {
+    background: var(--gray-dark);
+    border: 2px solid var(--gray-medium);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.ext-market-stats h4 {
+    color: var(--accent-green);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.ext-stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-medium);
+}
+
+.ext-stat-item:last-of-type {
+    border-bottom: none;
+}
+
+.ext-stat-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.ext-stat-value {
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.ext-sentiment-indicator {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(214, 174, 100, 0.1);
+    border-radius: 8px;
+    border: 1px solid var(--accent-green);
+}
+
+.ext-sentiment-label {
+    color: var(--accent-green);
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.ext-sentiment-bar {
+    width: 100%;
+    height: 25px;
+    background: var(--gray-medium);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.ext-sentiment-fill {
+    height: 100%;
+    transition: width 0.5s ease, background 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ext-sentiment-text {
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.ext-sentiment-text.positive {
+    color: var(--success);
+}
+
+.ext-sentiment-text.neutral {
+    color: var(--accent-green);
+}
+
+.ext-sentiment-text.negative {
+    color: var(--danger);
+}
+
+/* ============================================
+   FLUXO DE ORDENS POR ATIVO
+   ============================================ */
+
+.ext-order-flow {
+    margin: 12px 0;
+    background: var(--gray-medium);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.ext-flow-header {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.ext-flow-bar {
+    display: flex;
+    height: 30px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--gray-light);
+}
+
+.ext-flow-buy,
+.ext-flow-sell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: width 0.5s ease;
+}
+
+.ext-flow-buy {
+    background: linear-gradient(90deg, var(--success), rgb(25, 175, 75));
+}
+
+.ext-flow-sell {
+    background: linear-gradient(90deg, var(--danger), rgb(220, 50, 50));
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .ext-order-type-selector {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .ext-market-cap-ranking,
+    .ext-market-stats {
+        padding: 15px;
+    }
+    
+    .ext-ranking-item,
+    .ext-stat-item {
+        font-size: 0.85rem;
+    }
+    
+    .ext-news-modal-content {
+        max-width: 95%;
+        padding: 15px;
+    }
+    
+    .ext-news-item {
+        padding: 12px;
+    }
+    
+    .ext-rank-position {
+        min-width: 30px;
+        font-size: 1rem;
+    }
+    
+    .ext-flow-bar {
+        height: 25px;
+    }
+    
+    .ext-flow-buy span,
+    .ext-flow-sell span {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 450px) {
+    .ext-market-cap-info {
+        padding: 10px;
+    }
+    
+    .ext-info-row {
+        font-size: 0.8rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .ext-info-row.highlight {
+        padding: 8px;
+    }
+    
+    .ext-ranking-item {
+        padding: 10px;
+        gap: 8px;
+    }
+    
+    .ext-news-header {
+        flex-wrap: wrap;
+    }
+    
+    .ext-news-time {
+        margin-left: 0;
+        width: 100%;
+        margin-top: 5px;
+    }
+    
+    .ext-order-type-card {
+        padding: 12px;
+    }
+    
+    .ext-order-type-icon {
+        font-size: 1.5rem;
+    }
+    
+    .ext-sentiment-bar {
+        height: 20px;
+    }
+}
+
+/* ============================================
+   LIGHT MODE
+   ============================================ */
+
+[data-theme="light"] .ext-market-cap-info,
+[data-theme="light"] .ext-ranking-item,
+[data-theme="light"] .ext-news-item,
+[data-theme="light"] .ext-order-type-card,
+[data-theme="light"] .ext-market-stats {
+    background: #ffffff;
+    border-color: #dee2e6;
+}
+
+[data-theme="light"] .ext-info-row.highlight,
+[data-theme="light"] .ext-sentiment-indicator {
+    background: rgba(156, 124, 56, 0.1);
+}
+
+[data-theme="light"] .ext-news-disclaimer {
+    background: rgba(255, 193, 7, 0.2);
+    color: #856404;
+}
+
+/* Adicionar ao final do bloco <style> existente */
+
+/* Estilos para títulos públicos bloqueados */
+.btn-sell[disabled], .btn-sell-small[disabled] {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    background: var(--gray-medium) !important;
+    color: var(--gray-light) !important;
+    border-color: var(--gray-light) !important;
+}
+
+/* Badge informativo para títulos públicos */
+.public-bond-badge {
+    animation: pulse 3s infinite;
+    border-left: 3px solid var(--accent-green) !important;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* Estilos para contagem regressiva */
+.bond-countdown {
+    transition: all 0.3s ease;
+}
+
+.bond-countdown:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(214, 174, 100, 0.2);
+    background: rgba(214, 174, 100, 0.15) !important;
+}
+
+/* Barra de progresso */
+.bond-countdown div[style*="background: var(--accent-green)"] {
+    background: linear-gradient(90deg, var(--accent-green), rgb(194, 154, 80)) !important;
+    box-shadow: 0 0 8px rgba(214, 174, 100, 0.3);
+}
+
+/* Estilos para tabelas */
+#bond-interest-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#bond-interest-table th {
+    background: var(--gray-medium);
+    padding: 12px;
+    text-align: left;
+    color: var(--accent-green);
+    font-weight: 600;
+    border-bottom: 2px solid var(--gray-light);
+}
+
+#bond-interest-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gray-medium);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#bond-interest-table tbody tr:hover {
+    background: var(--gray-medium);
+}
+
+/* Badge para status */
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge.buy {
+    background: rgba(34, 197, 94, 0.2);
+    color: var(--success);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+}
+
+/* ===== CORREÇÃO: Tabela de Dividendos Sempre Visível ===== */
+.ext-dividends-panel {
+    display: block !important;
+    margin-top: 20px;
+    animation: fadeIn 0.5s ease;
+}
+
+.ext-dividends-panel .transaction-history {
+    background: var(--gray-dark);
+    border: 2px solid var(--accent-green);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+/* Mostrar aviso quando não há dividendos */
+.ext-dividends-panel .empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+    font-size: 1rem;
+}
+
+.ext-dividends-panel .empty-state::before {
+    content: '💰';
+    display: block;
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+
+/* 2ª Parte Estilização */
+
+/* ============================================
+   MÓDULO 1: SISTEMA DE ACUMULAÇÃO DE GANHOS/PERDAS (P&L)
+   ============================================ */
+
+.ext-pnl-accumulation {
+    background: var(--gray-dark);
+    border: 2px solid var(--accent-green);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    animation: fadeIn 0.5s ease;
+}
+
+.ext-pnl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--gray-medium);
+}
+
+.ext-pnl-header h4 {
+    color: var(--accent-green);
+    font-size: 1.1rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ext-pnl-totals {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.ext-pnl-stat {
+    background: var(--gray-medium);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    border-left: 4px solid transparent;
+    transition: var(--transition);
+}
+
+.ext-pnl-stat:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.ext-pnl-stat.positive {
+    border-left-color: var(--success);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), var(--gray-medium));
+}
+
+.ext-pnl-stat.negative {
+    border-left-color: var(--danger);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), var(--gray-medium));
+}
+
+.ext-pnl-stat.neutral {
+    border-left-color: var(--accent-green);
+    background: linear-gradient(135deg, rgba(214, 174, 100, 0.1), var(--gray-medium));
+}
+
+.ext-pnl-stat .label {
+    display: block;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 5px;
+}
+
+.ext-pnl-stat .value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.ext-pnl-stat.positive .value {
+    color: var(--success);
+}
+
+.ext-pnl-stat.negative .value {
+    color: var(--danger);
+}
+
+.ext-pnl-by-type {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.ext-pnl-type-card {
+    background: var(--gray-medium);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--gray-light);
+    transition: var(--transition);
+}
+
+.ext-pnl-type-card:hover {
+    border-color: var(--accent-green);
+    transform: translateX(5px);
+}
+
+.ext-pnl-type-card h5 {
+    color: var(--accent-green);
+    font-size: 0.95rem;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ext-pnl-type-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+}
+
+.ext-pnl-type-stats .gains {
+    color: var(--success);
+    font-weight: 600;
+}
+
+.ext-pnl-type-stats .losses {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.ext-pnl-chart-container {
+    background: var(--gray-medium);
+    border-radius: 8px;
+    padding: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.ext-pnl-chart-container canvas {
+    width: 100% !important;
+    height: 150px !important;
+}
+
+/* ============================================
+   MÓDULO 2: SISTEMA DE TEMPO SIMULADO
+   ============================================ */
+
+.ext-time-display {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--gray-dark);
+    border: 2px solid var(--accent-green);
+    border-radius: 12px;
+    padding: 15px 20px;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    min-width: 200px;
+}
+
+.ext-time-display-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.ext-time-display-header h4 {
+    color: var(--accent-green);
+    font-size: 0.9rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ext-time-badge {
+    background: rgba(214, 174, 100, 0.2);
+    color: var(--accent-green);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.ext-sim-date {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-white);
+    text-align: center;
+    margin-bottom: 8px;
+    font-family: 'Courier New', monospace;
+}
+
+.ext-sim-time-info {
+    text-align: center;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 10px;
+}
+
+.ext-year-progress-container {
+    background: var(--gray-medium);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.ext-year-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-green), rgb(194, 154, 80));
+    transition: width 1s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.ext-year-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer 2s infinite;
+}
+
+/* Efeito de Ano Novo */
+body.ext-new-year {
+    animation: newYearGlow 2s ease-in-out;
+}
+
+@keyframes newYearGlow {
+    0%, 100% { box-shadow: inset 0 0 0 0 rgba(214, 174, 100, 0); }
+    50% { box-shadow: inset 0 0 100px 20px rgba(214, 174, 100, 0.3); }
+}
+
+.ext-new-year-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, var(--accent-green), rgb(194, 154, 80));
+    color: var(--bg-primary);
+    padding: 30px 50px;
+    border-radius: 20px;
+    font-size: 2rem;
+    font-weight: 700;
+    z-index: 9999;
+    animation: newYearPop 3s ease forwards;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(214, 174, 100, 0.5);
+}
+
+@keyframes newYearPop {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    20% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+}
+
+/* Notificações de Dividendos */
+.ext-dividend-notification {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), var(--gray-dark));
+    border-left: 4px solid var(--success);
+}
+
+/* ============================================
+   MÓDULO 3: SISTEMA DE MOEDAS (FOREX)
+   ============================================ */
+
+.ext-currency-card {
+    background: var(--gray-dark);
+    border: 2px solid var(--gray-medium);
+    border-radius: 12px;
+    padding: 20px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.ext-currency-card:hover {
+    border-color: var(--accent-green);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(214, 174, 100, 0.2);
+}
+
+.ext-currency-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(214, 174, 100, 0.1), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.ext-currency-card:hover::before {
+    opacity: 1;
+}
+
+.ext-currency-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.ext-currency-info h4 {
+    color: var(--accent-green);
+    font-size: 1.3rem;
+    margin: 0 0 5px 0;
+}
+
+.ext-currency-info span {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.ext-currency-flag {
+    font-size: 2.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.ext-currency-rate {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-white);
+    text-align: center;
+    margin: 15px 0;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.ext-currency-change {
+    text-align: center;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: inline-block;
+    width: 100%;
+}
+
+.ext-currency-change.positive {
+    background: rgba(34, 197, 94, 0.2);
+    color: var(--success);
+}
+
+.ext-currency-change.negative {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--danger);
+}
+
+.ext-currency-spread {
+    background: var(--gray-medium);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.ext-currency-spread > div {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.ext-currency-spread > div:last-child {
+    border-bottom: none;
+}
+
+.ext-currency-spread .label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+}
+
+.ext-currency-spread .buy {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.ext-currency-spread .sell {
+    color: var(--success);
+    font-weight: 600;
+}
+
+/* Modal de Forex */
+.ext-forex-modal .modal-content {
+    max-width: 450px;
+}
+
+.ext-forex-info {
+    background: var(--gray-medium);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.ext-forex-rate-display {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-green);
+    margin: 10px 0;
+}
+
+.ext-forex-spread-info {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   MÓDULO 4: BOLSA DE VALORES EUA
+   ============================================ */
+
+.ext-us-stock-card {
+    background: var(--gray-dark);
+    border: 2px solid var(--gray-medium);
+    border-radius: 12px;
+    padding: 20px;
+    transition: var(--transition);
+    position: relative;
+}
+
+.ext-us-stock-card:hover {
+    border-color: #3b82f6; /* Azul para diferenciar EUA */
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.2);
+}
+
+.ext-us-stock-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.ext-us-stock-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.ext-us-stock-info h4 {
+    color: var(--text-white);
+    font-size: 1.1rem;
+    margin: 0 0 4px 0;
+}
+
+.ext-us-stock-info .ticker {
+    color: #3b82f6;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.ext-us-stock-prices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.ext-us-stock-price-box {
+    background: var(--gray-medium);
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.ext-us-stock-price-box .label {
+    display: block;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 5px;
+}
+
+.ext-us-stock-price-box .value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #3b82f6;
+    font-family: 'Courier New', monospace;
+}
+
+.ext-us-stock-price-box .converted {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-green);
+}
+
+/* Badge NASDAQ/NYSE */
+.ext-exchange-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* ============================================
+   MÓDULO 5: PREÇOS ILIMITADOS & FALÊNCIA
+   ============================================ */
+
+/* Animação de Flash Crash */
+@keyframes flashCrash {
+    0%, 100% { background-color: transparent; }
+    10%, 30%, 50%, 70%, 90% { background-color: rgba(239, 68, 68, 0.3); }
+    20%, 40%, 60%, 80% { background-color: rgba(239, 68, 68, 0.1); }
+}
+
+.ext-flash-crash {
+    animation: flashCrash 2s ease;
+    border: 2px solid var(--danger) !important;
+}
+
+/* Notificação de Falência */
+.ext-bankruptcy-notification {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(50, 0, 0, 0.9));
+    border: 3px solid var(--danger);
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    animation: bankruptcyPulse 2s infinite;
+}
+
+@keyframes bankruptcyPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+    50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.8); }
+}
+
+.ext-bankruptcy-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    animation: skullShake 0.5s ease infinite;
+}
+
+@keyframes skullShake {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+.ext-bankruptcy-title {
+    color: var(--danger);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.ext-bankruptcy-message {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Card de ativo em falência */
+.ext-bankrupt-asset {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    position: relative;
+}
+
+.ext-bankrupt-asset::after {
+    content: 'FALIDO';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background: var(--danger);
+    color: white;
+    padding: 10px 30px;
+    font-size: 1.5rem;
+    font-weight: 900;
+    border: 3px solid white;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+/* Indicador de risco de falência */
+.ext-bankruptcy-risk {
+    background: linear-gradient(90deg, var(--danger), var(--warning));
+    height: 4px;
+    border-radius: 2px;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.ext-bankruptcy-risk::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+/* Correção de bolha */
+.ext-bubble-burst {
+    animation: bubbleBurst 1s ease;
+}
+
+@keyframes bubbleBurst {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); filter: brightness(1.5); }
+    100% { transform: scale(1); }
+}
+
+/* ============================================
+   MÓDULO 6: SISTEMA DE DIVIDENDOS CORRIGIDO
+   ============================================ */
+
+.ext-dividends-panel-permanent {
+    margin-top: 30px;
+    animation: fadeIn 0.6s ease;
+}
+
+.ext-dividends-panel-permanent h3 {
+    color: var(--accent-green);
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ext-dividends-panel-permanent h3::before {
+    content: '💰';
+    font-size: 1.4rem;
+}
+
+#ext-dividends-table-permanent {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+#ext-dividends-table-permanent th {
+    background: var(--gray-medium);
+    padding: 12px 10px;
+    text-align: left;
+    color: var(--accent-green);
+    font-weight: 600;
+    border-bottom: 2px solid var(--gray-light);
+    white-space: nowrap;
+}
+
+#ext-dividends-table-permanent td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--gray-medium);
+    color: rgba(255, 255, 255, 0.9);
+    vertical-align: top;
+}
+
+#ext-dividends-table-permanent tbody tr {
+    transition: background 0.2s;
+}
+
+#ext-dividends-table-permanent tbody tr:hover {
+    background: var(--gray-medium);
+}
+
+#ext-dividends-table-permanent .positive {
+    color: var(--success);
+    font-weight: 600;
+}
+
+#ext-dividends-table-permanent .badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+#ext-dividends-table-permanent .badge.buy {
+    background: rgba(34, 197, 94, 0.2);
+    color: var(--success);
+}
+
+/* Estado vazio customizado */
+.ext-dividends-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ext-dividends-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* Próximo pagamento de dividendos */
+.ext-next-dividend {
+    background: linear-gradient(135deg, rgba(214, 174, 100, 0.2), var(--gray-dark));
+    border: 2px solid var(--accent-green);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.ext-next-dividend h4 {
+    color: var(--accent-green);
+    margin: 0 0 10px 0;
+}
+
+.ext-next-dividend-date {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.ext-dividend-countdown {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.ext-countdown-item {
+    background: var(--gray-dark);
+    padding: 10px 15px;
+    border-radius: 8px;
+    min-width: 60px;
+}
+
+.ext-countdown-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-green);
+    display: block;
+}
+
+.ext-countdown-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+}
+
+/* ============================================
+   MÓDULO 7: INDICADORES AVANÇADOS
+   ============================================ */
+
+.ext-advanced-indicators {
+    background: var(--gray-dark);
+    border: 2px solid var(--accent-green);
+    border-radius: 12px;
+    padding: 25px;
+    margin: 30px 0;
+    animation: fadeIn 0.5s ease;
+}
+
+.ext-advanced-indicators h4 {
+    color: var(--accent-green);
+    font-size: 1.2rem;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ext-indicator-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.ext-indicator-item {
+    background: var(--gray-medium);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    border-top: 4px solid transparent;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.ext-indicator-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.ext-indicator-item.good {
+    border-top-color: var(--success);
+    background: linear-gradient(180deg, rgba(34, 197, 94, 0.1), var(--gray-medium));
+}
+
+.ext-indicator-item.danger {
+    border-top-color: var(--danger);
+    background: linear-gradient(180deg, rgba(239, 68, 68, 0.1), var(--gray-medium));
+}
+
+.ext-indicator-item.warning {
+    border-top-color: var(--warning);
+    background: linear-gradient(180deg, rgba(234, 179, 8, 0.1), var(--gray-medium));
+}
+
+.ext-indicator-item.neutral {
+    border-top-color: var(--accent-green);
+    background: linear-gradient(180deg, rgba(214, 174, 100, 0.1), var(--gray-medium));
+}
+
+.ext-indicator-item .name {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ext-indicator-item .value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 5px;
+    font-family: 'Courier New', monospace;
+}
+
+.ext-indicator-item.good .value {
+    color: var(--success);
+}
+
+.ext-indicator-item.danger .value {
+    color: var(--danger);
+}
+
+.ext-indicator-item.warning .value {
+    color: var(--warning);
+}
+
+.ext-indicator-item.neutral .value {
+    color: var(--accent-green);
+}
+
+.ext-indicator-item .interpretation {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+}
+
+/* Sugestões de Alocação */
+#ext-allocation-suggestion {
+    background: linear-gradient(135deg, rgba(214, 174, 100, 0.15), var(--gray-medium));
+    border: 2px solid var(--accent-green);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+#ext-allocation-suggestion h5 {
+    color: var(--accent-green);
+    font-size: 1rem;
+    margin: 0 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ext-allocation-suggestion-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: var(--gray-dark);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border-left: 3px solid transparent;
+    transition: var(--transition);
+}
+
+.ext-allocation-suggestion-item:hover {
+    transform: translateX(5px);
+}
+
+.ext-allocation-suggestion-item.increase {
+    border-left-color: var(--success);
+}
+
+.ext-allocation-suggestion-item.decrease {
+    border-left-color: var(--danger);
+}
+
+.ext-allocation-suggestion-item .icon {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.ext-allocation-suggestion-item .details {
+    flex: 1;
+}
+
+.ext-allocation-suggestion-item .asset-type {
+    font-weight: 600;
+    color: var(--text-white);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.ext-allocation-suggestion-item .change {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.ext-allocation-suggestion-item .arrow {
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+/* Matriz de Correlação */
+.ext-correlation-matrix {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.ext-correlation-matrix table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.ext-correlation-matrix th,
+.ext-correlation-matrix td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid var(--gray-medium);
+}
+
+.ext-correlation-matrix th {
+    background: var(--gray-medium);
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+.ext-correlation-cell {
+    font-weight: 600;
+}
+
+.ext-correlation-cell.high {
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.ext-correlation-cell.medium {
+    color: var(--warning);
+    background: rgba(234, 179, 8, 0.1);
+}
+
+.ext-correlation-cell.low {
+    color: var(--success);
+    background: rgba(34, 197, 94, 0.1);
+}
+
+/* ============================================
+   RESPONSIVIDADE PARA TODOS OS MÓDULOS
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* P&L Accumulation */
+    .ext-pnl-totals {
+        grid-template-columns: 1fr;
+    }
+    
+    .ext-pnl-by-type {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Time Display */
+    .ext-time-display {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    
+    /* US Stocks */
+    .ext-us-stock-prices {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Advanced Indicators */
+    .ext-indicator-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Dividends Table */
+    #ext-dividends-table-permanent {
+        font-size: 0.8rem;
+    }
+    
+    #ext-dividends-table-permanent th,
+    #ext-dividends-table-permanent td {
+        padding: 8px 6px;
+    }
+    
+    /* Currency Cards */
+    .ext-currency-rate {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .ext-indicator-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .ext-pnl-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .ext-sim-date {
+        font-size: 1.2rem;
+    }
+    
+    .ext-dividend-countdown {
+        flex-wrap: wrap;
+    }
+    
+    .ext-countdown-item {
+        min-width: 50px;
+        padding: 8px 10px;
+    }
+    
+    .ext-countdown-value {
+        font-size: 1.2rem;
+    }
+}
+
+/* ============================================
+   ANIMAÇÕES GLOBAIS ADICIONAIS
+   ============================================ */
+
+@keyframes shimmer {
+    to {
+        left: 100%;
+    }
+}
+
+/* Tooltip para indicadores */
+.ext-indicator-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-primary);
+    border: 1px solid var(--accent-green);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 100;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+.ext-indicator-item:hover .ext-indicator-tooltip {
+    opacity: 1;
+    visibility: visible;
+    bottom: calc(100% + 10px);
+}
+
+/* Loading states */
+.ext-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.ext-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(214, 174, 100, 0.2), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    to {
+        left: 100%;
+    }
+}

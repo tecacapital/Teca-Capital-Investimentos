@@ -1,0 +1,761 @@
+/* ==============================================
+   TECA CAPITAL – LANDING PAGE SIMULADORES
+   APENAS MAIN (SEM HEADER/FOOTER/NAV)
+   CORES: PRETO (#000), DOURADO (rgb 214,174,100)
+          AZUL (#0066cc), VERMELHO (#cc3333)
+   RESPONSIVIDADE CIRÚRGICA PARA DISPOSITIVOS-ALVO
+============================================== */
+
+/* ----- VARIÁVEIS GLOBAIS ----- */
+:root {
+    --primary-black: #000000;
+    --primary-gold: rgb(214, 174, 100);
+    --primary-white: #FFFFFF;
+    --secondary-blue: #0066cc;
+    --secondary-red: #cc3333;
+    --secondary-green: #33cc33;
+    --text-gray: #CCCCCC;
+    --text-dim: #AAAAAA;
+    --border-dark: rgba(255, 255, 255, 0.1);
+    --border-darker: rgba(255, 255, 255, 0.2);
+    --bg-card: rgba(255, 255, 255, 0.03);
+    --bg-card-hover: rgba(255, 255, 255, 0.05);
+    --bg-soft-black: #0a0a0a;
+    
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --transition-default: all 0.3s ease;
+    --border-radius-card: 24px;
+    --container-width: 1280px;
+    --section-gap: 80px;
+}
+
+/* ----- RESET / BASE ----- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--primary-black);
+    font-family: var(--font-primary);
+    color: var(--primary-white);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.landing-page {
+    background-color: var(--primary-black);
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+}
+
+/* ----- TIPOGRAFIA E DESTAQUES ----- */
+.highlight {
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+}
+
+.highlight.gold {
+    color: var(--primary-gold);
+}
+.highlight.blue {
+    color: var(--secondary-blue);
+}
+.highlight.red {
+    color: var(--secondary-red);
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    max-width: 800px;
+    margin: 0 auto 50px;
+}
+
+/* ----- BOTÕES ----- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: var(--transition-default);
+    border: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: var(--primary-gold);
+    color: var(--primary-black);
+    border-color: var(--primary-gold);
+}
+
+.btn-primary:hover {
+    background: transparent;
+    color: var(--primary-gold);
+    transform: translateY(-2px);
+}
+
+.btn-large {
+    padding: 16px 42px;
+    font-size: 1.1rem;
+}
+
+/* ----- SEÇÃO 1: HERO ----- */
+.hero-section {
+    position: relative;
+    padding: 80px 0 60px;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 5;
+}
+
+.hero-icon {
+    font-size: 4.5rem;
+    color: var(--primary-gold);
+    margin-bottom: 20px;
+}
+
+.pulse-animation {
+    animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.05); opacity: 1; }
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: -0.03em;
+}
+
+.hero-subtitle {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--primary-gold);
+    margin-bottom: 20px;
+}
+
+.hero-description {
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    max-width: 700px;
+    margin: 0 auto 40px;
+}
+
+.hero-cta {
+    margin-top: 20px;
+}
+
+.particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(var(--border-darker) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* ----- SEÇÃO 2: BENEFÍCIOS ----- */
+.benefits-section {
+    padding: 80px 0;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.benefit-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 40px 30px;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--border-dark);
+    transition: var(--transition-default);
+}
+
+.benefit-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-darker);
+    transform: translateY(-5px);
+}
+
+.benefit-icon {
+    font-size: 2.8rem;
+    color: var(--primary-gold);
+    margin-bottom: 25px;
+}
+
+.benefit-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--primary-white);
+}
+
+.benefit-card p {
+    color: var(--text-dim);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* ----- SEÇÃO 3: SIMULADORES (CARDS COM BORDA ANIMADA) ----- */
+.simulators-section {
+    padding: 80px 0;
+    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, var(--bg-soft-black) 100%);
+}
+
+.simulators-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* ----- EFEITO BORDA ANIMADA (OBRIGATÓRIO) ----- */
+@keyframes borderRotate {
+    0% { background-position: 0% 50%; border-color: var(--primary-gold); }
+    33% { background-position: 100% 50%; border-color: var(--secondary-blue); }
+    66% { background-position: 200% 50%; border-color: var(--secondary-red); }
+    100% { background-position: 300% 50%; border-color: var(--primary-gold); }
+}
+
+.simulator-card {
+    position: relative;
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-card);
+    background: var(--bg-card);
+    padding: 30px 25px;
+    backdrop-filter: blur(8px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.simulator-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--primary-gold), var(--secondary-blue), var(--secondary-red), var(--primary-gold));
+    background-size: 400% 400%;
+    border-radius: 26px;
+    z-index: -1;
+    animation: borderRotate 6s linear infinite;
+    opacity: 0.5;
+}
+
+.simulator-card:hover {
+    transform: translateY(-8px);
+    background: var(--bg-card-hover);
+}
+
+.simulator-card:hover::before {
+    opacity: 0.9;
+    animation-duration: 3s;
+}
+
+/* badges */
+.card-badge {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    border: 1px solid;
+}
+.gold-badge {
+    background: rgba(214, 174, 100, 0.1);
+    color: var(--primary-gold);
+    border-color: var(--primary-gold);
+}
+.blue-badge {
+    background: rgba(0, 102, 204, 0.1);
+    color: var(--secondary-blue);
+    border-color: var(--secondary-blue);
+}
+.red-badge {
+    background: rgba(204, 51, 51, 0.1);
+    color: var(--secondary-red);
+    border-color: var(--secondary-red);
+}
+
+.card-icon {
+    font-size: 3rem;
+    color: var(--primary-gold);
+    margin-bottom: 15px;
+}
+
+.card-title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.card-subtitle {
+    font-size: 1rem;
+    color: var(--primary-gold);
+    font-weight: 500;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.card-description {
+    color: var(--text-gray);
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.card-features {
+    list-style: none;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.card-features li {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.card-features i {
+    color: var(--secondary-green);
+    font-size: 0.9rem;
+    margin-top: 3px;
+}
+
+.card-scenario {
+    background: rgba(255,255,255,0.05);
+    border-left: 4px solid var(--primary-gold);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: var(--text-gray);
+}
+
+.currency-aoa {
+    font-weight: 700;
+    color: var(--primary-gold);
+}
+
+.card-metric {
+    background: rgba(214, 174, 100, 0.08);
+    padding: 12px;
+    border-radius: 30px;
+    text-align: center;
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    border: 1px dashed var(--primary-gold);
+}
+.metric-number {
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--primary-gold);
+    margin-right: 5px;
+}
+
+.card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: transparent;
+    border: 2px solid var(--primary-gold);
+    color: var(--primary-gold);
+    padding: 14px 20px;
+    border-radius: 40px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--transition-default);
+    margin-top: auto;
+}
+
+.card-btn:hover {
+    background: var(--primary-gold);
+    color: var(--primary-black);
+}
+
+/* ----- SEÇÃO 4: COMO FUNCIONA (STEP) ----- */
+.how-it-works-section {
+    padding: 80px 0;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.step-item {
+    text-align: center;
+    position: relative;
+    padding: 30px 20px;
+    background: var(--bg-card);
+    border-radius: 20px;
+    border: 1px solid var(--border-dark);
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background: var(--primary-gold);
+    color: var(--primary-black);
+    font-size: 1.8rem;
+    font-weight: 800;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.step-icon {
+    font-size: 2.2rem;
+    color: var(--primary-gold);
+    margin-bottom: 15px;
+}
+
+.step-item h4 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.step-item p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+}
+
+/* ----- SEÇÃO 5: DEPOIMENTOS / STATS ----- */
+.testimonials-section {
+    padding: 80px 0;
+    background: var(--bg-soft-black);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--primary-gold);
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: var(--text-gray);
+}
+
+.testimonial-box {
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(214,174,100,0.05);
+    border-radius: 30px;
+    padding: 40px;
+    border: 1px solid var(--border-dark);
+    position: relative;
+}
+
+.quote-icon {
+    font-size: 3rem;
+    color: var(--primary-gold);
+    opacity: 0.2;
+    position: absolute;
+    top: 20px;
+    left: 30px;
+}
+
+.testimonial-content p {
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+.testimonial-author {
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-author strong {
+    color: var(--primary-gold);
+    font-size: 1.1rem;
+}
+
+.testimonial-author span {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+}
+
+/* ----- SEÇÃO 6: FAQ (ACCORDION) ----- */
+.faq-section {
+    padding: 80px 0;
+}
+
+.faq-container {
+    max-width: 900px;
+    margin: 40px auto 0;
+}
+
+.faq-item {
+    background: var(--bg-card);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-dark);
+    overflow: hidden;
+    transition: var(--transition-default);
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 25px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--primary-white);
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.faq-question:hover {
+    background: rgba(255,255,255,0.02);
+}
+
+.faq-question i {
+    color: var(--primary-gold);
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    padding: 0 25px;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.3s ease;
+    color: var(--text-dim);
+    border-top: 1px solid transparent;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 250px;
+    padding: 0 25px 25px;
+    border-top-color: var(--border-dark);
+}
+
+/* ----- SEÇÃO 7: CTA FINAL ----- */
+.cta-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, var(--bg-soft-black) 0%, #000 100%);
+    text-align: center;
+}
+
+.cta-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: var(--primary-white);
+}
+
+.cta-description {
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    max-width: 700px;
+    margin: 0 auto 40px;
+}
+
+.cta-footnote {
+    margin-top: 25px;
+    color: var(--text-dim);
+    font-size: 1rem;
+}
+
+.cta-footnote i {
+    color: var(--secondary-green);
+}
+
+/* ----- ANIMAÇÕES DE ENTRADA (FADE-IN) ----- */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ----- RESPONSIVIDADE CIRÚRGICA (DISPOSITIVOS PRIORITÁRIOS) ----- */
+
+/* iPhone 12/13/14 Pro - 393x852 */
+@media (width: 393px) and (height: 852px),
+       (max-width: 393px) and (min-height: 852px),
+       (max-width: 430px) {
+    
+    .section-title { font-size: 1.9rem; }
+    .hero-title { font-size: 2.4rem; }
+    .hero-subtitle { font-size: 1.3rem; }
+    
+    .benefits-grid,
+    .simulators-grid,
+    .steps-grid,
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .simulator-card { padding: 25px; }
+    .stat-number { font-size: 2.8rem; }
+    .cta-title { font-size: 2rem; }
+    .container { padding: 0 20px; }
+    .btn-large { padding: 14px 32px; white-space: normal; }
+}
+
+/* Pixel 5 / S21 Ultra - 480x1040 */
+@media (width: 480px) and (height: 1040px),
+       (max-width: 480px) and (min-height: 1040px) {
+    
+    .hero-title { font-size: 2.8rem; }
+    .section-title { font-size: 2.2rem; }
+    .simulators-grid { grid-template-columns: 1fr; gap: 35px; }
+    .benefits-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* iPhone 15 Pro / S23+ - 430x932 */
+@media (width: 430px) and (height: 932px),
+       (max-width: 430px) and (min-height: 932px) {
+    
+    .hero-title { font-size: 2.5rem; }
+    .simulators-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr; }
+}
+
+/* iPhone SE / Mini - 375x667 */
+@media (max-width: 375px) {
+    .hero-title { font-size: 2rem; }
+    .hero-subtitle { font-size: 1.2rem; }
+    .hero-description { font-size: 1rem; }
+    .section-title { font-size: 1.8rem; }
+    .stat-number { font-size: 2.4rem; }
+}
+
+/* Galaxy S20/S21/A52 - 360x800 */
+@media (max-width: 360px) {
+    .container { padding: 0 16px; }
+    .hero-title { font-size: 1.9rem; }
+    .card-title { font-size: 1.5rem; }
+}
+
+/* iPad Mini / tablet 768x1024 */
+@media (min-width: 768px) and (max-width: 834px) {
+    .simulators-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-title { font-size: 3.5rem; }
+}
+
+/* iPad Pro 11" 834x1194 */
+@media (min-width: 834px) and (max-width: 1194px) {
+    .simulators-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-title { font-size: 4rem; }
+}
+
+/* Touch targets (mobile) */
+@media (max-width: 768px) {
+    .btn, .card-btn, .faq-question {
+        min-height: 48px;
+        min-width: 48px;
+    }
+    
+    .card-btn {
+        padding: 16px 20px;
+    }
+    
+    .simulator-card {
+        margin-bottom: 10px;
+    }
+}
+
+/* Garantia total para todas as resoluções alvo */
+@media (max-width: 480px) {
+    .simulators-grid,
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
