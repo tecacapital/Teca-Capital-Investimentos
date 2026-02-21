@@ -1,0 +1,878 @@
+/* ============================================
+   SERVIÇOS PERSONALIZADOS - TECA CAPITAL
+   ESTILOS EXCLUSIVOS PARA A LANDING PAGE
+   ============================================ */
+
+/* VARIÁVEIS E RESET */
+:root {
+    /* Cores principais */
+    --primary-black: #000000;
+    --primary-gold: rgb(214, 174, 100);
+    --primary-white: #FFFFFF;
+    --secondary-blue: #0066cc;
+    --secondary-red: #cc3333;
+    --secondary-green: #33cc33;
+    --premium-purple: #9b59b6;
+    --b2b-blue: #3498db;
+    --investment-gold: #d4af37;
+    
+    /* Tons de cinza */
+    --text-gray: #CCCCCC;
+    --text-dim: #AAAAAA;
+    --border-dark: rgba(255, 255, 255, 0.1);
+    
+    /* Cards e fundos */
+    --bg-card: rgba(255, 255, 255, 0.03);
+    --bg-card-hover: rgba(255, 255, 255, 0.05);
+    --bg-soft-black: #0a0a0a;
+    
+    /* Espaçamentos */
+    --container-padding: 20px;
+    --section-spacing: 60px;
+    --card-padding: 30px;
+    
+    /* Animações */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ESTILOS BASE */
+body {
+    background-color: var(--primary-black);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    color: var(--primary-white);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.servicos-personalizados {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+    width: 100%;
+}
+
+/* TIPOGRAFIA */
+.section-title {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--primary-white);
+}
+
+.section-subtitle {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-white);
+}
+
+.highlight {
+    color: var(--primary-gold);
+    font-weight: 700;
+}
+
+/* BOTÕES */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: var(--primary-gold);
+    color: var(--primary-black);
+}
+
+.btn-primary:hover {
+    background: rgb(194, 154, 80);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(214, 174, 100, 0.2);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--primary-white);
+    border: 2px solid var(--primary-gold);
+}
+
+.btn-secondary:hover {
+    background: var(--primary-gold);
+    color: var(--primary-black);
+    transform: translateY(-2px);
+}
+
+.btn-large {
+    padding: 18px 36px;
+    font-size: 1.1rem;
+}
+
+/* ANIMAÇÕES */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* EFEITO DE BORDA ANIMADA PARA CARDS PRINCIPAIS */
+.card-animated {
+    position: relative;
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: var(--card-padding);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-dark);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.card-animated::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--primary-gold), var(--secondary-blue), var(--secondary-red), var(--primary-gold));
+    background-size: 400% 400%;
+    border-radius: 18px;
+    z-index: -2;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    animation: gradientMove 3s ease infinite;
+}
+
+.card-animated:hover::before {
+    opacity: 1;
+}
+
+.card-animated::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-card-hover);
+    border-radius: 16px;
+    z-index: -1;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ============================================
+   SEÇÃO 1: HERO
+   ============================================ */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: radial-gradient(circle at center, var(--bg-soft-black) 0%, var(--primary-black) 100%);
+    overflow: hidden;
+    padding: 80px 0;
+}
+
+.hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 30%, rgba(214, 174, 100, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 102, 204, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-icon {
+    margin-bottom: 20px;
+}
+
+.hero-icon i {
+    font-size: 4rem;
+    color: var(--primary-gold);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(214, 174, 100, 0.1);
+    border: 1px solid var(--primary-gold);
+    border-radius: 50px;
+    color: var(--primary-gold);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero-subtitle {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--text-gray);
+    margin-bottom: 20px;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+/* ============================================
+   SEÇÃO 2: DEFINIÇÃO
+   ============================================ */
+.definition-section {
+    padding: var(--section-spacing) 0;
+}
+
+.definition-card {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.definition-text {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: var(--text-gray);
+}
+
+.definition-text:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   SEÇÃO 3: PARA QUEM É (TARGET)
+   ============================================ */
+.target-section {
+    padding: var(--section-spacing) 0;
+    background: var(--bg-soft-black);
+}
+
+.target-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.target-card {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.target-card i {
+    font-size: 2.5rem;
+    color: var(--primary-gold);
+    margin-bottom: 20px;
+}
+
+.target-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: var(--primary-white);
+}
+
+.target-card p {
+    color: var(--text-gray);
+    font-size: 0.95rem;
+}
+
+/* ============================================
+   SEÇÃO 4: PROCESSO (TIMELINE)
+   ============================================ */
+.process-section {
+    padding: var(--section-spacing) 0;
+}
+
+.process-timeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    position: relative;
+}
+
+.process-step {
+    text-align: center;
+    position: relative;
+    padding: 40px 20px;
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background: var(--primary-gold);
+    color: var(--primary-black);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.step-icon {
+    margin-bottom: 20px;
+}
+
+.step-icon i {
+    font-size: 2rem;
+    color: var(--primary-gold);
+}
+
+.process-step h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--primary-gold);
+}
+
+.process-step p {
+    color: var(--text-gray);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* ============================================
+   SEÇÃO 5: INVESTIMENTO (DESTAQUE)
+   ============================================ */
+.investment-section {
+    padding: var(--section-spacing) 0;
+    background: linear-gradient(135deg, var(--primary-black) 0%, #1a1a1a 100%);
+}
+
+.investment-card {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+}
+
+.investment-badge {
+    display: inline-block;
+    padding: 10px 20px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid var(--investment-gold);
+    border-radius: 50px;
+    color: var(--investment-gold);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+.investment-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: 20px;
+    color: var(--primary-white);
+}
+
+.investment-value {
+    margin-bottom: 30px;
+}
+
+.investment-amount {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    color: var(--investment-gold);
+    text-shadow: 0 0 20px rgba(214, 174, 100, 0.3);
+    line-height: 1.2;
+    display: inline-block;
+}
+
+.investment-currency {
+    font-size: 1.5rem;
+    color: var(--text-gray);
+    margin-left: 10px;
+}
+
+.investment-description {
+    color: var(--text-gray);
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.investment-factors {
+    list-style: none;
+    margin-bottom: 30px;
+    display: inline-block;
+    text-align: left;
+}
+
+.investment-factors li {
+    margin-bottom: 10px;
+    color: var(--text-gray);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.investment-factors li i {
+    color: var(--investment-gold);
+}
+
+/* ============================================
+   SEÇÃO 6: SOLUÇÕES
+   ============================================ */
+.solutions-section {
+    padding: var(--section-spacing) 0;
+}
+
+.solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.solution-card {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.solution-card i {
+    font-size: 2.5rem;
+    color: var(--b2b-blue);
+    margin-bottom: 20px;
+}
+
+.solution-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--primary-white);
+}
+
+.solution-card p {
+    color: var(--text-gray);
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   SEÇÃO 7: APLICAÇÕES PRÁTICAS
+   ============================================ */
+.applications-section {
+    padding: var(--section-spacing) 0;
+    background: var(--bg-soft-black);
+}
+
+.applications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.application-card {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.application-card i {
+    font-size: 2rem;
+    color: var(--premium-purple);
+    margin-bottom: 20px;
+}
+
+.application-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--primary-white);
+}
+
+.application-card p {
+    color: var(--text-gray);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* ============================================
+   SEÇÃO 8: BENEFÍCIOS
+   ============================================ */
+.benefits-section {
+    padding: var(--section-spacing) 0;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.benefit-card {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.benefit-card i {
+    font-size: 2rem;
+    color: var(--secondary-green);
+    margin-bottom: 20px;
+}
+
+.benefit-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--primary-white);
+}
+
+.benefit-card p {
+    color: var(--text-gray);
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   SEÇÃO 9: O QUE INCLUI
+   ============================================ */
+.includes-section {
+    padding: var(--section-spacing) 0;
+    background: var(--bg-soft-black);
+}
+
+.includes-list {
+    list-style: none;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.includes-list li {
+    margin-bottom: 15px;
+    color: var(--text-gray);
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    font-size: 1rem;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.includes-list li:last-child {
+    border-bottom: none;
+}
+
+.includes-list li i {
+    color: var(--primary-gold);
+    font-size: 1.2rem;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   SEÇÃO 10: POSICIONAMENTO ESTRATÉGICO
+   ============================================ */
+.positioning-section {
+    padding: var(--section-spacing) 0;
+}
+
+.positioning-card {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.positioning-icon {
+    font-size: 3rem;
+    color: var(--primary-gold);
+    margin-bottom: 20px;
+}
+
+.positioning-card h3 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: 20px;
+    color: var(--primary-white);
+}
+
+.positioning-card p {
+    color: var(--text-gray);
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* ============================================
+   SEÇÃO 11: FAQ
+   ============================================ */
+.faq-section {
+    padding: var(--section-spacing) 0;
+    background: var(--bg-soft-black);
+}
+
+.faq-grid {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    margin-bottom: 15px;
+    border: 1px solid var(--border-dark);
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.faq-question {
+    width: 100%;
+    padding: 20px;
+    background: none;
+    border: none;
+    color: var(--primary-white);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--transition-normal);
+}
+
+.faq-question:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.faq-question i {
+    transition: transform var(--transition-normal);
+    color: var(--primary-gold);
+}
+
+.faq-question.active i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    padding: 0 20px;
+    overflow: hidden;
+    transition: max-height var(--transition-normal), padding var(--transition-normal);
+    color: var(--text-gray);
+}
+
+.faq-answer.show {
+    max-height: 300px;
+    padding: 0 20px 20px;
+}
+
+.faq-answer p {
+    line-height: 1.6;
+}
+
+/* ============================================
+   SEÇÃO 12: CTA FINAL
+   ============================================ */
+.cta-section {
+    padding: 80px 0;
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary-black) 0%, #1a1a1a 100%);
+    border-top: 1px solid var(--border-dark);
+}
+
+.cta-title {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--primary-white);
+}
+
+.cta-description {
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.cta-note {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+}
+
+.cta-note strong {
+    color: var(--investment-gold);
+}
+
+/* ============================================
+   RESPONSIVIDADE ESPECÍFICA
+   ============================================ */
+
+/* 393x852 - iPhone 12/13/14 Pro */
+@media (width: 393px) and (height: 852px),
+       (max-width: 393px) and (min-height: 852px),
+       (max-width: 393px) {
+    
+    :root {
+        --container-padding: 16px;
+        --section-spacing: 40px;
+        --card-padding: 20px;
+    }
+    
+    .investment-amount {
+        font-size: 2.2rem;
+    }
+    
+    .investment-factors li {
+        font-size: 0.9rem;
+    }
+    
+    .applications-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .btn-large {
+        padding: 14px 28px;
+        font-size: 1rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .includes-list li {
+        font-size: 0.9rem;
+    }
+}
+
+/* 480x1040 - Pixel 5 / S21 Ultra */
+@media (width: 480px) and (height: 1040px),
+       (max-width: 480px) and (min-height: 1040px),
+       (max-width: 480px) {
+    
+    :root {
+        --container-padding: 20px;
+        --section-spacing: 50px;
+    }
+    
+    .investment-amount {
+        font-size: 3rem;
+    }
+    
+    .applications-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .target-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .process-timeline {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 430x932 - iPhone 15 Pro / S23+ */
+@media (width: 430px) and (height: 932px),
+       (max-width: 430px) and (min-height: 932px),
+       (max-width: 430px) {
+    
+    :root {
+        --container-padding: 18px;
+        --card-padding: 25px;
+    }
+    
+    .investment-amount {
+        font-size: 2.5rem;
+    }
+    
+    .hero-title {
+        font-size: 2.8rem;
+    }
+    
+    .btn-large {
+        padding: 16px 32px;
+    }
+}
+
+/* Ajustes gerais para mobile */
+@media (max-width: 768px) {
+    .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    .investment-factors {
+        width: 100%;
+    }
+    
+    .investment-factors li {
+        font-size: 0.9rem;
+    }
+}
+
+/* Garantir touch targets adequados */
+@media (max-width: 480px) {
+    .btn,
+    .faq-question,
+    .investment-cta a {
+        min-height: 44px;
+        padding: 12px 24px;
+    }
+    
+    .faq-question {
+        padding: 15px;
+    }
+}
