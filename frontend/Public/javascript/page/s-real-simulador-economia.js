@@ -2946,8 +2946,488 @@ window.SimuladorEconomia = {
     ...window.SimuladorEconomia,
     salvarSimulacao,
     carregarSimulacao,
-    reiniciarSimulacao,
+    reiniciarSimulacao,  
     verificarSaveExistente,
     atualizarPaineisAcoes,
     atualizarPainelUSD
 };
+
+
+// ================================================
+// SUPORTE_RESERVAS_INTERNACIONAIS_2026 - Teca Capital
+// ================================================
+// Este módulo ENFORÇA as regras de negócio para Reservas Internacionais
+// Garante que todo movimento em USD afete corretamente as reservas
+// Versão: 1.0.0 - 2026
+// ================================================
+
+(function() {
+    'use strict';
+    
+    // ============================================
+    // CONFIGURAÇÕES E CONSTANTES
+    // ============================================
+    const DEBUG = false; // Mude para true se quiser ver logs no console
+    
+    // ============================================
+    // FUNÇÕES DE LOG E VALIDAÇÃO
+    // ============================================
+    
+    /**
+     * Log condicional para debug
+     */
+    function logDebug(...args) {
+        if (DEBUG) console.log('[RESERVAS]', ...args);
+    }
+    
+    /**
+     * Valida se há reservas USD suficientes para uma operação
+     * @param {number} valorUSD - Valor em USD necessário
+     * @param {string} operacao - Nome da operação para mensagem
+     * @returns {boolean} - True se tem saldo suficiente
+     */
+    function validarReservasUSD(valorUSD, operacao = 'operação') {
+        if (typeof valorUSD !== 'number' || isNaN(valorUSD) || valorUSD <= 0) {
+            mostrarNotificacao('Valor inválido para operação em USD', 'danger');
+            return false;
+        }
+        
+        if (estado.reservasUSD < valorUSD) {
+            const mensagem = `Reservas Internacionais insuficientes para ${operacao}. Disponível: ${formatarUSD(estado.reservasUSD)}`;
+            mostrarNotificacao(mensagem, 'danger');
+            adicionarAoHistorico('ALERTA', mensagem, 'danger');
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Valida se há saldo em Kwanzas suficiente para uma operação
+     * @param {number} valorKz - Valor em Kz necessário
+     * @param {string} operacao - Nome da operação para mensagem
+     * @returns {boolean} - True se tem saldo suficiente
+     */
+    function validarSaldoKz(valorKz, operacao = 'operação') {
+        if (typeof valorKz !== 'number' || isNaN(valorKz) || valorKz <= 0) {
+            mostrarNotificacao('Valor inválido para operação em Kz', 'danger');
+            return false;
+        }
+        
+        if (estado.saldoGovernoKz < valorKz) {
+            const mensagem = `Saldo em Kwanzas insuficiente para ${operacao}. Disponível: ${formatarKwanza(estado.saldoGovernoKz)}`;
+            mostrarNotificacao(mensagem, 'danger');
+            adicionarAoHistorico('ALERTA', mensagem, 'danger');
+            return false;
+        }
+        return true;
+    }
+    
+    // ============================================
+    // OVERRIDE: COMPRA DE USD
+    // ============================================
+    
+    /**
+     * Versão corrigida da compra de USD
+     * Gasta Kz da conta do governo, aumenta reservas USD
+     * @param {number} valorUSD - Valor em USD a comprar
+     */
+    window.comprarUSD = function(valorUSD) {
+        logDebug('comprarUSD chamado com valor:', valorUSD);
+        
+        // Validar entrada
+        if (typeof valorUSD !== 'number' || isNaN(valorUSD) || valorUSD <= 0) {
+            mostrarNotificacao('Digite um valor válido em USD', 'danger');
+            return false;
+        }
+        
+        // Calcular valor em Kz
+        const valorKz = valorUSD * VALORES_CAMBIO[estado.indiceCambio];
+        
+        // Validar saldo em Kz
+        if (!validarSaldoKz(valorKz, 'compra de USD')) return false;
+        
+        // Executar operação
+        estado.saldoGovernoKz -= valorKz;
+        estado.reservasUSD += valorUSD;
+        
+        // Impacto no câmbio (Kwanza valoriza)
+        estado.indiceCambio = Math.max(0, estado.indiceCambio - 1);
+        
+        // Logs
+        adicionarAoHistorico('Câmbio', 
+            `COMPRA USD: ${formatarUSD(valorUSD)} | Gasto: ${formatarKwanza(valorKz)} | Reservas: ${formatarUSD(estado.reservasUSD)}`);
+        mostrarNotificacao(`Compra de ${formatarUSD(valorUSD)} realizada com sucesso`, 'success');
+        
+        // Atualizar interfaces
+        atualizarInterface();
+        atualizarInterfaceExpandida();
+        if (typeof atualizarPainelUSD === 'function') atualizarPainelUSD();
+        
+        logDebug('compraUSD OK - Reservas:', estado.reservasUSD, 'Saldo Kz:', estado.saldoGovernoKz);
+        return true;
+    };
+    
+    // ============================================
+    // OVERRIDE: VENDA DE USD
+    // ============================================
+    
+    /**
+     * Versão corrigida da venda de USD
+     * Gasta reservas USD, aumenta saldo em Kz do governo
+     * @param {number} valorUSD - Valor em USD a vender
+     */
+    window.venderUSD = function(valorUSD) {
+        logDebug('venderUSD chamado com valor:', valorUSD);
+        
+        // Validar entrada
+        if (typeof valorUSD !== 'number' || isNaN(valorUSD) || valorUSD <= 0) {
+            mostrarNotificacao('Digite um valor válido em USD', 'danger');
+            return false;
+        }
+        
+        // Validar reservas USD
+        if (!validarReservasUSD(valorUSD, 'venda de USD')) return false;
+        
+        // Calcular valor em Kz
+        const valorKz = valorUSD * VALORES_CAMBIO[estado.indiceCambio];
+        
+        // Executar operação
+        estado.reservasUSD -= valorUSD;
+        estado.saldoGovernoKz += valorKz;
+        
+        // Impacto no câmbio (Kwanza desvaloriza)
+        estado.indiceCambio = Math.min(VALORES_CAMBIO.length - 1, estado.indiceCambio + 1);
+        
+        // Logs
+        adicionarAoHistorico('Câmbio', 
+            `VENDA USD: ${formatarUSD(valorUSD)} | Receita: ${formatarKwanza(valorKz)} | Reservas: ${formatarUSD(estado.reservasUSD)}`);
+        mostrarNotificacao(`Venda de ${formatarUSD(valorUSD)} realizada com sucesso`, 'success');
+        
+        // Atualizar interfaces
+        atualizarInterface();
+        atualizarInterfaceExpandida();
+        if (typeof atualizarPainelUSD === 'function') atualizarPainelUSD();
+        
+        logDebug('vendaUSD OK - Reservas:', estado.reservasUSD, 'Saldo Kz:', estado.saldoGovernoKz);
+        return true;
+    };
+    
+    // ============================================
+    // OVERRIDE: COMPRA DE AÇÕES (CORREÇÃO DO BUG DE QUANTIDADE)
+    // ============================================
+    
+    // Guardar referência da função original
+    const comprarAcaoOriginal = window.comprarAcao;
+    
+    /**
+     * Versão corrigida da compra de ações
+     * AGORA RESPEITA A QUANTIDADE DIGITADA PELO USUÁRIO
+     */
+    window.comprarAcao = function(ticker, quantidade) {
+        logDebug('comprarAcao chamado com ticker:', ticker, 'quantidade:', quantidade);
+        
+        // Validar quantidade (CORREÇÃO DO BUG)
+        if (typeof quantidade !== 'number' || isNaN(quantidade) || quantidade <= 0) {
+            mostrarNotificacao('Quantidade inválida. Digite um número maior que zero.', 'danger');
+            return false;
+        }
+        
+        // Encontrar a ação
+        const acao = estado.carteiraInternacional.acoesDisponiveis.find(a => a.ticker === ticker);
+        if (!acao) {
+            mostrarNotificacao('Ação não encontrada', 'danger');
+            return false;
+        }
+        
+        // Calcular custo total
+        const custoTotal = acao.precoAtual * quantidade;
+        
+        // VALIDAÇÃO CRÍTICA: Usar reservas USD
+        if (!validarReservasUSD(custoTotal, `compra de ${quantidade} ${ticker}`)) return false;
+        
+        // Executar a compra (chamar função original ou implementar aqui)
+        let resultado;
+        
+        if (typeof comprarAcaoOriginal === 'function') {
+            // Se a função original existe, usa ela
+            resultado = comprarAcaoOriginal(ticker, quantidade);
+        } else {
+            // Implementação fallback (caso a original não exista)
+            let acaoExistente = estado.carteiraInternacional.acoes.find(a => a.ticker === ticker);
+            
+            if (acaoExistente) {
+                const quantidadeAnterior = acaoExistente.quantidade;
+                acaoExistente.quantidade += quantidade;
+                acaoExistente.precoMedioCompra = (acaoExistente.precoMedioCompra * quantidadeAnterior + acao.precoAtual * quantidade) / acaoExistente.quantidade;
+            } else {
+                const novaAcao = new AcaoInternacional(acao.nome, acao.ticker, acao.setor, acao.pais, acao.precoAtual, acao.volatilidade);
+                novaAcao.quantidade = quantidade;
+                novaAcao.precoMedioCompra = acao.precoAtual;
+                estado.carteiraInternacional.acoes.push(novaAcao);
+            }
+            resultado = true;
+        }
+        
+        if (resultado) {
+            // Registrar a operação (a dedução das reservas já deve ter ocorrido na função original)
+            adicionarAoHistorico('Ações', 
+                `COMPRA ${quantidade} ${ticker} | Total: ${formatarUSD(custoTotal)} | Reservas: ${formatarUSD(estado.reservasUSD)}`);
+            
+            // Atualizar interfaces
+            if (typeof atualizarPaineisAcoes === 'function') atualizarPaineisAcoes();
+            atualizarInterfaceExpandida();
+        }
+        
+        return resultado;
+    };
+    
+    // ============================================
+    // OVERRIDE: VENDA DE AÇÕES
+    // ============================================
+    
+    const venderAcaoOriginal = window.venderAcao;
+    
+    window.venderAcao = function(ticker, quantidade) {
+        logDebug('venderAcao chamado com ticker:', ticker, 'quantidade:', quantidade);
+        
+        if (typeof quantidade !== 'number' || isNaN(quantidade) || quantidade <= 0) {
+            mostrarNotificacao('Quantidade inválida', 'danger');
+            return false;
+        }
+        
+        // Calcular valor da venda antes de executar
+        const acao = estado.carteiraInternacional.acoes.find(a => a.ticker === ticker);
+        if (!acao) {
+            mostrarNotificacao('Ação não encontrada na carteira', 'danger');
+            return false;
+        }
+        
+        if (quantidade > acao.quantidade) {
+            mostrarNotificacao('Quantidade insuficiente', 'danger');
+            return false;
+        }
+        
+        const valorVenda = acao.precoAtual * quantidade;
+        
+        // Executar venda
+        let resultado;
+        if (typeof venderAcaoOriginal === 'function') {
+            resultado = venderAcaoOriginal(ticker, quantidade);
+        } else {
+            acao.quantidade -= quantidade;
+            if (acao.quantidade === 0) {
+                estado.carteiraInternacional.acoes = estado.carteiraInternacional.acoes.filter(a => a.ticker !== ticker);
+            }
+            resultado = true;
+        }
+        
+        if (resultado) {
+            // O dinheiro já deve ter entrado nas reservas pela função original
+            adicionarAoHistorico('Ações', 
+                `VENDA ${quantidade} ${ticker} | Valor: ${formatarUSD(valorVenda)} | Reservas: ${formatarUSD(estado.reservasUSD)}`);
+            
+            if (typeof atualizarPaineisAcoes === 'function') atualizarPaineisAcoes();
+            atualizarInterfaceExpandida();
+        }
+        
+        return resultado;
+    };
+    
+    // ============================================
+    // OVERRIDE: COMPRA DE TÍTULOS ESTRANGEIROS
+    // ============================================
+    
+    const comprarTituloEstrangeiroOriginal = window.comprarTituloEstrangeiro;
+    
+    window.comprarTituloEstrangeiro = function(pais, valor, prazo) {
+        logDebug('comprarTituloEstrangeiro chamado:', pais, valor, prazo);
+        
+        if (!pais || typeof valor !== 'number' || isNaN(valor) || valor <= 0) {
+            mostrarNotificacao('Valor inválido para compra de título', 'danger');
+            return false;
+        }
+        
+        // VALIDAÇÃO CRÍTICA: Usar reservas USD
+        if (!validarReservasUSD(valor, `título de ${pais}`)) return false;
+        
+        let resultado;
+        if (typeof comprarTituloEstrangeiroOriginal === 'function') {
+            resultado = comprarTituloEstrangeiroOriginal(pais, valor, prazo);
+        }
+        
+        if (resultado !== false) {
+            adicionarAoHistorico('Títulos', 
+                `COMPRA título ${pais} | Valor: ${formatarUSD(valor)} | Reservas: ${formatarUSD(estado.reservasUSD)}`);
+            atualizarInterfaceExpandida();
+        }
+        
+        return resultado;
+    };
+    
+    // ============================================
+    // OVERRIDE: COMPRA DE OURO
+    // ============================================
+    
+    const comprarOuroOriginal = window.comprarOuro;
+    
+    window.comprarOuro = function(valorUSD) {
+        logDebug('comprarOuro chamado:', valorUSD);
+        
+        if (!validarReservasUSD(valorUSD, 'compra de ouro')) return false;
+        
+        let resultado;
+        if (typeof comprarOuroOriginal === 'function') {
+            resultado = comprarOuroOriginal(valorUSD);
+        }
+        
+        if (resultado) {
+            adicionarAoHistorico('Ouro', 
+                `COMPRA OURO | Valor: ${formatarUSD(valorUSD)} | Reservas: ${formatarUSD(estado.reservasUSD)}`);
+            atualizarInterfaceExpandida();
+        }
+        
+        return resultado;
+    };
+    
+    // ============================================
+    // OVERRIDE: VENDA DE OURO
+    // ============================================
+    
+    const venderOuroOriginal = window.venderOuro;
+    
+    window.venderOuro = function(oncas) {
+        logDebug('venderOuro chamado:', oncas);
+        
+        let resultado;
+        if (typeof venderOuroOriginal === 'function') {
+            resultado = venderOuroOriginal(oncas);
+        }
+        
+        if (resultado) {
+            adicionarAoHistorico('Ouro', 
+                `VENDA OURO | Onças: ${oncas.toFixed(2)} | Reservas: ${formatarUSD(estado.reservasUSD)}`);
+            atualizarInterfaceExpandida();
+        }
+        
+        return resultado;
+    };
+    
+    // ============================================
+    // PROXY PARA MONITORAR RESERVAS E SALDO
+    // ============================================
+    
+    /**
+     * Cria um proxy para monitorar alterações em propriedades críticas
+     */
+    function criarProxyEstado() {
+        if (!estado) {
+            console.error('ERRO: estado não encontrado!');
+            return;
+        }
+        
+        // Guardar referência ao estado original
+        const estadoOriginal = estado;
+        
+        // Criar handler para o proxy
+        const handler = {
+            set(target, prop, value) {
+                const oldValue = target[prop];
+                target[prop] = value;
+                
+                // Monitorar propriedades críticas
+                if (prop === 'reservasUSD') {
+                    logDebug(`reservasUSD alterado: ${formatarUSD(oldValue)} -> ${formatarUSD(value)}`);
+                    
+                    // Atualizar interfaces
+                    if (typeof atualizarInterface === 'function') atualizarInterface();
+                    if (typeof atualizarInterfaceExpandida === 'function') atualizarInterfaceExpandida();
+                    if (typeof atualizarPainelUSD === 'function') atualizarPainelUSD();
+                    if (typeof atualizarPaineisAcoes === 'function') atualizarPaineisAcoes();
+                    
+                    // Registrar mudança significativa (opcional)
+                    if (Math.abs(value - oldValue) > 1000000) { // Mais de 1M
+                        adicionarAoHistorico('Reservas', 
+                            `VARIAÇÃO: ${formatarUSD(oldValue)} → ${formatarUSD(value)}`);
+                    }
+                }
+                
+                if (prop === 'saldoGovernoKz') {
+                    logDebug(`saldoGovernoKz alterado: ${formatarKwanza(oldValue)} -> ${formatarKwanza(value)}`);
+                    
+                    // Atualizar interfaces
+                    if (typeof atualizarInterfaceExpandida === 'function') atualizarInterfaceExpandida();
+                    if (typeof atualizarPainelUSD === 'function') atualizarPainelUSD();
+                }
+                
+                if (prop === 'indiceCambio') {
+                    logDebug(`indiceCambio alterado: ${VALORES_CAMBIO[oldValue]} -> ${VALORES_CAMBIO[value]}`);
+                    
+                    if (typeof atualizarInterface === 'function') atualizarInterface();
+                    if (typeof atualizarPainelUSD === 'function') atualizarPainelUSD();
+                }
+                
+                return true;
+            }
+        };
+        
+        // Substituir estado pelo proxy
+        window.estado = new Proxy(estadoOriginal, handler);
+        logDebug('Proxy de estado ativado');
+    }
+    
+    // ============================================
+    // FUNÇÃO DE APLICAÇÃO DAS REGRAS
+    // ============================================
+    
+    function aplicarRegrasReservas() {
+        console.log('%c🔒 SUPORTE_RESERVAS_INTERNACIONAIS_2026 ATIVADO', 'color: #d6ae64; font-weight: bold; font-size: 14px');
+        console.log('• Reservas Internacionais:', formatarUSD(estado.reservasUSD));
+        console.log('• Saldo do Governo:', formatarKwanza(estado.saldoGovernoKz));
+        console.log('• Câmbio Atual:', VALORES_CAMBIO[estado.indiceCambio], 'Kz/USD');
+        
+        // Criar proxy para monitoramento
+        criarProxyEstado();
+        
+        // Adicionar entradas iniciais no histórico
+        adicionarAoHistorico('Sistema', 'Módulo de Reservas Internacionais ativado');
+        adicionarAoHistorico('Reservas', `Reservas iniciais: ${formatarUSD(estado.reservasUSD)}`);
+        adicionarAoHistorico('Câmbio', `Taxa inicial: ${VALORES_CAMBIO[estado.indiceCambio]} Kz/USD (Regime: ${estado.regimeCambial})`);
+        
+        // Forçar atualização de todos os painéis
+        if (typeof atualizarInterface === 'function') atualizarInterface();
+        if (typeof atualizarInterfaceExpandida === 'function') atualizarInterfaceExpandida();
+        if (typeof atualizarPainelUSD === 'function') atualizarPainelUSD();
+        if (typeof atualizarPaineisAcoes === 'function') atualizarPaineisAcoes();
+        
+        logDebug('Regras de reservas aplicadas com sucesso');
+    }
+    
+    // ============================================
+    // EXPOR FUNÇÕES PARA DEBUG (OPCIONAL)
+    // ============================================
+    
+    window.ReservasInternacionais = {
+        validar: validarReservasUSD,
+        saldo: () => estado.reservasUSD,
+        comprarUSD: window.comprarUSD,
+        venderUSD: window.venderUSD,
+        aplicarRegras: aplicarRegrasReservas
+    };
+    
+    // ============================================
+    // AGUARDAR DOM E APLICAR
+    // ============================================
+    
+    // Se o DOM já estiver carregado, aplica imediatamente
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(aplicarRegrasReservas, 500);
+    } else {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(aplicarRegrasReservas, 500);
+        });
+    }
+    
+    // Backup: aplicar depois de um tempo (garantia)
+    setTimeout(aplicarRegrasReservas, 1000);
+    
+})();
