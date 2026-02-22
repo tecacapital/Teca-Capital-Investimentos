@@ -1,441 +1,1450 @@
 // ============================================
-// SISTEMA DE PRODUÇÃO DE SERVIÇOS
+// FUNÇÕES ADICIONAIS PARA O SIMULADOR - v2.0
 // ============================================
 
-/ Configurações das classes de produção
-const classesProducao = {
-    A: {
-        nome: 'Produção Rápida',
-        tempoDias: 1,
-        tempoSegundos: 30,
-        custoUnitario: 25000,
-        multiplicadorProducao: 2,
-        eficiencia: 'alta'
-    },
-    B: {
-        nome: 'Produção Moderada',
-        tempoDias: 2,
-        tempoSegundos: 60,
-        custoUnitario: 15000,
-        multiplicadorProducao: 1.5,
-        eficiencia: 'media'
-    },
-    C: {
-        nome: 'Produção Económica',
-        tempoDias: 3,
-        tempoSegundos: 90,
-        custoUnitario: 5000,
-        multiplicadorProducao: 1,
-        eficiencia: 'baixa'
+// ============================================
+// 1. SALDO CORRENTE DO GOVERNO EM KWANZAS
+// ============================================
+
+// Adicionar ao estado global (dentro da classe EstadoSimulador)
+class EstadoSimulador {
+    constructor() {
+        // ... (código existente)
+        
+        // Saldo do Governo em Kwanzas
+        this.saldoGovernoKz = 5000000000000; // 5 trilhões Kz iniciais (aprox. $5.5B a 912 Kz/USD)
+        this.receitaMensalKz = 0;
+        this.despesaMensalKz = 0;
+        this.saldoHistorico = [];
+        
+        // Conta de Investimentos Internacionais (USD)
+        this.carteiraInternacional = {
+            acoes: [], // Ações compradas
+            titulosEstrangeiros: [], // Títulos públicos estrangeiros
+            saldoUSD: 0, // Saldo em USD disponível para investimentos
+            valorTotal: 0 // Valor total da carteira
+        };
+        
+        // Estatísticas detalhadas de empresas
+        this.empresasDetalhadas = {
+            A: {
+                quantidade: 100,
+                resiliencia: 0.9,
+                contribuicaoPIB: 0.4,
+                empregos: 5000,
+                faturamentoMensal: 50000000, // 50M USD
+                lucroMensal: 5000000, // 5M USD
+                endividamento: 0.3,
+                satisfacao: 0.8,
+                emRisco: 0
+            },
+            B: {
+                quantidade: 5000,
+                resiliencia: 0.6,
+                contribuicaoPIB: 0.4,
+                empregos: 200,
+                faturamentoMensal: 2000000, // 2M USD
+                lucroMensal: 200000, // 200k USD
+                endividamento: 0.5,
+                satisfacao: 0.6,
+                emRisco: 0
+            },
+            C: {
+                quantidade: 50000,
+                resiliencia: 0.3,
+                contribuicaoPIB: 0.2,
+                empregos: 10,
+                faturamentoMensal: 100000, // 100k USD
+                lucroMensal: 10000, // 10k USD
+                endividamento: 0.7,
+                satisfacao: 0.4,
+                emRisco: 0
+            }
+        };
+        
+        // Estatísticas detalhadas das famílias
+        this.familiasDetalhadas = {
+            rendaMedia: 100000, // Kz
+            poderCompra: 1.0,
+            endividamento: 0.4,
+            poupancaMedia: 50000, // Kz
+            satisfacao: 0.6,
+            acessoCredito: 0.5,
+            informalidade: 0.3,
+            pobreza: 0.3
+        };
+        
+        // Custo mensal com salários (calculado)
+        this.custoSalarialMensalKz = this.calcularCustoSalarialMensal();
     }
-};/
+    
+    // Calcular custo mensal com salários
+    calcularCustoSalarialMensal() {
+        return this.funcionariosPublicos * this.salarioMedio;
+    }
+    
+    // Atualizar saldo do governo
+    atualizarSaldoGoverno() {
+        this.saldoHistorico.push({
+            data: `${this.tempo.mes}/${this.tempo.ano}`,
+            saldo: this.saldoGovernoKz,
+            receita: this.receitaMensalKz,
+            despesa: this.despesaMensalKz
+        });
+        
+        if (this.saldoHistorico.length > 12) {
+            this.saldoHistorico.shift();
+        }
+    }
+    
+    // Calcular impostos arrecadados (versão simplificada)
+    calcularReceitaMensal() {
+        // Base: PIB / 12 * alíquota média de 15%
+        const pibMensal = this.pib / 12;
+        const arrecadacaoBase = pibMensal * 0.15;
+        
+        // Ajustes por consumo e formalidade
+        const ajusteConsumo = this.indiceConsumo;
+        const ajusteFormalidade = 1 - this.indiceInformalidade;
+        
+        this.receitaMensalKz = arrecadacaoBase * ajusteConsumo * ajusteFormalidade * VALORES_CAMBIO[this.indiceCambio];
+        
+        return this.receitaMensalKz;
+    }
+}
 
-let producoesServico = [];
+// ============================================
+// 2. INVESTIMENTOS INTERNACIONAIS
+// ============================================
 
-function mostrarProducaoServicos() {
-    const html = `
-        <div class="producao-container">
-            <h2>⚙️ Produção de Serviços</h2>
+// Classes para investimentos internacionais
+class AcaoInternacional {
+    constructor(nome, ticker, setor, pais, precoInicial) {
+        this.id = Date.now() + Math.random();
+        this.nome = nome;
+        this.ticker = ticker;
+        this.setor = setor;
+        this.pais = pais;
+        this.precoCompra = precoInicial;
+        this.precoAtual = precoInicial;
+        this.quantidade = 0;
+        this.dividendYield = Math.random() * 0.03 + 0.01; // 1-4%
+        this.volatilidade = Math.random() * 0.3 + 0.1; // 10-40%
+        this.historicoPrecos = [precoInicial];
+    }
+    
+    atualizarPreco() {
+        // Simular variação de preço com base na volatilidade
+        const variacao = (Math.random() - 0.5) * this.volatilidade;
+        this.precoAtual = this.precoAtual * (1 + variacao);
+        this.precoAtual = Math.max(1, this.precoAtual); // Não pode ser negativo
+        this.historicoPrecos.push(this.precoAtual);
+        
+        if (this.historicoPrecos.length > 30) {
+            this.historicoPrecos.shift();
+        }
+        
+        return this.precoAtual;
+    }
+}
+
+class TituloEstrangeiro {
+    constructor(pais, moeda, taxaJuros, prazoAnos, valor) {
+        this.id = Date.now() + Math.random();
+        this.pais = pais;
+        this.moeda = moeda;
+        this.taxaJuros = taxaJuros; // anual
+        this.prazoAnos = prazoAnos;
+        this.valorInvestido = valor;
+        this.dataCompra = {
+            ano: estado.tempo.ano,
+            mes: estado.tempo.mes,
+            dia: estado.tempo.dia
+        };
+        this.dataVencimento = {
+            ano: estado.tempo.ano + prazoAnos,
+            mes: estado.tempo.mes,
+            dia: estado.tempo.dia
+        };
+        this.ultimoPagamentoJuros = this.dataCompra;
+        this.jurosAcumulados = 0;
+    }
+    
+    calcularJurosSemestrais() {
+        return this.valorInvestido * this.taxaJuros * (180/360);
+    }
+}
+
+// Lista de ações internacionais disponíveis
+const ACOES_INTERNACIONAIS = [
+    { nome: 'Apple Inc.', ticker: 'AAPL', setor: 'Tecnologia', pais: 'EUA', precoBase: 175 },
+    { nome: 'Microsoft', ticker: 'MSFT', setor: 'Tecnologia', pais: 'EUA', precoBase: 330 },
+    { nome: 'Tesla', ticker: 'TSLA', setor: 'Automotivo', pais: 'EUA', precoBase: 240 },
+    { nome: 'Petrobras', ticker: 'PETR4', setor: 'Petróleo', pais: 'Brasil', precoBase: 38 },
+    { nome: 'Vale', ticker: 'VALE3', setor: 'Mineração', pais: 'Brasil', precoBase: 68 },
+    { nome: 'Tencent', ticker: '0700', setor: 'Tecnologia', pais: 'China', precoBase: 320 },
+    { nome: 'Samsung', ticker: '005930', setor: 'Tecnologia', pais: 'Coreia', precoBase: 68000 },
+    { nome: 'BP', ticker: 'BP', setor: 'Petróleo', pais: 'Reino Unido', precoBase: 480 },
+    { nome: 'Deutsche Bank', ticker: 'DBK', setor: 'Bancário', pais: 'Alemanha', precoBase: 12 },
+    { nome: 'LVMH', ticker: 'MC', setor: 'Luxo', pais: 'França', precoBase: 750 }
+];
+
+// Títulos públicos estrangeiros disponíveis
+const TITULOS_ESTRANGEIROS = [
+    { pais: 'EUA', moeda: 'USD', taxaBase: 0.045, risco: 'Baixo' }, // Treasury Bonds
+    { pais: 'Alemanha', moeda: 'EUR', taxaBase: 0.03, risco: 'Baixo' }, // Bunds
+    { pais: 'Brasil', moeda: 'BRL', taxaBase: 0.12, risco: 'Alto' }, // Tesouro Direto
+    { pais: 'África do Sul', moeda: 'ZAR', taxaBase: 0.10, risco: 'Médio' },
+    { pais: 'China', moeda: 'CNY', taxaBase: 0.035, risco: 'Baixo' },
+    { pais: 'Japão', moeda: 'JPY', taxaBase: 0.005, risco: 'Muito Baixo' }
+];
+
+// ============================================
+// 3. FUNÇÕES DE INVESTIMENTO INTERNACIONAL
+// ============================================
+
+function inicializarMercadoInternacional() {
+    // Inicializar ações disponíveis
+    estado.carteiraInternacional.acoesDisponiveis = ACOES_INTERNACIONAIS.map(a => 
+        new AcaoInternacional(a.nome, a.ticker, a.setor, a.pais, a.precoBase)
+    );
+    
+    // Inicializar títulos disponíveis
+    estado.carteiraInternacional.titulosDisponiveis = TITULOS_ESTRANGEIROS;
+    
+    // Saldo inicial para investimentos (10% das reservas)
+    estado.carteiraInternacional.saldoUSD = estado.reservasUSD * 0.1;
+}
+
+function comprarAcao(ticker, quantidade) {
+    const acao = estado.carteiraInternacional.acoesDisponiveis.find(a => a.ticker === ticker);
+    
+    if (!acao) {
+        mostrarNotificacao('Ação não encontrada', 'danger');
+        return false;
+    }
+    
+    const custoTotal = acao.precoAtual * quantidade;
+    
+    if (custoTotal > estado.carteiraInternacional.saldoUSD) {
+        mostrarNotificacao('Saldo insuficiente na carteira internacional', 'danger');
+        return false;
+    }
+    
+    // Verificar se já possui esta ação
+    let acaoExistente = estado.carteiraInternacional.acoes.find(a => a.ticker === ticker);
+    
+    if (acaoExistente) {
+        acaoExistente.quantidade += quantidade;
+        acaoExistente.precoMedioCompra = (acaoExistente.precoMedioCompra * (acaoExistente.quantidade - quantidade) + acao.precoAtual * quantidade) / acaoExistente.quantidade;
+    } else {
+        const novaAcao = new AcaoInternacional(acao.nome, acao.ticker, acao.setor, acao.pais, acao.precoAtual);
+        novaAcao.quantidade = quantidade;
+        novaAcao.precoMedioCompra = acao.precoAtual;
+        estado.carteiraInternacional.acoes.push(novaAcao);
+    }
+    
+    estado.carteiraInternacional.saldoUSD -= custoTotal;
+    atualizarValorCarteira();
+    
+    adicionarAoHistorico('Investimento', `Compra de ${quantidade} ${ticker} por $${(custoTotal/1e6).toFixed(2)}M`);
+    mostrarNotificacao(`Compra de ${quantidade} ${ticker} realizada`, 'success');
+    
+    return true;
+}
+
+function venderAcao(ticker, quantidade) {
+    const acaoIndex = estado.carteiraInternacional.acoes.findIndex(a => a.ticker === ticker);
+    
+    if (acaoIndex === -1) {
+        mostrarNotificacao('Ação não encontrada na carteira', 'danger');
+        return false;
+    }
+    
+    const acao = estado.carteiraInternacional.acoes[acaoIndex];
+    
+    if (quantidade > acao.quantidade) {
+        mostrarNotificacao('Quantidade insuficiente', 'danger');
+        return false;
+    }
+    
+    const valorVenda = acao.precoAtual * quantidade;
+    const lucroPrejuizo = (acao.precoAtual - acao.precoMedioCompra) * quantidade;
+    
+    acao.quantidade -= quantidade;
+    
+    if (acao.quantidade === 0) {
+        estado.carteiraInternacional.acoes.splice(acaoIndex, 1);
+    }
+    
+    estado.carteiraInternacional.saldoUSD += valorVenda;
+    atualizarValorCarteira();
+    
+    adicionarAoHistorico('Investimento', `Venda de ${quantidade} ${ticker} por $${(valorVenda/1e6).toFixed(2)}M (${lucroPrejuizo >= 0 ? '+' : ''}${(lucroPrejuizo/1e6).toFixed(2)}M)`);
+    mostrarNotificacao(`Venda de ${quantidade} ${ticker} realizada`, 'success');
+    
+    return true;
+}
+
+function comprarTituloEstrangeiro(pais, valor) {
+    const tituloInfo = TITULOS_ESTRANGEIROS.find(t => t.pais === pais);
+    
+    if (!tituloInfo) {
+        mostrarNotificacao('País não encontrado', 'danger');
+        return false;
+    }
+    
+    if (valor > estado.carteiraInternacional.saldoUSD) {
+        mostrarNotificacao('Saldo insuficiente na carteira internacional', 'danger');
+        return false;
+    }
+    
+    // Ajustar taxa com base no rating e risco
+    let taxaJuros = tituloInfo.taxaBase;
+    
+    // Ajuste por rating do país (simplificado)
+    if (tituloInfo.risco === 'Baixo') {
+        taxaJuros *= 1.0;
+    } else if (tituloInfo.risco === 'Médio') {
+        taxaJuros *= 1.5;
+    } else {
+        taxaJuros *= 2.0;
+    }
+    
+    // Prazo fixo de 5 anos para simplificar
+    const prazoAnos = 5;
+    
+    const novoTitulo = new TituloEstrangeiro(
+        tituloInfo.pais,
+        tituloInfo.moeda,
+        taxaJuros,
+        prazoAnos,
+        valor
+    );
+    
+    estado.carteiraInternacional.titulosEstrangeiros.push(novoTitulo);
+    estado.carteiraInternacional.saldoUSD -= valor;
+    atualizarValorCarteira();
+    
+    adicionarAoHistorico('Investimento', `Compra de título ${pais} por $${(valor/1e6).toFixed(2)}M a ${(taxaJuros*100).toFixed(1)}%`);
+    mostrarNotificacao(`Título de ${pais} adquirido`, 'success');
+    
+    return true;
+}
+
+function processarInvestimentosInternacionais() {
+    // Atualizar preços das ações
+    estado.carteiraInternacional.acoesDisponiveis.forEach(acao => {
+        acao.atualizarPreco();
+    });
+    
+    // Atualizar preços das ações na carteira
+    estado.carteiraInternacional.acoes.forEach(acao => {
+        const acaoRef = estado.carteiraInternacional.acoesDisponiveis.find(a => a.ticker === acao.ticker);
+        if (acaoRef) {
+            acao.precoAtual = acaoRef.precoAtual;
+        }
+    });
+    
+    // Processar juros de títulos estrangeiros
+    estado.carteiraInternacional.titulosEstrangeiros.forEach(titulo => {
+        const mesesDesdeUltimo = (estado.tempo.ano - titulo.ultimoPagamentoJuros.ano) * 12 + 
+                                 (estado.tempo.mes - titulo.ultimoPagamentoJuros.mes);
+        
+        if (mesesDesdeUltimo >= 6) {
+            const juros = titulo.calcularJurosSemestrais();
+            estado.carteiraInternacional.saldoUSD += juros;
+            titulo.ultimoPagamentoJuros = {
+                ano: estado.tempo.ano,
+                mes: estado.tempo.mes,
+                dia: estado.tempo.dia
+            };
+            titulo.jurosAcumulados += juros;
             
-            <div class="info-box">
-                <p>💡 Os serviços são PRODUZIDOS pela sua empresa, não comprados de fornecedores.</p>
-                <p>⏱️ Tempo real: 1 dia = 30 segundos</p>
-                <p>👥 Necessário: Pelo menos 1 funcionário para produzir</p>
-            </div>
+            adicionarAoHistorico('Rendimento', `Juros recebidos: ${titulo.pais} $${(juros/1e6).toFixed(2)}M`);
+        }
+        
+        // Verificar vencimento
+        if (estado.tempo.ano >= titulo.dataVencimento.ano && 
+            estado.tempo.mes >= titulo.dataVencimento.mes) {
+            // Pagar principal + último juros
+            const totalReceber = titulo.valorInvestido + titulo.calcularJurosSemestrais();
+            estado.carteiraInternacional.saldoUSD += totalReceber;
             
-            <div class="campanhas-grid">
-                <!-- Classe A -->
-                <div class="campanha-card producao-card classe-a">
-                    <h3>🚀 Classe A - Produção Rápida</h3>
-                    <div class="producao-info">
-                        <p><span class="info-label">⏱️ Tempo:</span> 1 dia (30s)</p>
-                        <p><span class="info-label">💰 Custo unitário:</span> 25.000 Kz</p>
-                        <p><span class="info-label">⚡ Eficiência:</span> Produz o DOBRO</p>
-                        <p class="dica">📌 Indicado para: Demanda urgente</p>
-                    </div>
-                    
-                    <div class="producao-inputs">
-                        <label>Quantidade base:</label>
-                        <input type="number" id="qtd-producao-A" min="1" value="1" placeholder="Unidades">
-                        
-                        <div class="calculo-producao">
-                            <p>Total a pagar: <span class="text-gold" id="total-pagar-A">25.000 Kz</span></p>
-                            <p>Serviços produzidos: <span class="text-success" id="servicos-produzidos-A">2</span> unidades</p>
-                        </div>
-                        
-                        <button onclick="iniciarProducaoServico('A')" class="btn-producao classe-a">
-                            🚀 Iniciar Produção Rápida
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Classe B -->
-                <div class="campanha-card producao-card classe-b">
-                    <h3>⚖️ Classe B - Produção Moderada</h3>
-                    <div class="producao-info">
-                        <p><span class="info-label">⏱️ Tempo:</span> 2 dias (60s)</p>
-                        <p><span class="info-label">💰 Custo unitário:</span> 15.000 Kz</p>
-                        <p><span class="info-label">⚡ Eficiência:</span> Produz 1.5x</p>
-                        <p class="dica">📌 Indicado para: Equilíbrio custo-benefício</p>
-                    </div>
-                    
-                    <div class="producao-inputs">
-                        <label>Quantidade base:</label>
-                        <input type="number" id="qtd-producao-B" min="1" value="1" placeholder="Unidades">
-                        
-                        <div class="calculo-producao">
-                            <p>Total a pagar: <span class="text-gold" id="total-pagar-B">15.000 Kz</span></p>
-                            <p>Serviços produzidos: <span class="text-success" id="servicos-produzidos-B">1.5</span> unidades</p>
-                        </div>
-                        
-                        <button onclick="iniciarProducaoServico('B')" class="btn-producao classe-b">
-                            ⚖️ Iniciar Produção Moderada
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Classe C -->
-                <div class="campanha-card producao-card classe-c">
-                    <h3>🐢 Classe C - Produção Económica</h3>
-                    <div class="producao-info">
-                        <p><span class="info-label">⏱️ Tempo:</span> 3 dias (90s)</p>
-                        <p><span class="info-label">💰 Custo unitário:</span> 5.000 Kz</p>
-                        <p><span class="info-label">⚡ Eficiência:</span> Produz 1x</p>
-                        <p class="dica">📌 Indicado para: Produção em massa</p>
-                    </div>
-                    
-                    <div class="producao-inputs">
-                        <label>Quantidade base:</label>
-                        <input type="number" id="qtd-producao-C" min="1" value="1" placeholder="Unidades">
-                        
-                        <div class="calculo-producao">
-                            <p>Total a pagar: <span class="text-gold" id="total-pagar-C">5.000 Kz</span></p>
-                            <p>Serviços produzidos: <span class="text-success" id="servicos-produzidos-C">1</span> unidade</p>
-                        </div>
-                        
-                        <button onclick="iniciarProducaoServico('C')" class="btn-producao classe-c">
-                            🐢 Iniciar Produção Económica
-                        </button>
-                    </div>
-                </div>
-            </div>
+            adicionarAoHistorico('Investimento', `Título ${titulo.pais} venceu: $${(totalReceber/1e6).toFixed(2)}M`);
             
-            <!-- Produções em Andamento -->
-            <div class="producoes-andamento">
-                <h3>⏳ Produções em Andamento</h3>
-                <div id="lista-producoes-pendentes">
-                    ${gerarListaProducoesPendentes()}
+            // Remover título
+            estado.carteiraInternacional.titulosEstrangeiros = 
+                estado.carteiraInternacional.titulosEstrangeiros.filter(t => t.id !== titulo.id);
+        }
+    });
+    
+    atualizarValorCarteira();
+}
+
+function atualizarValorCarteira() {
+    let valorAcoes = 0;
+    estado.carteiraInternacional.acoes.forEach(acao => {
+        valorAcoes += acao.precoAtual * acao.quantidade;
+    });
+    
+    let valorTitulos = 0;
+    estado.carteiraInternacional.titulosEstrangeiros.forEach(titulo => {
+        valorTitulos += titulo.valorInvestido;
+    });
+    
+    estado.carteiraInternacional.valorTotal = 
+        estado.carteiraInternacional.saldoUSD + valorAcoes + valorTitulos;
+}
+
+// ============================================
+// 4. ESTATÍSTICAS DETALHADAS DE EMPRESAS
+// ============================================
+
+function atualizarEmpresas() {
+    // Fatores que afetam as empresas
+    const fatorJuros = 1 - (estado.taxaJuros * 0.5); // Juros altos prejudicam
+    const fatorConsumo = estado.indiceConsumo;
+    const fatorCambio = VALORES_CAMBIO[estado.indiceCambio] > 900 ? 0.9 : 1.1; // Câmbio desvalorizado ajuda exportadoras
+    
+    // Atualizar empresas nível A (grandes, mais resilientes)
+    const empresasA = estado.empresasDetalhadas.A;
+    empresasA.faturamentoMensal = 50000000 * fatorConsumo * (1 - estado.inflacao * 0.5) * fatorCambio;
+    empresasA.lucroMensal = empresasA.faturamentoMensal * 0.1; // Margem de 10%
+    empresasA.endividamento = Math.min(1, 0.3 + estado.taxaJuros * 0.5);
+    empresasA.satisfacao = Math.max(0, Math.min(1, 0.8 - estado.desemprego * 0.5 - estado.inflacao));
+    empresasA.emRisco = empresasA.endividamento > 0.8 ? empresasA.quantidade * 0.1 : 0;
+    
+    // Atualizar empresas nível B (médias)
+    const empresasB = estado.empresasDetalhadas.B;
+    empresasB.faturamentoMensal = 2000000 * fatorConsumo * (1 - estado.inflacao) * fatorJuros;
+    empresasB.lucroMensal = empresasB.faturamentoMensal * 0.08; // Margem de 8%
+    empresasB.endividamento = Math.min(1, 0.5 + estado.taxaJuros);
+    empresasB.satisfacao = Math.max(0, Math.min(1, 0.6 - estado.desemprego - estado.inflacao * 0.5));
+    empresasB.emRisco = empresasB.endividamento > 0.7 ? empresasB.quantidade * 0.15 : 0;
+    
+    // Atualizar empresas nível C (pequenas, mais vulneráveis)
+    const empresasC = estado.empresasDetalhadas.C;
+    empresasC.faturamentoMensal = 100000 * fatorConsumo * (1 - estado.inflacao * 1.5) * fatorJuros * 0.8;
+    empresasC.lucroMensal = empresasC.faturamentoMensal * 0.05; // Margem de 5%
+    empresasC.endividamento = Math.min(1, 0.7 + estado.taxaJuros * 1.5);
+    empresasC.satisfacao = Math.max(0, Math.min(1, 0.4 - estado.desemprego * 1.5 - estado.inflacao));
+    empresasC.emRisco = empresasC.endividamento > 0.6 ? empresasC.quantidade * 0.2 : 0;
+    
+    // Falências
+    if (empresasC.emRisco > 0 && Math.random() < 0.1) {
+        const falencias = Math.floor(Math.random() * empresasC.emRisco);
+        empresasC.quantidade = Math.max(0, empresasC.quantidade - falencias);
+        adicionarAoHistorico('Empresas', `${falencias} pequenas empresas faliram`, 'danger');
+    }
+    
+    if (empresasB.emRisco > 0 && Math.random() < 0.05) {
+        const falencias = Math.floor(Math.random() * empresasB.emRisco * 0.5);
+        empresasB.quantidade = Math.max(0, empresasB.quantidade - falencias);
+        adicionarAoHistorico('Empresas', `${falencias} médias empresas faliram`, 'warning');
+    }
+    
+    // Novas empresas (incentivadas por juros baixos)
+    if (estado.taxaJuros < 0.1 && Math.random() < 0.2) {
+        const novasEmpresas = Math.floor(Math.random() * 100) + 50;
+        empresasC.quantidade += novasEmpresas;
+        adicionarAoHistorico('Empresas', `${novasEmpresas} novas empresas abertas`, 'success');
+    }
+}
+
+// ============================================
+// 5. ESTATÍSTICAS DETALHADAS DAS FAMÍLIAS
+// ============================================
+
+function atualizarFamilias() {
+    const familias = estado.familiasDetalhadas;
+    
+    // Renda afetada por desemprego e informalidade
+    familias.rendaMedia = 100000 * (1 - estado.desemprego) * (1 - familias.informalidade * 0.5);
+    
+    // Poder de compra afetado por inflação
+    familias.poderCompra = 1 / (1 + estado.inflacao);
+    
+    // Endividamento afetado por juros
+    familias.endividamento = Math.min(1, 0.4 + estado.taxaJuros);
+    
+    // Poupança afetada por renda e juros
+    familias.poupancaMedia = familias.rendaMedia * 0.2 * (1 + estado.taxaJuros * 2);
+    
+    // Satisfação
+    familias.satisfacao = Math.max(0, Math.min(1, 
+        0.6 - estado.desemprego * 1.5 - estado.inflacao * 2 + (1 - familias.endividamento) * 0.3
+    ));
+    
+    // Acesso a crédito
+    familias.acessoCredito = Math.max(0, Math.min(1, 
+        0.5 - estado.taxaJuros * 2
+    ));
+    
+    // Informalidade
+    if (estado.desemprego > 0.2) {
+        familias.informalidade = Math.min(1, familias.informalidade + 0.01);
+    } else if (estado.taxaJuros < 0.1) {
+        familias.informalidade = Math.max(0.1, familias.informalidade - 0.005);
+    }
+    
+    // Pobreza
+    familias.pobreza = estado.indicePobreza;
+    
+    // Índice de Gini (desigualdade) - simplificado
+    const gini = 0.5 + familias.informalidade * 0.3 + estado.desemprego * 0.2;
+    
+    return {
+        ...familias,
+        gini
+    };
+}
+
+// ============================================
+// 6. NOVOS COMPONENTES HTML
+// ============================================
+
+// Adicione estes elementos HTML dentro da seção dashboard, após os indicadores-grid existentes
+
+const novosComponentesHTML = `
+<!-- Saldo do Governo em Kz -->
+<div class="saldo-governo-card card-animated">
+    <div class="saldo-header">
+        <h3><i class="fas fa-landmark"></i> Saldo do Governo (Kz)</h3>
+        <span class="badge" id="saldoGovernoStatus">Estável</span>
+    </div>
+    <div class="saldo-valor" id="saldoGovernoValor">5.0 T</div>
+    <div class="saldo-detalhes">
+        <div class="saldo-item">
+            <span>Receita Mensal:</span>
+            <span class="valor-positivo" id="receitaMensal">0 Kz</span>
+        </div>
+        <div class="saldo-item">
+            <span>Despesa Mensal:</span>
+            <span class="valor-negativo" id="despesaMensal">0 Kz</span>
+        </div>
+        <div class="saldo-item">
+            <span>Custo Salarial:</span>
+            <span class="valor-negativo" id="custoSalarial">0 Kz</span>
+        </div>
+    </div>
+    <div class="saldo-grafico" id="saldoHistorico">
+        <!-- Mini gráfico será inserido via JS -->
+    </div>
+</div>
+
+<!-- Carteira de Investimentos Internacionais -->
+<div class="carteira-card card-animated">
+    <div class="carteira-header">
+        <h3><i class="fas fa-globe"></i> Carteira Internacional (USD)</h3>
+        <span class="badge" id="carteiraValorTotal">$0</span>
+    </div>
+    <div class="carteira-stats">
+        <div class="stat-item">
+            <span>Saldo Disponível:</span>
+            <span id="carteiraSaldo">$0</span>
+        </div>
+        <div class="stat-item">
+            <span>Valor em Ações:</span>
+            <span id="carteiraAcoes">$0</span>
+        </div>
+        <div class="stat-item">
+            <span>Valor em Títulos:</span>
+            <span id="carteiraTitulos">$0</span>
+        </div>
+    </div>
+    
+    <!-- Abas para diferentes investimentos -->
+    <div class="carteira-abas">
+        <button class="tab-btn active" data-tab="acoes">Ações</button>
+        <button class="tab-btn" data-tab="titulos">Títulos</button>
+    </div>
+    
+    <!-- Painel de Ações -->
+    <div class="tab-panel active" id="painelAcoes">
+        <div class="acoes-grid" id="acoesDisponiveis">
+            <!-- Será preenchido via JS -->
+        </div>
+        <div class="carteira-acoes" id="carteiraAcoesLista">
+            <h4>Minhas Ações</h4>
+            <div id="minhasAcoes"></div>
+        </div>
+    </div>
+    
+    <!-- Painel de Títulos -->
+    <div class="tab-panel" id="painelTitulos">
+        <div class="titulos-grid" id="titulosDisponiveis">
+            <!-- Será preenchido via JS -->
+        </div>
+        <div class="carteira-titulos" id="carteiraTitulosLista">
+            <h4>Meus Títulos</h4>
+            <div id="meusTitulos"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Painel de Empresas -->
+<div class="empresas-painel card-animated">
+    <div class="painel-header">
+        <h3><i class="fas fa-building"></i> Situação das Empresas</h3>
+        <div class="legenda">
+            <span class="nivel-a">Nível A</span>
+            <span class="nivel-b">Nível B</span>
+            <span class="nivel-c">Nível C</span>
+        </div>
+    </div>
+    
+    <div class="empresas-grid">
+        <!-- Nível A -->
+        <div class="empresa-card nivel-a">
+            <h4>Grandes Empresas <span class="quantidade" id="empresasAQtd">100</span></h4>
+            <div class="empresa-stats">
+                <div class="stat" title="Faturamento Mensal">
+                    <i class="fas fa-chart-line"></i>
+                    <span id="empresasAFaturamento">$50M</span>
                 </div>
-            </div>
-            
-            <!-- Serviços em Estoque -->
-            <div class="servicos-estoque">
-                <h3>📦 Serviços Disponíveis</h3>
-                <div id="lista-servicos-estoque">
-                    ${gerarListaServicosEstoque()}
+                <div class="stat" title="Lucro Mensal">
+                    <i class="fas fa-coins"></i>
+                    <span id="empresasALucro">$5M</span>
+                </div>
+                <div class="stat" title="Endividamento">
+                    <i class="fas fa-file-invoice"></i>
+                    <span id="empresasAEndividamento">30%</span>
+                </div>
+                <div class="stat" title="Satisfação">
+                    <i class="fas fa-smile"></i>
+                    <span id="empresasASatisfacao">80%</span>
+                </div>
+                <div class="stat" title="Em Risco">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="empresasARisco">0</span>
                 </div>
             </div>
         </div>
         
-        <style>
-            .producao-card.classe-a { border-left: 4px solid #4CAF50; }
-            .producao-card.classe-b { border-left: 4px solid #FFC107; }
-            .producao-card.classe-c { border-left: 4px solid #F44336; }
+        <!-- Nível B -->
+        <div class="empresa-card nivel-b">
+            <h4>Médias Empresas <span class="quantidade" id="empresasBQtd">5000</span></h4>
+            <div class="empresa-stats">
+                <div class="stat">
+                    <i class="fas fa-chart-line"></i>
+                    <span id="empresasBFaturamento">$2M</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-coins"></i>
+                    <span id="empresasBLucro">$200k</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-file-invoice"></i>
+                    <span id="empresasBEndividamento">50%</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-smile"></i>
+                    <span id="empresasBSatisfacao">60%</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="empresasBRisco">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Nível C -->
+        <div class="empresa-card nivel-c">
+            <h4>Pequenas Empresas <span class="quantidade" id="empresasCQtd">50000</span></h4>
+            <div class="empresa-stats">
+                <div class="stat">
+                    <i class="fas fa-chart-line"></i>
+                    <span id="empresasCFaturamento">$100k</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-coins"></i>
+                    <span id="empresasCLucro">$10k</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-file-invoice"></i>
+                    <span id="empresasCEndividamento">70%</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-smile"></i>
+                    <span id="empresasCSatisfacao">40%</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="empresasCRisco">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Painel das Famílias -->
+<div class="familias-painel card-animated">
+    <div class="painel-header">
+        <h3><i class="fas fa-users"></i> Situação das Famílias</h3>
+        <span class="badge" id="bemEstarSocial">60%</span>
+    </div>
+    
+    <div class="familias-grid">
+        <div class="indicador-familia">
+            <label>Renda Média</label>
+            <div class="valor" id="rendaMedia">100k Kz</div>
+            <div class="barra-progresso">
+                <div class="progresso" id="rendaProgresso" style="width: 50%"></div>
+            </div>
+        </div>
+        
+        <div class="indicador-familia">
+            <label>Poder de Compra</label>
+            <div class="valor" id="poderCompra">1.0</div>
+            <div class="barra-progresso">
+                <div class="progresso" id="compraProgresso" style="width: 100%"></div>
+            </div>
+        </div>
+        
+        <div class="indicador-familia">
+            <label>Endividamento</label>
+            <div class="valor" id="endividamentoFamiliar">40%</div>
+            <div class="barra-progresso">
+                <div class="progresso" id="endividamentoProgresso" style="width: 40%"></div>
+            </div>
+        </div>
+        
+        <div class="indicador-familia">
+            <label>Poupança Média</label>
+            <div class="valor" id="poupancaMedia">50k Kz</div>
+            <div class="barra-progresso">
+                <div class="progresso" id="poupancaProgresso" style="width: 50%"></div>
+            </div>
+        </div>
+        
+        <div class="indicador-familia">
+            <label>Satisfação</label>
+            <div class="valor" id="satisfacaoFamiliar">60%</div>
+            <div class="barra-progresso">
+                <div class="progresso" id="satisfacaoProgresso" style="width: 60%"></div>
+            </div>
+        </div>
+        
+        <div class="indicador-familia">
+            <label>Acesso a Crédito</label>
+            <div class="valor" id="acessoCredito">50%</div>
+            <div class="barra-progresso">
+                <div class="progresso" id="creditoProgresso" style="width: 50%"></div>
+            </div>
+        </div>
+        
+        <div class="indicador-familia">
+            <label>Informalidade</label>
+            <div class="valor" id="informalidade">30%</div>
+            <div class="barra-progresso">
+                <div class="progresso" id="informalidadeProgresso" style="width: 30%"></div>
+            </div>
+        </div>
+        
+        <div class="indicador-familia">
+            <label>Pobreza</label>
+            <div class="valor" id="pobreza">30%</div>
+            <div class="barra-progresso">
+                <div class="progresso" id="pobrezaProgresso" style="width: 30%"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="indice-gini">
+        <label>Índice de Gini (Desigualdade): <span id="giniValor">0.50</span></label>
+        <div class="barra-progresso">
+            <div class="progresso" id="giniProgresso" style="width: 50%"></div>
+        </div>
+    </div>
+</div>
+`;
+
+// ============================================
+// 7. FUNÇÕES DE ATUALIZAÇÃO DA INTERFACE
+// ============================================
+
+function atualizarInterfaceExpandida() {
+    // Atualizar saldo do governo
+    const saldoKz = estado.saldoGovernoKz;
+    document.getElementById('saldoGovernoValor').textContent = formatarKwanza(saldoKz);
+    
+    // Calcular receita e despesa mensal
+    const receitaMensal = estado.calcularReceitaMensal();
+    const custoSalarial = estado.calcularCustoSalarialMensal();
+    const outrasDespesas = custoSalarial * 0.3; // 30% do salarial
+    const despesaMensal = custoSalarial + outrasDespesas;
+    
+    estado.receitaMensalKz = receitaMensal;
+    estado.despesaMensalKz = despesaMensal;
+    
+    document.getElementById('receitaMensal').textContent = formatarKwanza(receitaMensal);
+    document.getElementById('despesaMensal').textContent = formatarKwanza(despesaMensal);
+    document.getElementById('custoSalarial').textContent = formatarKwanza(custoSalarial);
+    
+    // Status do saldo
+    const saldoStatus = document.getElementById('saldoGovernoStatus');
+    if (saldoKz < custoSalarial * 3) {
+        saldoStatus.textContent = 'Crítico';
+        saldoStatus.style.backgroundColor = 'rgba(204, 51, 51, 0.2)';
+        saldoStatus.style.color = '#cc3333';
+    } else if (saldoKz < custoSalarial * 6) {
+        saldoStatus.textContent = 'Atenção';
+        saldoStatus.style.backgroundColor = 'rgba(243, 156, 18, 0.2)';
+        saldoStatus.style.color = '#f39c12';
+    } else {
+        saldoStatus.textContent = 'Estável';
+        saldoStatus.style.backgroundColor = 'rgba(51, 204, 51, 0.2)';
+        saldoStatus.style.color = '#33cc33';
+    }
+    
+    // Mini gráfico do histórico
+    const historicoHTML = estado.saldoHistorico.slice(-6).map((item, i) => {
+        const altura = (item.saldo / estado.saldoHistorico[0]?.saldo * 100) || 50;
+        return `<div class="barra-historico" style="height: ${altura}px" title="${item.data}: ${formatarKwanza(item.saldo)}"></div>`;
+    }).join('');
+    document.getElementById('saldoHistorico').innerHTML = `<div class="historico-barras">${historicoHTML}</div>`;
+    
+    // Atualizar carteira internacional
+    document.getElementById('carteiraValorTotal').textContent = formatarUSD(estado.carteiraInternacional.valorTotal);
+    document.getElementById('carteiraSaldo').textContent = formatarUSD(estado.carteiraInternacional.saldoUSD);
+    
+    const valorAcoes = estado.carteiraInternacional.acoes.reduce((sum, a) => sum + (a.precoAtual * a.quantidade), 0);
+    const valorTitulos = estado.carteiraInternacional.titulosEstrangeiros.reduce((sum, t) => sum + t.valorInvestido, 0);
+    
+    document.getElementById('carteiraAcoes').textContent = formatarUSD(valorAcoes);
+    document.getElementById('carteiraTitulos').textContent = formatarUSD(valorTitulos);
+    
+    // Atualizar empresas
+    document.getElementById('empresasAQtd').textContent = estado.empresasDetalhadas.A.quantidade;
+    document.getElementById('empresasAFaturamento').textContent = formatarUSD(estado.empresasDetalhadas.A.faturamentoMensal);
+    document.getElementById('empresasALucro').textContent = formatarUSD(estado.empresasDetalhadas.A.lucroMensal);
+    document.getElementById('empresasAEndividamento').textContent = (estado.empresasDetalhadas.A.endividamento * 100).toFixed(1) + '%';
+    document.getElementById('empresasASatisfacao').textContent = (estado.empresasDetalhadas.A.satisfacao * 100).toFixed(1) + '%';
+    document.getElementById('empresasARisco').textContent = estado.empresasDetalhadas.A.emRisco;
+    
+    document.getElementById('empresasBQtd').textContent = estado.empresasDetalhadas.B.quantidade;
+    document.getElementById('empresasBFaturamento').textContent = formatarUSD(estado.empresasDetalhadas.B.faturamentoMensal);
+    document.getElementById('empresasBLucro').textContent = formatarUSD(estado.empresasDetalhadas.B.lucroMensal);
+    document.getElementById('empresasBEndividamento').textContent = (estado.empresasDetalhadas.B.endividamento * 100).toFixed(1) + '%';
+    document.getElementById('empresasBSatisfacao').textContent = (estado.empresasDetalhadas.B.satisfacao * 100).toFixed(1) + '%';
+    document.getElementById('empresasBRisco').textContent = estado.empresasDetalhadas.B.emRisco;
+    
+    document.getElementById('empresasCQtd').textContent = estado.empresasDetalhadas.C.quantidade;
+    document.getElementById('empresasCFaturamento').textContent = formatarUSD(estado.empresasDetalhadas.C.faturamentoMensal);
+    document.getElementById('empresasCLucro').textContent = formatarUSD(estado.empresasDetalhadas.C.lucroMensal);
+    document.getElementById('empresasCEndividamento').textContent = (estado.empresasDetalhadas.C.endividamento * 100).toFixed(1) + '%';
+    document.getElementById('empresasCSatisfacao').textContent = (estado.empresasDetalhadas.C.satisfacao * 100).toFixed(1) + '%';
+    document.getElementById('empresasCRisco').textContent = estado.empresasDetalhadas.C.emRisco;
+    
+    // Atualizar famílias
+    const familias = atualizarFamilias();
+    
+    document.getElementById('rendaMedia').textContent = formatarKwanza(familias.rendaMedia);
+    document.getElementById('rendaProgresso').style.width = (familias.rendaMedia / 200000 * 100) + '%';
+    
+    document.getElementById('poderCompra').textContent = familias.poderCompra.toFixed(2);
+    document.getElementById('compraProgresso').style.width = (familias.poderCompra * 100) + '%';
+    
+    document.getElementById('endividamentoFamiliar').textContent = (familias.endividamento * 100).toFixed(1) + '%';
+    document.getElementById('endividamentoProgresso').style.width = (familias.endividamento * 100) + '%';
+    
+    document.getElementById('poupancaMedia').textContent = formatarKwanza(familias.poupancaMedia);
+    document.getElementById('poupancaProgresso').style.width = (familias.poupancaMedia / 100000 * 100) + '%';
+    
+    document.getElementById('satisfacaoFamiliar').textContent = (familias.satisfacao * 100).toFixed(1) + '%';
+    document.getElementById('satisfacaoProgresso').style.width = (familias.satisfacao * 100) + '%';
+    
+    document.getElementById('acessoCredito').textContent = (familias.acessoCredito * 100).toFixed(1) + '%';
+    document.getElementById('creditoProgresso').style.width = (familias.acessoCredito * 100) + '%';
+    
+    document.getElementById('informalidade').textContent = (familias.informalidade * 100).toFixed(1) + '%';
+    document.getElementById('informalidadeProgresso').style.width = (familias.informalidade * 100) + '%';
+    
+    document.getElementById('pobreza').textContent = (familias.pobreza * 100).toFixed(1) + '%';
+    document.getElementById('pobrezaProgresso').style.width = (familias.pobreza * 100) + '%';
+    
+    document.getElementById('giniValor').textContent = familias.gini.toFixed(2);
+    document.getElementById('giniProgresso').style.width = (familias.gini * 100) + '%';
+    
+    document.getElementById('bemEstarSocial').textContent = (familias.satisfacao * 100).toFixed(1) + '%';
+}
+
+function formatarKwanza(valor) {
+    if (valor >= 1e12) return (valor / 1e12).toFixed(1) + ' T';
+    if (valor >= 1e9) return (valor / 1e9).toFixed(1) + ' B';
+    if (valor >= 1e6) return (valor / 1e6).toFixed(1) + ' M';
+    if (valor >= 1e3) return (valor / 1e3).toFixed(1) + ' k';
+    return valor.toFixed(0) + ' Kz';
+}
+
+function formatarUSD(valor) {
+    if (valor >= 1e9) return '$' + (valor / 1e9).toFixed(1) + 'B';
+    if (valor >= 1e6) return '$' + (valor / 1e6).toFixed(1) + 'M';
+    if (valor >= 1e3) return '$' + (valor / 1e3).toFixed(1) + 'k';
+    return '$' + valor.toFixed(0);
+}
+
+// ============================================
+// 8. INICIALIZAÇÃO DOS NOVOS COMPONENTES
+// ============================================
+
+function inicializarComponentesAdicionais() {
+    // Inicializar mercado internacional
+    inicializarMercadoInternacional();
+    
+    // Preencher ações disponíveis
+    const acoesGrid = document.getElementById('acoesDisponiveis');
+    acoesGrid.innerHTML = estado.carteiraInternacional.acoesDisponiveis.map(acao => `
+        <div class="acao-card" data-ticker="${acao.ticker}">
+            <div class="acao-header">
+                <strong>${acao.ticker}</strong>
+                <span class="acao-nome">${acao.nome}</span>
+            </div>
+            <div class="acao-preco">$${acao.precoAtual.toFixed(2)}</div>
+            <div class="acao-setor">${acao.setor} | ${acao.pais}</div>
+            <div class="acao-actions">
+                <input type="number" class="acao-quantidade" min="1" value="1" placeholder="Qtd">
+                <button class="btn-small btn-primary comprar-acao">Comprar</button>
+            </div>
+        </div>
+    `).join('');
+    
+    // Preencher títulos disponíveis
+    const titulosGrid = document.getElementById('titulosDisponiveis');
+    titulosGrid.innerHTML = TITULOS_ESTRANGEIROS.map(titulo => `
+        <div class="titulo-card" data-pais="${titulo.pais}">
+            <div class="titulo-header">
+                <strong>${titulo.pais}</strong>
+                <span class="titulo-moeda">${titulo.moeda}</span>
+            </div>
+            <div class="titulo-taxa">${(titulo.taxaBase * 100).toFixed(1)}% a.a.</div>
+            <div class="titulo-risco ${titulo.risco.toLowerCase()}">Risco: ${titulo.risco}</div>
+            <div class="titulo-actions">
+                <input type="number" class="titulo-valor" min="100000" step="100000" value="1000000" placeholder="Valor">
+                <button class="btn-small btn-primary comprar-titulo">Comprar</button>
+            </div>
+        </div>
+    `).join('');
+    
+    // Adicionar event listeners para as abas
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             
-            .info-label { color: var(--accent-gold); font-weight: bold; }
-            .dica { font-size: 0.9em; color: var(--text-secondary); font-style: italic; }
-            
-            .btn-producao {
-                width: 100%;
-                padding: 10px;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-weight: bold;
-                transition: all 0.3s;
-            }
-            .btn-producao.classe-a { background: #4CAF50; color: white; }
-            .btn-producao.classe-b { background: #FFC107; color: black; }
-            .btn-producao.classe-c { background: #F44336; color: white; }
-            .btn-producao:hover { transform: translateY(-2px); filter: brightness(1.1); }
-            
-            .calculo-producao {
-                background: var(--bg-tertiary);
-                padding: 10px;
-                border-radius: 6px;
-                margin: 10px 0;
-            }
-        </style>
-    `;
-    
-    document.getElementById('conteudoPrincipal').innerHTML = html;
-    
-    // Adicionar listeners para cálculo automático
-    adicionarListenersProducao();
-}
-
-function adicionarListenersProducao() {
-    document.getElementById('qtd-producao-A')?.addEventListener('input', function() {
-        const qtd = parseInt(this.value) || 1;
-        const totalPagar = qtd * 25000;
-        const servicosProduzidos = Math.floor(qtd * 2);
-        
-        document.getElementById('total-pagar-A').textContent = formatarMoeda(totalPagar) + ' Kz';
-        document.getElementById('servicos-produzidos-A').textContent = servicosProduzidos;
+            e.target.classList.add('active');
+            document.getElementById(`painel${e.target.dataset.tab.charAt(0).toUpperCase() + e.target.dataset.tab.slice(1)}`).classList.add('active');
+        });
     });
     
-    document.getElementById('qtd-producao-B')?.addEventListener('input', function() {
-        const qtd = parseInt(this.value) || 1;
-        const totalPagar = qtd * 15000;
-        const servicosProduzidos = Math.floor(qtd * 1.5);
-        
-        document.getElementById('total-pagar-B').textContent = formatarMoeda(totalPagar) + ' Kz';
-        document.getElementById('servicos-produzidos-B').textContent = servicosProduzidos;
+    // Event listeners para compra de ações
+    document.querySelectorAll('.comprar-acao').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const card = e.target.closest('.acao-card');
+            const ticker = card.dataset.ticker;
+            const quantidade = parseInt(card.querySelector('.acao-quantidade').value);
+            comprarAcao(ticker, quantidade);
+        });
     });
     
-    document.getElementById('qtd-producao-C')?.addEventListener('input', function() {
-        const qtd = parseInt(this.value) || 1;
-        const totalPagar = qtd * 5000;
-        const servicosProduzidos = qtd;
-        
-        document.getElementById('total-pagar-C').textContent = formatarMoeda(totalPagar) + ' Kz';
-        document.getElementById('servicos-produzidos-C').textContent = servicosProduzidos;
+    // Event listeners para compra de títulos
+    document.querySelectorAll('.comprar-titulo').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const card = e.target.closest('.titulo-card');
+            const pais = card.dataset.pais;
+            const valor = parseInt(card.querySelector('.titulo-valor').value);
+            comprarTituloEstrangeiro(pais, valor);
+        });
     });
 }
 
-function iniciarProducaoServico(classe) {
-    // Verificar se tem funcionários
-    if (calcularTotalFuncionarios() === 0) {
-        notificar('❌ Não é possível produzir sem funcionários');
-        return false;
-    }
+// Modificar a função passarMes para incluir as novas atualizações
+function passarMesOriginal = passarMes;
+passarMes = function() {
+    passarMesOriginal();
     
-    const qtdInput = document.getElementById(`qtd-producao-${classe}`);
-    const quantidade = parseInt(qtdInput?.value) || 1;
+    // Atualizar empresas
+    atualizarEmpresas();
     
-    if (quantidade <= 0) {
-        notificar('❌ Quantidade inválida');
-        return false;
-    }
+    // Atualizar saldo do governo
+    estado.saldoGovernoKz += estado.receitaMensalKz - estado.despesaMensalKz;
+    estado.atualizarSaldoGoverno();
     
-    const config = classesProducao[classe];
-    const custoTotal = quantidade * config.custoUnitario;
-    const servicosProduzidos = Math.floor(quantidade * config.multiplicadorProducao);
+    // Processar investimentos internacionais
+    processarInvestimentosInternacionais();
     
-    // Verificar saldo
-    if (estadoJogo.carteiraKz < custoTotal) {
-        notificar('❌ Saldo insuficiente para produção');
-        return false;
-    }
-    
-    // Confirmar produção
-    if (!confirm(`📋 CONFIRMAR PRODUÇÃO:
-        \nClasse: ${config.nome}
-        \nQuantidade base: ${quantidade}
-        \nServiços a produzir: ${servicosProduzidos}
-        \nCusto total: ${formatarMoeda(custoTotal)} Kz
-        \nTempo: ${config.tempoDias} dia(s)
-        \n\nConfirmar?`)) {
-        return false;
-    }
-    
-    // Debitar custo
-    estadoJogo.carteiraKz -= custoTotal;
-    estadoJogo.custosMes += custoTotal;
-    contadoresMensais.custos.producao += custoTotal;
-    
-    // Calcular data de conclusão
-    const dataConclusao = new Date(dataSimulador);
-    dataConclusao.setDate(dataConclusao.getDate() + config.tempoDias);
-    
-    // Registrar produção pendente
-    const producao = {
-        id: Date.now(),
-        classe: classe,
-        nome: config.nome,
-        quantidadeBase: quantidade,
-        servicosProduzidos: servicosProduzidos,
-        custoTotal: custoTotal,
-        custoUnitario: config.custoUnitario,
-        dataInicio: dataSimulador.toLocaleDateString(),
-        dataConclusao: dataConclusao.toLocaleDateString(),
-        tempoDias: config.tempoDias,
-        segundosRestantes: config.tempoSegundos,
-        status: 'em_producao'
-    };
-    
-    producoesServico.push(producao);
-    
-    registrarTransacao('producao', 'saida', custoTotal, 'Kz', 
-        `Produção de ${servicosProduzidos} serviços (Classe ${classe})`);
-    
-    notificar(`✅ Produção iniciada! Conclusão: ${producao.dataConclusao}`);
-    salvarEstadoSimulacao();
-    
-    mostrarProducaoServicos();
-    atualizarCarteiras();
-    
-    return true;
-}
-
-function processarProducoesServico() {
-    const hoje = dataSimulador.toLocaleDateString();
-    const concluidas = [];
-    
-    producoesServico = producoesServico.filter(prod => {
-        if (prod.status !== 'em_producao') return true;
-        
-        if (prod.dataConclusao === hoje) {
-            // Adicionar serviços ao estoque
-            const novoServico = {
-                id: Date.now() + prod.id,
-                tipo: 'servico',
-                nome: `Serviço Classe ${prod.classe}`,
-                quantidade: prod.servicosProduzidos,
-                custoUnitario: prod.custoUnitario,
-                precoVenda: null,
-                margem: null,
-                dataEntrada: hoje,
-                producaoId: prod.id,
-                status: 'disponivel'
-            };
-            
-            estoque.push(novoServico);
-            concluidas.push(prod);
-            
-            notificar(`⚙️ Produção concluída! ${prod.servicosProduzidos} serviços disponíveis.`);
-            return false; // Remove da lista de pendentes
-        }
-        
-        // Atualizar dias restantes
-        const dataConc = new Date(prod.dataConclusao.split('/').reverse().join('-'));
-        const diffMs = dataConc - dataSimulador;
-        prod.segundosRestantes = Math.max(0, Math.floor(diffMs / 1000));
-        
-        return true;
-    });
-    
-    if (concluidas.length > 0) {
-        salvarEstadoSimulacao();
-    }
-}
-
-function gerarListaProducoesPendentes() {
-    const pendentes = producoesServico.filter(p => p.status === 'em_producao');
-    
-    if (pendentes.length === 0) {
-        return '<p class="text-center" style="padding: 20px;">Nenhuma produção em andamento</p>';
-    }
-    
-    let html = '<div class="tabela-container"><table><thead><tr>' +
-               '<th>Classe</th><th>Serviços</th><th>Custo</th><th>Início</th>' +
-               '<th>Conclusão</th><th>Tempo Restante</th></tr></thead><tbody>';
-    
-    pendentes.forEach(prod => {
-        const diasRestantes = calcularDiasRestantes(prod.dataConclusao);
-        const classeCor = prod.classe === 'A' ? 'text-success' : 
-                          prod.classe === 'B' ? 'text-gold' : 'text-danger';
-        
-        html += `
-            <tr>
-                <td class="${classeCor}"><strong>Classe ${prod.classe}</strong></td>
-                <td>${prod.servicosProduzidos} un</td>
-                <td>${formatarMoeda(prod.custoTotal)} Kz</td>
-                <td>${prod.dataInicio}</td>
-                <td>${prod.dataConclusao}</td>
-                <td><span class="${classeCor}">${diasRestantes} dias</span></td>
-            </tr>
-        `;
-    });
-    
-    html += '</tbody></table></div>';
-    return html;
-}
-
-function gerarListaServicosEstoque() {
-    const servicos = estoque.filter(item => item.tipo === 'servico' && item.status === 'disponivel');
-    
-    if (servicos.length === 0) {
-        return '<p class="text-center" style="padding: 20px;">Nenhum serviço disponível no estoque</p>';
-    }
-    
-    let html = '<div class="tabela-container"><table><thead><tr>' +
-               '<th>Serviço</th><th>Quantidade</th><th>Custo Unit.</th>' +
-               '<th>Preço Venda</th><th>Margem</th><th>Ações</th></tr></thead><tbody>';
-    
-    servicos.forEach(serv => {
-        html += `
-            <tr>
-                <td>${serv.nome}</td>
-                <td>${serv.quantidade}</td>
-                <td>${formatarMoeda(serv.custoUnitario)} Kz</td>
-                <td>${serv.precoVenda ? formatarMoeda(serv.precoVenda) + ' Kz' : 'Não definido'}</td>
-                <td>${serv.margem ? serv.margem + '%' : '-'}</td>
-                <td>
-                    ${!serv.precoVenda ? `
-                        <input type="number" id="margem-serv-${serv.id}" min="0" max="30" placeholder="0-30%" style="width: 70px;">
-                        <button onclick="definirMargemServico(${serv.id})">Definir</button>
-                    ` : `
-                        <button onclick="publicarServico(${serv.id})" class="btn-success">Publicar</button>
-                    `}
-                </td>
-            </tr>
-        `;
-    });
-    
-    html += '</tbody></table></div>';
-    return html;
-}
-
-function definirMargemServico(servicoId) {
-    const servico = estoque.find(item => item.id === servicoId);
-    if (!servico) {
-        notificar('❌ Serviço não encontrado');
-        return false;
-    }
-    
-    const margem = parseFloat(document.getElementById(`margem-serv-${servicoId}`).value);
-    
-    if (isNaN(margem) || margem < 0 || margem > 30) {
-        notificar('❌ Margem deve ser entre 0% e 30%');
-        return false;
-    }
-    
-    servico.margem = margem;
-    servico.precoVenda = servico.custoUnitario * (1 + margem / 100);
-    servico.status = 'pronto';
-    
-    notificar(`✅ Margem de ${margem}% definida. Preço: ${formatarMoeda(servico.precoVenda)} Kz`);
-    salvarEstadoSimulacao();
-    
-    mostrarProducaoServicos();
-    return true;
-}
-
-function publicarServico(servicoId) {
-    const servico = estoque.find(item => item.id === servicoId);
-    if (!servico) {
-        notificar('❌ Serviço não encontrado');
-        return false;
-    }
-    
-    if (!servico.precoVenda) {
-        notificar('❌ Defina a margem primeiro');
-        return false;
-    }
-    
-    servico.status = 'venda';
-    
-    notificar(`✅ Serviço publicado para venda por ${formatarMoeda(servico.precoVenda)} Kz`);
-    salvarEstadoSimulacao();
-    
-    mostrarProducaoServicos();
-    return true;
-}
-
-// Adicionar ao processarDia
-const originalProcessarDia = processarDia;
-processarDia = function() {
-    if (originalProcessarDia) originalProcessarDia();
-    processarProducoesServico();
+    // Atualizar interface expandida
+    atualizarInterfaceExpandida();
 };
+
+// ============================================
+// CSS ADICIONAL
+// ============================================
+`;
+
+// CSS adicional para os novos componentes
+const novoCSS = `
+/* Saldo do Governo */
+.saldo-governo-card {
+    margin-bottom: 30px;
+}
+
+.saldo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.saldo-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.saldo-valor {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-gold);
+    margin-bottom: 20px;
+}
+
+.saldo-detalhes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.saldo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: var(--bg-soft-black);
+    border-radius: 10px;
+}
+
+.valor-positivo {
+    color: var(--secondary-green);
+    font-weight: 600;
+}
+
+.valor-negativo {
+    color: var(--secondary-red);
+    font-weight: 600;
+}
+
+.historico-barras {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    height: 60px;
+    margin-top: 15px;
+}
+
+.barra-historico {
+    flex: 1;
+    background: var(--primary-gold);
+    opacity: 0.7;
+    border-radius: 3px 3px 0 0;
+    transition: height 0.3s ease;
+}
+
+/* Carteira Internacional */
+.carteira-card {
+    margin-bottom: 30px;
+}
+
+.carteira-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.carteira-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-item {
+    background: var(--bg-soft-black);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stat-item span:first-child {
+    display: block;
+    color: var(--text-gray);
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.stat-item span:last-child {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-gold);
+}
+
+/* Abas */
+.carteira-abas {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-dark);
+    padding-bottom: 10px;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-gray);
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 44px;
+}
+
+.tab-btn.active {
+    background: var(--primary-gold);
+    color: var(--primary-black);
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+/* Ações Grid */
+.acoes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.acao-card {
+    background: var(--bg-soft-black);
+    border: 1px solid var(--border-dark);
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.acao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.acao-header strong {
+    color: var(--primary-gold);
+    font-size: 1.1rem;
+}
+
+.acao-nome {
+    color: var(--text-gray);
+    font-size: 0.9rem;
+}
+
+.acao-preco {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--primary-white);
+    margin-bottom: 5px;
+}
+
+.acao-setor {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+}
+
+.acao-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.acao-quantidade {
+    width: 70px;
+    padding: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-dark);
+    border-radius: 8px;
+    color: var(--primary-white);
+}
+
+/* Títulos Grid */
+.titulos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.titulo-card {
+    background: var(--bg-soft-black);
+    border: 1px solid var(--border-dark);
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.titulo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.titulo-header strong {
+    color: var(--primary-gold);
+    font-size: 1.1rem;
+}
+
+.titulo-moeda {
+    color: var(--text-gray);
+    font-size: 0.9rem;
+}
+
+.titulo-taxa {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--secondary-green);
+    margin-bottom: 5px;
+}
+
+.titulo-risco {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.titulo-risco.baixo {
+    color: var(--secondary-green);
+}
+
+.titulo-risco.médio {
+    color: var(--accent-orange);
+}
+
+.titulo-risco.alto {
+    color: var(--secondary-red);
+}
+
+.titulo-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.titulo-valor {
+    flex: 1;
+    padding: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-dark);
+    border-radius: 8px;
+    color: var(--primary-white);
+}
+
+/* Empresas Painel */
+.empresas-painel {
+    margin-bottom: 30px;
+}
+
+.painel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.legenda {
+    display: flex;
+    gap: 15px;
+}
+
+.legenda span {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+}
+
+.nivel-a {
+    background: rgba(155, 89, 182, 0.2);
+    color: var(--accent-purple);
+}
+
+.nivel-b {
+    background: rgba(0, 102, 204, 0.2);
+    color: var(--secondary-blue);
+}
+
+.nivel-c {
+    background: rgba(51, 204, 51, 0.2);
+    color: var(--secondary-green);
+}
+
+.empresas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.empresa-card {
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-dark);
+}
+
+.empresa-card.nivel-a {
+    background: rgba(155, 89, 182, 0.05);
+    border-color: var(--accent-purple);
+}
+
+.empresa-card.nivel-b {
+    background: rgba(0, 102, 204, 0.05);
+    border-color: var(--secondary-blue);
+}
+
+.empresa-card.nivel-c {
+    background: rgba(51, 204, 51, 0.05);
+    border-color: var(--secondary-green);
+}
+
+.empresa-card h4 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.empresa-card .quantidade {
+    font-size: 1.2rem;
+    color: var(--primary-gold);
+}
+
+.empresa-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.empresa-stats .stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.empresa-stats .stat i {
+    width: 20px;
+    color: var(--primary-gold);
+}
+
+/* Famílias Painel */
+.familias-painel {
+    margin-bottom: 30px;
+}
+
+.familias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.indicador-familia {
+    background: var(--bg-soft-black);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.indicador-familia label {
+    display: block;
+    color: var(--text-gray);
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.indicador-familia .valor {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-gold);
+    margin-bottom: 10px;
+}
+
+.barra-progresso {
+    height: 6px;
+    background: var(--border-dark);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progresso {
+    height: 100%;
+    background: var(--primary-gold);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.indice-gini {
+    margin-top: 20px;
+    padding: 15px;
+    background: var(--bg-soft-black);
+    border-radius: 10px;
+}
+
+.indice-gini label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.indice-gini span {
+    color: var(--primary-gold);
+    font-weight: 600;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .empresas-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .carteira-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .acoes-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .familias-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .saldo-detalhes {
+        grid-template-columns: 1fr;
+    }
+}
+`;
+
+// Instruções de integração:
+/*
+1. Adicione o novoCSS ao arquivo styles.css existente
+2. Adicione os novosComponentesHTML dentro do dashboard, após os indicadores-grid
+3. Adicione todas as funções JavaScript ao script.js
+4. Modifique a função passarMes para incluir as novas chamadas
+5. Adicione a chamada inicializarComponentesAdicionais() no DOMContentLoaded
+*/

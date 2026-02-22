@@ -19,10 +19,10 @@
     <script src="frontend/Public/javascript/Global/footer.js"></script>
 
     <!-- ARQUIVOS JS -->
-    <script src="frontend/Public/javascript/page"></script>
+    <script src="frontend/Public/javascript/page/s-real-simulador-economia.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
-    <link rel="stylesheet" href="frontend/Public/CSS/">
+    <link rel="stylesheet" href="frontend/Public/CSS/simuladores/sub-simuladores/s.perfeitos/simulador-economia.css">
 </head>
 
 <body>
@@ -69,7 +69,632 @@
     </header>
 
 
-    <main>
+    <main class="simulador-page">
+ 
+        <!-- Tela de Inicialização (Formulário) -->
+        <section class="simulador-inicio card-animated">
+            <h1 class="page-title"><span class="highlight">Simulador</span> de Economia</h1>
+            <p class="text-body">Tome decisões como Banco Nacional e Ministério das Finanças</p>
+            
+            <form id="formInicio" class="simulador-form">
+                <div class="form-group">
+                    <label for="nome">Nome do Usuário</label>
+                    <input type="text" id="nome" class="form-control" placeholder="Digite seu nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Gênero</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="genero" value="Homem" required> Homem
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="genero" value="Mulher" required> Mulher
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="provincia">Província</label>
+                    <select id="provincia" class="form-control" required>
+                        <option value="">Selecione uma província</option>
+                        <option value="Bengo">Bengo</option>
+                        <option value="Benguela">Benguela</option>
+                        <option value="Bié">Bié</option>
+                        <option value="Cabinda">Cabinda</option>
+                        <option value="Cuando">Cuando</option>
+                        <option value="Cuanza Norte">Cuanza Norte</option>
+                        <option value="Cuanza Sul">Cuanza Sul</option>
+                        <option value="Cubango">Cubango</option>
+                        <option value="Cunene">Cunene</option>
+                        <option value="Huambo">Huambo</option>
+                        <option value="Huíla">Huíla</option>
+                        <option value="Icolo e Bengo">Icolo e Bengo</option>
+                        <option value="Luanda">Luanda</option>
+                        <option value="Lunda Norte">Lunda Norte</option>
+                        <option value="Lunda Sul">Lunda Sul</option>
+                        <option value="Malanje">Malanje</option>
+                        <option value="Moxico">Moxico</option>
+                        <option value="Moxico Leste">Moxico Leste</option>
+                        <option value="Namibe">Namibe</option>
+                        <option value="Uíge">Uíge</option>
+                        <option value="Zaire">Zaire</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-primary btn-large">Iniciar Simulação <i class="fas fa-play"></i></button>
+            </form>
+        </section>
+
+        <!-- Dashboard Principal (inicialmente oculto) -->
+        <section class="dashboard" id="dashboard" style="display: none;">
+            <!-- Cabeçalho do Dashboard -->
+            <div class="dashboard-header">
+                <div class="tempo-info card">
+                    <div class="tempo-display">
+                        <span class="tempo-icone"><i class="fas fa-calendar-alt"></i></span>
+                        <span class="tempo-data" id="dataSimulada">01/01/2025</span>
+                    </div>
+                    <div class="tempo-progresso">
+                        <span id="anoProgresso">Ano 1/∞</span>
+                    </div>
+                </div>
+                
+                <div class="usuario-info card">
+                    <i class="fas fa-user"></i>
+                    <span id="nomeUsuarioDisplay"></span> | 
+                    <span id="provinciaDisplay"></span>
+                </div>
+            </div>
+            
+            <!-- Cards de Indicadores Principais -->
+            <div class="indicadores-grid">
+                <div class="indicador-card card-animated">
+                    <div class="indicador-header">
+                        <h3>PIB</h3>
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="indicador-valor" id="pibValor">$80B</div>
+                    <div class="indicador-variacao" id="pibVariacao">+0%</div>
+                </div>
+                
+                <div class="indicador-card card-animated">
+                    <div class="indicador-header">
+                        <h3>Inflação</h3>
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="indicador-valor" id="inflacaoValor">0%</div>
+                    <div class="indicador-status" id="inflacaoStatus">Estável</div>
+                </div>
+                
+                <div class="indicador-card card-animated">
+                    <div class="indicador-header">
+                        <h3>Desemprego</h3>
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="indicador-valor" id="desempregoValor">0%</div>
+                    <div class="indicador-tendencia" id="desempregoTendencia">→</div>
+                </div>
+                
+                <div class="indicador-card card-animated">
+                    <div class="indicador-header">
+                        <h3>USD/Kz</h3>
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="indicador-valor" id="cambioValor">912</div>
+                    <div class="indicador-regime" id="regimeCambial">Flutuante</div>
+                </div>
+                
+                <div class="indicador-card card-animated">
+                    <div class="indicador-header">
+                        <h3>Reservas</h3>
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <div class="indicador-valor" id="reservasValor">$11B</div>
+                    <div class="indicador-mes" id="reservasVariacao">USD</div>
+                </div>
+                
+                <div class="indicador-card card-animated">
+                    <div class="indicador-header">
+                        <h3>Dívida/PIB</h3>
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="indicador-valor" id="dividaPIB">60%</div>
+                    <div class="indicador-rating" id="ratingDisplay">BBB</div>
+                </div>
+            </div>
+            
+            <!-- Evento Ativo -->
+            <div class="evento-ativo card" id="eventoContainer" style="display: none;">
+                <div class="evento-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="eventoNome">Evento Ativo</span>
+                </div>
+                <div class="evento-tempo" id="eventoTempo">Restante: 0 dias</div>
+            </div>
+            
+            <!-- Módulos de Decisão -->
+            <div class="modulos-grid">
+                <!-- Módulo BNA -->
+                <div class="modulo-card card-animated">
+                    <div class="modulo-header">
+                        <h2><i class="fas fa-university"></i> Banco Nacional</h2>
+                    </div>
+                    
+                    <div class="modulo-conteudo">
+                        <div class="form-group">
+                            <label>Taxa de Juros: <span id="jurosAtual">15%</span></label>
+                            <div class="range-slider">
+                                <input type="range" id="taxaJuros" min="-100" max="100" value="15" step="0.5">
+                                <div class="range-values">
+                                    <span>-100%</span>
+                                    <span id="jurosDisplay">15%</span>
+                                    <span>+100%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Regime Cambial</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="regimeCambial" value="fixo" id="regimeFixo"> Fixo
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="regimeCambial" value="flutuante" id="regimeFlutuante" checked> Flutuante
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="regimeCambial" value="bandas" id="regimeBandas"> Bandas
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Configurações específicas por regime -->
+                        <div id="configFixo" style="display: none;">
+                            <div class="form-group">
+                                <label>Valor Fixo (USD/Kz)</label>
+                                <select id="cambioFixo" class="form-control">
+                                    <option value="100">100 Kz</option>
+                                    <option value="150">150 Kz</option>
+                                    <option value="250">250 Kz</option>
+                                    <option value="350">350 Kz</option>
+                                    <option value="400">400 Kz</option>
+                                    <option value="500">500 Kz</option>
+                                    <option value="600">600 Kz</option>
+                                    <option value="700">700 Kz</option>
+                                    <option value="720">720 Kz</option>
+                                    <option value="760">760 Kz</option>
+                                    <option value="790">790 Kz</option>
+                                    <option value="812">812 Kz</option>
+                                    <option value="850">850 Kz</option>
+                                    <option value="900">900 Kz</option>
+                                    <option value="912" selected>912 Kz</option>
+                                    <option value="970">970 Kz</option>
+                                    <option value="1000">1000 Kz</option>
+                                    <option value="1100">1100 Kz</option>
+                                    <option value="1500">1500 Kz</option>
+                                    <option value="1700">1700 Kz</option>
+                                    <option value="2000">2000 Kz</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div id="configBandas" style="display: none;">
+                            <div class="form-group">
+                                <label>Mínimo (USD/Kz)</label>
+                                <select id="bandaMin" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Máximo (USD/Kz)</label>
+                                <select id="bandaMax" class="form-control"></select>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary" id="aplicarBNA">Aplicar Alterações</button>
+                    </div>
+                </div>
+                
+                <!-- Módulo Dívida Pública -->
+                <div class="modulo-card card-animated">
+                    <div class="modulo-header">
+                        <h2><i class="fas fa-file-invoice"></i> Dívida Pública</h2>
+                    </div>
+                    
+                    <div class="modulo-conteudo">
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="tipoDivida" value="interna" checked> Interna (Kz)
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="tipoDivida" value="externa"> Externa (USD)
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Valor (milhões)</label>
+                            <input type="number" id="valorDivida" class="form-control" min="1" step="0.1" placeholder="Ex: 100">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Prazo (anos)</label>
+                            <input type="number" id="prazoDivida" class="form-control" min="1" max="10" value="5">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Taxa de Juros (%)</label>
+                            <input type="number" id="taxaDivida" class="form-control" min="10" max="25" step="0.1" value="15">
+                            <small class="text-small" id="taxaRangeHint">Interna: 15-25% | Externa: 10-20%</small>
+                        </div>
+                        
+                        <button class="btn-primary" id="emitirDivida">Emitir Título</button>
+                    </div>
+                </div>
+                
+                <!-- Módulo Investimentos -->
+                <div class="modulo-card card-animated">
+                    <div class="modulo-header">
+                        <h2><i class="fas fa-chart-bar"></i> Investimentos</h2>
+                    </div>
+                    
+                    <div class="modulo-conteudo">
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="tipoInvestimento" value="publico" checked> Público
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="tipoInvestimento" value="exportacao"> Exportação
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Nível</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="nivelInvestimento" value="C" checked> C <span class="badge badge-green">Pequeno</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="nivelInvestimento" value="B"> B <span class="badge badge-blue">Médio</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="nivelInvestimento" value="A"> A <span class="badge badge-purple">Grande</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" id="areaInvestimentoGroup">
+                            <label>Área</label>
+                            <select id="areaInvestimento" class="form-control">
+                                <option value="Educação">Educação</option>
+                                <option value="Agricultura">Agricultura</option>
+                                <option value="Infraestrutura">Infraestrutura</option>
+                                <option value="Logística">Logística</option>
+                                <option value="Tecnologia">Tecnologia</option>
+                                <option value="Energia">Energia</option>
+                                <option value="Saúde">Saúde</option>
+                                <option value="Indústria">Indústria</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Quantidade</label>
+                            <input type="number" id="quantidadeInvestimento" class="form-control" min="1" value="1">
+                        </div>
+                        
+                        <div class="investimento-info" id="investimentoInfo">
+                            <p>Custo total: <span id="custoTotalInvestimento">$5M</span></p>
+                            <p>Retorno PIB: <span id="retornoPIBInfo">+$1M/ano</span></p>
+                            <p>Retorno Reservas: <span id="retornoReservasInfo">+5%</span></p>
+                        </div>
+                        
+                        <button class="btn-primary" id="realizarInvestimento">Investir</button>
+                    </div>
+                </div>
+                
+                <!-- Módulo Reservas e Ouro -->
+                <div class="modulo-card card-animated">
+                    <div class="modulo-header">
+                        <h2><i class="fas fa-coins"></i> Reservas & Ouro</h2>
+                    </div>
+                    
+                    <div class="modulo-conteudo">
+                        <div class="reservas-stats">
+                            <p><strong>Reservas USD:</strong> <span id="reservasUSDDisplay">$11B</span></p>
+                            <p><strong>Ouro (onças):</strong> <span id="ouroOncasDisplay">0</span></p>
+                            <p><strong>Preço do Ouro:</strong> <span id="precoOuroDisplay">$1,800</span>/onça</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Ação</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="acaoOuro" value="comprar" checked> Comprar Ouro
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="acaoOuro" value="vender"> Vender Ouro
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Valor (USD milhões)</label>
+                            <input type="number" id="valorOuro" class="form-control" min="1" step="0.1" placeholder="Ex: 100">
+                        </div>
+                        
+                        <button class="btn-primary" id="executarOuro">Executar</button>
+                    </div>
+                </div>
+            </div>
+
+                        <!-- Saldo do Governo em Kz -->
+            <div class="saldo-governo-card card-animated">
+                <div class="saldo-header">
+                    <h3><i class="fas fa-landmark"></i> Saldo do Governo (Kz)</h3>
+                    <span class="badge" id="saldoGovernoStatus">Estável</span>
+                </div>
+                <div class="saldo-valor" id="saldoGovernoValor">5.0 T</div>
+                <div class="saldo-detalhes">
+                    <div class="saldo-item">
+                        <span>Receita Mensal:</span>
+                        <span class="valor-positivo" id="receitaMensal">0 Kz</span>
+                    </div>
+                    <div class="saldo-item">
+                        <span>Despesa Mensal:</span>
+                        <span class="valor-negativo" id="despesaMensal">0 Kz</span>
+                    </div>
+                    <div class="saldo-item">
+                        <span>Custo Salarial:</span>
+                        <span class="valor-negativo" id="custoSalarial">0 Kz</span>
+                    </div>
+                </div>
+                <div class="saldo-grafico" id="saldoHistorico">
+                    <!-- Mini gráfico será inserido via JS -->
+                </div>
+            </div>
+
+            <!-- Carteira de Investimentos Internacionais -->
+            <div class="carteira-card card-animated">
+                <div class="carteira-header">
+                    <h3><i class="fas fa-globe"></i> Carteira Internacional (USD)</h3>
+                    <span class="badge" id="carteiraValorTotal">$0</span>
+                </div>
+                <div class="carteira-stats">
+                    <div class="stat-item">
+                        <span>Saldo Disponível:</span>
+                        <span id="carteiraSaldo">$0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Valor em Ações:</span>
+                        <span id="carteiraAcoes">$0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Valor em Títulos:</span>
+                        <span id="carteiraTitulos">$0</span>
+                    </div>
+                </div>
+                
+                <!-- Abas para diferentes investimentos -->
+                <div class="carteira-abas">
+                    <button class="tab-btn active" data-tab="acoes">Ações</button>
+                    <button class="tab-btn" data-tab="titulos">Títulos</button>
+                </div>
+                
+                <!-- Painel de Ações -->
+                <div class="tab-panel active" id="painelAcoes">
+                    <div class="acoes-grid" id="acoesDisponiveis">
+                        <!-- Será preenchido via JS -->
+                    </div>
+                    <div class="carteira-acoes" id="carteiraAcoesLista">
+                        <h4>Minhas Ações</h4>
+                        <div id="minhasAcoes"></div>
+                    </div>
+                </div>
+                
+                <!-- Painel de Títulos -->
+                <div class="tab-panel" id="painelTitulos">
+                    <div class="titulos-grid" id="titulosDisponiveis">
+                        <!-- Será preenchido via JS -->
+                    </div>
+                    <div class="carteira-titulos" id="carteiraTitulosLista">
+                        <h4>Meus Títulos</h4>
+                        <div id="meusTitulos"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de Empresas -->
+            <div class="empresas-painel card-animated">
+                <div class="painel-header">
+                    <h3><i class="fas fa-building"></i> Situação das Empresas</h3>
+                    <div class="legenda">
+                        <span class="nivel-a">Nível A</span>
+                        <span class="nivel-b">Nível B</span>
+                        <span class="nivel-c">Nível C</span>
+                    </div>
+                </div>
+                
+                <div class="empresas-grid">
+                    <!-- Nível A -->
+                    <div class="empresa-card nivel-a">
+                        <h4>Grandes Empresas <span class="quantidade" id="empresasAQtd">100</span></h4>
+                        <div class="empresa-stats">
+                            <div class="stat" title="Faturamento Mensal">
+                                <i class="fas fa-chart-line"></i>
+                                <span id="empresasAFaturamento">$50M</span>
+                            </div>
+                            <div class="stat" title="Lucro Mensal">
+                                <i class="fas fa-coins"></i>
+                                <span id="empresasALucro">$5M</span>
+                            </div>
+                            <div class="stat" title="Endividamento">
+                                <i class="fas fa-file-invoice"></i>
+                                <span id="empresasAEndividamento">30%</span>
+                            </div>
+                            <div class="stat" title="Satisfação">
+                                <i class="fas fa-smile"></i>
+                                <span id="empresasASatisfacao">80%</span>
+                            </div>
+                            <div class="stat" title="Em Risco">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span id="empresasARisco">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Nível B -->
+                    <div class="empresa-card nivel-b">
+                        <h4>Médias Empresas <span class="quantidade" id="empresasBQtd">5000</span></h4>
+                        <div class="empresa-stats">
+                            <div class="stat">
+                                <i class="fas fa-chart-line"></i>
+                                <span id="empresasBFaturamento">$2M</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-coins"></i>
+                                <span id="empresasBLucro">$200k</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-file-invoice"></i>
+                                <span id="empresasBEndividamento">50%</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-smile"></i>
+                                <span id="empresasBSatisfacao">60%</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span id="empresasBRisco">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Nível C -->
+                    <div class="empresa-card nivel-c">
+                        <h4>Pequenas Empresas <span class="quantidade" id="empresasCQtd">50000</span></h4>
+                        <div class="empresa-stats">
+                            <div class="stat">
+                                <i class="fas fa-chart-line"></i>
+                                <span id="empresasCFaturamento">$100k</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-coins"></i>
+                                <span id="empresasCLucro">$10k</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-file-invoice"></i>
+                                <span id="empresasCEndividamento">70%</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-smile"></i>
+                                <span id="empresasCSatisfacao">40%</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span id="empresasCRisco">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel das Famílias -->
+            <div class="familias-painel card-animated">
+                <div class="painel-header">
+                    <h3><i class="fas fa-users"></i> Situação das Famílias</h3>
+                    <span class="badge" id="bemEstarSocial">60%</span>
+                </div>
+                
+                <div class="familias-grid">
+                    <div class="indicador-familia">
+                        <label>Renda Média</label>
+                        <div class="valor" id="rendaMedia">100k Kz</div>
+                        <div class="barra-progresso">
+                            <div class="progresso" id="rendaProgresso" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="indicador-familia">
+                        <label>Poder de Compra</label>
+                        <div class="valor" id="poderCompra">1.0</div>
+                        <div class="barra-progresso">
+                            <div class="progresso" id="compraProgresso" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="indicador-familia">
+                        <label>Endividamento</label>
+                        <div class="valor" id="endividamentoFamiliar">40%</div>
+                        <div class="barra-progresso">
+                            <div class="progresso" id="endividamentoProgresso" style="width: 40%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="indicador-familia">
+                        <label>Poupança Média</label>
+                        <div class="valor" id="poupancaMedia">50k Kz</div>
+                        <div class="barra-progresso">
+                            <div class="progresso" id="poupancaProgresso" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="indicador-familia">
+                        <label>Satisfação</label>
+                        <div class="valor" id="satisfacaoFamiliar">60%</div>
+                        <div class="barra-progresso">
+                            <div class="progresso" id="satisfacaoProgresso" style="width: 60%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="indicador-familia">
+                        <label>Acesso a Crédito</label>
+                        <div class="valor" id="acessoCredito">50%</div>
+                        <div class="barra-progresso">
+                            <div class="progresso" id="creditoProgresso" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="indicador-familia">
+                        <label>Informalidade</label>
+                        <div class="valor" id="informalidade">30%</div>
+                        <div class="barra-progresso">
+                            <div class="progresso" id="informalidadeProgresso" style="width: 30%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="indicador-familia">
+                        <label>Pobreza</label>
+                        <div class="valor" id="pobreza">30%</div>
+                        <div class="barra-progresso">
+                            <div class="progresso" id="pobrezaProgresso" style="width: 30%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="indice-gini">
+                    <label>Índice de Gini (Desigualdade): <span id="giniValor">0.50</span></label>
+                    <div class="barra-progresso">
+                        <div class="progresso" id="giniProgresso" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Histórico de Ações -->
+            <section class="historico-section card">
+                <h3><i class="fas fa-history"></i> Histórico de Ações</h3>
+                <div class="historico-container" id="historicoAcoes"></div>
+            </section>
+            
+            <!-- Botões de Controle -->
+            <div class="controles-simulacao">
+                <button class="btn-secondary" id="pausarSimulacao"><i class="fas fa-pause"></i> Pausar</button>
+                <button class="btn-danger" id="reiniciarSimulacao"><i class="fas fa-redo"></i> Reiniciar</button>
+            </div>
+        </section>
 
     </main>
     
