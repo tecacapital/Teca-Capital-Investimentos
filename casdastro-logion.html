@@ -69,426 +69,185 @@
         </div>
     </header>
 
-    <main>
+    <main class="plataforma-container">
 
-        <!-- ========== CONTAINER DE CADASTRO ========== -->
-        <div class="cadastro-universal-container" id="cadastroContainer">
-            <div class="cadastro-card card-animated">
-                <div class="cadastro-header">
-                    <i class="fas fa-user-plus"></i>
-                    <h2>Cadastro <span class="highlight">Teca Capital</span></h2>
-                    <p>Escolha o tipo de serviço e preencha seus dados</p>
-                </div>
-                
-                <!-- BARRA DE PROGRESSO (CADASTRO) -->
-                <div class="progress-container" id="progressContainer" style="display: none;">
-                    <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
-                    <span class="progress-text" id="progressText">0%</span>
-                </div>
-                
-                <!-- SELEÇÃO DO TIPO DE SERVIÇO -->
-                <div class="servico-selector">
-                    <label class="servico-option">
-                        <input type="radio" name="tipoServico" value="simuladores" checked>
-                        <i class="fas fa-gamepad"></i>
-                        <span>Simuladores/Biblioteca</span>
-                        <small>Acesso por 90 dias</small>
-                    </label>
-                    
-                    <label class="servico-option">
-                        <input type="radio" name="tipoServico" value="cursoOnline">
-                        <i class="fas fa-video"></i>
-                        <span>Curso Online</span>
-                        <small>Mercados Financeiro, Gestão, Economia</small>
-                    </label>
-                    
-                    <label class="servico-option">
-                        <input type="radio" name="tipoServico" value="formacaoPresencial">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                        <span>Formação Presencial</span>
-                        <small>Acesso por 15 dias</small>
-                    </label>
-                    
-                    <label class="servico-option">
-                        <input type="radio" name="tipoServico" value="parceiros">
-                        <i class="fas fa-handshake"></i>
-                        <span>Parceiros</span>
-                        <small>Senha enviada após autorização</small>
-                    </label>
-                    
-                    <label class="servico-option">
-                        <input type="radio" name="tipoServico" value="personalizado">
-                        <i class="fas fa-crown"></i>
-                        <span>Serviços Personalizados</span>
-                        <small>Sob consulta</small>
-                    </label>
-                </div>
-                
-                <form id="formCadastroUniversal">
-                    <!-- CAMPOS BÁSICOS (COMUNS A TODOS) -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label><i class="fas fa-user"></i> Nome Completo</label>
-                            <input type="text" id="nomeCompleto" class="form-control" placeholder="Ex: João Silva Santos" required>
-                        </div>
+        <!-- Cabeçalho da página (específico, não é o header global) -->
+        <div class="page-header">
+            <h1 class="page-title">Plataforma Educacional</h1>
+            <p class="page-subtitle">Aceda aos simuladores, cursos e formações</p>
+        </div>
+
+        <!-- Sistema de Abas -->
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="cadastro">
+                <i class="fas fa-user-edit"></i> Cadastro
+            </button>
+            <button class="tab-btn" data-tab="login">
+                <i class="fas fa-lock"></i> Login
+            </button>
+            <button class="tab-btn" data-tab="admin">
+                <i class="fas fa-crown"></i> Administrador
+            </button>
+        </div>
+
+        <!-- CONTEÚDO DAS ABAS -->
+        <div class="tab-content-container">
+            <!-- ABA 1: CADASTRO -->
+            <div id="tab-cadastro" class="tab-content active">
+                <form id="form-cadastro" class="form-cadastro" novalidate>
+                    <!-- Campos Comuns (obrigatórios para todos) -->
+                    <div class="form-section">
+                        <h3 class="section-title"><i class="fas fa-user"></i> Dados Pessoais</h3>
                         
-                        <div class="form-group">
-                            <label><i class="fas fa-venus-mars"></i> Sexo</label>
-                            <select id="sexo" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="Homem">Homem</option>
-                                <option value="Mulher">Mulher</option>
-                            </select>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nome">Nome Completo <span class="required">*</span></label>
+                                <input type="text" id="nome" name="nome" class="form-control" placeholder="Ex: João Manuel Silva" minlength="3" required>
+                                <div class="error-message" id="error-nome"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="sexo">Sexo <span class="required">*</span></label>
+                                <select id="sexo" name="sexo" class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Homem">Homem</option>
+                                    <option value="Mulher">Mulher</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pais">País <span class="required">*</span></label>
+                                <input type="text" id="pais" name="pais" class="form-control" value="Angola" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regiao">Região <span class="required">*</span></label>
+                                <input type="text" id="regiao" name="regiao" class="form-control" value="Luanda" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="idade">Idade <span class="required">*</span></label>
+                                <input type="number" id="idade" name="idade" class="form-control" min="16" max="100" placeholder="25" required>
+                                <div class="error-message" id="error-idade"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">E-mail <span class="required">*</span></label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="exemplo@email.com" required>
+                                <div class="error-message" id="error-email"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="telefone">Nº Telefone <span class="required">*</span></label>
+                                <input type="tel" id="telefone" name="telefone" class="form-control" placeholder="923456789" required>
+                                <div class="error-message" id="error-telefone"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tipo-servico">Tipo de Serviço <span class="required">*</span></label>
+                                <select id="tipo-servico" name="destino" class="form-control" required>
+                                    <option value="">Selecione o serviço desejado...</option>
+                                    <option value="Simuladores/Bibliotecas"> Simuladores/Bibliotecas</option>
+                                    <option value="Curso Online">🎓 Curso Online</option>
+                                    <option value="Formação Presencial">🏛️ Formação Presencial</option>
+                                    <option value="Servicos">⚙️ Serviços Personalizados</option>
+                                    <option value="Parceiros">🤝 Parceiros</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label><i class="fas fa-globe"></i> País</label>
-                            <input type="text" id="pais" class="form-control" placeholder="Ex: Angola" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-map-marker-alt"></i> Região/Província</label>
-                            <input type="text" id="regiao" class="form-control" placeholder="Ex: Luanda" required>
-                        </div>
+
+                    <!-- ÁREA DINÂMICA - CAMPOS ESPECÍFICOS POR TIPO DE SERVIÇO -->
+                    <div id="campos-dinamicos" class="form-section">
+                        <!-- Será preenchido via JavaScript -->
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label><i class="fas fa-calendar-alt"></i> Idade</label>
-                            <input type="number" id="idade" class="form-control" min="1" max="120" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-envelope"></i> Gmail</label>
-                            <input type="email" id="gmail" class="form-control" placeholder="exemplo@gmail.com" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label><i class="fas fa-phone"></i> Nº Telefone</label>
-                        <input type="tel" id="telefone" class="form-control" placeholder="+244 900 000 000" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label><i class="fas fa-calendar-check"></i> Data de Cadastro</label>
-                        <input type="date" id="dataCadastro" class="form-control" required>
-                    </div>
-                    
-                    <!-- CAMPOS PARA SIMULADORES/BIBLIOTECAS -->
-                    <div class="campos-especificos" id="camposSimuladores">
-                        <h4>Dados de Acesso aos Simuladores</h4>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-credit-card"></i> Tipo de Pagamento</label>
-                            <select id="tipoPagamentoSimuladores" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="Caixa">Caixa</option>
-                                <option value="Transferência Bancária">Transferência Bancária</option>
-                                <option value="Express">Express</option>
-                                <option value="Unitel Money">Unitel Money</option>
-                                <option value="USDT via Binance">USDT via Binance</option>
-                                <option value="USDT via outra corretora">USDT via outra corretora</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-money-bill"></i> Valor Pago (Kz)</label>
-                            <input type="number" id="valorSimuladores" class="form-control" value="7500" readonly>
-                            <small>Valor fixo: 7.500 Kz (90 dias de acesso)</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-file-upload"></i> Comprovativo de Pagamento</label>
-                            <input type="file" id="comprovativoSimuladores" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                            <small>Envie PDF ou imagem do comprovativo</small>
-                        </div>
-                    </div>
-                    
-                    <!-- CAMPOS PARA CURSO ONLINE -->
-                    <div class="campos-especificos" id="camposCursoOnline" style="display: none;">
-                        <h4>Dados do Curso Online</h4>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-book"></i> Tipo de Curso</label>
-                            <select id="tipoCurso" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="Mercados Financeiro">Mercados Financeiro</option>
-                                <option value="Gestão">Gestão</option>
-                                <option value="Economia">Economia</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-clock"></i> Turma Escolhida</label>
-                            <select id="turmaCurso" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="Da manhã">Da manhã</option>
-                                <option value="De Tarde">De Tarde</option>
-                                <option value="De Noite">De Noite</option>
-                                <option value="Do fim de semana">Do fim de semana</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-credit-card"></i> Tipo de Pagamento</label>
-                            <select id="tipoPagamentoCurso" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="Caixa">Caixa</option>
-                                <option value="Transferência Bancária">Transferência Bancária</option>
-                                <option value="Express">Express</option>
-                                <option value="Unitel Money">Unitel Money</option>
-                                <option value="USDT via Binance">USDT via Binance</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-money-bill"></i> Valor Pago (Kz)</label>
-                            <input type="number" id="valorCurso" class="form-control" value="15000" readonly>
-                            <small>Valor fixo: 15.000 Kz</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-file-upload"></i> Comprovativo de Pagamento</label>
-                            <input type="file" id="comprovativoCurso" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                        </div>
-                    </div>
-                    
-                    <!-- CAMPOS PARA FORMAÇÃO PRESENCIAL -->
-                    <div class="campos-especificos" id="camposFormacaoPresencial" style="display: none;">
-                        <h4>Dados da Formação Presencial</h4>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-university"></i> Instituição Associada</label>
-                            <input type="text" id="instituicao" class="form-control" placeholder="Nome da instituição">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-book"></i> Tipo de Formação</label>
-                            <select id="tipoFormacao" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="Mercados Financeiro">Mercados Financeiro</option>
-                                <option value="Gestão">Gestão</option>
-                                <option value="Economia">Economia</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-clock"></i> Turma</label>
-                            <select id="turmaFormacao" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="Da manhã">Da manhã</option>
-                                <option value="De Tarde">De Tarde</option>
-                                <option value="De Noite">De Noite</option>
-                                <option value="Do fim de semana">Do fim de semana</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-credit-card"></i> Tipo de Pagamento</label>
-                            <select id="tipoPagamentoFormacao" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="Caixa">Caixa</option>
-                                <option value="Transferência Bancária">Transferência Bancária</option>
-                                <option value="Express">Express</option>
-                                <option value="Unitel Money">Unitel Money</option>
-                                <option value="USDT via Binance">USDT via Binance</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-money-bill"></i> Valor Pago (Kz)</label>
-                            <input type="number" id="valorFormacao" class="form-control" value="25000" readonly>
-                            <small>Valor fixo: 25.000 Kz</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-file-upload"></i> Comprovativo de Pagamento</label>
-                            <input type="file" id="comprovativoFormacao" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                        </div>
-                    </div>
-                    
-                    <!-- CAMPOS PARA PARCEIROS -->
-                    <div class="campos-especificos" id="camposParceiros" style="display: none;">
-                        <h4>Dados do Parceiro</h4>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-briefcase"></i> Função</label>
-                            <select id="funcaoParceiro" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="Formador">Formador</option>
-                                <option value="Assistente">Assistente</option>
-                                <option value="Caixa">Caixa</option>
-                                <option value="Líder regional">Líder regional</option>
-                                <option value="Secretaria/o">Secretaria/o</option>
-                                <option value="Estagiário/a">Estagiário/a</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-info-circle"></i> Status</label>
-                            <select id="statusParceiro" class="form-control" required>
-                                <option value="Pendente">Pendente</option>
-                                <option value="Ativo">Ativo</option>
-                                <option value="Inativo">Inativo</option>
-                            </select>
-                        </div>
-                        
-                        <div class="alert-warning">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <p>Após o cadastro, sua solicitação será analisada pelo administrador. Você receberá a senha de acesso por e-mail ou WhatsApp após autorização.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- CAMPOS PARA SERVIÇOS PERSONALIZADOS -->
-                    <div class="campos-especificos" id="camposPersonalizados" style="display: none;">
-                        <h4>Detalhes do Serviço Personalizado</h4>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-id-card"></i> Identificação</label>
-                            <input type="text" id="identificacao" class="form-control" placeholder="BI, Passaporte ou NIF">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-bullseye"></i> Tipo de Serviço</label>
-                            <select id="tipoServicoPersonalizado" class="form-control" required>
-                                <option value="">Selecione o tipo de serviço</option>
-                                <option value="Simulador Personalizado">Simulador Personalizado</option>
-                                <option value="Curso Personalizado">Curso Personalizado</option>
-                                <option value="Formação In Company">Formação In Company</option>
-                                <option value="Consultoria">Consultoria</option>
-                                <option value="Desenvolvimento de Software">Desenvolvimento de Software</option>
-                                <option value="Outro">Outro (especificar na descrição)</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-align-left"></i> Descrição Detalhada do Serviço</label>
-                            <textarea id="descricaoServico" class="form-control" rows="5" placeholder="Descreva em detalhes o que você precisa..."></textarea>
-                            <small>Seja o mais detalhado possível para que possamos avaliar sua proposta</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-credit-card"></i> Forma de Pagamento</label>
-                            <select id="formaPagamentoPersonalizado" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="Caixa">Caixa</option>
-                                <option value="Transferência Bancária">Transferência Bancária</option>
-                                <option value="Express">Express</option>
-                                <option value="Unitel Money">Unitel Money</option>
-                                <option value="USDT via Binance">USDT via Binance</option>
-                                <option value="USDT via outra corretora">USDT via outra corretora</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-money-bill"></i> Valor Proposto (Kz)</label>
-                            <input type="number" id="valorPersonalizado" class="form-control" placeholder="Digite o valor proposto" min="0">
-                            <small>Este valor será analisado pela nossa equipe</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label><i class="fas fa-file-upload"></i> Comprovativo (opcional)</label>
-                            <input type="file" id="comprovativoPersonalizado" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
-                            <small>Se já realizou algum pagamento inicial, envie o comprovativo</small>
-                        </div>
-                        
-                        <div class="alert-info">
-                            <i class="fas fa-info-circle"></i>
-                            <p>Sua proposta será analisada pela equipe Teca Capital. Entraremos em contato por e-mail, WhatsApp ou telefone para discutir os próximos passos.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- BOTÕES DE AÇÃO -->
+
+                    <!-- Botão de Envio -->
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary btn-large">
-                            <i class="fas fa-check-circle"></i> Cadastrar
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-large" id="btnLimparForm">
-                            <i class="fas fa-undo-alt"></i> Limpar
+                        <button type="submit" id="btn-cadastrar" class="btn btn-primary btn-large">
+                            <i class="fas fa-paper-plane"></i> CADASTRAR
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
 
-        <!-- ========== CONTAINER DE LOGIN ========== -->
-        <div class="login-universal-container" id="loginContainer">
-            <div class="login-card card-animated">
-                <div class="login-header">
-                    <i class="fas fa-lock"></i>
-                    <h2>Login <span class="highlight">Teca Capital</span></h2>
-                    <p>Acesse sua conta para utilizar os simuladores e bibliotecas</p>
-                </div>
-                
-                <!-- BARRA DE PROGRESSO (LOGIN) -->
-                <div class="progress-container" id="loginProgressContainer" style="display: none;">
-                    <div class="progress-bar" id="loginProgressBar" style="width: 0%;"></div>
-                    <span class="progress-text" id="loginProgressText">0%</span>
-                </div>
-                
-                <form id="formLogin">
-                    <div class="form-group">
-                        <label><i class="fas fa-user"></i> Nome de Usuário</label>
-                        <input type="text" id="loginNome" class="form-control" placeholder="Digite seu nome completo" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label><i class="fas fa-key"></i> Senha ou Código Especial</label>
-                        <input type="password" id="loginCredencial" class="form-control" placeholder="Digite sua senha ou código" required>
-                        <small class="text-muted">Use a senha ou código especial fornecido no cadastro</small>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary btn-large">
-                            <i class="fas fa-sign-in-alt"></i> Entrar
-                        </button>
-                    </div>
-                    
-                    <div class="login-footer">
-                        <p>Ainda não tem cadastro? <a href="#" id="linkCadastro">Cadastre-se aqui</a></p>
-                        <p><a href="#" id="linkRecuperar">Esqueceu sua senha?</a></p>
-                    </div>
-                </form>
+                <!-- Área de Mensagem para Cadastro -->
+                <div id="mensagem-cadastro" class="alert-container"></div>
             </div>
-        </div>
 
-        <!-- ========== MODAL DE EXIBIÇÃO TEMPORÁRIA DE SENHA ========== -->
-        <div class="senha-temporaria-modal" id="senhaModal" style="display: none;">
-            <div class="modal-content card-animated">
-                <div class="modal-header">
-                    <i class="fas fa-key"></i>
-                    <h3>Sua senha de acesso</h3>
-                </div>
-                <div class="modal-body">
-                    <p>Anote sua senha. Ela ficará visível por apenas <span class="highlight" id="timerSegundos">60</span> segundos.</p>
-                    
-                    <div class="senha-display" id="senhaGerada">
-                        sbjs0427
-                    </div>
-                    
-                    <div class="timer-display">
-                        <div class="timer-circle" id="timerCircle">
-                            <svg width="100" height="100">
-                                <circle cx="50" cy="50" r="45" stroke="var(--border-dark)" stroke-width="4" fill="none"/>
-                                <circle id="timerProgress" cx="50" cy="50" r="45" stroke="var(--primary-gold)" stroke-width="4" fill="none" stroke-dasharray="0" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
-                            </svg>
-                            <span class="timer-number" id="timerNumber">60</span>
+            <!-- ABA 2: LOGIN COMUM -->
+            <div id="tab-login" class="tab-content">
+                <form id="form-login" class="form-login">
+                    <div class="form-section">
+                        <h3 class="section-title"><i class="fas fa-sign-in-alt"></i> Aceder à Plataforma</h3>
+                        
+                        <div class="form-group">
+                            <label for="login-usuario">Nome de Usuário <span class="required">*</span></label>
+                            <input type="text" id="login-usuario" name="usuario" class="form-control" placeholder="Seu nome completo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="login-senha">Senha ou Código Especial <span class="required">*</span></label>
+                            <input type="password" id="login-senha" name="senha" class="form-control" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-large">
+                                <i class="fas fa-unlock-alt"></i> ENTRAR
+                            </button>
                         </div>
                     </div>
-                    
-                    <button class="btn btn-secondary" id="btnCopiarSenha" type="button">
-                        <i class="fas fa-copy"></i> Copiar Senha
-                    </button>
-                </div>
-                <div class="modal-footer">
-                    <p class="warning-text" id="mensagemExpiracao">
-                        Se não anotou a senha, solicite pelo WhatsApp ou e-mail da Teca Capital, ou ligue para o nosso nº. Tempo médio de resposta: 5 minutos a 2 horas.
-                    </p>
-                </div>
+                </form>
+                
+                <!-- Área de Mensagem para Login -->
+                <div id="mensagem-login" class="alert-container"></div>
+            </div>
+
+            <!-- ABA 3: LOGIN ADMINISTRADOR -->
+            <div id="tab-admin" class="tab-content">
+                <form id="form-admin" class="form-login">
+                    <div class="form-section">
+                        <h3 class="section-title"><i class="fas fa-crown"></i> Acesso Administrativo</h3>
+                        
+                        <div class="form-group">
+                            <label for="admin-usuario">Nome de Usuário Master <span class="required">*</span></label>
+                            <input type="text" id="admin-usuario" name="usuario" class="form-control" placeholder="Administrador" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="admin-pais">País <span class="required">*</span></label>
+                            <input type="text" id="admin-pais" name="pais" class="form-control" placeholder="Angola" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="admin-senha">Senha de Acesso Geral <span class="required">*</span></label>
+                            <input type="password" id="admin-senha" name="senha" class="form-control" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-large">
+                                <i class="fas fa-crown"></i> ACESSAR DASHBOARD ADMIN
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Área de Mensagem para Admin -->
+                <div id="mensagem-admin" class="alert-container"></div>
             </div>
         </div>
+
+        <!-- Informações de contato (rodapé específico da página) -->
+        <div class="contact-info">
+            <p><i class="fas fa-phone"></i> Precisa de ajuda? Ligue: +244 974 235 284</p>
+            <p><i class="fas fa-envelope"></i> Email: tecacapitaledtech@gmail.com</p>
+        </div>
+
 
     </main>
     
@@ -544,3 +303,4 @@
 
 </body>
 </html>
+

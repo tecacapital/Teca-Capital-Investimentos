@@ -21,6 +21,1175 @@
     <!-- ARQUIVOS JS -->
     <script src="frontend/Public/javascript/page/b_imagem.js"></script>
 
+     <!-- ARQUIVOS JS De Restrição -->
+    <script>
+
+            // ============================================
+        // SISTEMA DE LOGIN OBRIGATÓRIO - TECA CAPITAL
+        // Versão: 3.0.0 - PROFISSIONAL
+        // Descrição: Bloqueia página e exibe formulário com 3 abas
+        // ============================================
+
+        (function() {
+            'use strict';
+            
+            // ============================================
+            // CONFIGURAÇÕES DO SISTEMA
+            // ============================================
+            const CONFIG = {
+                // URL do Google Apps Script (backend)
+                SCRIPT_URL: "https://script.google.com/macros/s/AKfycbx7L5XowJYawTYChVsG-k_FtO0ieen4ilQd9UpDjnilcgIy3uLSRdIg_5rG3QY6blwr5Q/exec",
+                
+                // Página de cadastro
+                CADASTRO_PAGE: "index.html#cadastro",
+                
+                // Duração da sessão (1 hora)
+                SESSION_DURATION: 3600000,
+                
+                // Modo debug (false em produção)
+                DEBUG: true,
+                
+                // Cores do sistema (baseadas na identidade TECA)
+                COLORS: {
+                    gold: '#d6ae64',
+                    goldLight: '#e5c48c',
+                    goldDark: '#b88e3f',
+                    blue: '#1976d2',
+                    blueLight: '#4791db',
+                    blueDark: '#0d47a1',
+                    dark: '#0a0a0a',
+                    darkLight: '#1a1a1a',
+                    darkLighter: '#222222',
+                    gray: '#333333',
+                    grayLight: '#666666',
+                    text: '#ffffff',
+                    textLight: '#cccccc',
+                    textMuted: '#999999',
+                    error: '#dc3545',
+                    success: '#28a745',
+                    warning: '#ffc107'
+                },
+                
+                // Z-index (altíssimo para garantir visibilidade)
+                Z_INDEX: {
+                    overlay: 999999,
+                    modal: 1000000,
+                    message: 1000001
+                }
+            };
+            
+            // ============================================
+            // ESTADO DA APLICAÇÃO
+            // ============================================
+            const State = {
+                isAuthenticated: false,
+                currentUser: null,
+                activeTab: 'admin', // admin, parceiro, comum
+                initialized: false,
+                sessionExpiry: null
+            };
+            
+            // ============================================
+            // INICIALIZAÇÃO - EXECUTADA IMEDIATAMENTE
+            // ============================================
+            
+            log('🔐 Inicializando sistema de proteção de acesso...');
+            
+            // Verificar sessão existente
+            if (!checkExistingSession()) {
+                log('Nenhuma sessão ativa. Bloqueando página...');
+                
+                // Estratégia de injeção: tentar de várias formas
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initializeSystem);
+                } else {
+                    initializeSystem();
+                }
+                
+                // Fallback extremo: injetar após 200ms
+                setTimeout(() => {
+                    if (!document.getElementById('teca-login-modal')) {
+                        log('⚠️ Fallback: forçando injeção');
+                        initializeSystem();
+                    }
+                }, 200);
+                
+                // Fallback adicional: injetar no body se existir
+                if (document.body) {
+                    setTimeout(() => {
+                        if (!document.getElementById('teca-login-modal')) {
+                            log('⚠️ Fallback: injetando diretamente no body');
+                            forceInjectLogin();
+                        }
+                    }, 500);
+                }
+            } else {
+                log('✅ Sessão ativa encontrada. Página liberada.');
+            }
+            
+            // ============================================
+            // FUNÇÃO PRINCIPAL DE INICIALIZAÇÃO
+            // ============================================
+            
+            function initializeSystem() {
+                if (State.initialized) return;
+                State.initialized = true;
+                
+                log('Inicializando sistema...');
+                
+                // Limpar elementos residuais
+                cleanupExistingElements();
+                
+                // Injetar estilos CSS
+                injectStyles();
+                
+                // Bloquear página e mostrar formulário
+                showLoginScreen();
+            }
+            
+            function forceInjectLogin() {
+                if (!document.getElementById('teca-login-modal') && document.body) {
+                    const overlay = document.createElement('div');
+                    overlay.id = 'teca-login-modal';
+                    overlay.style.cssText = `
+                        position: fixed !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                        background: ${CONFIG.COLORS.dark} !important;
+                        z-index: ${CONFIG.Z_INDEX.overlay} !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        font-family: 'Segoe UI', Roboto, sans-serif !important;
+                    `;
+                    overlay.innerHTML = `
+                        <div style="
+                            background: ${CONFIG.COLORS.darkLight};
+                            border: 2px solid ${CONFIG.COLORS.gold};
+                            border-radius: 20px;
+                            padding: 40px;
+                            max-width: 500px;
+                            width: 90%;
+                            text-align: center;
+                        ">
+                            <div style="color: ${CONFIG.COLORS.gold}; font-size: 60px; margin-bottom: 20px;">🔐</div>
+                            <h2 style="color: ${CONFIG.COLORS.gold}; margin-bottom: 20px;">Sistema de Autenticação</h2>
+                            <p style="color: ${CONFIG.COLORS.textLight}; margin-bottom: 30px;">A carregar formulário de login...</p>
+                            <div style="width: 50px; height: 50px; border: 3px solid ${CONFIG.COLORS.gray}; border-top-color: ${CONFIG.COLORS.gold}; border-radius: 50%; animation: tecaSpin 1s linear infinite; margin: 0 auto;"></div>
+                        </div>
+                    `;
+                    document.body.appendChild(overlay);
+                    
+                    // Tentar carregar novamente
+                    setTimeout(() => {
+                        if (document.getElementById('teca-login-modal')) {
+                            document.getElementById('teca-login-modal').remove();
+                        }
+                        initializeSystem();
+                    }, 1000);
+                }
+            }
+            
+            function cleanupExistingElements() {
+                const elements = [
+                    'teca-login-modal',
+                    'teca-access-overlay',
+                    'teca-login-styles'
+                ];
+                
+                elements.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.remove();
+                });
+            }
+            
+            // ============================================
+            // ESTILOS CSS (INJETADOS COM !important)
+            // ============================================
+            
+            function injectStyles() {
+                if (document.getElementById('teca-login-styles')) return;
+                
+                const styles = `
+                    <style id="teca-login-styles">
+                        /* ANIMAÇÕES */
+                        @keyframes tecaSpin {
+                            to { transform: rotate(360deg); }
+                        }
+                        
+                        @keyframes tecaSlideIn {
+                            from {
+                                opacity: 0;
+                                transform: translateY(-30px);
+                            }
+                            to {
+                                opacity: 1;
+                                transform: translateY(0);
+                            }
+                        }
+                        
+                        @keyframes tecaFadeIn {
+                            from { opacity: 0; }
+                            to { opacity: 1; }
+                        }
+                        
+                        @keyframes tecaFadeOut {
+                            to {
+                                opacity: 0;
+                                transform: translateY(-30px);
+                            }
+                        }
+                        
+                        @keyframes tecaSlideInRight {
+                            from {
+                                transform: translateX(100%);
+                                opacity: 0;
+                            }
+                            to {
+                                transform: translateX(0);
+                                opacity: 1;
+                            }
+                        }
+                        
+                        /* CONTAINER PRINCIPAL */
+                        .teca-login-container {
+                            position: fixed !important;
+                            top: 0 !important;
+                            left: 0 !important;
+                            width: 100% !important;
+                            height: 100% !important;
+                            background: rgba(0, 0, 0, 0.95) !important;
+                            backdrop-filter: blur(8px) !important;
+                            z-index: ${CONFIG.Z_INDEX.overlay} !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            font-family: 'Segoe UI', Roboto, system-ui, sans-serif !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            box-sizing: border-box !important;
+                        }
+                        
+                        /* CARD DE LOGIN */
+                        .teca-login-card {
+                            background: ${CONFIG.COLORS.darkLight} !important;
+                            border: 2px solid ${CONFIG.COLORS.gold} !important;
+                            border-radius: 24px !important;
+                            padding: 35px !important;
+                            max-width: 520px !important;
+                            width: 90% !important;
+                            max-height: 90vh !important;
+                            overflow-y: auto !important;
+                            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8) !important;
+                            animation: tecaSlideIn 0.4s ease !important;
+                            color: ${CONFIG.COLORS.text} !important;
+                            position: relative !important;
+                        }
+                        
+                        /* HEADER */
+                        .teca-login-header {
+                            text-align: center !important;
+                            margin-bottom: 25px !important;
+                        }
+                        
+                        .teca-logo {
+                            font-size: 60px !important;
+                            margin-bottom: 15px !important;
+                            color: ${CONFIG.COLORS.gold} !important;
+                        }
+                        
+                        .teca-login-title {
+                            color: ${CONFIG.COLORS.gold} !important;
+                            font-size: 28px !important;
+                            font-weight: 700 !important;
+                            margin: 0 0 8px 0 !important;
+                            letter-spacing: 1px !important;
+                        }
+                        
+                        .teca-login-subtitle {
+                            color: ${CONFIG.COLORS.textMuted} !important;
+                            font-size: 14px !important;
+                            margin: 0 !important;
+                        }
+                        
+                        /* TABS */
+                        .teca-tabs {
+                            display: flex !important;
+                            gap: 8px !important;
+                            margin-bottom: 25px !important;
+                            background: ${CONFIG.COLORS.darkLighter} !important;
+                            padding: 6px !important;
+                            border-radius: 50px !important;
+                            border: 1px solid ${CONFIG.COLORS.gray} !important;
+                        }
+                        
+                        .teca-tab {
+                            flex: 1 !important;
+                            padding: 12px 8px !important;
+                            background: transparent !important;
+                            border: none !important;
+                            border-radius: 40px !important;
+                            color: ${CONFIG.COLORS.textMuted} !important;
+                            font-weight: 600 !important;
+                            font-size: 14px !important;
+                            cursor: pointer !important;
+                            transition: all 0.3s ease !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            gap: 8px !important;
+                        }
+                        
+                        .teca-tab.active {
+                            background: ${CONFIG.COLORS.gold} !important;
+                            color: ${CONFIG.COLORS.dark} !important;
+                        }
+                        
+                        .teca-tab i {
+                            font-size: 16px !important;
+                        }
+                        
+                        /* FORMULÁRIOS */
+                        .teca-form-container {
+                            margin-bottom: 20px !important;
+                        }
+                        
+                        .teca-form-group {
+                            margin-bottom: 18px !important;
+                        }
+                        
+                        .teca-form-group label {
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 8px !important;
+                            margin-bottom: 8px !important;
+                            color: ${CONFIG.COLORS.textLight} !important;
+                            font-weight: 500 !important;
+                            font-size: 14px !important;
+                        }
+                        
+                        .teca-form-group label i {
+                            color: ${CONFIG.COLORS.gold} !important;
+                            width: 20px !important;
+                        }
+                        
+                        .teca-input {
+                            width: 100% !important;
+                            padding: 14px 16px !important;
+                            background: ${CONFIG.COLORS.darkLighter} !important;
+                            border: 1px solid ${CONFIG.COLORS.gray} !important;
+                            border-radius: 10px !important;
+                            color: ${CONFIG.COLORS.text} !important;
+                            font-size: 15px !important;
+                            transition: all 0.3s ease !important;
+                            box-sizing: border-box !important;
+                        }
+                        
+                        .teca-input:focus {
+                            outline: none !important;
+                            border-color: ${CONFIG.COLORS.gold} !important;
+                            box-shadow: 0 0 0 3px rgba(214, 174, 100, 0.2) !important;
+                            background: ${CONFIG.COLORS.darkLight} !important;
+                        }
+                        
+                        .teca-input::placeholder {
+                            color: ${CONFIG.COLORS.grayLight} !important;
+                            opacity: 0.7 !important;
+                        }
+                        
+                        .teca-submit-btn {
+                            width: 100% !important;
+                            padding: 16px !important;
+                            background: ${CONFIG.COLORS.gold} !important;
+                            color: ${CONFIG.COLORS.dark} !important;
+                            border: none !important;
+                            border-radius: 10px !important;
+                            font-weight: 700 !important;
+                            font-size: 16px !important;
+                            cursor: pointer !important;
+                            transition: all 0.3s ease !important;
+                            margin-top: 10px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            gap: 10px !important;
+                        }
+                        
+                        .teca-submit-btn:hover:not(:disabled) {
+                            background: ${CONFIG.COLORS.blue} !important;
+                            color: white !important;
+                            transform: translateY(-2px) !important;
+                            box-shadow: 0 5px 20px rgba(25, 118, 210, 0.3) !important;
+                        }
+                        
+                        .teca-submit-btn:disabled {
+                            opacity: 0.6 !important;
+                            cursor: not-allowed !important;
+                        }
+                        
+                        .teca-submit-btn.loading {
+                            position: relative !important;
+                            color: transparent !important;
+                            pointer-events: none !important;
+                        }
+                        
+                        .teca-submit-btn.loading::after {
+                            content: '' !important;
+                            position: absolute !important;
+                            width: 24px !important;
+                            height: 24px !important;
+                            top: 50% !important;
+                            left: 50% !important;
+                            margin-left: -12px !important;
+                            margin-top: -12px !important;
+                            border: 3px solid rgba(0, 0, 0, 0.3) !important;
+                            border-radius: 50% !important;
+                            border-top-color: ${CONFIG.COLORS.dark} !important;
+                            animation: tecaSpin 0.8s linear infinite !important;
+                        }
+                        
+                        /* MENSAGENS */
+                        .teca-message-area {
+                            margin-bottom: 20px !important;
+                        }
+                        
+                        .teca-message {
+                            padding: 14px 18px !important;
+                            border-radius: 10px !important;
+                            margin-bottom: 10px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 12px !important;
+                            animation: tecaFadeIn 0.3s ease !important;
+                            font-size: 14px !important;
+                        }
+                        
+                        .teca-message i {
+                            font-size: 18px !important;
+                        }
+                        
+                        .teca-message-error {
+                            background: rgba(220, 53, 69, 0.1) !important;
+                            border: 1px solid ${CONFIG.COLORS.error} !important;
+                            color: ${CONFIG.COLORS.error} !important;
+                        }
+                        
+                        .teca-message-success {
+                            background: rgba(40, 167, 69, 0.1) !important;
+                            border: 1px solid ${CONFIG.COLORS.success} !important;
+                            color: ${CONFIG.COLORS.success} !important;
+                        }
+                        
+                        .teca-message-warning {
+                            background: rgba(255, 193, 7, 0.1) !important;
+                            border: 1px solid ${CONFIG.COLORS.warning} !important;
+                            color: ${CONFIG.COLORS.warning} !important;
+                        }
+                        
+                        .teca-message-info {
+                            background: rgba(23, 162, 184, 0.1) !important;
+                            border: 1px solid #17a2b8 !important;
+                            color: #17a2b8 !important;
+                        }
+                        
+                        /* INFO BOX */
+                        .teca-info-box {
+                            background: rgba(255, 255, 255, 0.03) !important;
+                            border: 1px solid ${CONFIG.COLORS.gray} !important;
+                            border-radius: 10px !important;
+                            padding: 15px !important;
+                            margin-top: 15px !important;
+                            font-size: 13px !important;
+                            color: ${CONFIG.COLORS.textMuted} !important;
+                            line-height: 1.6 !important;
+                        }
+                        
+                        .teca-info-box i {
+                            color: ${CONFIG.COLORS.gold} !important;
+                            margin-right: 8px !important;
+                        }
+                        
+                        /* LINK DE CADASTRO */
+                        .teca-register-section {
+                            text-align: center !important;
+                            margin-top: 25px !important;
+                            padding-top: 20px !important;
+                            border-top: 1px solid ${CONFIG.COLORS.gray} !important;
+                        }
+                        
+                        .teca-register-section p {
+                            color: ${CONFIG.COLORS.textMuted} !important;
+                            margin-bottom: 15px !important;
+                            font-size: 14px !important;
+                        }
+                        
+                        .teca-register-btn {
+                            display: inline-flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            gap: 10px !important;
+                            padding: 14px 30px !important;
+                            background: transparent !important;
+                            border: 2px solid ${CONFIG.COLORS.gold} !important;
+                            color: ${CONFIG.COLORS.gold} !important;
+                            border-radius: 50px !important;
+                            text-decoration: none !important;
+                            font-weight: 600 !important;
+                            font-size: 15px !important;
+                            transition: all 0.3s ease !important;
+                        }
+                        
+                        .teca-register-btn:hover {
+                            background: ${CONFIG.COLORS.gold} !important;
+                            color: ${CONFIG.COLORS.dark} !important;
+                        }
+                        
+                        /* FOOTER */
+                        .teca-login-footer {
+                            text-align: center !important;
+                            margin-top: 20px !important;
+                            color: ${CONFIG.COLORS.grayLight} !important;
+                            font-size: 12px !important;
+                        }
+                        
+                        /* RESPONSIVIDADE */
+                        @media (max-width: 768px) {
+                            .teca-login-card {
+                                padding: 25px !important;
+                            }
+                            
+                            .teca-login-title {
+                                font-size: 24px !important;
+                            }
+                            
+                            .teca-tab {
+                                font-size: 12px !important;
+                            }
+                            
+                            .teca-tab span {
+                                display: none !important;
+                            }
+                            
+                            .teca-tab i {
+                                font-size: 20px !important;
+                                margin: 0 !important;
+                            }
+                        }
+                        
+                        @media (max-width: 480px) {
+                            .teca-login-card {
+                                padding: 20px !important;
+                            }
+                            
+                            .teca-input {
+                                padding: 12px !important;
+                            }
+                            
+                            .teca-submit-btn {
+                                padding: 14px !important;
+                                font-size: 14px !important;
+                            }
+                        }
+                    </style>
+                `;
+                
+                document.head.insertAdjacentHTML('beforeend', styles);
+                log('✅ Estilos injetados');
+            }
+            
+            // ============================================
+            // CRIAÇÃO DA TELA DE LOGIN
+            // ============================================
+            
+            function showLoginScreen() {
+                log('Criando tela de login...');
+                
+                // Desabilitar rolagem
+                document.body.style.overflow = 'hidden';
+                document.documentElement.style.overflow = 'hidden';
+                
+                // Criar container principal
+                const container = document.createElement('div');
+                container.id = 'teca-login-container';
+                container.className = 'teca-login-container';
+                
+                // HTML completo do card
+                container.innerHTML = getLoginHTML();
+                
+                // Adicionar ao documento (no body ou html como fallback)
+                if (document.body) {
+                    document.body.appendChild(container);
+                } else {
+                    document.documentElement.appendChild(container);
+                }
+                
+                log('✅ Tela de login adicionada ao DOM');
+                
+                // Configurar eventos
+                setupTabs();
+                setupForms();
+                setupRegisterLink();
+            }
+            
+            function getLoginHTML() {
+                return `
+                    <div class="teca-login-card">
+                        <!-- HEADER -->
+                        <div class="teca-login-header">
+                            <h1 class="teca-login-title">TECA CAPITAL</h1>
+                            <p class="teca-login-subtitle">Acesso à Plataforma Educacional</p>
+                        </div>
+                        
+                        <!-- TABS -->
+                        <div class="teca-tabs">
+                            <button class="teca-tab ${State.activeTab === 'admin' ? 'active' : ''}" data-tab="admin">
+                                <i class="fas fa-crown"></i>
+                                <span>ADMIN</span>
+                            </button>
+                            <button class="teca-tab ${State.activeTab === 'parceiro' ? 'active' : ''}" data-tab="parceiro">
+                                <i class="fas fa-handshake"></i>
+                                <span>PARCEIRO</span>
+                            </button>
+                            <button class="teca-tab ${State.activeTab === 'comum' ? 'active' : ''}" data-tab="comum">
+                                <i class="fas fa-user"></i>
+                                <span>USUÁRIO</span>
+                            </button>
+                        </div>
+                        
+                        <!-- FORM CONTAINER -->
+                        <div id="teca-form-container" class="teca-form-container">
+                            ${getFormHTML(State.activeTab)}
+                        </div>
+                        
+                        <!-- MESSAGE AREA -->
+                        <div id="teca-message-area" class="teca-message-area"></div>
+                        
+                        <!-- REGISTER LINK -->
+                        <div class="teca-register-section">
+                            <p>Ainda não tem acesso?</p>
+                            <a href="${CONFIG.CADASTRO_PAGE}" id="teca-register-link" class="teca-register-btn">
+                                <i class="fas fa-user-plus"></i>
+                                CRIAR CONTA
+                            </a>
+                        </div>
+                        
+                        <!-- FOOTER -->
+                        <div class="teca-login-footer">
+                            <p>© 2026 TECA CAPITAL - Todos os direitos reservados</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            function getFormHTML(tab) {
+                switch(tab) {
+                    case 'admin':
+                        return `
+                            <form id="teca-form-admin" class="teca-form">
+                                <div class="teca-form-group">
+                                    <label for="admin-nome">
+                                        <i class="fas fa-user-tie"></i>
+                                        Nome de Usuário
+                                    </label>
+                                    <input type="text" id="admin-nome" class="teca-input" 
+                                        placeholder="Digite seu nome de administrador"
+                                        autocomplete="username"
+                                        required>
+                                </div>
+                                
+                                <div class="teca-form-group">
+                                    <label for="admin-pais">
+                                        <i class="fas fa-globe-africa"></i>
+                                        País
+                                    </label>
+                                    <input type="text" id="admin-pais" class="teca-input" 
+                                        placeholder="Ex: Angola, Portugal, Brasil..."
+                                        autocomplete="country"
+                                        required>
+                                </div>
+                                
+                                <div class="teca-form-group">
+                                    <label for="admin-senha">
+                                        <i class="fas fa-lock"></i>
+                                        Senha
+                                    </label>
+                                    <input type="password" id="admin-senha" class="teca-input" 
+                                        placeholder="Digite sua senha"
+                                        autocomplete="current-password"
+                                        required>
+                                </div>
+                                
+                                <button type="submit" class="teca-submit-btn">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    ENTRAR COMO ADMINISTRADOR
+                                </button>
+                            </form>
+                        `;
+                        
+                    case 'parceiro':
+                        return `
+                            <form id="teca-form-parceiro" class="teca-form">
+                                <div class="teca-form-group">
+                                    <label for="parceiro-nome">
+                                        <i class="fas fa-user-friends"></i>
+                                        Nome Completo
+                                    </label>
+                                    <input type="text" id="parceiro-nome" class="teca-input" 
+                                        placeholder="Digite seu nome completo"
+                                        autocomplete="name"
+                                        required>
+                                </div>
+                                
+                                <div class="teca-form-group">
+                                    <label for="parceiro-codigo">
+                                        <i class="fas fa-qrcode"></i>
+                                        Código de Acesso
+                                    </label>
+                                    <input type="password" id="parceiro-codigo" class="teca-input" 
+                                        placeholder="Ex: prcjs1234"
+                                        autocomplete="off"
+                                        required>
+                                </div>
+                                
+                                <button type="submit" class="teca-submit-btn">
+                                    <i class="fas fa-handshake"></i>
+                                    ENTRAR COMO PARCEIRO
+                                </button>
+                            </form>
+                        `;
+                        
+                    case 'comum':
+                        return `
+                            <form id="teca-form-comum" class="teca-form">
+                                <div class="teca-form-group">
+                                    <label for="comum-usuario">
+                                        <i class="fas fa-user"></i>
+                                        Nome ou Email
+                                    </label>
+                                    <input type="text" id="comum-usuario" class="teca-input" 
+                                        placeholder="Seu nome ou email"
+                                        autocomplete="username"
+                                        required>
+                                </div>
+                                
+                                <div class="teca-form-group">
+                                    <label for="comum-senha">
+                                        <i class="fas fa-key"></i>
+                                        Senha ou Código Especial
+                                    </label>
+                                    <input type="password" id="comum-senha" class="teca-input" 
+                                        placeholder="Sua senha ou código"
+                                        autocomplete="current-password"
+                                        required>
+                                </div>
+                                
+                                <button type="submit" class="teca-submit-btn">
+                                    <i class="fas fa-user-check"></i>
+                                    ENTRAR COMO USUÁRIO
+                                </button>
+                            </form>
+                            
+                            <div class="teca-info-box">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Informação:</strong> A autenticação será verificada em todas as bases de dados do sistema.
+                                Qualquer combinação válida de nome/email e senha/código concederá acesso.
+                            </div>
+                        `;
+                }
+            }
+            
+            // ============================================
+            // CONFIGURAÇÃO DOS EVENTOS
+            // ============================================
+            
+            function setupTabs() {
+                const tabs = document.querySelectorAll('.teca-tab');
+                
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        
+                        const tabName = tab.dataset.tab;
+                        if (!tabName) return;
+                        
+                        log(`Mudando para aba: ${tabName}`);
+                        
+                        State.activeTab = tabName;
+                        
+                        // Atualizar classes das abas
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        
+                        // Atualizar formulário
+                        const container = document.getElementById('teca-form-container');
+                        if (container) {
+                            container.innerHTML = getFormHTML(tabName);
+                            setupForms();
+                        }
+                        
+                        // Limpar mensagens
+                        clearMessages();
+                    });
+                });
+            }
+            
+            function setupForms() {
+                // Admin form
+                const formAdmin = document.getElementById('teca-form-admin');
+                if (formAdmin) {
+                    formAdmin.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        await handleAdminLogin();
+                    });
+                }
+                
+                // Parceiro form
+                const formParceiro = document.getElementById('teca-form-parceiro');
+                if (formParceiro) {
+                    formParceiro.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        await handleParceiroLogin();
+                    });
+                }
+                
+                // Comum form
+                const formComum = document.getElementById('teca-form-comum');
+                if (formComum) {
+                    formComum.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        await handleComumLogin();
+                    });
+                }
+            }
+            
+            function setupRegisterLink() {
+                const registerLink = document.getElementById('teca-register-link');
+                if (registerLink) {
+                    registerLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.open(CONFIG.CADASTRO_PAGE, '_blank');
+                    });
+                }
+            }
+            
+            // ============================================
+            // HANDLERS DE LOGIN
+            // ============================================
+            
+            async function handleAdminLogin() {
+                const nome = document.getElementById('admin-nome')?.value;
+                const pais = document.getElementById('admin-pais')?.value;
+                const senha = document.getElementById('admin-senha')?.value;
+                
+                if (!nome || !pais || !senha) {
+                    showError('Por favor, preencha todos os campos.');
+                    return;
+                }
+                
+                const btn = document.querySelector('#teca-form-admin .teca-submit-btn');
+                setButtonLoading(btn, true);
+                
+                try {
+                    const url = `${CONFIG.SCRIPT_URL}?usuario=${encodeURIComponent(nome)}&senha=${encodeURIComponent(senha)}&tipo=admin&pais=${encodeURIComponent(pais)}`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data.login) {
+                        showSuccess(`Bem-vindo, ${nome}! Redirecionando...`);
+                        
+                        State.isAuthenticated = true;
+                        State.currentUser = {
+                            name: nome,
+                            type: 'admin',
+                            nivel: data.nivel || 'master'
+                        };
+                        
+                        saveSession(State.currentUser);
+                        setTimeout(() => grantAccess(), 1000);
+                    } else {
+                        showError('Credenciais de administrador inválidas.');
+                        setButtonLoading(btn, false);
+                    }
+                } catch (error) {
+                    log('Erro:', error);
+                    showError('Erro de ligação ao servidor. Tente novamente.');
+                    setButtonLoading(btn, false);
+                }
+            }
+            
+            async function handleParceiroLogin() {
+                const nome = document.getElementById('parceiro-nome')?.value;
+                const codigo = document.getElementById('parceiro-codigo')?.value;
+                
+                if (!nome || !codigo) {
+                    showError('Por favor, preencha todos os campos.');
+                    return;
+                }
+                
+                const btn = document.querySelector('#teca-form-parceiro .teca-submit-btn');
+                setButtonLoading(btn, true);
+                
+                try {
+                    const url = `${CONFIG.SCRIPT_URL}?acao=validar_parceiro&nome=${encodeURIComponent(nome)}&codigo=${encodeURIComponent(codigo)}`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data.valido) {
+                        showSuccess(`Bem-vindo, ${nome}! Redirecionando...`);
+                        
+                        State.isAuthenticated = true;
+                        State.currentUser = {
+                            name: nome,
+                            type: 'parceiro',
+                            funcao: data.funcao || 'Parceiro',
+                            regiao: data.regiao || ''
+                        };
+                        
+                        saveSession(State.currentUser);
+                        setTimeout(() => grantAccess(), 1000);
+                    } else {
+                        showError('Código de parceiro inválido.');
+                        setButtonLoading(btn, false);
+                    }
+                } catch (error) {
+                    log('Erro:', error);
+                    showError('Erro de ligação ao servidor. Tente novamente.');
+                    setButtonLoading(btn, false);
+                }
+            }
+            
+            async function handleComumLogin() {
+                const usuario = document.getElementById('comum-usuario')?.value;
+                const senha = document.getElementById('comum-senha')?.value;
+                
+                if (!usuario || !senha) {
+                    showError('Por favor, preencha todos os campos.');
+                    return;
+                }
+                
+                const btn = document.querySelector('#teca-form-comum .teca-submit-btn');
+                setButtonLoading(btn, true);
+                
+                try {
+                    const url = `${CONFIG.SCRIPT_URL}?usuario=${encodeURIComponent(usuario)}&senha=${encodeURIComponent(senha)}&tipo=comum&busca_todas=true`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data.login) {
+                        showSuccess(`Bem-vindo, ${data.nome || usuario}! Redirecionando...`);
+                        
+                        State.isAuthenticated = true;
+                        State.currentUser = {
+                            name: data.nome || usuario,
+                            type: 'comum',
+                            destino: data.destino || 'Simuladores/Bibliotecas'
+                        };
+                        
+                        saveSession(State.currentUser);
+                        setTimeout(() => grantAccess(), 1000);
+                    } else {
+                        showError('Usuário ou senha inválidos.');
+                        setButtonLoading(btn, false);
+                    }
+                } catch (error) {
+                    log('Erro:', error);
+                    showError('Erro de ligação ao servidor. Tente novamente.');
+                    setButtonLoading(btn, false);
+                }
+            }
+            
+            // ============================================
+            // FUNÇÕES DE SESSÃO
+            // ============================================
+            
+            function checkExistingSession() {
+                try {
+                    const sessionData = sessionStorage.getItem('teca_session');
+                    if (sessionData) {
+                        const session = JSON.parse(sessionData);
+                        
+                        if (session.expiry && Date.now() < session.expiry) {
+                            State.isAuthenticated = true;
+                            State.currentUser = session.user;
+                            State.sessionExpiry = session.expiry;
+                            log('Sessão ativa encontrada para:', session.user.name);
+                            return true;
+                        } else {
+                            sessionStorage.removeItem('teca_session');
+                        }
+                    }
+                } catch (e) {
+                    log('Erro ao verificar sessão:', e);
+                }
+                return false;
+            }
+            
+            function saveSession(user) {
+                const expiry = Date.now() + CONFIG.SESSION_DURATION;
+                
+                const session = {
+                    user: user,
+                    loginTime: Date.now(),
+                    expiry: expiry,
+                    userAgent: navigator.userAgent
+                };
+                
+                sessionStorage.setItem('teca_session', JSON.stringify(session));
+                State.sessionExpiry = expiry;
+                log('Sessão guardada para:', user.name);
+            }
+            
+            function logout() {
+                sessionStorage.removeItem('teca_session');
+                State.isAuthenticated = false;
+                State.currentUser = null;
+                window.location.reload();
+            }
+            
+            // ============================================
+            // FUNÇÕES DE LIBERAÇÃO
+            // ============================================
+            
+            function grantAccess() {
+                log('✅ Acesso concedido para:', State.currentUser);
+                
+                const container = document.getElementById('teca-login-container');
+                if (container) {
+                    container.style.opacity = '0';
+                    container.style.transition = 'opacity 0.5s ease';
+                    
+                    setTimeout(() => {
+                        if (container.parentNode) {
+                            container.parentNode.removeChild(container);
+                        }
+                        
+                        // Restaurar rolagem
+                        document.body.style.overflow = '';
+                        document.documentElement.style.overflow = '';
+                        
+                        // Mostrar mensagem de boas-vindas
+                        showWelcomeMessage();
+                    }, 500);
+                }
+            }
+            
+            function showWelcomeMessage() {
+                const msg = document.createElement('div');
+                msg.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${CONFIG.COLORS.gold};
+                    color: ${CONFIG.COLORS.dark};
+                    padding: 15px 25px;
+                    border-radius: 50px;
+                    font-weight: 600;
+                    z-index: ${CONFIG.Z_INDEX.message};
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                    animation: tecaSlideInRight 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    font-family: 'Segoe UI', sans-serif;
+                `;
+                
+                const icons = {
+                    'admin': '<i class="fas fa-crown"></i>',
+                    'parceiro': '<i class="fas fa-handshake"></i>',
+                    'comum': '<i class="fas fa-user"></i>'
+                };
+                
+                const icon = icons[State.currentUser?.type] || '<i class="fas fa-user"></i>';
+                
+                msg.innerHTML = `
+                    ${icon}
+                    <div>
+                        <strong>Bem-vindo, ${State.currentUser?.name || 'Usuário'}!</strong>
+                        <small style="display: block; font-size: 12px; margin-top: 5px; opacity: 0.8;">
+                            Acesso liberado
+                        </small>
+                    </div>
+                `;
+                
+                document.body.appendChild(msg);
+                
+                setTimeout(() => {
+                    msg.style.opacity = '0';
+                    msg.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => msg.remove(), 300);
+                }, 5000);
+            }
+            
+            // ============================================
+            // FUNÇÕES UTILITÁRIAS
+            // ============================================
+            
+            function showError(message) {
+                const area = document.getElementById('teca-message-area');
+                if (area) {
+                    area.innerHTML = `<div class="teca-message teca-message-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>${message}</span>
+                    </div>`;
+                }
+            }
+            
+            function showSuccess(message) {
+                const area = document.getElementById('teca-message-area');
+                if (area) {
+                    area.innerHTML = `<div class="teca-message teca-message-success">
+                        <i class="fas fa-check-circle"></i>
+                        <span>${message}</span>
+                    </div>`;
+                }
+            }
+            
+            function clearMessages() {
+                const area = document.getElementById('teca-message-area');
+                if (area) {
+                    area.innerHTML = '';
+                }
+            }
+            
+            function setButtonLoading(btn, isLoading) {
+                if (!btn) return;
+                
+                if (isLoading) {
+                    btn.classList.add('loading');
+                    btn.disabled = true;
+                } else {
+                    btn.classList.remove('loading');
+                    btn.disabled = false;
+                }
+            }
+            
+            function log(...args) {
+                if (CONFIG.DEBUG) {
+                    console.log('[🔐 TECA Login]', ...args);
+                }
+            }
+            
+            // ============================================
+            // API PÚBLICA
+            // ============================================
+            
+            window.TecaAuth = {
+                logout: logout,
+                currentUser: () => State.currentUser,
+                isAuthenticated: () => State.isAuthenticated,
+                sessionExpiry: () => State.sessionExpiry
+            };
+            
+            // ============================================
+            // FIM DO SISTEMA
+            // ============================================
+            
+        })();
+
+    </script>
+
     <!-- CSS CONTEUDO PRINCIPAL -->
     <link rel="stylesheet" href="frontend/Public/CSS/biblioteca/sub-biblioteca/b-imagem.css">
 </head>

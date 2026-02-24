@@ -21,6 +21,7 @@
 
     <!-- ARQUIVOS JS -->
     <script src="frontend/Public/javascript/page/Adm.js"></script>
+    <script src="frontend/Public/javascript/page/base_de_dados.js"></script>
 
     <!-- CSS CONTEUDO PRINCIPAL -->
     <link rel="stylesheet" href="frontend/Public/CSS/Adm/Adm.css">
@@ -70,363 +71,710 @@
     </header>
 
 
-    <main id="admin-main">
-        <!-- ============================================ -->
-        <!-- TELA DE LOGIN DO ADMINISTRADOR               -->
-        <!-- ============================================ -->
-        <div class="admin-login-container" id="adminLoginContainer">
-            <div class="admin-login-card card-animated">
-                <div class="login-header">
-                    <i class="fas fa-shield-alt"></i>
-                    <h2>Acesso Restrito <span class="highlight">Administrador</span></h2>
-                    <p>Área exclusiva para gestão master da Teca Capital</p>
-                </div>
-
-                <div class="login-form">
-                    <div class="form-group">
-                        <label><i class="fas fa-user"></i> Nome de Usuário Master</label>
-                        <input type="text" id="adminUser" class="form-control" placeholder="Digite seu nome de usuário" autocomplete="off">
+    <main>
+        
+        <body class="login-page">
+            <main class="login-container">
+                <div class="login-card">
+                        <h1 class="login-title">Área Administrativa</h1>
+                        <p class="login-subtitle">Acesso restrito a administradores e líderes regionais</p>
                     </div>
-
-                    <div class="form-group">
-                        <label><i class="fas fa-globe"></i> País</label>
-                        <select id="adminPais" class="form-control">
-                            <option value="">Selecione o país</option>
-                            <option value="Angola">Angola</option>
-                            <option value="Brasil">Brasil</option>
-                            <option value="Portugal">Portugal</option>
-                            <option value="Outro">Outro</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label><i class="fas fa-lock"></i> Senha de Acesso Geral</label>
-                        <input type="password" id="adminSenha" class="form-control" placeholder="Digite sua senha" autocomplete="off">
-                    </div>
-
-                    <button class="btn btn-primary btn-large" id="btnAdminLogin">
-                        <i class="fas fa-sign-in-alt"></i> Acessar Painel
-                    </button>
-                    <div id="adminLoginError" class="error-message" style="display: none;"></div>
-                </div>
-
-                <div class="login-footer">
-                    <p><i class="fas fa-clock"></i> Sessão expira a cada 15 minutos por segurança</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================ -->
-        <!-- DASHBOARD DO ADMINISTRADOR (PRINCIPAL)       -->
-        <!-- ============================================ -->
-        <div class="admin-dashboard" id="adminDashboard" style="display: none;">
-
-            <!-- HEADER DO PAINEL COM TIMER -->
-            <div class="admin-header">
-                <div class="admin-welcome">
-                    <i class="fas fa-user-cog"></i>
-                    <h2>Bem-vindo, <span id="adminNomeDisplay">Administrador</span></h2>
-                </div>
-                <div class="session-timer" id="sessionTimerBox">
-                    <i class="fas fa-hourglass-half"></i>
-                    <span id="sessionTimer">15:00</span> restantes
-                </div>
-                <button class="btn btn-secondary btn-small" id="btnLogout">
-                    <i class="fas fa-sign-out-alt"></i> Sair
-                </button>
-            </div>
-
-            <!-- CARDS DE RESUMO (DASHBOARD) -->
-            <div class="stats-grid" id="statsGrid">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-users"></i></div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="totalUsuarios">0</div>
-                        <div class="stat-label">Total de Usuários</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="usuariosAtivos">0</div>
-                        <div class="stat-label">Usuários Ativos</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-venus-mars"></i></div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="percentualHomens">0%</div>
-                        <div class="stat-label">Homens / Mulheres</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="simuladorMaisUsado">-</div>
-                        <div class="stat-label">Simulador + Acessado</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- NAVEGAÇÃO DOS MÓDULOS -->
-            <div class="admin-modules-nav">
-                <button class="module-btn active" data-module="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</button>
-                <button class="module-btn" data-module="usuarios"><i class="fas fa-users"></i> Usuários</button>
-                <button class="module-btn" data-module="simuladores"><i class="fas fa-gamepad"></i> Simuladores/Biblioteca</button>
-                <button class="module-btn" data-module="cursos"><i class="fas fa-video"></i> Cursos Online</button>
-                <button class="module-btn" data-module="formacoes"><i class="fas fa-chalkboard-teacher"></i> Formações Presenciais</button>
-                <button class="module-btn" data-module="servicos"><i class="fas fa-crown"></i> Serviços Personalizados</button>
-                <button class="module-btn" data-module="parceiros"><i class="fas fa-handshake"></i> Parceiros</button>
-                <button class="module-btn" data-module="conteudos"><i class="fas fa-edit"></i> Gerenciar Conteúdos</button>
-            </div>
-
-            <!-- ========================== -->
-            <!-- MÓDULO: USUÁRIOS           -->
-            <!-- ========================== -->
-            <div class="admin-module" id="module-usuarios" style="display: none;">
-                <div class="module-header">
-                    <h3><i class="fas fa-users"></i> Gestão de Usuários</h3>
-                    <div class="module-actions">
-                        <div class="search-box">
-                            <input type="text" id="searchUsuarios" placeholder="Buscar por nome, email, região...">
-                            <i class="fas fa-search"></i>
-                        </div>
-                        <button class="btn btn-primary btn-small" id="btnBloquearSelecionados"><i class="fas fa-ban"></i> Bloquear</button>
-                        <button class="btn btn-danger btn-small" id="btnRemoverSelecionados"><i class="fas fa-trash"></i> Remover</button>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table" id="tabelaUsuarios">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="selectAllUsuarios"></th>
-                                <th>Nome</th>
-                                <th>Sexo</th>
-                                <th>País</th>
-                                <th>Região</th>
-                                <th>Idade</th>
-                                <th>Gmail</th>
-                                <th>Telefone</th>
-                                <th>Data Cadastro</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usuariosTableBody"></tbody>
-                    </table>
-                </div>
-                <div class="pagination" id="paginationUsuarios"></div>
-            </div>
-
-            <!-- ========================== -->
-            <!-- MÓDULO: SIMULADORES/BIBLIOTECA -->
-            <!-- ========================== -->
-            <div class="admin-module" id="module-simuladores" style="display: none;">
-                <div class="module-header">
-                    <h3><i class="fas fa-gamepad"></i> Simuladores e Biblioteca</h3>
-                    <div class="module-actions">
-                        <button class="btn btn-primary btn-small" id="btnNovoConteudoSimulador"><i class="fas fa-plus"></i> Adicionar Conteúdo</button>
-                    </div>
-                </div>
-                <div class="submodule">
-                    <h4>Usuários com Acesso a Simuladores</h4>
-                    <div class="table-responsive">
-                        <table class="table" id="tabelaAcessosSimuladores">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Email</th>
-                                    <th>Data Cadastro</th>
-                                    <th>Tipo Pagamento</th>
-                                    <th>Valor Pago</th>
-                                    <th>Data Expiração</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="acessosSimuladoresBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="submodule">
-                    <h4>Conteúdos dos Simuladores</h4>
-                    <div class="conteudos-grid" id="conteudosSimuladores"></div>
-                </div>
-            </div>
-
-            <!-- ========================== -->
-            <!-- MÓDULO: CURSOS ONLINE       -->
-            <!-- ========================== -->
-            <div class="admin-module" id="module-cursos" style="display: none;">
-                <div class="module-header">
-                    <h3><i class="fas fa-video"></i> Cursos Online</h3>
-                </div>
-                <div class="table-responsive">
-                    <table class="table" id="tabelaCursosOnline">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Email</th>
-                                <th>Curso</th>
-                                <th>Turma</th>
-                                <th>Tipo Pagamento</th>
-                                <th>Valor</th>
-                                <th>Código Especial</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cursosOnlineBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ========================== -->
-            <!-- MÓDULO: FORMAÇÕES PRESENCIAIS -->
-            <!-- ========================== -->
-            <div class="admin-module" id="module-formacoes" style="display: none;">
-                <div class="module-header">
-                    <h3><i class="fas fa-chalkboard-teacher"></i> Formações Presenciais</h3>
-                </div>
-                <div class="table-responsive">
-                    <table class="table" id="tabelaFormacoesPresenciais">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Email</th>
-                                <th>Instituição</th>
-                                <th>Formação</th>
-                                <th>Turma</th>
-                                <th>Tipo Pagamento</th>
-                                <th>Código Especial</th>
-                                <th>Expira em</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="formacoesPresenciaisBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ========================== -->
-            <!-- MÓDULO: SERVIÇOS PERSONALIZADOS -->
-            <!-- ========================== -->
-            <div class="admin-module" id="module-servicos" style="display: none;">
-                <div class="module-header">
-                    <h3><i class="fas fa-crown"></i> Serviços Personalizados</h3>
-                </div>
-                <div class="table-responsive">
-                    <table class="table" id="tabelaServicosPersonalizados">
-                        <thead>
-                            <tr>
-                                <th>Cliente</th>
-                                <th>Identificação</th>
-                                <th>Sector</th>
-                                <th>País-Região</th>
-                                <th>Tipo Serviço</th>
-                                <th>Descrição</th>
-                                <th>Forma Pagamento</th>
-                                <th>Valor</th>
-                                <th>Data</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="servicosPersonalizadosBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ========================== -->
-            <!-- MÓDULO: PARCEIROS           -->
-            <!-- ========================== -->
-            <div class="admin-module" id="module-parceiros" style="display: none;">
-                <div class="module-header">
-                    <h3><i class="fas fa-handshake"></i> Parceiros</h3>
-                </div>
-                <div class="table-responsive">
-                    <table class="table" id="tabelaParceiros">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Função</th>
-                                <th>Email</th>
-                                <th>Telefone</th>
-                                <th>País</th>
-                                <th>Região</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="parceirosBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ========================== -->
-            <!-- MÓDULO: GERENCIAR CONTEÚDOS -->
-            <!-- ========================== -->
-            <div class="admin-module" id="module-conteudos" style="display: none;">
-                <div class="module-header">
-                    <h3><i class="fas fa-edit"></i> Gerenciar Conteúdos do Site</h3>
-                    <p>Adicione, edite ou remova conteúdos das bibliotecas com poucos cliques</p>
-                </div>
-                <div class="conteudos-categorias" id="conteudosCategorias">
-                    <!-- Cards de categorias serão gerados via JS -->
-                </div>
-                <!-- Formulário de Adição/Edição de Conteúdo -->
-                <div class="form-conteudo" id="formAdicionarConteudo" style="display: none;">
-                    <h4 id="formConteudoTitle">Adicionar Novo Conteúdo</h4>
-                    <form id="conteudoForm">
-                        <input type="hidden" id="editConteudoId" value="">
+                    
+                    <form id="adminLoginForm" class="login-form">
                         <div class="form-group">
-                            <label>Tipo de Conteúdo</label>
-                            <select id="tipoConteudo" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="ebook">E-book</option>
-                                <option value="infografico">Infográfico</option>
-                                <option value="video">Vídeo</option>
-                                <option value="audio">Áudio</option>
-                                <option value="slide">Slide</option>
-                            </select>
+                            <label for="adminUser">
+                                <i class="fas fa-user"></i>
+                                <span>Usuário</span>
+                            </label>
+                            <input type="text" id="adminUser" name="usuario" class="form-control" placeholder="Seu nome de usuário" required autocomplete="username">
                         </div>
+                        
                         <div class="form-group">
-                            <label>Categoria</label>
-                            <select id="categoriaConteudo" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option value="financas">Finanças</option>
-                                <option value="gestao">Gestão</option>
-                                <option value="economia">Economia</option>
-                                <option value="geral">Geral</option>
-                            </select>
+                            <label for="adminSenha">
+                                <i class="fas fa-lock"></i>
+                                <span>Senha</span>
+                            </label>
+                            <input type="password" id="adminSenha" name="senha" class="form-control" placeholder="••••••••" required autocomplete="current-password">
                         </div>
-                        <div class="form-group">
-                            <label>Título</label>
-                            <input type="text" id="tituloConteudo" class="form-control" placeholder="Digite o título" required>
+                        
+                        <div class="form-options">
+                            <div class="remember-me">
+                                <input type="checkbox" id="rememberMe" name="remember">
+                                <label for="rememberMe">Lembrar-me</label>
+                            </div>
+                            <a href="#" class="forgot-password" id="forgotPasswordLink">Esqueceu a senha?</a>
                         </div>
-                        <div class="form-group">
-                            <label>Descrição</label>
-                            <textarea id="descricaoConteudo" class="form-control" rows="3" placeholder="Descrição do conteúdo" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>URL do Arquivo (ou caminho)</label>
-                            <input type="text" id="urlConteudo" class="form-control" placeholder="/caminho/do/arquivo.pdf" required>
-                        </div>
-                        <div class="form-group">
-                            <label>URL da Thumbnail</label>
-                            <input type="text" id="thumbnailConteudo" class="form-control" placeholder="/caminho/da/thumbnail.jpg">
-                        </div>
-                        <div class="form-group">
-                            <label>Tags (separadas por vírgula)</label>
-                            <input type="text" id="tagsConteudo" class="form-control" placeholder="ex: finanças, investimentos, bitcoin">
-                        </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary" id="btnSalvarConteudo">Salvar Conteúdo</button>
-                            <button type="button" class="btn btn-secondary" id="cancelarConteudo">Cancelar</button>
-                        </div>
+                        
+                        <button type="submit" id="btnLoginAdmin" class="btn btn-primary btn-block">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>ENTRAR</span>
+                        </button>
                     </form>
+                    
+                    <div id="loginMessage" class="message-container"></div>
+                    
+                    <div class="login-footer">
+                        <p>© 2026 TECA CAPITAL - Todos os direitos reservados</p>
+                        <p class="system-version">Sistema Administrativo v1.0</p>
+                    </div>
+                </div>
+                
+                <!-- Loading Overlay -->
+                <div id="loginLoader" class="loader-overlay" style="display: none;">
+                    <div class="loader-spinner"></div>
+                    <p>Autenticando...</p>
+                </div>
+            </main>
+            
+            <!-- Modal de Recuperação de Senha -->
+            <div id="forgotPasswordModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3><i class="fas fa-key"></i> Recuperar Acesso</h3>
+                        <button class="modal-close" id="closeForgotModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Entre em contato com o Administrador Master para recuperar seu acesso:</p>
+                        <div class="contact-info">
+                            <p><i class="fas fa-envelope"></i> admin@tecacapital.co.ao</p>
+                            <p><i class="fas fa-phone"></i> +244 923 456 789</p>
+                        </div>
+                        <p class="note">Apenas o Administrador Master pode resetar senhas.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" id="closeForgotBtn">Fechar</button>
+                    </div>
                 </div>
             </div>
-        </div> <!-- Fim admin-dashboard -->
+            </head>
+        
+        </body>
 
+        <body class="dashboard-page">
+            <!-- Loading Principal -->
+            <div id="mainLoader" class="loader-overlay" style="display: none;">
+                <div class="loader-spinner"></div>
+                <p>Carregando...</p>
+            </div>
+            
+            <!-- Container Principal -->
+            <div class="dashboard-container">
+                <!-- Sidebar -->
+                <aside class="sidebar" id="sidebar">
+                    <div class="sidebar-header">
+                        <div class="logo-mini">TC Edtech</div>
+                        <div class="logo-full">TECA CAPITAL</div>
+                    </div>
+                    
+                    <div class="user-info" id="userInfo">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <span class="user-name" id="userNameDisplay">Carregando...</span>
+                            <span class="user-role" id="userRoleDisplay">-</span>
+                            <span class="user-region" id="userRegionDisplay"></span>
+                        </div>
+                    </div>
+                    
+                    <nav class="sidebar-nav" id="sidebarNav">
+                        <ul>
+                            <li class="nav-item active" data-module="dashboard">
+                                <a href="#"><i class="fas fa-chart-pie"></i> <span>Dashboard</span></a>
+                            </li>
+                            <li class="nav-item" data-module="usuarios">
+                                <a href="#"><i class="fas fa-users"></i> <span>Usuários</span></a>
+                            </li>
+                            <li class="nav-item" data-module="simuladores">
+                                <a href="#"><i class="fas fa-gamepad"></i> <span>Simuladores</span></a>
+                            </li>
+                            <li class="nav-item" data-module="biblioteca">
+                                <a href="#"><i class="fas fa-book"></i> <span>Biblioteca</span></a>
+                            </li>
+                            <li class="nav-item" data-module="cursos">
+                                <a href="#"><i class="fas fa-graduation-cap"></i> <span>Cursos</span></a>
+                            </li>
+                            <li class="nav-item" data-module="formacoes">
+                                <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span>Formações</span></a>
+                            </li>
+                            <li class="nav-item" data-module="parceiros">
+                                <a href="#"><i class="fas fa-handshake"></i> <span>Parceiros</span></a>
+                            </li>
+                            <li class="nav-item" data-module="servicos">
+                                <a href="#"><i class="fas fa-cogs"></i> <span>Serviços</span></a>
+                            </li>
+                            <li class="nav-item divider"></li>
+                            <li class="nav-item" data-module="configuracoes" id="configMenu" style="display: none;">
+                                <a href="#"><i class="fas fa-cog"></i> <span>Configurações</span></a>
+                            </li>
+                            <li class="nav-item" id="logoutBtn">
+                                <a href="#"><i class="fas fa-sign-out-alt"></i> <span>Sair</span></a>
+                            </li>
+                        </ul>
+                    </nav>
+                    
+                    <div class="sidebar-footer">
+                        <div class="session-timer" id="sessionTimer">
+                            <i class="fas fa-hourglass-half"></i>
+                            <span id="sessionTimerDisplay">15:00</span>
+                        </div>
+                    </div>
+                </aside>
+                
+                <!-- Conteúdo Principal -->
+                <main class="main-content">
+                    <!-- Header Superior -->
+                    <header class="content-header">
+                        <button class="menu-toggle" id="menuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        
+                        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                        
+                        <div class="header-actions">
+                            <button class="btn-icon" id="refreshData" title="Atualizar dados">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button class="btn-icon" id="fullscreenBtn" title="Tela cheia">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <div class="notification-badge" id="notificationBadge" style="display: none;">
+                                <i class="fas fa-bell"></i>
+                                <span class="badge-count" id="notificationCount">0</span>
+                            </div>
+                        </div>
+                    </header>
+                    
+                    <!-- Módulos (cada um aparece conforme seleção) -->
+                    
+                    <!-- MÓDULO: DASHBOARD -->
+                    <section id="module-dashboard" class="admin-module active">
+                        <!-- Cards de Estatísticas -->
+                        <div class="stats-grid" id="statsGrid">
+                            <!-- Preenchido via JS -->
+                        </div>
+                        
+                        <!-- Gráficos -->
+                        <div class="charts-grid">
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3><i class="fas fa-chart-line"></i> Receita Acumulada (30 dias)</h3>
+                                    <div class="chart-actions">
+                                        <button class="chart-period active" data-period="7">7d</button>
+                                        <button class="chart-period" data-period="30">30d</button>
+                                        <button class="chart-period" data-period="90">90d</button>
+                                    </div>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="receitaChart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3><i class="fas fa-globe-africa"></i> Usuários por Região</h3>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="regiaoChart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3><i class="fas fa-venus-mars"></i> Distribuição por Gênero</h3>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="generoChart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h3><i class="fas fa-chart-bar"></i> Serviços Mais Contratados</h3>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="servicosChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tabela de Últimos Cadastros -->
+                        <div class="table-card">
+                            <div class="table-header">
+                                <h3><i class="fas fa-clock"></i> Últimos Cadastros</h3>
+                                <a href="#" class="view-all-link" data-module="usuarios">Ver todos</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Email</th>
+                                            <th>Região</th>
+                                            <th>Serviço</th>
+                                            <th>Data</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ultimosCadastrosTable">
+                                        <tr><td colspan="6" class="text-center">Carregando...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- MÓDULO: USUÁRIOS -->
+                    <section id="module-usuarios" class="admin-module">
+                        <div class="module-header">
+                            <h2><i class="fas fa-users"></i> Gerenciar Usuários</h2>
+                            <div class="module-actions">
+                                <button class="btn btn-primary" id="addUsuarioBtn" style="display: none;">
+                                    <i class="fas fa-plus"></i> Novo Usuário
+                                </button>
+                                <button class="btn btn-secondary" id="exportUsuariosBtn">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Filtros -->
+                        <div class="filters-bar">
+                            <div class="filter-group">
+                                <input type="text" id="searchUsuarios" class="form-control" placeholder="Buscar por nome ou email...">
+                            </div>
+                            <div class="filter-group">
+                                <select id="filterRegiaoUsuarios" class="form-control">
+                                    <option value="">Todas as regiões</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <select id="filterStatusUsuarios" class="form-control">
+                                    <option value="">Todos os status</option>
+                                    <option value="Ativo">Ativo</option>
+                                    <option value="Bloqueado">Bloqueado</option>
+                                    <option value="Pendente">Pendente</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-filter" id="applyFilterUsuarios">
+                                <i class="fas fa-filter"></i> Filtrar
+                            </button>
+                        </div>
+                        
+                        <!-- Ações em Massa (para Master) -->
+                        <div class="bulk-actions" id="bulkActionsUsuarios" style="display: none;">
+                            <span><span id="selectedCount">0</span> selecionados</span>
+                            <button class="btn btn-warning" id="btnBloquearSelecionados" disabled>
+                                <i class="fas fa-ban"></i> Bloquear
+                            </button>
+                            <button class="btn btn-danger" id="btnRemoverSelecionados" disabled>
+                                <i class="fas fa-trash"></i> Remover
+                            </button>
+                            <button class="btn btn-secondary" id="btnCancelarSelecao">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                        </div>
+                        
+                        <!-- Tabela de Usuários -->
+                        <div class="table-responsive">
+                            <table class="data-table" id="usuariosTable">
+                                <thead>
+                                    <tr>
+                                        <th width="40"><input type="checkbox" id="selectAllUsuarios"></th>
+                                        <th>Nome</th>
+                                        <th>Sexo</th>
+                                        <th>País</th>
+                                        <th>Região</th>
+                                        <th>Idade</th>
+                                        <th>Email</th>
+                                        <th>Telefone</th>
+                                        <th>Data</th>
+                                        <th>Status</th>
+                                        <th width="120">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usuariosTableBody">
+                                    <tr><td colspan="11" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Paginação -->
+                        <div class="pagination" id="usuariosPagination">
+                            <!-- Preenchido via JS -->
+                        </div>
+                    </section>
+                    
+                    <!-- MÓDULO: SIMULADORES -->
+                    <section id="module-simuladores" class="admin-module">
+                        <div class="module-header">
+                            <h2><i class="fas fa-gamepad"></i> Simuladores / Biblioteca</h2>
+                            <div class="module-actions">
+                                <button class="btn btn-secondary" id="exportSimuladoresBtn">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="filters-bar">
+                            <input type="text" id="searchSimuladores" class="form-control" placeholder="Buscar...">
+                            <select id="filterRegiaoSimuladores" class="form-control">
+                                <option value="">Todas as regiões</option>
+                            </select>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Sexo</th>
+                                        <th>País</th>
+                                        <th>Região</th>
+                                        <th>Idade</th>
+                                        <th>Email</th>
+                                        <th>Data</th>
+                                        <th>Pagamento</th>
+                                        <th>Valor</th>
+                                        <th>Expiração</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="simuladoresTableBody">
+                                    <tr><td colspan="12" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="pagination" id="simuladoresPagination"></div>
+                    </section>
+                    
+                    <!-- MÓDULO: BIBLIOTECA -->
+                    <section id="module-biblioteca" class="admin-module">
+                        <div class="module-header">
+                            <h2><i class="fas fa-book"></i> Biblioteca</h2>
+                            <div class="module-actions">
+                                <button class="btn btn-secondary" id="exportBibliotecaBtn">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="filters-bar">
+                            <input type="text" id="searchBiblioteca" class="form-control" placeholder="Buscar...">
+                            <select id="filterRegiaoBiblioteca" class="form-control">
+                                <option value="">Todas as regiões</option>
+                            </select>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Sexo</th>
+                                        <th>País</th>
+                                        <th>Região</th>
+                                        <th>Idade</th>
+                                        <th>Email</th>
+                                        <th>Data</th>
+                                        <th>Pagamento</th>
+                                        <th>Valor</th>
+                                        <th>Expiração</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bibliotecaTableBody">
+                                    <tr><td colspan="11" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="pagination" id="bibliotecaPagination"></div>
+                    </section>
+                    
+                    <!-- MÓDULO: CURSOS -->
+                    <section id="module-cursos" class="admin-module">
+                        <div class="module-header">
+                            <h2><i class="fas fa-graduation-cap"></i> Cursos Online</h2>
+                            <div class="module-actions">
+                                <button class="btn btn-secondary" id="exportCursosBtn">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="filters-bar">
+                            <input type="text" id="searchCursos" class="form-control" placeholder="Buscar...">
+                            <select id="filterRegiaoCursos" class="form-control">
+                                <option value="">Todas as regiões</option>
+                            </select>
+                            <select id="filterTipoCurso" class="form-control">
+                                <option value="">Todos os cursos</option>
+                                <option value="Mercados Financeiro">Mercados Financeiro</option>
+                                <option value="Gestão">Gestão</option>
+                                <option value="Economia">Economia</option>
+                            </select>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Sexo</th>
+                                        <th>País</th>
+                                        <th>Idade</th>
+                                        <th>Email</th>
+                                        <th>Curso</th>
+                                        <th>Turma</th>
+                                        <th>Pagamento</th>
+                                        <th>Valor</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cursosTableBody">
+                                    <tr><td colspan="11" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="pagination" id="cursosPagination"></div>
+                    </section>
+                    
+                    <!-- MÓDULO: FORMAÇÕES -->
+                    <section id="module-formacoes" class="admin-module">
+                        <div class="module-header">
+                            <h2><i class="fas fa-chalkboard-teacher"></i> Formações Presenciais</h2>
+                            <div class="module-actions">
+                                <button class="btn btn-secondary" id="exportFormacoesBtn">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="filters-bar">
+                            <input type="text" id="searchFormacoes" class="form-control" placeholder="Buscar...">
+                            <select id="filterRegiaoFormacoes" class="form-control">
+                                <option value="">Todas as regiões</option>
+                            </select>
+                            <select id="filterTipoFormacao" class="form-control">
+                                <option value="">Todos os tipos</option>
+                                <option value="Mercados Financeiro">Mercados Financeiro</option>
+                                <option value="Gestão">Gestão</option>
+                                <option value="Economia">Economia</option>
+                            </select>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Sexo</th>
+                                        <th>País</th>
+                                        <th>Instituição</th>
+                                        <th>Formação</th>
+                                        <th>Turma</th>
+                                        <th>Pagamento</th>
+                                        <th>Valor</th>
+                                        <th>Expiração</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="formacoesTableBody">
+                                    <tr><td colspan="10" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="pagination" id="formacoesPagination"></div>
+                    </section>
+                    
+                    <!-- MÓDULO: PARCEIROS -->
+                    <section id="module-parceiros" class="admin-module">
+                        <div class="module-header">
+                            <h2><i class="fas fa-handshake"></i> Parceiros</h2>
+                            <div class="module-actions">
+                                <button class="btn btn-primary" id="addParceiroBtn" style="display: none;">
+                                    <i class="fas fa-plus"></i> Novo Parceiro
+                                </button>
+                                <button class="btn btn-secondary" id="exportParceirosBtn">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="filters-bar">
+                            <input type="text" id="searchParceiros" class="form-control" placeholder="Buscar...">
+                            <select id="filterRegiaoParceiros" class="form-control">
+                                <option value="">Todas as regiões</option>
+                            </select>
+                            <select id="filterFuncaoParceiros" class="form-control">
+                                <option value="">Todas as funções</option>
+                                <option value="Líder regional">Líder regional</option>
+                                <option value="Formador">Formador</option>
+                                <option value="Assistente">Assistente</option>
+                                <option value="Caixa">Caixa</option>
+                                <option value="Secretaria/o">Secretaria/o</option>
+                                <option value="Estagiário/a">Estagiário/a</option>
+                            </select>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Sexo</th>
+                                        <th>País</th>
+                                        <th>Região</th>
+                                        <th>Idade</th>
+                                        <th>Função</th>
+                                        <th>Email</th>
+                                        <th>Telefone</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="parceirosTableBody">
+                                    <tr><td colspan="10" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="pagination" id="parceirosPagination"></div>
+                    </section>
+                    
+                    <!-- MÓDULO: SERVIÇOS -->
+                    <section id="module-servicos" class="admin-module">
+                        <div class="module-header">
+                            <h2><i class="fas fa-cogs"></i> Serviços Personalizados</h2>
+                            <div class="module-actions">
+                                <button class="btn btn-secondary" id="exportServicosBtn">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="filters-bar">
+                            <input type="text" id="searchServicos" class="form-control" placeholder="Buscar...">
+                            <select id="filterRegiaoServicos" class="form-control">
+                                <option value="">Todas as regiões</option>
+                            </select>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Identificação</th>
+                                        <th>Sector</th>
+                                        <th>País</th>
+                                        <th>Serviço</th>
+                                        <th>Descrição</th>
+                                        <th>Pagamento</th>
+                                        <th>Valor</th>
+                                        <th>Data</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="servicosTableBody">
+                                    <tr><td colspan="10" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="pagination" id="servicosPagination"></div>
+                    </section>
+                    
+                    <!-- MÓDULO: CONFIGURAÇÕES (apenas Master) -->
+                    <section id="module-configuracoes" class="admin-module">
+                        <div class="module-header">
+                            <h2><i class="fas fa-cog"></i> Configurações do Sistema</h2>
+                        </div>
+                        
+                        <div class="config-grid">
+                            <div class="config-card">
+                                <h3><i class="fas fa-user-tie"></i> Gerenciar Administradores</h3>
+                                <p>Adicionar ou remover administradores master.</p>
+                                <button class="btn btn-primary" id="manageAdminsBtn">Gerenciar</button>
+                            </div>
+                            
+                            <div class="config-card">
+                                <h3><i class="fas fa-history"></i> Logs de Atividade</h3>
+                                <p>Visualizar todas as ações realizadas no sistema.</p>
+                                <button class="btn btn-primary" id="viewLogsBtn">Visualizar Logs</button>
+                            </div>
+                            
+                            <div class="config-card">
+                                <h3><i class="fas fa-database"></i> Backup</h3>
+                                <p>Último backup: 12/02/2024 15:30</p>
+                                <button class="btn btn-primary" id="backupBtn">Fazer Backup</button>
+                            </div>
+                            
+                            <div class="config-card">
+                                <h3><i class="fas fa-chart-line"></i> Métricas Avançadas</h3>
+                                <p>Relatórios detalhados da plataforma.</p>
+                                <button class="btn btn-primary" id="metricsBtn">Gerar Relatório</button>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+            
+            <!-- Modal de Confirmação -->
+            <div id="confirmModal" class="modal" style="display: none;">
+                <div class="modal-content modal-sm">
+                    <div class="modal-header">
+                        <h3 id="confirmModalTitle">Confirmar Ação</h3>
+                        <button class="modal-close" id="closeConfirmModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="confirmModalMessage">Tem certeza que deseja continuar?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" id="cancelConfirmBtn">Cancelar</button>
+                        <button class="btn btn-danger" id="confirmActionBtn">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal de Notificação -->
+            <div id="notificationModal" class="modal" style="display: none;">
+                <div class="modal-content modal-sm">
+                    <div class="modal-header">
+                        <h3 id="notificationModalTitle">Notificação</h3>
+                        <button class="modal-close" id="closeNotificationModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="notificationModalMessage"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="closeNotificationBtn">OK</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal de Reautenticação -->
+            <div id="reauthPopup" class="modal" style="display: none;">
+                <div class="modal-content modal-sm">
+                    <div class="modal-header">
+                        <h3><i class="fas fa-clock"></i> Sessão expirando</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Sua sessão irá expirar em 1 minuto. Deseja continuar?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" id="btnReauthCancel">Sair</button>
+                        <button class="btn btn-primary" id="btnReauth">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        
     </main>
     
     <footer class="site-footer">
@@ -477,7 +825,7 @@
                     </p>
                 </div>
             </div>
-        </footer>
+        </footer> 
 
 </body>
 </html>

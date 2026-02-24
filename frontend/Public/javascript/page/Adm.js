@@ -1,1035 +1,1325 @@
 // ============================================
-// admin-script.js - Painel Administrativo Teca Capital
-// Versão Integrada com Google Apps Script
+// ADMIN PANEL - TECA CAPITAL
+// SISTEMA COMPLETO COM PERMISSÕES (MASTER VS LÍDER REGIONAL)
 // ============================================
 
 (function() {
     'use strict';
 
-    // ===== CONFIGURAÇÕES GLOBAIS =====
-    const CONFIG = {
-        SESSION_DURATION: 900000, // 15 minutos em ms
-        WARNING_TIME: 60000,       // 1 minuto antes de expirar
-        WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbzXfX-xfT0a1_o1JjBw-7sN5iXJrRQ0XC92utFGdqyD1tlnb9rwyXXruC2wfBBeWiuW/exec', // Substitua pela URL do seu Web App
-        TEMPO_VISIBILIDADE_SENHA: 60,
-        STATUS: {
-            ATIVO: 'Ativo',
-            PENDENTE: 'Pendente',
-            EXPIRADO: 'Expirado',
-            BLOQUEADO: 'Bloqueado'
+    // ============================================
+    // CONFIGURAÇÕES GLOBAIS
+    // ============================================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7L5XowJYawTYChVsG-k_FtO0ieen4ilQd9UpDjnilcgIy3uLSRdIg_5rG3QY6blwr5Q/exec";
+    
+    const SHEET_NAMES = {
+        CADASTRO: 'Cadastro/Logion',
+        SIMULADORES: 'Simuladores/Bibliotecas',
+        CURSOS: 'Curso Online',
+        FORMACAO: 'Formação Presencial',
+        SERVICOS: 'Serviços personalizados',
+        ADMIN: 'Administrador',
+        PARCEIROS: 'Parceiros'
+    };
+
+    // ============================================
+    // GERENCIADOR DE AUTENTICAÇÃO
+    // ============================================
+    class AuthManager {
+        constructor() {
+            this.usuario = null;
+            this.nivel = null;
+            this.regiao = null;
+            this.nome = null;
+            this.loginTime = null;
+            this.sessionDuration = 900000; // 15 minutos (master)
+            this.liderSessionDuration = 1800000; // 30 minutos (líder)
         }
-    };
-
-    // ===== ESTADO DA APLICAÇÃO =====
-    const AppState = {
-        isAuthenticated: false,
-        adminData: null,
-        sessionTimer: null,
-        sessionCheckInterval: null,
-        dataSheets: {
-            cadastro: [],
-            simuladores: [],
-            cursos: [],
-            formacao: [],
-            servicos: [],
-            parceiros: []
-        },
-        currentPage: 1,
-        itemsPerPage: 20,
-        ultimaSenhaGerada: null,
-        timerSenha: null
-    };
-
-    // ===== UTILITÁRIOS =====
-    const Utils = {
-        formatDate: (date) => {
-            if (!date) return '';
-            const d = new Date(date);
-            return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
-        },
-
-        formatCurrency: (value) => {
-            return parseFloat(value).toLocaleString('pt-AO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' Kz';
-        },
-
-        showNotification: (message, type = 'success', duration = 5000) => {
-            const notification = document.createElement('div');
-            notification.className = `admin-notification ${type}`;
-            notification.innerHTML = `
-                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => notification.remove(), 300);
-            }, duration);
-        },
-
-        debounce: (func, wait) => {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
-        },
-
-        showPasswordTimer: (senha, elementId) => {
-            const timerElement = document.getElementById(elementId);
-            if (!timerElement) return;
-            
-            let secondsLeft = CONFIG.TEMPO_VISIBILIDADE_SENHA;
-            timerElement.innerHTML = `
-                <div class="senha-temporaria">
-                    <strong>${senha}</strong>
-                    <span class="timer">Expira em ${secondsLeft}s</span>
-                </div>
-            `;
-            
-            if (AppState.timerSenha) clearInterval(AppState.timerSenha);
-            
-            AppState.timerSenha = setInterval(() => {
-                secondsLeft--;
-                const timerSpan = timerElement.querySelector('.timer');
-                if (timerSpan) {
-                    timerSpan.textContent = `Expira em ${secondsLeft}s`;
-                }
-                
-                if (secondsLeft <= 0) {
-                    clearInterval(AppState.timerSenha);
-                    timerElement.innerHTML = `
-                        <div class="senha-expirada">
-                            <p>⏰ Senha expirada por segurança</p>
-                            <small>Se não anotou, solicite via WhatsApp ou email</small>
-                        </div>
-                    `;
-                }
-            }, 1000);
-        },
-
-        showLoading: (show = true) => {
-            const loader = document.getElementById('global-loader') || (() => {
-                const div = document.createElement('div');
-                div.id = 'global-loader';
-                div.className = 'global-loader';
-                div.innerHTML = '<div class="loader-spinner"></div>';
-                document.body.appendChild(div);
-                return div;
-            })();
-            
-            loader.style.display = show ? 'flex' : 'none';
-        }
-    };
-
-    // ===== API DE COMUNICAÇÃO COM GOOGLE APPS SCRIPT =====
-    const GoogleSheetsAPI = {
-        async request(action, data = {}) {
-            Utils.showLoading(true);
+        
+        async login(usuario, senha, remember = false) {
             try {
-                const payload = {
-                    acao: action,
-                    ...data,
-                    timestamp: new Date().toISOString()
-                };
-
-                const response = await fetch(CONFIG.WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams(payload).toString()
-                });
-
-                const result = await response.json();
-                Utils.showLoading(false);
+                // Primeiro tenta como admin master
+                let url = `${SCRIPT_URL}?acao=loginAdmin&usuario=${encodeURIComponent(usuario)}&senha=${encodeURIComponent(senha)}`;
+                let response = await fetch(url);
+                let dados = await response.json();
                 
-                if (!result.sucesso) {
-                    throw new Error(result.mensagem || 'Erro na requisição');
+                if (dados.login && dados.tipo === 'master') {
+                    this.usuario = usuario;
+                    this.nivel = 'master';
+                    this.nome = dados.nome || usuario;
+                    this.loginTime = Date.now();
+                    
+                    this.salvarSessao(remember);
+                    return { success: true, nivel: 'master', dados: dados };
                 }
                 
-                return result;
-
+                // Se não for master, tenta como parceiro (líder regional)
+                url = `${SCRIPT_URL}?acao=loginParceiro&usuario=${encodeURIComponent(usuario)}&senha=${encodeURIComponent(senha)}`;
+                response = await fetch(url);
+                dados = await response.json();
+                
+                if (dados.login && dados.funcao === 'Líder regional' && dados.status === 'Ativo') {
+                    this.usuario = usuario;
+                    this.nivel = 'lider';
+                    this.regiao = dados.regiao;
+                    this.nome = dados.nome || usuario;
+                    this.loginTime = Date.now();
+                    
+                    this.salvarSessao(remember);
+                    return { success: true, nivel: 'lider', dados: dados };
+                }
+                
+                return { success: false, mensagem: 'Credenciais inválidas ou acesso não autorizado' };
+                
             } catch (error) {
-                Utils.showLoading(false);
-                Utils.showNotification(`Erro: ${error.message}`, 'error');
-                throw error;
+                console.error('Erro no login:', error);
+                return { success: false, mensagem: 'Erro de conexão com o servidor' };
             }
-        },
-
-        // Login do administrador
-        async loginAdmin(nome, pais, senha) {
-            return this.request('loginAdmin', { nome, pais, senha });
-        },
-
-        // Login de usuário comum
-        async logion(nome, credencial) {
-            return this.request('logion', { nome, credencial });
-        },
-
-        // Cadastro de novo usuário
-        async cadastrarUsuario(dados) {
-            return this.request('cadastrar', dados);
-        },
-
-        // Buscar dados de uma planilha
-        async fetchSheetData(sheetKey) {
-            return this.request('fetchSheetData', { sheetKey });
-        },
-
-        // Buscar usuário por email
-        async buscarUsuario(email) {
-            return this.request('buscarUsuario', { email });
-        },
-
-        // Verificar expiração de acesso
-        async verificarExpiracao(nome, tipo) {
-            return this.request('verificarExpiracao', { nome, tipo });
-        },
-
-        // Registrar comprovativo
-        async registrarComprovativo(dados) {
-            return this.request('registrarComprovativo', dados);
-        },
-
-        // Obter estatísticas do dashboard
-        async getEstatisticas() {
-            return this.request('getEstatisticas');
-        },
-
-        // Gerenciar parceiros (aprovar/bloquear)
-        async atualizarStatusParceiro(nome, status) {
-            return this.request('atualizarStatusParceiro', { nome, status });
-        },
-
-        // Listar todas as planilhas disponíveis
-        async listarPlanilhas() {
-            return this.request('listarPlanilhas');
-        },
-
-        // Relatório de expirações próximas
-        async relatorioExpiracao() {
-            return this.request('relatorioExpiracao');
-        },
-
-        // Status do sistema
-        async getStatus() {
-            return this.request('status');
         }
-    };
-
-    // ===== SISTEMA DE AUTENTICAÇÃO =====
-    const AuthManager = {
-        init: function() {
-            this.checkExistingSession();
-            this.setupLoginListener();
-        },
-
-        checkExistingSession: function() {
-            const auth = sessionStorage.getItem('adminAuthenticated');
-            const loginTime = sessionStorage.getItem('adminLoginTime');
-            const adminData = sessionStorage.getItem('adminData');
+        
+        salvarSessao(remember) {
+            const sessionData = {
+                usuario: this.usuario,
+                nivel: this.nivel,
+                regiao: this.regiao,
+                nome: this.nome,
+                loginTime: this.loginTime
+            };
             
-            if (auth === 'true' && loginTime && adminData) {
-                const elapsed = Date.now() - parseInt(loginTime);
-                if (elapsed < CONFIG.SESSION_DURATION) {
-                    AppState.isAuthenticated = true;
-                    AppState.adminData = JSON.parse(adminData);
-                    document.getElementById('adminNomeDisplay').textContent = AppState.adminData.nome;
-                    this.startSessionTimer();
-                    DashboardManager.showDashboard();
-                    DataLoader.loadAllData();
-                } else {
-                    this.logout();
-                }
+            if (remember) {
+                localStorage.setItem('teca_admin_session', JSON.stringify(sessionData));
+            } else {
+                sessionStorage.setItem('teca_admin_session', JSON.stringify(sessionData));
             }
-        },
-
-        setupLoginListener: function() {
-            document.getElementById('btnAdminLogin').addEventListener('click', () => this.login());
-            
-            ['adminUser', 'adminSenha', 'adminPais'].forEach(id => {
-                document.getElementById(id).addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.login();
-                });
-            });
-        },
-
-        login: async function() {
-            const nome = document.getElementById('adminUser').value.trim();
-            const pais = document.getElementById('adminPais').value;
-            const senha = document.getElementById('adminSenha').value;
-
-            if (!nome || !pais || !senha) {
-                this.showError('Preencha todos os campos');
-                return;
-            }
-
-            try {
-                const result = await GoogleSheetsAPI.loginAdmin(nome, pais, senha);
-                
-                if (result.sucesso) {
-                    AppState.isAuthenticated = true;
-                    AppState.adminData = result.admin;
+        }
+        
+        carregarSessao() {
+            // Tenta sessionStorage primeiro
+            let sessionData = sessionStorage.getItem('teca_admin_session');
+            if (sessionData) {
+                try {
+                    const data = JSON.parse(sessionData);
+                    this.usuario = data.usuario;
+                    this.nivel = data.nivel;
+                    this.regiao = data.regiao;
+                    this.nome = data.nome;
+                    this.loginTime = data.loginTime;
                     
-                    sessionStorage.setItem('adminAuthenticated', 'true');
-                    sessionStorage.setItem('adminLoginTime', Date.now().toString());
-                    sessionStorage.setItem('adminData', JSON.stringify(result.admin));
-                    
-                    document.getElementById('adminLoginError').style.display = 'none';
-                    document.getElementById('adminNomeDisplay').textContent = nome;
-                    
-                    this.startSessionTimer();
-                    DashboardManager.showDashboard();
-                    
-                    // Carrega estatísticas iniciais
-                    if (result.estatisticas) {
-                        DashboardManager.updateStats(result.estatisticas);
+                    // Verificar expiração
+                    const duration = this.nivel === 'master' ? this.sessionDuration : this.liderSessionDuration;
+                    if (Date.now() - this.loginTime > duration) {
+                        this.logout();
+                        return false;
                     }
                     
-                    await DataLoader.loadAllData();
-                    Utils.showNotification(result.mensagem, 'success');
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+            
+            // Tenta localStorage
+            sessionData = localStorage.getItem('teca_admin_session');
+            if (sessionData) {
+                try {
+                    const data = JSON.parse(sessionData);
+                    this.usuario = data.usuario;
+                    this.nivel = data.nivel;
+                    this.regiao = data.regiao;
+                    this.nome = data.nome;
+                    this.loginTime = data.loginTime;
                     
-                } else {
-                    this.showError(result.mensagem);
-                }
-            } catch (error) {
-                this.showError(error.message);
-            }
-        },
-
-        showError: function(message) {
-            const errorEl = document.getElementById('adminLoginError');
-            errorEl.textContent = message;
-            errorEl.style.display = 'block';
-        },
-
-        startSessionTimer: function() {
-            if (AppState.sessionTimer) clearInterval(AppState.sessionTimer);
-            if (AppState.sessionCheckInterval) clearInterval(AppState.sessionCheckInterval);
-
-            AppState.sessionTimer = setInterval(() => {
-                const loginTime = parseInt(sessionStorage.getItem('adminLoginTime'));
-                const elapsed = Date.now() - loginTime;
-                const remaining = CONFIG.SESSION_DURATION - elapsed;
-
-                if (remaining <= 0) {
-                    this.logout();
-                } else {
-                    this.updateTimerDisplay(remaining);
-                }
-            }, 1000);
-
-            AppState.sessionCheckInterval = setInterval(() => {
-                const loginTime = parseInt(sessionStorage.getItem('adminLoginTime'));
-                if (Date.now() - loginTime > CONFIG.SESSION_DURATION - CONFIG.WARNING_TIME) {
-                    this.showReauthPopup();
-                }
-            }, 60000);
-        },
-
-        updateTimerDisplay: function(remainingMs) {
-            const minutes = Math.floor(remainingMs / 60000);
-            const seconds = Math.floor((remainingMs % 60000) / 1000);
-            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            const timerEl = document.getElementById('sessionTimer');
-            const timerBox = document.getElementById('sessionTimerBox');
-            
-            if (timerEl) timerEl.textContent = display;
-            if (timerBox) {
-                if (remainingMs <= 60000) {
-                    timerBox.classList.add('warning');
-                } else {
-                    timerBox.classList.remove('warning');
+                    // Verificar expiração
+                    const duration = this.nivel === 'master' ? this.sessionDuration : this.liderSessionDuration;
+                    if (Date.now() - this.loginTime > duration) {
+                        this.logout();
+                        return false;
+                    }
+                    
+                    return true;
+                } catch (e) {
+                    return false;
                 }
             }
-        },
-
-        showReauthPopup: function() {
-            if (document.querySelector('.reauth-popup')) return;
             
-            const popup = document.createElement('div');
-            popup.className = 'reauth-popup';
-            popup.innerHTML = `
-                <div class="reauth-content">
-                    <h3><i class="fas fa-clock"></i> Sessão prestes a expirar</h3>
-                    <p>Por segurança, faça login novamente para continuar.</p>
-                    <button class="btn btn-primary" id="btnReauth">Reautenticar Agora</button>
-                </div>
-            `;
-            document.body.appendChild(popup);
-            
-            document.getElementById('btnReauth').addEventListener('click', () => {
-                popup.remove();
-                this.logout();
-            });
-        },
-
-        logout: function() {
-            clearInterval(AppState.sessionTimer);
-            clearInterval(AppState.sessionCheckInterval);
-            if (AppState.timerSenha) clearInterval(AppState.timerSenha);
-            
-            sessionStorage.removeItem('adminAuthenticated');
-            sessionStorage.removeItem('adminLoginTime');
-            sessionStorage.removeItem('adminData');
-            
-            AppState.isAuthenticated = false;
-            document.getElementById('adminLoginContainer').style.display = 'flex';
-            document.getElementById('adminDashboard').style.display = 'none';
-            
-            Utils.showNotification('Sessão encerrada', 'info');
+            return false;
         }
-    };
+        
+        logout() {
+            sessionStorage.removeItem('teca_admin_session');
+            localStorage.removeItem('teca_admin_session');
+            this.usuario = null;
+            this.nivel = null;
+            this.regiao = null;
+            this.nome = null;
+            this.loginTime = null;
+            window.location.href = 'adm.html';
+        }
+        
+        getTempoRestante() {
+            if (!this.loginTime) return 0;
+            
+            const duration = this.nivel === 'master' ? this.sessionDuration : this.liderSessionDuration;
+            const elapsed = Date.now() - this.loginTime;
+            return Math.max(0, duration - elapsed);
+        }
+        
+        pode(acao, alvo = null) {
+            if (this.nivel === 'master') return true;
+            
+            if (this.nivel === 'lider') {
+                // Líder não pode agir em parceiros
+                if (alvo && alvo.tipo === 'parceiro') return false;
+                
+                // Líder só pode agir em sua região
+                if (alvo && alvo.regiao && alvo.regiao !== this.regiao) return false;
+                
+                // Ações permitidas para líder
+                const acoesPermitidas = ['ver', 'bloquear', 'remover', 'editar'];
+                return acoesPermitidas.includes(acao);
+            }
+            
+            return false;
+        }
+    }
 
-    // ===== GERENCIADOR DO DASHBOARD =====
-    const DashboardManager = {
-        showDashboard: function() {
-            document.getElementById('adminLoginContainer').style.display = 'none';
-            document.getElementById('adminDashboard').style.display = 'block';
-            this.setupModuleNavigation();
-        },
+    // ============================================
+    // GERENCIADOR DE API
+    // ============================================
+    class APIManager {
+        constructor(authManager) {
+            this.auth = authManager;
+        }
+        
+        async buscarDados(planilha, filtros = {}) {
+            // Aplicar filtro regional para líder
+            if (this.auth.nivel === 'lider' && this.auth.regiao) {
+                filtros.regiao = this.auth.regiao;
+            }
+            
+            const url = `${SCRIPT_URL}?acao=buscar&planilha=${encodeURIComponent(planilha)}&filtros=${encodeURIComponent(JSON.stringify(filtros))}`;
+            
+            try {
+                const response = await fetch(url);
+                const dados = await response.json();
+                return dados;
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                return [];
+            }
+        }
+        
+        async buscarEstatisticas() {
+            let url = `${SCRIPT_URL}?acao=estatisticas`;
+            
+            // Para líder, passar região
+            if (this.auth.nivel === 'lider' && this.auth.regiao) {
+                url += `&regiao=${encodeURIComponent(this.auth.regiao)}`;
+            }
+            
+            try {
+                const response = await fetch(url);
+                const dados = await response.json();
+                return dados;
+            } catch (error) {
+                console.error('Erro ao buscar estatísticas:', error);
+                return this.getEstatisticasPadrao();
+            }
+        }
+        
+        getEstatisticasPadrao() {
+            return {
+                totalUsuarios: 0,
+                receitaTotal: 0,
+                totalRegioes: 0,
+                percentualHomens: 50,
+                idadeMedia: 0,
+                distribuicaoGenero: { Homens: 0, Mulheres: 0 },
+                distribuicaoServicos: { simuladores: 0, cursos: 0, formacoes: 0 },
+                usuariosPorRegiao: [],
+                receitaPorDia: []
+            };
+        }
+        
+        async alterarStatusUsuario(planilha, linha, status) {
+            // Verificar permissão
+            if (!this.auth.pode('bloquear', { tipo: planilha === SHEET_NAMES.PARCEIROS ? 'parceiro' : 'usuario' })) {
+                return { status: 'erro', mensagem: 'Sem permissão para esta ação' };
+            }
+            
+            const payload = {
+                acao: 'alterarStatus',
+                planilha: planilha,
+                linha: linha,
+                status: status
+            };
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                const resultado = await response.json();
+                return resultado;
+            } catch (error) {
+                console.error('Erro ao alterar status:', error);
+                return { status: 'erro', mensagem: error.message };
+            }
+        }
+        
+        async removerUsuario(planilha, linha) {
+            // Verificar permissão
+            if (!this.auth.pode('remover', { tipo: planilha === SHEET_NAMES.PARCEIROS ? 'parceiro' : 'usuario' })) {
+                return { status: 'erro', mensagem: 'Sem permissão para esta ação' };
+            }
+            
+            const payload = {
+                acao: 'remover',
+                planilha: planilha,
+                linha: linha
+            };
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                const resultado = await response.json();
+                return resultado;
+            } catch (error) {
+                console.error('Erro ao remover usuário:', error);
+                return { status: 'erro', mensagem: error.message };
+            }
+        }
+        
+        async adicionarParceiro(dados) {
+            // Apenas master pode adicionar parceiros
+            if (this.auth.nivel !== 'master') {
+                return { status: 'erro', mensagem: 'Apenas o Administrador Master pode adicionar parceiros' };
+            }
+            
+            const payload = {
+                acao: 'adicionarParceiro',
+                dados: dados
+            };
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                const resultado = await response.json();
+                return resultado;
+            } catch (error) {
+                console.error('Erro ao adicionar parceiro:', error);
+                return { status: 'erro', mensagem: error.message };
+            }
+        }
+    }
 
-        setupModuleNavigation: function() {
-            document.querySelectorAll('.module-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.module-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    const moduleId = btn.dataset.module;
-                    document.querySelectorAll('.admin-module').forEach(mod => mod.style.display = 'none');
-                    
-                    const targetModule = document.getElementById(`module-${moduleId}`);
-                    if (targetModule) {
-                        targetModule.style.display = 'block';
-                        
-                        // Recarrega dados específicos do módulo se necessário
-                        switch(moduleId) {
-                            case 'dashboard':
-                                this.refreshStats();
-                                break;
-                            case 'parceiros':
-                                DataLoader.renderParceirosTable();
-                                break;
+    // ============================================
+    // GERENCIADOR DE GRÁFICOS
+    // ============================================
+    class ChartManager {
+        constructor() {
+            this.charts = {};
+        }
+        
+        criarGraficoReceita(canvasId, dados) {
+            const ctx = document.getElementById(canvasId)?.getContext('2d');
+            if (!ctx) return;
+            
+            if (this.charts[canvasId]) {
+                this.charts[canvasId].destroy();
+            }
+            
+            this.charts[canvasId] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dados.labels || ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Receita (Kz)',
+                        data: dados.valores || [0, 0, 0, 0, 0, 0],
+                        borderColor: '#d6ae64',
+                        backgroundColor: 'rgba(214, 174, 100, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#cccccc' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#cccccc' }
                         }
                     }
-                });
-            });
-        },
-
-        updateStats: function(stats) {
-            if (!stats) return;
-            
-            document.getElementById('totalUsuarios').textContent = stats.totalCadastros || 0;
-            document.getElementById('usuariosAtivos').textContent = stats.totalCadastros || 0;
-            
-            // Calcula percentual de homens/mulheres (mock por enquanto)
-            document.getElementById('percentualHomens').textContent = '50%';
-            document.getElementById('simuladorMaisUsado').textContent = 'Mercado Financeiro';
-        },
-
-        refreshStats: async function() {
-            try {
-                const result = await GoogleSheetsAPI.getEstatisticas();
-                if (result.sucesso) {
-                    this.updateStats(result.estatisticas);
                 }
+            });
+        }
+        
+        criarGraficoRegioes(canvasId, dados) {
+            const ctx = document.getElementById(canvasId)?.getContext('2d');
+            if (!ctx) return;
+            
+            if (this.charts[canvasId]) {
+                this.charts[canvasId].destroy();
+            }
+            
+            this.charts[canvasId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dados.regioes || ['Luanda', 'Huambo', 'Benguela', 'Cabinda'],
+                    datasets: [{
+                        label: 'Usuários',
+                        data: dados.valores || [0, 0, 0, 0],
+                        backgroundColor: '#d6ae64',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#cccccc' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#cccccc' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        criarGraficoGenero(canvasId, homens, mulheres) {
+            const ctx = document.getElementById(canvasId)?.getContext('2d');
+            if (!ctx) return;
+            
+            if (this.charts[canvasId]) {
+                this.charts[canvasId].destroy();
+            }
+            
+            this.charts[canvasId] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Homens', 'Mulheres'],
+                    datasets: [{
+                        data: [homens, mulheres],
+                        backgroundColor: ['#1976D2', '#d6ae64'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#cccccc' }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+        
+        criarGraficoServicos(canvasId, dados) {
+            const ctx = document.getElementById(canvasId)?.getContext('2d');
+            if (!ctx) return;
+            
+            if (this.charts[canvasId]) {
+                this.charts[canvasId].destroy();
+            }
+            
+            this.charts[canvasId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Simuladores', 'Cursos', 'Formações'],
+                    datasets: [{
+                        label: 'Contratações',
+                        data: [
+                            dados.simuladores || 0,
+                            dados.cursos || 0,
+                            dados.formacoes || 0
+                        ],
+                        backgroundColor: ['#d6ae64', '#1976D2', '#28a745'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#cccccc' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#cccccc' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        destroyAll() {
+            Object.values(this.charts).forEach(chart => chart.destroy());
+            this.charts = {};
+        }
+    }
+
+    // ============================================
+    // GERENCIADOR DE TABELAS
+    // ============================================
+    class TableManager {
+        constructor(apiManager, authManager) {
+            this.api = apiManager;
+            this.auth = authManager;
+            this.currentPage = 1;
+            this.itemsPerPage = 50;
+            this.totalItems = 0;
+            this.currentData = [];
+            this.currentFilters = {};
+        }
+        
+        async carregarDados(planilha, tabelaId, colunas, options = {}) {
+            try {
+                const dados = await this.api.buscarDados(planilha, this.currentFilters);
+                this.currentData = dados;
+                this.totalItems = dados.length;
+                
+                this.renderTabela(tabelaId, dados, colunas, options);
+                this.renderPaginacao(tabelaId.replace('TableBody', 'Pagination'), dados.length);
+                
+                return dados;
             } catch (error) {
-                console.error('Erro ao atualizar estatísticas:', error);
+                console.error(`Erro ao carregar dados de ${planilha}:`, error);
+                const tbody = document.getElementById(tabelaId);
+                if (tbody) {
+                    tbody.innerHTML = `<tr><td colspan="10" class="text-center">Erro ao carregar dados</td></tr>`;
+                }
+                return [];
             }
         }
-    };
-
-    // ===== CARREGADOR DE DADOS DAS PLANILHAS =====
-    const DataLoader = {
-        loadAllData: async function() {
-            try {
-                await Promise.all([
-                    this.loadCadastro(),
-                    this.loadSimuladores(),
-                    this.loadCursos(),
-                    this.loadFormacao(),
-                    this.loadServicos(),
-                    this.loadParceiros()
-                ]);
-                
-                this.renderAllTables();
-                Utils.showNotification('Dados carregados com sucesso', 'success');
-                
-            } catch (error) {
-                Utils.showNotification('Erro ao carregar dados: ' + error.message, 'error');
+        
+        renderTabela(tabelaId, dados, colunas, options = {}) {
+            const tbody = document.getElementById(tabelaId);
+            if (!tbody) return;
+            
+            if (!dados || dados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${colunas.length + 2}" class="text-center">Nenhum dado encontrado</td></tr>`;
+                return;
             }
-        },
-
-        loadCadastro: async function() {
-            const result = await GoogleSheetsAPI.fetchSheetData('cadastro');
-            AppState.dataSheets.cadastro = result.dados || [];
-        },
-
-        loadSimuladores: async function() {
-            const result = await GoogleSheetsAPI.fetchSheetData('simuladores');
-            AppState.dataSheets.simuladores = result.dados || [];
-        },
-
-        loadCursos: async function() {
-            const result = await GoogleSheetsAPI.fetchSheetData('cursos');
-            AppState.dataSheets.cursos = result.dados || [];
-        },
-
-        loadFormacao: async function() {
-            const result = await GoogleSheetsAPI.fetchSheetData('formacao');
-            AppState.dataSheets.formacao = result.dados || [];
-        },
-
-        loadServicos: async function() {
-            const result = await GoogleSheetsAPI.fetchSheetData('servicos');
-            AppState.dataSheets.servicos = result.dados || [];
-        },
-
-        loadParceiros: async function() {
-            const result = await GoogleSheetsAPI.fetchSheetData('parceiros');
-            AppState.dataSheets.parceiros = result.dados || [];
-        },
-
-        renderAllTables: function() {
-            this.renderUsuariosTable();
-            this.renderSimuladoresTable();
-            this.renderCursosTable();
-            this.renderFormacoesTable();
-            this.renderServicosTable();
-            this.renderParceirosTable();
-            this.renderConteudosCategorias();
-        },
-
-        renderUsuariosTable: function() {
-            const tbody = document.getElementById('usuariosTableBody');
-            if (!tbody) return;
             
-            const data = AppState.dataSheets.cadastro;
-            tbody.innerHTML = data.map((user, index) => `
-                <tr>
-                    <td><input type="checkbox" class="user-checkbox" data-id="${user.id || index}"></td>
-                    <td>${user.nome || '-'}</td>
-                    <td>${user.sexo || '-'}</td>
-                    <td>${user.pais || '-'}</td>
-                    <td>${user.regiao || '-'}</td>
-                    <td>${user.idade || '-'}</td>
-                    <td>${user.email || user.gmail || '-'}</td>
-                    <td>${user.telefone || '-'}</td>
-                    <td>${user.dataCadastro ? Utils.formatDate(user.dataCadastro) : '-'}</td>
-                    <td><span class="badge badge-success">Ativo</span></td>
-                    <td>
-                        <button class="btn-icon" onclick="DataLoader.editUser('${user.id}')" title="Editar"><i class="fas fa-edit"></i></button>
-                        <button class="btn-icon" onclick="DataLoader.deleteUser('${user.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-        },
-
-        renderSimuladoresTable: function() {
-            const tbody = document.getElementById('acessosSimuladoresBody');
-            if (!tbody) return;
+            // Paginação
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = Math.min(start + this.itemsPerPage, dados.length);
+            const pageData = dados.slice(start, end);
             
-            const data = AppState.dataSheets.simuladores;
-            tbody.innerHTML = data.map(item => {
-                const hoje = new Date();
-                const expiracao = item.dataExpiracao ? new Date(item.dataExpiracao.split('/').reverse().join('-')) : null;
-                const expirado = expiracao && expiracao < hoje;
+            tbody.innerHTML = '';
+            
+            pageData.forEach((item, index) => {
+                const linha = item.linha || (start + index + 2);
+                const row = document.createElement('tr');
                 
-                return `
-                <tr>
-                    <td>${item.nome || '-'}</td>
-                    <td>${item.email || item.gmail || '-'}</td>
-                    <td>${item.dataCadastro ? Utils.formatDate(item.dataCadastro) : '-'}</td>
-                    <td>${item.tipoPagamento || '-'}</td>
-                    <td>${item.valorPago ? Utils.formatCurrency(item.valorPago) : '-'}</td>
-                    <td>${item.dataExpiracao || '-'}</td>
-                    <td><span class="badge ${expirado ? 'badge-danger' : 'badge-success'}">${expirado ? 'Expirado' : 'Ativo'}</span></td>
-                    <td>
-                        <button class="btn-icon" onclick="DataLoader.viewDetails('${item.id}')" title="Ver detalhes"><i class="fas fa-eye"></i></button>
-                        <button class="btn-icon" onclick="DataLoader.deleteItem('simuladores', '${item.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `}).join('');
-        },
-
-        renderCursosTable: function() {
-            const tbody = document.getElementById('cursosOnlineBody');
-            if (!tbody) return;
-            
-            const data = AppState.dataSheets.cursos;
-            tbody.innerHTML = data.map(item => `
-                <tr>
-                    <td>${item.nome || '-'}</td>
-                    <td>${item.email || item.gmail || '-'}</td>
-                    <td>${item.tipoCurso || '-'}</td>
-                    <td>${item.turma || '-'}</td>
-                    <td>${item.tipoPagamento || '-'}</td>
-                    <td>${item.valorPago ? Utils.formatCurrency(item.valorPago) : '-'}</td>
-                    <td>${item.codigoEspecial || '-'}</td>
-                    <td>
-                        <button class="btn-icon" onclick="DataLoader.viewDetails('${item.id}')" title="Ver detalhes"><i class="fas fa-eye"></i></button>
-                        <button class="btn-icon" onclick="DataLoader.deleteItem('cursos', '${item.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-        },
-
-        renderFormacoesTable: function() {
-            const tbody = document.getElementById('formacoesPresenciaisBody');
-            if (!tbody) return;
-            
-            const data = AppState.dataSheets.formacao;
-            tbody.innerHTML = data.map(item => {
-                const hoje = new Date();
-                const expiracao = item.tempoAcesso ? new Date(item.tempoAcesso.split('/').reverse().join('-')) : null;
-                const expirado = expiracao && expiracao < hoje;
+                let cells = '';
                 
-                return `
-                <tr>
-                    <td>${item.nome || '-'}</td>
-                    <td>${item.email || item.gmail || '-'}</td>
-                    <td>${item.instituicao || '-'}</td>
-                    <td>${item.tipoFormacao || '-'}</td>
-                    <td>${item.turma || '-'}</td>
-                    <td>${item.tipoPagamento || '-'}</td>
-                    <td>${item.codigoEspecial || '-'}</td>
-                    <td><span class="badge ${expirado ? 'badge-danger' : 'badge-success'}">${item.tempoAcesso || '-'}</span></td>
-                    <td>
-                        <button class="btn-icon" onclick="DataLoader.viewDetails('${item.id}')" title="Ver detalhes"><i class="fas fa-eye"></i></button>
-                        <button class="btn-icon" onclick="DataLoader.deleteItem('formacao', '${item.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `}).join('');
-        },
-
-        renderServicosTable: function() {
-            const tbody = document.getElementById('servicosPersonalizadosBody');
-            if (!tbody) return;
-            
-            const data = AppState.dataSheets.servicos;
-            tbody.innerHTML = data.map(item => `
-                <tr>
-                    <td>${item.nome || '-'}</td>
-                    <td>${item.identificacao || '-'}</td>
-                    <td>${item.sector || '-'}</td>
-                    <td>${item.paisRegiao || '-'}</td>
-                    <td>${item.tipoServico || '-'}</td>
-                    <td>${item.descricao ? item.descricao.substring(0, 30) + '...' : '-'}</td>
-                    <td>${item.formaPagamento || '-'}</td>
-                    <td>${item.valorPago ? Utils.formatCurrency(item.valorPago) : '-'}</td>
-                    <td>${item.dataCadastro ? Utils.formatDate(item.dataCadastro) : '-'}</td>
-                    <td>
-                        <button class="btn-icon" onclick="DataLoader.viewDetails('${item.id}')" title="Ver detalhes"><i class="fas fa-eye"></i></button>
-                        <button class="btn-icon" onclick="DataLoader.deleteItem('servicos', '${item.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-        },
-
-        renderParceirosTable: function() {
-            const tbody = document.getElementById('parceirosBody');
-            if (!tbody) return;
-            
-            const data = AppState.dataSheets.parceiros;
-            tbody.innerHTML = data.map(item => {
-                const statusClass = item.status === 'Ativo' ? 'badge-success' : 
-                                   item.status === 'Pendente' ? 'badge-warning' : 'badge-danger';
+                // Checkbox (apenas para master na tabela de usuários)
+                if (options.showCheckbox && this.auth.nivel === 'master' && tabelaId === 'usuariosTableBody') {
+                    cells += `<td><input type="checkbox" class="select-user" data-linha="${linha}"></td>`;
+                }
                 
-                return `
-                <tr>
-                    <td>${item.nome || '-'}</td>
-                    <td>${item.funcao || '-'}</td>
-                    <td>${item.email || item.gmail || '-'}</td>
-                    <td>${item.telefone || '-'}</td>
-                    <td>${item.pais || '-'}</td>
-                    <td>${item.regiao || '-'}</td>
-                    <td><span class="badge ${statusClass}">${item.status || 'Pendente'}</span></td>
-                    <td>
-                        <button class="btn-icon" onclick="DataLoader.aprovarParceiro('${item.id}')" title="Aprovar"><i class="fas fa-check-circle"></i></button>
-                        <button class="btn-icon" onclick="DataLoader.bloquearParceiro('${item.id}')" title="Bloquear"><i class="fas fa-ban"></i></button>
-                        <button class="btn-icon" onclick="DataLoader.deleteItem('parceiros', '${item.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `}).join('');
-        },
-
-        renderConteudosCategorias: function() {
-            const container = document.getElementById('conteudosCategorias');
+                // Células de dados
+                colunas.forEach(col => {
+                    let valor = item[col] || '';
+                    
+                    // Formatação especial para status
+                    if (col.toLowerCase().includes('status')) {
+                        const statusClass = valor === 'Ativo' ? 'badge-green' : 
+                                           valor === 'Pendente' ? 'badge-yellow' : 'badge-red';
+                        cells += `<td><span class="badge ${statusClass}">${valor}</span></td>`;
+                    }
+                    // Formatação para email (aceitar variações)
+                    else if (col.toLowerCase().includes('email') || col.toLowerCase().includes('gmail')) {
+                        const email = item.email || item.gmail || item['Gmail'] || item['Email'] || '';
+                        cells += `<td>${email}</td>`;
+                    }
+                    else {
+                        cells += `<td>${valor}</td>`;
+                    }
+                });
+                
+                // Ações
+                cells += `<td class="actions-cell">`;
+                
+                // Botão Editar
+                cells += `<button class="btn-icon btn-edit" onclick="window.adminPanel.editarRegistro('${tabelaId}', '${linha}')" title="Editar"><i class="fas fa-edit"></i></button>`;
+                
+                // Botão Bloquear (se tiver permissão)
+                if (this.auth.pode('bloquear', { tipo: options.tipo || 'usuario', regiao: item.regiao })) {
+                    cells += `<button class="btn-icon btn-block" onclick="window.adminPanel.bloquearRegistro('${tabelaId}', '${linha}')" title="Bloquear"><i class="fas fa-ban"></i></button>`;
+                }
+                
+                // Botão Remover (se tiver permissão)
+                if (this.auth.pode('remover', { tipo: options.tipo || 'usuario', regiao: item.regiao })) {
+                    cells += `<button class="btn-icon btn-danger" onclick="window.adminPanel.removerRegistro('${tabelaId}', '${linha}')" title="Remover"><i class="fas fa-trash"></i></button>`;
+                }
+                
+                cells += `</td>`;
+                
+                row.innerHTML = cells;
+                tbody.appendChild(row);
+            });
+        }
+        
+        renderPaginacao(paginationId, totalItems) {
+            const container = document.getElementById(paginationId);
             if (!container) return;
             
-            container.innerHTML = `
-                <div class="categoria-card">
-                    <h4>Biblioteca de E-books</h4>
-                    <div class="categoria-actions">
-                        <button class="btn btn-primary btn-small" onclick="ContentManager.showForm('ebook')">
-                            <i class="fas fa-plus"></i> Adicionar E-book
-                        </button>
-                        <button class="btn btn-secondary btn-small" onclick="ContentManager.gerenciar('ebooks')">
-                            <i class="fas fa-edit"></i> Gerenciar
-                        </button>
+            const totalPages = Math.ceil(totalItems / this.itemsPerPage);
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            
+            // Botão Anterior
+            html += `<button class="page-btn" ${this.currentPage === 1 ? 'disabled' : ''} onclick="window.adminPanel.tableManager.irPagina(${this.currentPage - 1})"><i class="fas fa-chevron-left"></i></button>`;
+            
+            // Páginas
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= this.currentPage - 2 && i <= this.currentPage + 2)) {
+                    html += `<button class="page-btn ${i === this.currentPage ? 'active' : ''}" onclick="window.adminPanel.tableManager.irPagina(${i})">${i}</button>`;
+                } else if (i === this.currentPage - 3 || i === this.currentPage + 3) {
+                    html += `<span class="page-dots">...</span>`;
+                }
+            }
+            
+            // Botão Próximo
+            html += `<button class="page-btn" ${this.currentPage === totalPages ? 'disabled' : ''} onclick="window.adminPanel.tableManager.irPagina(${this.currentPage + 1})"><i class="fas fa-chevron-right"></i></button>`;
+            
+            container.innerHTML = html;
+        }
+        
+        irPagina(pagina) {
+            this.currentPage = pagina;
+            // Recarregar dados da tabela atual
+            if (window.adminPanel) {
+                window.adminPanel.recarregarModuloAtual();
+            }
+        }
+        
+        aplicarFiltros(filtros) {
+            this.currentFilters = filtros;
+            this.currentPage = 1;
+            // Recarregar dados com filtros
+            if (window.adminPanel) {
+                window.adminPanel.recarregarModuloAtual();
+            }
+        }
+        
+        limparFiltros() {
+            this.currentFilters = {};
+            this.currentPage = 1;
+            if (window.adminPanel) {
+                window.adminPanel.recarregarModuloAtual();
+            }
+        }
+    }
+
+    // ============================================
+    // CLASSE PRINCIPAL DO PAINEL ADMIN
+    // ============================================
+    class AdminPanel {
+        constructor() {
+            this.auth = new AuthManager();
+            this.api = new APIManager(this.auth);
+            this.charts = new ChartManager();
+            this.tableManager = new TableManager(this.api, this.auth);
+            this.currentModule = 'dashboard';
+            this.selectedLinhas = new Set();
+            this.updateInterval = null;
+            this.sessionTimer = null;
+            this.init();
+        }
+        
+        async init() {
+            // Verificar autenticação
+            if (!this.auth.carregarSessao()) {
+                window.location.href = 'adm.html';
+                return;
+            }
+            
+            // Inicializar interface
+            this.atualizarInterfaceUsuario();
+            this.configurarEventListeners();
+            this.iniciarSessionTimer();
+            
+            // Carregar dados iniciais
+            await this.carregarDadosDashboard();
+            
+            // Iniciar atualização periódica (a cada 30 segundos)
+            this.iniciarAtualizacaoPeriodica();
+        }
+        
+        atualizarInterfaceUsuario() {
+            // Nome do usuário
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            if (userNameDisplay) userNameDisplay.textContent = this.auth.nome;
+            
+            // Role
+            const userRoleDisplay = document.getElementById('userRoleDisplay');
+            if (userRoleDisplay) {
+                userRoleDisplay.textContent = this.auth.nivel === 'master' ? 'Administrador Master' : 'Líder Regional';
+            }
+            
+            // Região (para líder)
+            const userRegionDisplay = document.getElementById('userRegionDisplay');
+            if (userRegionDisplay) {
+                if (this.auth.nivel === 'lider' && this.auth.regiao) {
+                    userRegionDisplay.textContent = `Região: ${this.auth.regiao}`;
+                } else {
+                    userRegionDisplay.textContent = '';
+                }
+            }
+            
+            // Mostrar/esconder itens de menu específicos do master
+            if (this.auth.nivel === 'master') {
+                document.getElementById('configMenu').style.display = 'block';
+                document.getElementById('addUsuarioBtn').style.display = 'inline-flex';
+                document.getElementById('addParceiroBtn').style.display = 'inline-flex';
+            } else {
+                document.getElementById('configMenu').style.display = 'none';
+                document.getElementById('addUsuarioBtn').style.display = 'none';
+                document.getElementById('addParceiroBtn').style.display = 'none';
+            }
+        }
+        
+        configurarEventListeners() {
+            // Navegação por módulos
+            document.querySelectorAll('.nav-item[data-module]').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const module = item.dataset.module;
+                    this.switchModule(module);
+                });
+            });
+            
+            // Botão de logout
+            document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                this.confirmarAcao('Terminar Sessão', 'Deseja realmente sair do sistema?', () => {
+                    this.auth.logout();
+                });
+            });
+            
+            // Menu toggle (sidebar)
+            document.getElementById('menuToggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+                document.querySelector('.main-content').classList.toggle('expanded');
+            });
+            
+            // Botão de refresh
+            document.getElementById('refreshData').addEventListener('click', () => {
+                this.recarregarModuloAtual();
+            });
+            
+            // Fullscreen
+            document.getElementById('fullscreenBtn').addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+            
+            // Filtros
+            document.getElementById('applyFilterUsuarios')?.addEventListener('click', () => {
+                this.aplicarFiltrosUsuarios();
+            });
+            
+            // Checkbox "Selecionar todos"
+            const selectAll = document.getElementById('selectAllUsuarios');
+            if (selectAll) {
+                selectAll.addEventListener('change', (e) => {
+                    const checkboxes = document.querySelectorAll('.select-user');
+                    checkboxes.forEach(cb => {
+                        cb.checked = e.target.checked;
+                        const linha = cb.dataset.linha;
+                        if (e.target.checked) {
+                            this.selectedLinhas.add(linha);
+                        } else {
+                            this.selectedLinhas.delete(linha);
+                        }
+                    });
+                    this.atualizarBulkActions();
+                });
+            }
+            
+            // Botões de ação em massa
+            document.getElementById('btnBloquearSelecionados')?.addEventListener('click', () => {
+                this.bulkAction('bloquear');
+            });
+            
+            document.getElementById('btnRemoverSelecionados')?.addEventListener('click', () => {
+                this.bulkAction('remover');
+            });
+            
+            document.getElementById('btnCancelarSelecao')?.addEventListener('click', () => {
+                this.limparSelecao();
+            });
+        }
+        
+        async switchModule(module) {
+            // Atualizar navegação
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.nav-item[data-module="${module}"]`).classList.add('active');
+            
+            // Esconder todos os módulos
+            document.querySelectorAll('.admin-module').forEach(mod => {
+                mod.classList.remove('active');
+            });
+            
+            // Mostrar módulo selecionado
+            const moduleElement = document.getElementById(`module-${module}`);
+            if (moduleElement) {
+                moduleElement.classList.add('active');
+                
+                // Atualizar título da página
+                const pageTitle = document.getElementById('pageTitle');
+                const moduleNames = {
+                    'dashboard': 'Dashboard',
+                    'usuarios': 'Usuários',
+                    'simuladores': 'Simuladores',
+                    'biblioteca': 'Biblioteca',
+                    'cursos': 'Cursos Online',
+                    'formacoes': 'Formações Presenciais',
+                    'parceiros': 'Parceiros',
+                    'servicos': 'Serviços Personalizados',
+                    'configuracoes': 'Configurações'
+                };
+                pageTitle.textContent = moduleNames[module] || 'Dashboard';
+                
+                // Carregar dados do módulo
+                await this.carregarDadosModulo(module);
+            }
+            
+            this.currentModule = module;
+        }
+        
+        async carregarDadosModulo(module) {
+            this.showLoader();
+            
+            try {
+                switch(module) {
+                    case 'dashboard':
+                        await this.carregarDadosDashboard();
+                        break;
+                    case 'usuarios':
+                        await this.tableManager.carregarDados(
+                            SHEET_NAMES.CADASTRO,
+                            'usuariosTableBody',
+                            ['Nome', 'Sexo', 'País', 'Região', 'Idade', 'Email', 'Telefone', 'Data', 'Status'],
+                            { showCheckbox: true, tipo: 'usuario' }
+                        );
+                        break;
+                    case 'simuladores':
+                        await this.tableManager.carregarDados(
+                            SHEET_NAMES.SIMULADORES,
+                            'simuladoresTableBody',
+                            ['Nome de usuario', 'Sexo', 'País', 'Região', 'Idade', 'Email', 'Data', 'Tipo de Pagamento', 'Valor Pago', 'Data de Expiração do Acesso'],
+                            { tipo: 'usuario' }
+                        );
+                        break;
+                    case 'biblioteca':
+                        await this.tableManager.carregarDados(
+                            SHEET_NAMES.SIMULADORES,
+                            'bibliotecaTableBody',
+                            ['Nome de usuario', 'Sexo', 'País', 'Região', 'Idade', 'Email', 'Data', 'Tipo de Pagamento', 'Valor Pago', 'Data de Expiração do Acesso'],
+                            { tipo: 'usuario' }
+                        );
+                        break;
+                    case 'cursos':
+                        await this.tableManager.carregarDados(
+                            SHEET_NAMES.CURSOS,
+                            'cursosTableBody',
+                            ['Nome do Usuario', 'Sexo', 'País', 'Idade', 'Email', 'Tipo do Curso', 'Turma Escolhida', 'Tipo de Pagamento', 'Valor Pago'],
+                            { tipo: 'usuario' }
+                        );
+                        break;
+                    case 'formacoes':
+                        await this.tableManager.carregarDados(
+                            SHEET_NAMES.FORMACAO,
+                            'formacoesTableBody',
+                            ['Nome do Usuario', 'Sexo', 'País', 'Instituição Associada', 'Tipo de Formação', 'Turma', 'Tipo de Pagamento', 'Valor Pago', 'Tempo de Acesso'],
+                            { tipo: 'usuario' }
+                        );
+                        break;
+                    case 'parceiros':
+                        await this.tableManager.carregarDados(
+                            SHEET_NAMES.PARCEIROS,
+                            'parceirosTableBody',
+                            ['Nome', 'Sexo', 'País', 'Região', 'Idade', 'Função', 'Email', 'Telefone', 'Status'],
+                            { tipo: 'parceiro' }
+                        );
+                        break;
+                    case 'servicos':
+                        await this.tableManager.carregarDados(
+                            SHEET_NAMES.SERVICOS,
+                            'servicosTableBody',
+                            ['Nome do Cliente', 'Identificação', 'Sexo/Sector de atuação', 'País-Região', 'Tipo de Serviço', 'Descrição do Mesmo', 'Forma de Pagamento', 'Valor Pago', 'Data'],
+                            { tipo: 'servico' }
+                        );
+                        break;
+                }
+            } catch (error) {
+                console.error(`Erro ao carregar módulo ${module}:`, error);
+                this.showToast('Erro ao carregar dados', 'error');
+            } finally {
+                this.hideLoader();
+            }
+        }
+        
+        async carregarDadosDashboard() {
+            try {
+                const stats = await this.api.buscarEstatisticas();
+                
+                // Renderizar cards
+                this.renderStats(stats);
+                
+                // Renderizar gráficos
+                this.renderGraficos(stats);
+                
+                // Carregar últimos cadastros
+                const ultimos = await this.api.buscarDados(SHEET_NAMES.CADASTRO, { limite: 10 });
+                this.renderUltimosCadastros(ultimos);
+                
+            } catch (error) {
+                console.error('Erro ao carregar dashboard:', error);
+            }
+        }
+        
+        renderStats(stats) {
+            const statsGrid = document.getElementById('statsGrid');
+            if (!statsGrid) return;
+            
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number">${stats.totalUsuarios || 0}</div>
+                        <div class="stat-label">Total de Usuários</div>
                     </div>
-                    <div class="itens-preview" id="previewEbooks"></div>
                 </div>
-                <div class="categoria-card">
-                    <h4>Biblioteca de Infográficos</h4>
-                    <div class="categoria-actions">
-                        <button class="btn btn-primary btn-small" onclick="ContentManager.showForm('infografico')">
-                            <i class="fas fa-plus"></i> Adicionar Infográfico
-                        </button>
-                        <button class="btn btn-secondary btn-small" onclick="ContentManager.gerenciar('infograficos')">
-                            <i class="fas fa-edit"></i> Gerenciar
-                        </button>
+                
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number">${(stats.receitaTotal || 0).toLocaleString()} Kz</div>
+                        <div class="stat-label">Receita Total</div>
                     </div>
-                    <div class="itens-preview" id="previewInfograficos"></div>
                 </div>
-                <div class="categoria-card">
-                    <h4>Vídeos e Áudios</h4>
-                    <div class="categoria-actions">
-                        <button class="btn btn-primary btn-small" onclick="ContentManager.showForm('video')">
-                            <i class="fas fa-plus"></i> Adicionar Mídia
-                        </button>
-                        <button class="btn btn-secondary btn-small" onclick="ContentManager.gerenciar('videos')">
-                            <i class="fas fa-edit"></i> Gerenciar
-                        </button>
+                
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number">${stats.totalRegioes || 0}</div>
+                        <div class="stat-label">Regiões Ativas</div>
                     </div>
-                    <div class="itens-preview" id="previewVideos"></div>
                 </div>
-                <div class="categoria-card">
-                    <h4>Slides e Apresentações</h4>
-                    <div class="categoria-actions">
-                        <button class="btn btn-primary btn-small" onclick="ContentManager.showForm('slide')">
-                            <i class="fas fa-plus"></i> Adicionar Slide
-                        </button>
-                        <button class="btn btn-secondary btn-small" onclick="ContentManager.gerenciar('slides')">
-                            <i class="fas fa-edit"></i> Gerenciar
-                        </button>
+                
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number">${stats.idadeMedia || 0}</div>
+                        <div class="stat-label">Idade Média</div>
                     </div>
-                    <div class="itens-preview" id="previewSlides"></div>
                 </div>
             `;
-        },
-
-        // Ações CRUD
-        editUser: async function(userId) {
-            Utils.showNotification('Funcionalidade de edição em desenvolvimento', 'warning');
-        },
-
-        deleteUser: async function(userId) {
-            if (confirm('Tem certeza que deseja excluir este usuário permanentemente?')) {
-                Utils.showNotification('Usuário excluído com sucesso', 'success');
-                // Implementar chamada à API
-            }
-        },
-
-        deleteItem: async function(sheet, itemId) {
-            if (confirm('Tem certeza que deseja excluir este item?')) {
-                Utils.showNotification('Item excluído com sucesso', 'success');
-            }
-        },
-
-        viewDetails: async function(itemId) {
-            Utils.showNotification('Detalhes do item em desenvolvimento', 'info');
-        },
-
-        aprovarParceiro: async function(parceiroId) {
-            if (confirm('Aprovar este parceiro?')) {
-                try {
-                    await GoogleSheetsAPI.atualizarStatusParceiro(parceiroId, 'Ativo');
-                    Utils.showNotification('Parceiro aprovado com sucesso', 'success');
-                    await this.loadParceiros();
-                    this.renderParceirosTable();
-                } catch (error) {
-                    Utils.showNotification('Erro ao aprovar parceiro', 'error');
-                }
-            }
-        },
-
-        bloquearParceiro: async function(parceiroId) {
-            if (confirm('Bloquear este parceiro?')) {
-                try {
-                    await GoogleSheetsAPI.atualizarStatusParceiro(parceiroId, 'Bloqueado');
-                    Utils.showNotification('Parceiro bloqueado', 'success');
-                    await this.loadParceiros();
-                    this.renderParceirosTable();
-                } catch (error) {
-                    Utils.showNotification('Erro ao bloquear parceiro', 'error');
-                }
-            }
-        },
-
-        searchData: async function(sheetKey, term) {
-            const result = await GoogleSheetsAPI.searchData(sheetKey, term);
-            return result.dados || [];
         }
-    };
-
-    // ===== GERENCIADOR DE CONTEÚDOS =====
-    const ContentManager = {
-        showForm: function(tipo) {
-            document.getElementById('formConteudoTitle').textContent = `Adicionar ${tipo}`;
-            document.getElementById('tipoConteudo').value = tipo;
-            document.getElementById('editConteudoId').value = '';
-            document.getElementById('conteudoForm').reset();
-            document.getElementById('formAdicionarConteudo').style.display = 'block';
-        },
-
-        hideForm: function() {
-            document.getElementById('formAdicionarConteudo').style.display = 'none';
-        },
-
-        gerenciar: function(categoria) {
-            Utils.showNotification(`Gerenciar ${categoria} em desenvolvimento`, 'info');
-        },
-
-        saveContent: async function(event) {
-            event.preventDefault();
-            
-            const formData = {
-                id: document.getElementById('editConteudoId').value || Date.now(),
-                tipo: document.getElementById('tipoConteudo').value,
-                categoria: document.getElementById('categoriaConteudo').value,
-                titulo: document.getElementById('tituloConteudo').value,
-                descricao: document.getElementById('descricaoConteudo').value,
-                url: document.getElementById('urlConteudo').value,
-                thumbnail: document.getElementById('thumbnailConteudo').value,
-                tags: document.getElementById('tagsConteudo').value.split(',').map(t => t.trim())
-            };
-
-            Utils.showNotification('Conteúdo salvo com sucesso', 'success');
-            this.hideForm();
-        }
-    };
-
-    // ===== SISTEMA DE BUSCA =====
-    const SearchManager = {
-        init: function() {
-            const searchInput = document.getElementById('searchUsuarios');
-            if (searchInput) {
-                searchInput.addEventListener('input', Utils.debounce((e) => {
-                    this.searchUsuarios(e.target.value);
-                }, 300));
-            }
-        },
-
-        searchUsuarios: async function(term) {
-            if (!term) {
-                DataLoader.renderUsuariosTable();
-                return;
-            }
-            
-            const results = await DataLoader.searchData('cadastro', term);
-            AppState.dataSheets.cadastro = results;
-            DataLoader.renderUsuariosTable();
-        }
-    };
-
-    // ===== INICIALIZAÇÃO =====
-    function init() {
-        console.log('🚀 Inicializando Painel Administrativo Teca Capital...');
         
-        AuthManager.init();
-        SearchManager.init();
-
-        // Event listener para logout
-        document.getElementById('btnLogout').addEventListener('click', () => AuthManager.logout());
-
-        // Event listener para formulário de conteúdo
-        document.getElementById('conteudoForm').addEventListener('submit', (e) => ContentManager.saveContent(e));
-        document.getElementById('cancelarConteudo').addEventListener('click', () => ContentManager.hideForm());
-
-        // Event listener para checkboxes de seleção em massa
-        document.getElementById('selectAllUsuarios')?.addEventListener('change', (e) => {
-            document.querySelectorAll('.user-checkbox').forEach(cb => cb.checked = e.target.checked);
-        });
-
-        // Event listener para botões de ação em massa
-        document.getElementById('btnBloquearSelecionados')?.addEventListener('click', () => {
-            const selected = document.querySelectorAll('.user-checkbox:checked');
-            if (selected.length === 0) {
-                Utils.showNotification('Selecione pelo menos um usuário', 'warning');
-                return;
-            }
-            Utils.showNotification(`${selected.length} usuário(s) bloqueado(s)`, 'success');
-        });
-
-        document.getElementById('btnRemoverSelecionados')?.addEventListener('click', () => {
-            const selected = document.querySelectorAll('.user-checkbox:checked');
-            if (selected.length === 0) {
-                Utils.showNotification('Selecione pelo menos um usuário', 'warning');
-                return;
-            }
-            if (confirm(`Remover ${selected.length} usuário(s) permanentemente?`)) {
-                Utils.showNotification(`${selected.length} usuário(s) removido(s)`, 'success');
-            }
-        });
-
-        // Carregar Font Awesome se não existir
-        if (!document.querySelector('link[href*="font-awesome"]')) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
-            document.head.appendChild(link);
+        renderGraficos(stats) {
+            // Gráfico de receita
+            this.charts.criarGraficoReceita('receitaChart', {
+                labels: stats.receitaPorDia?.map(d => d.dia) || [],
+                valores: stats.receitaPorDia?.map(d => d.valor) || []
+            });
+            
+            // Gráfico de regiões
+            this.charts.criarGraficoRegioes('regiaoChart', {
+                regioes: stats.usuariosPorRegiao?.map(r => r.regiao) || [],
+                valores: stats.usuariosPorRegiao?.map(r => r.count) || []
+            });
+            
+            // Gráfico de gênero
+            this.charts.criarGraficoGenero(
+                'generoChart',
+                stats.distribuicaoGenero?.Homens || 0,
+                stats.distribuicaoGenero?.Mulheres || 0
+            );
+            
+            // Gráfico de serviços
+            this.charts.criarGraficoServicos('servicosChart', stats.distribuicaoServicos || {});
         }
-
-        // Verificar status do sistema
-        GoogleSheetsAPI.getStatus().then(result => {
-            if (result.sucesso) {
-                console.log('✅ Sistema conectado:', result);
+        
+        renderUltimosCadastros(usuarios) {
+            const tbody = document.getElementById('ultimosCadastrosTable');
+            if (!tbody) return;
+            
+            if (!usuarios || usuarios.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhum cadastro recente</td></tr>';
+                return;
             }
-        }).catch(error => {
-            console.error('❌ Erro de conexão:', error);
-            Utils.showNotification('Erro ao conectar com o servidor', 'error');
-        });
-
-        // Adicionar estilos para notificações e loader
-        addCustomStyles();
-    }
-
-    function addCustomStyles() {
-        const style = document.createElement('style');
-        style.textContent = `
-            .admin-notification {
+            
+            tbody.innerHTML = '';
+            
+            usuarios.slice(0, 10).forEach(usuario => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${usuario.nome || usuario['Nome do Usuário'] || ''}</td>
+                    <td>${usuario.email || usuario.gmail || ''}</td>
+                    <td>${usuario.regiao || ''}</td>
+                    <td>${this.determinarServico(usuario)}</td>
+                    <td>${usuario.data || usuario['Data'] || ''}</td>
+                    <td><span class="badge badge-green">Ativo</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        determinarServico(usuario) {
+            if (usuario['Tipo de Pagamento'] || usuario.tipoPagamento) return 'Simulador';
+            if (usuario['Tipo do Curso'] || usuario.tipoCurso) return 'Curso';
+            if (usuario['Tipo de Formação'] || usuario.tipoFormacao) return 'Formação';
+            return 'N/A';
+        }
+        
+        aplicarFiltrosUsuarios() {
+            const filtros = {
+                nome: document.getElementById('searchUsuarios')?.value,
+                regiao: document.getElementById('filterRegiaoUsuarios')?.value,
+                status: document.getElementById('filterStatusUsuarios')?.value
+            };
+            this.tableManager.aplicarFiltros(filtros);
+        }
+        
+        atualizarBulkActions() {
+            const container = document.getElementById('bulkActionsUsuarios');
+            const selectedCount = document.getElementById('selectedCount');
+            
+            if (this.selectedLinhas.size > 0) {
+                container.style.display = 'flex';
+                selectedCount.textContent = this.selectedLinhas.size;
+            } else {
+                container.style.display = 'none';
+            }
+            
+            document.getElementById('btnBloquearSelecionados').disabled = this.selectedLinhas.size === 0;
+            document.getElementById('btnRemoverSelecionados').disabled = this.selectedLinhas.size === 0;
+        }
+        
+        limparSelecao() {
+            this.selectedLinhas.clear();
+            document.querySelectorAll('.select-user').forEach(cb => {
+                cb.checked = false;
+            });
+            document.getElementById('selectAllUsuarios').checked = false;
+            this.atualizarBulkActions();
+        }
+        
+        async bulkAction(acao) {
+            if (this.selectedLinhas.size === 0) return;
+            
+            const confirmMsg = acao === 'bloquear' 
+                ? `Deseja bloquear ${this.selectedLinhas.size} usuário(s)?`
+                : `Deseja remover ${this.selectedLinhas.size} usuário(s) permanentemente?`;
+            
+            if (!confirm(confirmMsg)) return;
+            
+            this.showLoader();
+            
+            try {
+                const linhas = Array.from(this.selectedLinhas);
+                let sucessos = 0;
+                
+                for (const linha of linhas) {
+                    let resultado;
+                    if (acao === 'bloquear') {
+                        resultado = await this.api.alterarStatusUsuario(SHEET_NAMES.CADASTRO, linha, 'Bloqueado');
+                    } else {
+                        resultado = await this.api.removerUsuario(SHEET_NAMES.CADASTRO, linha);
+                    }
+                    
+                    if (resultado.status === 'sucesso') sucessos++;
+                }
+                
+                this.showToast(`${sucessos} de ${linhas.length} processados com sucesso`, sucessos === linhas.length ? 'success' : 'warning');
+                this.limparSelecao();
+                await this.recarregarModuloAtual();
+                
+            } catch (error) {
+                console.error('Erro na ação em massa:', error);
+                this.showToast('Erro ao processar ação', 'error');
+            } finally {
+                this.hideLoader();
+            }
+        }
+        
+        async bloquearRegistro(tabelaId, linha) {
+            const planilha = this.getPlanilhaPorTabela(tabelaId);
+            if (!planilha) return;
+            
+            this.confirmarAcao('Bloquear', 'Deseja bloquear este registro?', async () => {
+                this.showLoader();
+                const resultado = await this.api.alterarStatusUsuario(planilha, linha, 'Bloqueado');
+                this.hideLoader();
+                
+                if (resultado.status === 'sucesso') {
+                    this.showToast('Registro bloqueado com sucesso', 'success');
+                    await this.recarregarModuloAtual();
+                } else {
+                    this.showToast(resultado.mensagem || 'Erro ao bloquear', 'error');
+                }
+            });
+        }
+        
+        async removerRegistro(tabelaId, linha) {
+            const planilha = this.getPlanilhaPorTabela(tabelaId);
+            if (!planilha) return;
+            
+            this.confirmarAcao('Remover', 'Deseja remover este registro permanentemente?', async () => {
+                this.showLoader();
+                const resultado = await this.api.removerUsuario(planilha, linha);
+                this.hideLoader();
+                
+                if (resultado.status === 'sucesso') {
+                    this.showToast('Registro removido com sucesso', 'success');
+                    await this.recarregarModuloAtual();
+                } else {
+                    this.showToast(resultado.mensagem || 'Erro ao remover', 'error');
+                }
+            });
+        }
+        
+        getPlanilhaPorTabela(tabelaId) {
+            const map = {
+                'usuariosTableBody': SHEET_NAMES.CADASTRO,
+                'simuladoresTableBody': SHEET_NAMES.SIMULADORES,
+                'bibliotecaTableBody': SHEET_NAMES.SIMULADORES,
+                'cursosTableBody': SHEET_NAMES.CURSOS,
+                'formacoesTableBody': SHEET_NAMES.FORMACAO,
+                'parceirosTableBody': SHEET_NAMES.PARCEIROS,
+                'servicosTableBody': SHEET_NAMES.SERVICOS
+            };
+            return map[tabelaId];
+        }
+        
+        async recarregarModuloAtual() {
+            await this.carregarDadosModulo(this.currentModule);
+        }
+        
+        iniciarSessionTimer() {
+            this.sessionTimer = setInterval(() => {
+                const tempoRestante = this.auth.getTempoRestante();
+                
+                // Atualizar display
+                const timerDisplay = document.getElementById('sessionTimerDisplay');
+                if (timerDisplay) {
+                    const minutos = Math.floor(tempoRestante / 60000);
+                    const segundos = Math.floor((tempoRestante % 60000) / 1000);
+                    timerDisplay.textContent = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+                }
+                
+                // Aviso 1 minuto antes
+                if (tempoRestante <= 60000 && tempoRestante > 0) {
+                    document.getElementById('sessionTimer').classList.add('warning');
+                    if (tempoRestante <= 60000 && tempoRestante > 58000) {
+                        this.mostrarReauthPopup();
+                    }
+                } else {
+                    document.getElementById('sessionTimer').classList.remove('warning');
+                }
+                
+                // Logout automático
+                if (tempoRestante <= 0) {
+                    clearInterval(this.sessionTimer);
+                    this.auth.logout();
+                }
+            }, 1000);
+        }
+        
+        iniciarAtualizacaoPeriodica() {
+            this.updateInterval = setInterval(() => {
+                if (this.currentModule === 'dashboard') {
+                    this.carregarDadosDashboard();
+                }
+            }, 30000);
+        }
+        
+        mostrarReauthPopup() {
+            const popup = document.getElementById('reauthPopup');
+            if (!popup) return;
+            
+            popup.style.display = 'flex';
+            
+            const btnReauth = document.getElementById('btnReauth');
+            const btnCancel = document.getElementById('btnReauthCancel');
+            
+            btnReauth.onclick = () => {
+                popup.style.display = 'none';
+                // Renovar sessão
+                this.auth.loginTime = Date.now();
+                this.auth.salvarSessao(true);
+            };
+            
+            btnCancel.onclick = () => {
+                popup.style.display = 'none';
+                this.auth.logout();
+            };
+        }
+        
+        confirmarAcao(titulo, mensagem, callback) {
+            const modal = document.getElementById('confirmModal');
+            document.getElementById('confirmModalTitle').textContent = titulo;
+            document.getElementById('confirmModalMessage').textContent = mensagem;
+            
+            modal.style.display = 'flex';
+            
+            const confirmar = () => {
+                modal.style.display = 'none';
+                callback();
+                document.getElementById('confirmActionBtn').removeEventListener('click', confirmar);
+            };
+            
+            document.getElementById('confirmActionBtn').addEventListener('click', confirmar);
+            document.getElementById('cancelConfirmBtn').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            document.getElementById('closeConfirmModal').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        }
+        
+        showToast(mensagem, tipo = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast-notification toast-${tipo}`;
+            toast.innerHTML = `
+                <i class="fas ${tipo === 'success' ? 'fa-check-circle' : tipo === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                <span>${mensagem}</span>
+            `;
+            
+            toast.style.cssText = `
                 position: fixed;
-                top: 20px;
+                bottom: 20px;
                 right: 20px;
-                padding: 15px 25px;
-                background: var(--primary-black);
-                border: 2px solid var(--primary-gold);
-                border-radius: 12px;
-                color: var(--primary-white);
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                z-index: 10000;
-                transform: translateX(400px);
-                transition: transform 0.3s ease;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            }
-            
-            .admin-notification.show {
-                transform: translateX(0);
-            }
-            
-            .admin-notification.success {
-                border-color: var(--secondary-green);
-            }
-            
-            .admin-notification.error {
-                border-color: var(--secondary-red);
-            }
-            
-            .admin-notification i {
-                font-size: 1.5rem;
-            }
-            
-            .global-loader {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.7);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 99999;
-                backdrop-filter: blur(5px);
-            }
-            
-            .loader-spinner {
-                width: 50px;
-                height: 50px;
-                border: 3px solid var(--admin-card-bg);
-                border-top-color: var(--primary-gold);
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-            }
-            
-            @keyframes spin {
-                to { transform: rotate(360deg); }
-            }
-            
-            .senha-temporaria {
-                background: rgba(214,174,100,0.2);
-                border: 2px solid var(--primary-gold);
+                background: ${tipo === 'success' ? 'rgba(40,167,69,0.9)' : tipo === 'error' ? 'rgba(220,53,69,0.9)' : 'rgba(214,174,100,0.9)'};
+                color: ${tipo === 'success' ? 'black' : 'white'};
+                padding: 12px 20px;
                 border-radius: 8px;
-                padding: 20px;
-                text-align: center;
-                animation: pulse 2s infinite;
-            }
-            
-            .senha-temporaria strong {
-                font-size: 1.5rem;
-                display: block;
-                margin-bottom: 10px;
-                color: var(--primary-gold);
-                letter-spacing: 2px;
-            }
-            
-            .senha-temporaria .timer {
-                color: var(--secondary-red);
                 font-weight: 600;
-            }
-            
-            .senha-expirada {
-                background: rgba(204,51,51,0.1);
-                border: 2px solid var(--secondary-red);
-                border-radius: 8px;
-                padding: 20px;
-                text-align: center;
-            }
-            
-            .reauth-popup {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.9);
+                z-index: 50000;
                 display: flex;
-                justify-content: center;
                 align-items: center;
-                z-index: 10001;
-                backdrop-filter: blur(10px);
-            }
+                gap: 10px;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
             
-            .reauth-content {
-                background: var(--admin-card-bg);
-                border: 2px solid var(--primary-gold);
-                border-radius: 20px;
-                padding: 40px;
-                max-width: 400px;
-                text-align: center;
-            }
+            document.body.appendChild(toast);
             
-            .reauth-content h3 {
-                color: var(--primary-gold);
-                margin-bottom: 20px;
-            }
-            
-            .reauth-content p {
-                margin-bottom: 30px;
-                color: var(--text-secondary);
-            }
-        `;
-        document.head.appendChild(style);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        showLoader() {
+            document.getElementById('mainLoader').style.display = 'flex';
+        }
+        
+        hideLoader() {
+            document.getElementById('mainLoader').style.display = 'none';
+        }
     }
 
-    // Iniciar quando o DOM estiver pronto
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
+    // ============================================
+    // FUNÇÕES DE LOGIN (GLOBAIS)
+    // ============================================
+    window.realizarLoginAdmin = async function() {
+        const usuario = document.getElementById('adminUser')?.value;
+        const senha = document.getElementById('adminSenha')?.value;
+        const remember = document.getElementById('rememberMe')?.checked;
+        
+        if (!usuario || !senha) {
+            mostrarMensagemLogin('Preencha todos os campos!', 'error');
+            return;
+        }
+        
+        // Mostrar loader
+        document.getElementById('loginLoader').style.display = 'flex';
+        
+        const auth = new AuthManager();
+        const resultado = await auth.login(usuario, senha, remember);
+        
+        document.getElementById('loginLoader').style.display = 'none';
+        
+        if (resultado.success) {
+            window.location.href = 'admin-dashboard.html';
+        } else {
+            mostrarMensagemLogin(resultado.mensagem, 'error');
+        }
+    };
+    
+    function mostrarMensagemLogin(texto, tipo) {
+        const container = document.getElementById('loginMessage');
+        container.innerHTML = `<div class="alert-${tipo}"><i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${texto}</div>`;
     }
-
-    // Expor funções globalmente
-    window.DataLoader = DataLoader;
-    window.ContentManager = ContentManager;
-    window.Utils = Utils;
+    
+    // Inicializar painel quando a página carregar
+    document.addEventListener('DOMContentLoaded', () => {
+        // Verificar se estamos na página do dashboard
+        if (document.querySelector('.dashboard-page')) {
+            window.adminPanel = new AdminPanel();
+        }
+        
+        // Configurar modal de recuperação de senha
+        const forgotLink = document.getElementById('forgotPasswordLink');
+        if (forgotLink) {
+            forgotLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('forgotPasswordModal').style.display = 'flex';
+            });
+        }
+        
+        document.getElementById('closeForgotModal')?.addEventListener('click', () => {
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+        });
+        
+        document.getElementById('closeForgotBtn')?.addEventListener('click', () => {
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+        });
+    });
 })();

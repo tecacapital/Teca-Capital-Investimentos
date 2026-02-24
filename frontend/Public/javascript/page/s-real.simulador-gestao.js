@@ -6,6 +6,7 @@
 // CONFIGURAÇÕES E CONSTANTES GLOBAIS
 // ============================================
 
+
 const TEMPO = {
   dia: 30,
   semana: 210,
@@ -4732,3 +4733,4 @@ window.alterarVelocidade = alterarVelocidade;
 document.addEventListener('DOMContentLoaded', () => {
   iniciarSimulador();
 });
+

@@ -3431,3 +3431,4 @@ window.SimuladorEconomia = {
     setTimeout(aplicarRegrasReservas, 1000);
     
 })();
+

@@ -1919,3 +1919,5 @@ window.addEventListener('resize', otimizarTabelasParaMobile);
         
         // Fallback para JS desabilitado
         document.documentElement.classList.add('js-enabled');
+
+        
