@@ -69,183 +69,43 @@
         </div>
     </header>
 
-    <main class="plataforma-container">
+   <main>
 
-        <!-- Cabeçalho da página (específico, não é o header global) -->
-        <div class="page-header">
-            <h1 class="page-title">Plataforma Educacional</h1>
-            <p class="page-subtitle">Aceda aos simuladores, cursos e formações</p>
-        </div>
-
-        <!-- Sistema de Abas -->
-        <div class="tabs-container">
-            <button class="tab-btn active" data-tab="cadastro">
-                <i class="fas fa-user-edit"></i> Cadastro
-            </button>
-            <button class="tab-btn" data-tab="login">
-                <i class="fas fa-lock"></i> Login
-            </button>
-            <button class="tab-btn" data-tab="admin">
-                <i class="fas fa-crown"></i> Administrador
-            </button>
-        </div>
-
-        <!-- CONTEÚDO DAS ABAS -->
-        <div class="tab-content-container">
-            <!-- ABA 1: CADASTRO -->
-            <div id="tab-cadastro" class="tab-content active">
-                <form id="form-cadastro" class="form-cadastro" novalidate>
-                    <!-- Campos Comuns (obrigatórios para todos) -->
-                    <div class="form-section">
-                        <h3 class="section-title"><i class="fas fa-user"></i> Dados Pessoais</h3>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="nome">Nome Completo <span class="required">*</span></label>
-                                <input type="text" id="nome" name="nome" class="form-control" placeholder="Ex: João Manuel Silva" minlength="3" required>
-                                <div class="error-message" id="error-nome"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="sexo">Sexo <span class="required">*</span></label>
-                                <select id="sexo" name="sexo" class="form-control" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="Homem">Homem</option>
-                                    <option value="Mulher">Mulher</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="pais">País <span class="required">*</span></label>
-                                <input type="text" id="pais" name="pais" class="form-control" value="Angola" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="regiao">Região <span class="required">*</span></label>
-                                <input type="text" id="regiao" name="regiao" class="form-control" value="Luanda" required>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="idade">Idade <span class="required">*</span></label>
-                                <input type="number" id="idade" name="idade" class="form-control" min="16" max="100" placeholder="25" required>
-                                <div class="error-message" id="error-idade"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="email">E-mail <span class="required">*</span></label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="exemplo@email.com" required>
-                                <div class="error-message" id="error-email"></div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="telefone">Nº Telefone <span class="required">*</span></label>
-                                <input type="tel" id="telefone" name="telefone" class="form-control" placeholder="923456789" required>
-                                <div class="error-message" id="error-telefone"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="tipo-servico">Tipo de Serviço <span class="required">*</span></label>
-                                <select id="tipo-servico" name="destino" class="form-control" required>
-                                    <option value="">Selecione o serviço desejado...</option>
-                                    <option value="Simuladores/Bibliotecas"> Simuladores/Bibliotecas</option>
-                                    <option value="Curso Online">🎓 Curso Online</option>
-                                    <option value="Formação Presencial">🏛️ Formação Presencial</option>
-                                    <option value="Servicos">⚙️ Serviços Personalizados</option>
-                                    <option value="Parceiros">🤝 Parceiros</option>
-                                </select>
-                            </div>
-                        </div>
+        <!-- Formulário TECA Capital - Totalmente encapsulado -->
+        <div class="teca-form-container">
+            <div class="teca-form-card">
+                <!-- Cabeçalho do formulário -->
+                <div class="teca-form-header">
+                    <div class="teca-form-logo">
+                        <i class="fas fa-chart-line" style="color: rgb(214, 174, 100);"></i>
+                        <span>TECA CAPITAL</span>
                     </div>
+                    <p class="teca-form-subtitle">Acesso à plataforma de investimentos</p>
+                </div>
 
-                    <!-- ÁREA DINÂMICA - CAMPOS ESPECÍFICOS POR TIPO DE SERVIÇO -->
-                    <div id="campos-dinamicos" class="form-section">
-                        <!-- Será preenchido via JavaScript -->
-                    </div>
-
-                    <!-- Botão de Envio -->
-                    <div class="form-actions">
-                        <button type="submit" id="btn-cadastrar" class="btn btn-primary btn-large">
-                            <i class="fas fa-paper-plane"></i> CADASTRAR
+                <!-- Navegação principal (Cadastro/Login) -->
+                <div class="teca-nav-container">
+                    <div class="teca-nav-buttons">
+                        <button class="teca-nav-btn active" data-mode="cadastro">
+                            <i class="fas fa-user-plus"></i>
+                            Cadastramento
+                        </button>
+                        <button class="teca-nav-btn" data-mode="login">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
                         </button>
                     </div>
-                </form>
+                    <div class="teca-nav-indicator"></div>
+                </div>
 
-                <!-- Área de Mensagem para Cadastro -->
-                <div id="mensagem-cadastro" class="alert-container"></div>
+                <!-- Container dinâmico do formulário -->
+                <div id="teca-dynamic-form" class="teca-dynamic-form">
+                    <!-- Conteúdo carregado via JavaScript -->
+                </div>
+
+                <!-- Mensagens de status -->
+                <div id="teca-message-container" class="teca-message-container"></div>
             </div>
-
-            <!-- ABA 2: LOGIN COMUM -->
-            <div id="tab-login" class="tab-content">
-                <form id="form-login" class="form-login">
-                    <div class="form-section">
-                        <h3 class="section-title"><i class="fas fa-sign-in-alt"></i> Aceder à Plataforma</h3>
-                        
-                        <div class="form-group">
-                            <label for="login-usuario">Nome de Usuário <span class="required">*</span></label>
-                            <input type="text" id="login-usuario" name="usuario" class="form-control" placeholder="Seu nome completo" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="login-senha">Senha ou Código Especial <span class="required">*</span></label>
-                            <input type="password" id="login-senha" name="senha" class="form-control" placeholder="••••••••" required>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary btn-large">
-                                <i class="fas fa-unlock-alt"></i> ENTRAR
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                
-                <!-- Área de Mensagem para Login -->
-                <div id="mensagem-login" class="alert-container"></div>
-            </div>
-
-            <!-- ABA 3: LOGIN ADMINISTRADOR -->
-            <div id="tab-admin" class="tab-content">
-                <form id="form-admin" class="form-login">
-                    <div class="form-section">
-                        <h3 class="section-title"><i class="fas fa-crown"></i> Acesso Administrativo</h3>
-                        
-                        <div class="form-group">
-                            <label for="admin-usuario">Nome de Usuário Master <span class="required">*</span></label>
-                            <input type="text" id="admin-usuario" name="usuario" class="form-control" placeholder="Administrador" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="admin-pais">País <span class="required">*</span></label>
-                            <input type="text" id="admin-pais" name="pais" class="form-control" placeholder="Angola" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="admin-senha">Senha de Acesso Geral <span class="required">*</span></label>
-                            <input type="password" id="admin-senha" name="senha" class="form-control" placeholder="••••••••" required>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary btn-large">
-                                <i class="fas fa-crown"></i> ACESSAR DASHBOARD ADMIN
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                
-                <!-- Área de Mensagem para Admin -->
-                <div id="mensagem-admin" class="alert-container"></div>
-            </div>
-        </div>
-
-        <!-- Informações de contato (rodapé específico da página) -->
-        <div class="contact-info">
-            <p><i class="fas fa-phone"></i> Precisa de ajuda? Ligue: +244 974 235 284</p>
-            <p><i class="fas fa-envelope"></i> Email: tecacapitaledtech@gmail.com</p>
         </div>
 
 

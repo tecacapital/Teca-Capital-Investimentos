@@ -1,902 +1,1160 @@
-/**
- * TECA CAPITAL - SISTEMA DE CADASTRO E LOGIN
- */
+// ============================================================
+// TECA CAPITAL INVESTIMENTOS - FRONTEND JAVASCRIPT
+// ============================================================
+// Plataforma: Fintech Angolana
+// Comunicação: Google Apps Script + Google Sheets
+// ============================================================
 
-// ===== CONFIGURAÇÕES =====
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjtDzuJm013k7HGGZbjwfmMPNr5HjpqiPl2fWuM33nKSuvzfb7AOTisZjLyAaSViSesw/exec";
-const TEMPO_VISIBILIDADE = 60; // segundos
+// ============================================================
+// CONFIGURAÇÃO GLOBAL — URL DO APPS SCRIPT
+// ============================================================
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8Esw7LGasoZ3lkDOWugWSd6Cz18daJMXO2ZtNxFwo4KZnDNgcfwilToMcIuJl-sBC/exec';
 
-// ===== VALIDAÇÕES PREDEFINIDAS =====
-const VALIDACOES = {
-    sexo: ['Homem', 'Mulher'],
-    tipoPagamento: ['Caixa', 'Transferência Bancária', 'Express', 'Unitel Money', 'USDT via Binance ou outra corretora'],
-    tipoCurso: ['Mercados Financeiro', 'Gestão', 'Economia'],
-    turmas: ['Da manhã', 'De Tarde', 'De Noite', 'Do fim de semana'],
-    funcoesParceiro: ['Formador', 'Assistente', 'Caixa', 'Líder regional', 'Secretaria/o', 'Estagiário/a']
-};
-
-// ===== ESTADO GLOBAL =====
-let timerInterval = null;
-
-// ===== INICIALIZAÇÃO =====
-document.addEventListener('DOMContentLoaded', () => {
-    inicializarAbas();
-    inicializarFormularioCadastro();
-    inicializarFormularioLogin();
-    inicializarFormularioAdmin();
-    carregarCamposDinamicos();
-    configurarMascaras();
-    configurarValidacoesTempoReal();
-});
-
-// ===== 1. GERENCIAMENTO DE ABAS =====
-function inicializarAbas() {
-    const tabs = document.querySelectorAll('.tab-btn');
-    
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            tab.classList.add('active');
-            const tabId = tab.getAttribute('data-tab');
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-        });
-    });
-}
-
-// ===== 2. FORMULÁRIO DINÂMICO =====
-function carregarCamposDinamicos() {
-    const selectTipo = document.getElementById('tipo-servico');
-    if (!selectTipo) return;
-    
-    selectTipo.addEventListener('change', () => {
-        atualizarCamposPorTipo(selectTipo.value);
-    });
-}
-
-function atualizarCamposPorTipo(tipo) {
-    const container = document.getElementById('campos-dinamicos');
-    if (!container) return;
-    
-    let html = '';
-    
-    switch(tipo) {
-        case 'Simuladores/Bibliotecas':
-            html = `
-                <h3 class="section-title"><i class="fas fa-credit-card"></i> Dados de Pagamento</h3>
-                <div class="form-group">
-                    <label for="tipo-pagamento">Tipo de Pagamento <span class="required">*</span></label>
-                    <select id="tipo-pagamento" name="tipoPagamento" class="form-control" required>
-                        <option value="">Selecione...</option>
-                        ${VALIDACOES.tipoPagamento.map(op => `<option value="${op}">${op}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="valor-pago">Valor Pago (AOA) <span class="required">*</span></label>
-                    <input type="number" id="valor-pago" name="valorPago" class="form-control" value="1500.00" readonly required>
-                </div>
-                <div class="form-group">
-                    <label for="comprovativo">Comprovativo (PDF, JPG, PNG) <span class="required">*</span></label>
-                    <input type="file" id="comprovativo" name="comprovativo" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                    <small class="text-dim">Máximo 5MB</small>
-                </div>
-            `;
-            break;
-            
-        case 'Curso Online':
-            html = `
-                <h3 class="section-title"><i class="fas fa-graduation-cap"></i> Dados do Curso</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="tipo-curso">Tipo de Curso <span class="required">*</span></label>
-                        <select id="tipo-curso" name="tipoCurso" class="form-control" required>
-                            <option value="">Selecione...</option>
-                            ${VALIDACOES.tipoCurso.map(op => `<option value="${op}">${op}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="turma">Turma <span class="required">*</span></label>
-                        <select id="turma" name="turma" class="form-control" required>
-                            <option value="">Selecione...</option>
-                            ${VALIDACOES.turmas.map(op => `<option value="${op}">${op}</option>`).join('')}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="tipo-pagamento">Tipo de Pagamento <span class="required">*</span></label>
-                    <select id="tipo-pagamento" name="tipoPagamento" class="form-control" required>
-                        <option value="">Selecione...</option>
-                        ${VALIDACOES.tipoPagamento.map(op => `<option value="${op}">${op}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="valor-pago">Valor Pago (AOA) <span class="required">*</span></label>
-                    <input type="number" id="valor-pago" name="valorPago" class="form-control" value="2000.00" readonly required>
-                </div>
-                <div class="form-group">
-                    <label for="comprovativo">Comprovativo (PDF, JPG, PNG) <span class="required">*</span></label>
-                    <input type="file" id="comprovativo" name="comprovativo" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                    <small class="text-dim">Máximo 5MB</small>
-                </div>
-            `;
-            break;
-            
-        case 'Formação Presencial':
-            html = `
-                <h3 class="section-title"><i class="fas fa-chalkboard-teacher"></i> Dados da Formação</h3>
-                <div class="form-group">
-                    <label for="instituicao">Instituição Associada <span class="required">*</span></label>
-                    <input type="text" id="instituicao" name="instituicao" class="form-control" placeholder="Nome da instituição" required>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="tipo-formacao">Tipo de Formação <span class="required">*</span></label>
-                        <select id="tipo-formacao" name="tipoFormacao" class="form-control" required>
-                            <option value="">Selecione...</option>
-                            ${VALIDACOES.tipoCurso.map(op => `<option value="${op}">${op}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="turma">Turma <span class="required">*</span></label>
-                        <select id="turma" name="turma" class="form-control" required>
-                            <option value="">Selecione...</option>
-                            ${VALIDACOES.turmas.map(op => `<option value="${op}">${op}</option>`).join('')}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="tipo-pagamento">Tipo de Pagamento <span class="required">*</span></label>
-                    <select id="tipo-pagamento" name="tipoPagamento" class="form-control" required>
-                        <option value="">Selecione...</option>
-                        ${VALIDACOES.tipoPagamento.map(op => `<option value="${op}">${op}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="valor-pago">Valor Pago (AOA) <span class="required">*</span></label>
-                    <input type="number" id="valor-pago" name="valorPago" class="form-control" value="2500.00" readonly required>
-                </div>
-                <div class="form-group">
-                    <label for="comprovativo">Comprovativo (PDF, JPG, PNG) <span class="required">*</span></label>
-                    <input type="file" id="comprovativo" name="comprovativo" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                    <small class="text-dim">Máximo 5MB</small>
-                </div>
-            `;
-            break;
-            
-        case 'Servicos':
-            html = `
-                <h3 class="section-title"><i class="fas fa-cogs"></i> Detalhes do Serviço</h3>
-                <div class="form-group">
-                    <label for="identificacao">Identificação (BI/Passaporte/NIF) <span class="required">*</span></label>
-                    <input type="text" id="identificacao" name="identificacao" class="form-control" placeholder="Ex: 123456789LA" required>
-                </div>
-                <div class="form-group">
-                    <label for="sector">Sector de Atuação <span class="required">*</span></label>
-                    <input type="text" id="sector" name="sector" class="form-control" placeholder="Ex: Tecnologia, Saúde, etc." required>
-                </div>
-                <div class="form-group">
-                    <label for="tipo-servico-personalizado">Tipo de Serviço <span class="required">*</span></label>
-                    <input type="text" id="tipo-servico-personalizado" name="tipoServico" class="form-control" placeholder="Ex: Consultoria Financeira" required>
-                </div>
-                <div class="form-group">
-                    <label for="descricao">Descrição do Serviço <span class="required">*</span></label>
-                    <textarea id="descricao" name="descricao" class="form-control" rows="4" placeholder="Descreva em detalhes o que precisa..." required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="forma-pagamento">Forma de Pagamento <span class="required">*</span></label>
-                    <select id="forma-pagamento" name="formaPagamento" class="form-control" required>
-                        <option value="">Selecione...</option>
-                        ${VALIDACOES.tipoPagamento.map(op => `<option value="${op}">${op}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="valor-pago-servico">Valor Proposto (AOA) <span class="required">*</span></label>
-                    <input type="number" id="valor-pago-servico" name="valorPago" class="form-control" placeholder="Ex: 50000" required>
-                </div>
-                <div class="form-group">
-                    <label for="comprovativo-servico">Comprovativo (opcional)</label>
-                    <input type="file" id="comprovativo-servico" name="comprovativo" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
-                    <small class="text-dim">Máximo 5MB</small>
-                </div>
-            `;
-            break;
-            
-        case 'Parceiros':
-            html = `
-                <h3 class="section-title"><i class="fas fa-handshake"></i> Dados do Parceiro</h3>
-                <div class="form-group">
-                    <label for="funcao">Função <span class="required">*</span></label>
-                    <select id="funcao" name="funcao" class="form-control" required>
-                        <option value="">Selecione...</option>
-                        ${VALIDACOES.funcoesParceiro.map(op => `<option value="${op}">${op}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="alert-info" style="margin-top: 15px;">
-                    <i class="fas fa-info-circle"></i> Após o cadastro, aguarde a autorização do Administrador.
-                </div>
-            `;
-            break;
-            
-        default:
-            html = '<p class="text-dim">Selecione um tipo de serviço para continuar.</p>';
-    }
-    
-    container.innerHTML = html;
-}
-
-// ===== 3. VALIDAÇÕES EM TEMPO REAL =====
-function configurarValidacoesTempoReal() {
-    const nomeInput = document.getElementById('nome');
-    if (nomeInput) {
-        nomeInput.addEventListener('input', () => validarNome());
-    }
-    
-    const emailInput = document.getElementById('email');
-    if (emailInput) {
-        emailInput.addEventListener('input', () => validarEmail());
-    }
-    
-    const telefoneInput = document.getElementById('telefone');
-    if (telefoneInput) {
-        telefoneInput.addEventListener('input', () => validarTelefone());
-    }
-    
-    const idadeInput = document.getElementById('idade');
-    if (idadeInput) {
-        idadeInput.addEventListener('input', () => validarIdade());
-    }
-}
-
-function validarNome() {
-    const input = document.getElementById('nome');
-    const error = document.getElementById('error-nome');
-    const valor = input.value.trim();
-    
-    if (valor.length < 3) {
-        error.textContent = 'Nome deve ter pelo menos 3 caracteres';
-        return false;
-    } else {
-        error.textContent = '';
-        return true;
-    }
-}
-
-function validarEmail() {
-    const input = document.getElementById('email');
-    const error = document.getElementById('error-email');
-    const valor = input.value.trim();
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-    if (!regex.test(valor)) {
-        error.textContent = 'E-mail inválido';
-        return false;
-    } else {
-        error.textContent = '';
-        return true;
-    }
-}
-
-function validarTelefone() {
-    const input = document.getElementById('telefone');
-    const error = document.getElementById('error-telefone');
-    const valor = input.value.replace(/\D/g, '');
-    
-    if (valor.length < 9) {
-        error.textContent = 'Telefone deve ter pelo menos 9 dígitos';
-        return false;
-    } else {
-        error.textContent = '';
-        return true;
-    }
-}
-
-function validarIdade() {
-    const input = document.getElementById('idade');
-    const error = document.getElementById('error-idade');
-    const valor = parseInt(input.value);
-    
-    if (isNaN(valor) || valor < 16 || valor > 100) {
-        error.textContent = 'Idade deve estar entre 16 e 100 anos';
-        return false;
-    } else {
-        error.textContent = '';
-        return true;
-    }
-}
-
-// ===== 4. MÁSCARAS =====
-function configurarMascaras() {
-    const telefoneInput = document.getElementById('telefone');
-    if (telefoneInput) {
-        telefoneInput.addEventListener('input', (e) => {
-            let valor = e.target.value.replace(/\D/g, '');
-            if (valor.length > 9) valor = valor.slice(0, 9);
-            e.target.value = valor;
-        });
-    }
-}
-
-// ===== 5. FILE TO BASE64 =====
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        if (file.size > 5 * 1024 * 1024) {
-            reject(new Error('Arquivo muito grande. Máximo 5MB.'));
-            return;
-        }
+// ============================================================
+// CLASSE PRINCIPAL DO FORMULÁRIO
+// ============================================================
+class TecaForm {
+    constructor() {
+        // Configurações
+        this.WHATSAPP_NUMBER = '244974235284';
         
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = error => reject(error);
-    });
-}
-
-// ===== 6. FUNÇÕES DE REGISTRO NAS PLANILHAS (NOVAS) =====
-
-/**
- * Calcula data de expiração (30 dias a partir da data atual)
- * @returns {string} Data formatada YYYY-MM-DD
- */
-function calcularDataExpiracao() {
-    const data = new Date();
-    data.setDate(data.getDate() + 30);
-    
-    const ano = data.getFullYear();
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const dia = String(data.getDate()).padStart(2, '0');
-    
-    return `${ano}-${mes}-${dia}`;
-}
-
-/**
- * Salva dados na planilha principal "Cadastro/Logion"
- * @param {Object} dados - Dados completos do usuário
- * @param {string} senha - Senha gerada
- */
-async function salvarDadosPlanilhaPrincipal(dados, senha) {
-    const payload = {
-        acao: 'salvarPrincipal',
-        planilha: 'Cadastro/Logion',
-        dados: JSON.stringify({
-            nome: dados.nome,
-            sexo: dados.sexo,
-            pais: dados.pais,
-            regiao: dados.regiao,
-            idade: dados.idade,
-            email: dados.email,
-            telefone: dados.telefone,
-            data: dados.data || new Date().toISOString().split('T')[0],
-            senha: senha,
-            codigoEspecial: senha
-        })
-    };
-
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(payload)
-        });
-        console.log('✅ Dados salvos na planilha principal');
-    } catch (error) {
-        console.error('❌ Erro ao salvar na planilha principal:', error);
-    }
-}
-
-/**
- * Salva dados na planilha específica conforme o destino
- * @param {Object} dados - Dados completos do usuário
- * @param {string} destino - Tipo de serviço
- * @param {string} senha - Senha gerada
- */
-async function salvarDadosPlanilhaEspecifica(dados, destino, senha) {
-    let payload = {
-        acao: 'salvarEspecifica',
-        destino: destino,
-        dados: {}
-    };
-
-    const dataExpiracao = calcularDataExpiracao();
-    const dataAtual = new Date().toISOString().split('T')[0];
-
-    switch(destino) {
-        case 'Simuladores/Bibliotecas':
-            payload.dados = {
-                nome: dados.nome,
-                sexo: dados.sexo,
-                pais: dados.pais,
-                regiao: dados.regiao,
-                idade: dados.idade,
-                email: dados.email,
-                telefone: dados.telefone,
-                data: dataAtual,
-                tipoPagamento: dados.tipoPagamento,
-                valorPago: dados.valorPago || '1500.00',
-                comprovativo: dados.comprovativo || '',
-                dataExpiracao: dataExpiracao,
-                senha: senha
-            };
-            break;
-            
-        case 'Curso Online':
-            payload.dados = {
-                nome: dados.nome,
-                sexo: dados.sexo,
-                pais: dados.pais,
-                regiao: dados.regiao,
-                idade: dados.idade,
-                email: dados.email,
-                telefone: dados.telefone,
-                data: dataAtual,
-                tipoCurso: dados.tipoCurso,
-                turma: dados.turma,
-                tipoPagamento: dados.tipoPagamento,
-                valorPago: dados.valorPago || '2000.00',
-                comprovativo: dados.comprovativo || '',
-                senha: senha
-            };
-            break;
-            
-        case 'Formação Presencial':
-            payload.dados = {
-                nome: dados.nome,
-                sexo: dados.sexo,
-                pais: dados.pais,
-                regiao: dados.regiao,
-                idade: dados.idade,
-                email: dados.email,
-                telefone: dados.telefone,
-                instituicao: dados.instituicao,
-                tipoFormacao: dados.tipoFormacao,
-                turma: dados.turma,
-                tipoPagamento: dados.tipoPagamento,
-                valorPago: dados.valorPago || '2500.00',
-                comprovativo: dados.comprovativo || '',
-                data: dataAtual,
-                senha: senha,
-                dataExpiracao: dataExpiracao
-            };
-            break;
-            
-        case 'Servicos':
-            payload.dados = {
-                nome: dados.nome,
-                identificacao: dados.identificacao,
-                sector: dados.sector,
-                paisRegiao: `${dados.pais}-${dados.regiao}`,
-                tipoServico: dados.tipoServico,
-                descricao: dados.descricao,
-                formaPagamento: dados.formaPagamento,
-                valorPago: dados.valorPago,
-                comprovativo: dados.comprovativo || '',
-                data: dataAtual
-            };
-            break;
-            
-        case 'Parceiros':
-            payload.dados = {
-                nome: dados.nome,
-                sexo: dados.sexo,
-                pais: dados.pais,
-                regiao: dados.regiao,
-                idade: dados.idade,
-                funcao: dados.funcao,
-                email: dados.email,
-                telefone: dados.telefone,
-                data: dataAtual,
-                senha: senha,
-                status: 'Pendente'
-            };
-            break;
+        // Estado da aplicação
+        this.currentMode = 'cadastro';
+        this.currentUserType = null;
+        this.formData = {};
+        this.isLoading = false;
+        
+        // Inicializar
+        this.init();
     }
 
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(payload)
-        });
-        console.log(`✅ Dados salvos na planilha específica: ${destino}`);
-    } catch (error) {
-        console.error('❌ Erro ao salvar na planilha específica:', error);
+    init() {
+        this.cacheElements();
+        this.attachEvents();
+        this.renderForm();
+        
+        // Verificar se há utilizador logado
+        this.verificarSessao();
     }
-}
 
-// ===== 7. ENVIO DE CADASTRO (MODIFICADO PARA INCLUIR REGISTRO) =====
-function inicializarFormularioCadastro() {
-    const form = document.getElementById('form-cadastro');
-    if (!form) return;
-    
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        if (!validarNome() || !validarEmail() || !validarTelefone() || !validarIdade()) {
-            mostrarMensagem('mensagem-cadastro', 'Por favor, corrija os erros no formulário.', 'error');
-            return;
-        }
-        
-        const tipoServico = document.getElementById('tipo-servico').value;
-        if (!tipoServico) {
-            mostrarMensagem('mensagem-cadastro', 'Selecione um tipo de serviço.', 'error');
-            return;
-        }
-        
-        // Coletar dados comuns
-        const dados = {
-            nome: document.getElementById('nome').value.trim(),
-            sexo: document.getElementById('sexo').value,
-            pais: document.getElementById('pais').value.trim(),
-            regiao: document.getElementById('regiao').value.trim(),
-            idade: document.getElementById('idade').value,
-            email: document.getElementById('email').value.trim(),
-            telefone: document.getElementById('telefone').value,
-            destino: tipoServico,
-            data: new Date().toISOString().split('T')[0]
-        };
-        
-        try {
-            // Coletar campos específicos
-            const comprovativoInput = document.querySelector('#campos-dinamicos input[type="file"]');
-            if (comprovativoInput && comprovativoInput.files && comprovativoInput.files[0]) {
-                dados.comprovativo = await fileToBase64(comprovativoInput.files[0]);
-                dados.nomeArquivo = comprovativoInput.files[0].name;
-            }
-            
-            switch(tipoServico) {
-                case 'Simuladores/Bibliotecas':
-                    dados.tipoPagamento = document.getElementById('tipo-pagamento')?.value;
-                    dados.valorPago = document.getElementById('valor-pago')?.value;
-                    break;
-                    
-                case 'Curso Online':
-                    dados.tipoCurso = document.getElementById('tipo-curso')?.value;
-                    dados.turma = document.getElementById('turma')?.value;
-                    dados.tipoPagamento = document.getElementById('tipo-pagamento')?.value;
-                    dados.valorPago = document.getElementById('valor-pago')?.value;
-                    break;
-                    
-                case 'Formação Presencial':
-                    dados.instituicao = document.getElementById('instituicao')?.value;
-                    dados.tipoFormacao = document.getElementById('tipo-formacao')?.value;
-                    dados.turma = document.getElementById('turma')?.value;
-                    dados.tipoPagamento = document.getElementById('tipo-pagamento')?.value;
-                    dados.valorPago = document.getElementById('valor-pago')?.value;
-                    break;
-                    
-                case 'Servicos':
-                    dados.identificacao = document.getElementById('identificacao')?.value;
-                    dados.sector = document.getElementById('sector')?.value;
-                    dados.tipoServico = document.getElementById('tipo-servico-personalizado')?.value;
-                    dados.descricao = document.getElementById('descricao')?.value;
-                    dados.formaPagamento = document.getElementById('forma-pagamento')?.value;
-                    dados.valorPago = document.getElementById('valor-pago-servico')?.value;
-                    break;
-                    
-                case 'Parceiros':
-                    dados.funcao = document.getElementById('funcao')?.value;
-                    break;
-            }
-            
-            await enviarCadastro(dados);
-            
-        } catch (error) {
-            console.error('Erro ao processar arquivo:', error);
-            mostrarMensagem('mensagem-cadastro', 'Erro ao processar o arquivo: ' + error.message, 'error');
-        }
-    });
-}
+    cacheElements() {
+        this.dynamicForm = document.getElementById('teca-dynamic-form');
+        this.messageContainer = document.getElementById('teca-message-container');
+        this.navButtons = document.querySelectorAll('.teca-nav-btn');
+    }
 
-/**
- * Função para enviar o cadastro do Frontend para o Google Sheets
- * @param {Object} dadosForm - Objeto contendo os dados do formulário HTML
- */
-async function enviarCadastro(dadosForm) {
-    const btn = document.getElementById('btn-cadastrar');
-    btn.classList.add('loading');
-    btn.disabled = true;
-    
-    try {
-        // Adiciona a ação para o Apps Script identificar
-        const payload = {
-            acao: 'cadastrar',
-            ...dadosForm
-        };
-
-        console.log('Enviando dados:', payload);
-
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8'
-            },
-            body: JSON.stringify(payload)
+    attachEvents() {
+        this.navButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const mode = e.currentTarget.dataset.mode;
+                this.switchMode(mode);
+            });
         });
 
-        console.log('Requisição enviada com sucesso');
-        
-        // Gerar senha conforme as regras
-        const senhaGerada = gerarSenhaSimulada(dadosForm.destino, dadosForm.nome);
-        
-        // === NOVO: SALVAR NAS PLANILHAS ===
-        await salvarDadosPlanilhaPrincipal(dadosForm, senhaGerada);
-        await salvarDadosPlanilhaEspecifica(dadosForm, dadosForm.destino, senhaGerada);
-        
-        // Criar resultado com a senha
-        const resultado = {
-            status: "sucesso",
-            mensagem: "Cadastro realizado",
-            senha: senhaGerada
-        };
-        
-        // Mostrar mensagem de sucesso
-        mostrarMensagem('mensagem-cadastro', 'Cadastramento feito com sucesso', 'success');
-        
-        // Tratar exibição da senha
-        tratarExibicaoSenha(resultado, dadosForm.destino);
-        
-        // Limpar formulário
-        document.getElementById('form-cadastro').reset();
-        atualizarCamposPorTipo('');
-        
-    } catch (error) {
-        console.error("Erro na comunicação com a base de dados:", error);
-        mostrarMensagem('mensagem-cadastro', 'Erro ao conectar com o servidor. Tente novamente.', 'error');
-    } finally {
-        btn.classList.remove('loading');
-        btn.disabled = false;
-    }
-}
-
-// Função auxiliar para gerar senha simulada
-function gerarSenhaSimulada(destino, nome) {
-    if (!nome) return 'SB-123456';
-    
-    const partes = nome.split(' ');
-    const primeiroNome = partes[0] || '';
-    const segundoNome = partes[1] || '';
-    
-    const primeiraLetra1 = primeiroNome.charAt(0).toLowerCase() || 'x';
-    const primeiraLetra2 = segundoNome.charAt(0).toLowerCase() || 'x';
-    const ultimaLetra1 = primeiroNome.charAt(primeiroNome.length - 1).toLowerCase() || 'x';
-    
-    const numero = Math.floor(Math.random() * 1000) + 1;
-    const numeroFormatado = numero.toString().padStart(4, '0');
-    
-    switch(destino) {
-        case 'Simuladores/Bibliotecas':
-            return `sb${primeiraLetra1}${primeiraLetra2}${numeroFormatado}`;
-        case 'Curso Online':
-            return `co${primeiraLetra1}${primeiraLetra2}${numeroFormatado}`;
-        case 'Formação Presencial':
-            return `fp${primeiraLetra1}${primeiraLetra2}${numeroFormatado}`;
-        case 'Parceiros':
-            return `prc${primeiraLetra1}${ultimaLetra1}${numeroFormatado}`;
-        default:
-            return `TECA-${numeroFormatado}`;
-    }
-}
-
-// ===== 8. EXIBIÇÃO DE SENHA COM TIMER E BOTÕES (MODIFICADO) =====
-function tratarExibicaoSenha(resultado, destino) {
-    const painelMensagem = document.getElementById("mensagem-cadastro");
-    
-    if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
-    
-    if (destino === "Parceiros") {
-        painelMensagem.innerHTML = `
-            <div class="alert-info">
-                <i class="fas fa-info-circle"></i>
-                Receberás a senha de acesso depois da autorização do Administrador master, 
-                o mesmo irá entrar em contacto e fornecer a sua senha de acesso e outras instruções.
-            </div>`;
-        return;
-    }
-
-    if (destino === "Servicos") {
-        painelMensagem.innerHTML = `
-            <div class="alert-success">
-                <i class="fas fa-check-circle"></i>
-                Solicitação enviada com sucesso! Aguarde nosso contato em até 48h úteis.
-            </div>`;
-        return;
-    }
-    
-    if (resultado.senha) {
-        painelMensagem.innerHTML = `
-            <div class="senha-card">
-                <h4><i class="fas fa-key"></i> Sua senha/código de acesso:</h4>
-                <div class="codigo">${resultado.senha}</div>
-                <div class="timer-container">
-                    <div class="timer-display" id="timerDisplay">60</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 100%"></div>
-                    </div>
-                    <p><strong>Atenção:</strong> Você tem <span id="timerText">60</span> segundos para anotar!</p>
-                </div>
-                <div class="botoes-acesso" id="botoesAcesso" style="display: none; margin-top: 20px;">
-                    <p><strong>✅ Cadastro concluído! Agora você pode acessar:</strong></p>
-                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                        ${destino === 'Simuladores/Bibliotecas' ? 
-                            `<a href="biblioteca.html" class="btn btn-primary" style="text-decoration: none;">📚 Acessar Biblioteca</a>
-                             <a href="simuladores.html" class="btn btn-secondary" style="text-decoration: none;">📊 Acessar Simuladores</a>` : 
-                            `<a href="biblioteca.html" class="btn btn-primary" style="text-decoration: none;">📚 Acessar Biblioteca</a>`
-                        }
-                    </div>
-                </div>
-                <div class="aviso" id="avisoFinal" style="display: none;">
-                    Se não anotou a senha, solicite pela mesma via whatsapp ou email da Teca Capital, 
-                    ou liga para o nosso nº para poder ter acesso aos simuladores e bibliotecas. 
-                    Tempo mínimo de espera para resposta: 5 minutos a 2 horas. Obrigado.
-                </div>
-            </div>`;
-        
-        let segundos = TEMPO_VISIBILIDADE;
-        const timerDisplay = document.getElementById('timerDisplay');
-        const timerText = document.getElementById('timerText');
-        const progressFill = document.getElementById('progressFill');
-        const avisoFinal = document.getElementById('avisoFinal');
-        const botoesAcesso = document.getElementById('botoesAcesso');
-        
-        timerInterval = setInterval(() => {
-            segundos--;
-            timerDisplay.textContent = segundos;
-            timerText.textContent = segundos;
-            
-            const percent = (segundos / TEMPO_VISIBILIDADE) * 100;
-            progressFill.style.width = `${percent}%`;
-            
-            if (segundos <= 10) {
-                timerDisplay.classList.add('urgent');
+        this.dynamicForm.addEventListener('change', (e) => {
+            if (e.target.name === 'tipoUsuario') {
+                this.handleUserTypeChange(e.target.value);
             }
-            
-            if (segundos <= 0) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-                document.querySelector('.timer-container').style.display = 'none';
-                document.querySelector('.codigo').style.opacity = '0.3';
-                avisoFinal.style.display = 'block';
+            if (e.target.name === 'comprovativoEnviado') {
+                this.handleComprovativoChange(e.target.value);
             }
-        }, 1000);
-        
-        // Mostrar botões após 1 segundo
-        setTimeout(() => {
-            if (botoesAcesso) {
-                botoesAcesso.style.display = 'block';
+        });
+
+        this.dynamicForm.addEventListener('click', (e) => {
+            if (e.target.closest('.teca-toggle-btn')) {
+                const btn = e.target.closest('.teca-toggle-btn');
+                const type = btn.dataset.type;
+                this.handleTipoPessoaToggle(type);
             }
-        }, 1000);
+            if (e.target.closest('.teca-whatsapp-btn')) {
+                this.openWhatsApp();
+            }
+        });
+
+        this.dynamicForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleSubmit();
+        });
     }
-}
 
-// ===== 9. LOGIN DE USUÁRIO (MODIFICADO) =====
-function inicializarFormularioLogin() {
-    const form = document.getElementById('form-login');
-    if (!form) return;
-    
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const usuario = document.getElementById('login-usuario').value.trim();
-        const senha = document.getElementById('login-senha').value;
-        
-        if (!usuario || !senha) {
-            mostrarMensagem('mensagem-login', 'Preencha todos os campos.', 'error');
-            return;
-        }
-        
-        await realizarLogin(usuario, senha, 'comum');
-    });
-}
-
-// ===== 10. LOGIN ADMIN (MODIFICADO) =====
-function inicializarFormularioAdmin() {
-    const form = document.getElementById('form-admin');
-    if (!form) return;
-    
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const usuario = document.getElementById('admin-usuario').value.trim();
-        const pais = document.getElementById('admin-pais').value.trim();
-        const senha = document.getElementById('admin-senha').value;
-        
-        if (!usuario || !pais || !senha) {
-            mostrarMensagem('mensagem-admin', 'Preencha todos os campos.', 'error');
-            return;
-        }
-        
-        await realizarLogin(usuario, senha, 'admin', pais);
-    });
-}
-
-/**
- * Função de Login (MODIFICADA - REDIRECIONAMENTOS ATUALIZADOS)
- */
-async function realizarLogin(usuario, senha, tipo = 'comum', pais = '') {
-    const btn = tipo === 'admin' 
-        ? document.querySelector('#form-admin button[type="submit"]')
-        : document.querySelector('#form-login button[type="submit"]');
-    
-    if (btn) {
-        btn.classList.add('loading');
-        btn.disabled = true;
-    }
-    
-    try {
-        let url = `${SCRIPT_URL}?usuario=${encodeURIComponent(usuario)}&senha=${encodeURIComponent(senha)}&tipo=${tipo}`;
-        if (pais) {
-            url += `&pais=${encodeURIComponent(pais)}`;
-        }
-        
-        const response = await fetch(url);
-        const dados = await response.json();
-
-        if (dados.login) {
-            const mensagemId = tipo === 'admin' ? 'mensagem-admin' : 'mensagem-login';
-            mostrarMensagem(mensagemId, 'Logion feito com sucesso', 'success');
+    verificarSessao() {
+        const logado = sessionStorage.getItem('logado');
+        if (logado === 'true') {
+            const utilizador = JSON.parse(sessionStorage.getItem('utilizador') || '{}');
+            console.log('👤 Utilizador logado:', utilizador);
             
-            // REDIRECIONAMENTOS ATUALIZADOS
-            setTimeout(() => {
-                if (tipo === 'admin') {
-                    window.location.href = "adm.html"; // Admin
-                } else {
-                    window.location.href = "biblioteca.html"; // Usuário comum
+            // Se estiver na página de login/cadastro e já estiver logado, redirecionar
+            if (window.location.pathname.includes('login') || window.location.pathname.includes('cadastro')) {
+                const tipo = utilizador.tipo;
+                switch(tipo) {
+                    case 'Administrador':
+                        window.location.href = '/admin/dashboard';
+                        break;
+                    case 'Parceiro':
+                        window.location.href = '/parceiro/area';
+                        break;
+                    default:
+                        window.location.href = '/plataforma';
                 }
-            }, 1000);
+            }
+        }
+    }
+
+    // ============================================================
+    // FUNÇÃO 5 — FEEDBACK VISUAL DE CARREGAMENTO
+    // ============================================================
+    mostrarCarregando(estado) {
+        this.isLoading = estado;
+        
+        const submitBtn = document.querySelector('.teca-submit-btn');
+        const loader = document.getElementById('teca-loader');
+        
+        if (!loader && estado) {
+            // Criar loader se não existir
+            const novoLoader = document.createElement('div');
+            novoLoader.id = 'teca-loader';
+            novoLoader.className = 'teca-loader';
+            novoLoader.innerHTML = '<span class="teca-loading"></span> Processando...';
+            this.messageContainer.appendChild(novoLoader);
+        }
+
+        if (loader) {
+            loader.style.display = estado ? 'flex' : 'none';
+        }
+
+        if (submitBtn) {
+            // Guardar texto original se não estiver guardado
+            if (!submitBtn.dataset.textoOriginal) {
+                submitBtn.dataset.textoOriginal = submitBtn.innerHTML;
+            }
+            
+            submitBtn.disabled = estado;
+            submitBtn.innerHTML = estado 
+                ? '<span class="teca-loading"></span> A processar...' 
+                : this.currentMode === 'cadastro' 
+                    ? '<i class="fas fa-check-circle"></i> Registrar Cadastro'
+                    : '<i class="fas fa-sign-in-alt"></i> Entrar na Plataforma';
+        }
+    }
+
+    // ============================================================
+    // FUNÇÃO 6 — EXIBIR MENSAGEM
+    // ============================================================
+    exibirMensagem(tipo, texto) {
+        console.log(`📢 Mensagem [${tipo}]:`, texto);
+        
+        // Limpar mensagens anteriores
+        this.messageContainer.innerHTML = '';
+        
+        // Criar elemento de mensagem
+        const mensagemDiv = document.createElement('div');
+        mensagemDiv.className = `teca-message ${tipo}`;
+        
+        // Ícone conforme o tipo
+        const icone = tipo === 'sucesso' ? 'fa-check-circle' : 
+                     tipo === 'aviso' ? 'fa-exclamation-triangle' : 'fa-exclamation-circle';
+        
+        mensagemDiv.innerHTML = `
+            <i class="fas ${icone}"></i>
+            <span>${texto}</span>
+        `;
+        
+        this.messageContainer.appendChild(mensagemDiv);
+        this.messageContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        // Auto-remover após 5 segundos (apenas mensagens de sucesso)
+        if (tipo === 'sucesso') {
+            setTimeout(() => {
+                if (mensagemDiv.parentNode) {
+                    mensagemDiv.remove();
+                }
+            }, 5000);
+        }
+    }
+
+    // ============================================================
+    // FUNÇÃO 4 — VERIFICAR EMAIL (ANTES DO CADASTRO)
+    // ============================================================
+    async verificarEmail(email) {
+        try {
+            if (!email || email.trim() === '') {
+                return { sucesso: false, existe: false };
+            }
+
+            const dados = {
+                acao: 'verificarEmail',
+                email: email.trim()
+            };
+
+            const resultado = await this.chamarBackend(dados);
+            
+            if (resultado && resultado.sucesso) {
+                return resultado;
+            }
+            
+            return { sucesso: false, existe: false };
+            
+        } catch (erro) {
+            console.error('❌ Erro ao verificar email:', erro);
+            return { sucesso: false, existe: false };
+        }
+    }
+
+    // ============================================================
+    // FUNÇÃO UNIVERSAL DE COMUNICAÇÃO COM O BACKEND
+    // ============================================================
+    async chamarBackend(dadosParaEnviar) {
+        try {
+            console.log('📤 Enviando para backend:', dadosParaEnviar);
+            
+            // Configuração CORRETA para Apps Script
+            const resposta = await fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                // NÃO define Content-Type — evita erro de CORS preflight
+                body: JSON.stringify(dadosParaEnviar),
+                redirect: 'follow' // OBRIGATÓRIO — Apps Script redireciona
+            });
+
+            if (!resposta.ok) {
+                throw new Error(`Erro HTTP: ${resposta.status} - ${resposta.statusText}`);
+            }
+
+            const resultado = await resposta.json();
+            console.log('📥 Resposta do backend:', resultado);
+            return resultado;
+
+        } catch (erro) {
+            console.error('❌ Erro na comunicação com backend:', erro);
+            
+            // Mensagens de erro mais amigáveis
+            let mensagemErro = 'Erro de conexão com o servidor';
+            
+            if (erro.message.includes('Failed to fetch')) {
+                mensagemErro = 'Não foi possível conectar ao servidor. Verifique sua internet.';
+            } else if (erro.message.includes('HTTP')) {
+                mensagemErro = 'Erro no servidor. Tente novamente mais tarde.';
+            }
+            
+            return { 
+                sucesso: false, 
+                mensagem: mensagemErro,
+                erro: erro.message 
+            };
+        }
+    }
+
+    // ============================================================
+    // FUNÇÃO 2 — CADASTRAR UTILIZADOR
+    // ============================================================
+    async cadastrarUtilizador(dados) {
+        try {
+            console.log('📝 Processando cadastro:', dados);
+            
+            // Validações obrigatórias
+            if (!dados.nome || dados.nome.trim() === '') {
+                return { sucesso: false, mensagem: 'Nome é obrigatório' };
+            }
+            
+            if (!dados.email || dados.email.trim() === '') {
+                return { sucesso: false, mensagem: 'Email é obrigatório' };
+            }
+            
+            if (!dados.telefone || dados.telefone.trim() === '') {
+                return { sucesso: false, mensagem: 'Telefone é obrigatório' };
+            }
+            
+            if (!dados.tipoUsuario) {
+                return { sucesso: false, mensagem: 'Tipo de usuário é obrigatório' };
+            }
+            
+            // Verificar email antes de cadastrar
+            this.exibirMensagem('aviso', 'Verificando disponibilidade do email...');
+            
+            const verificacao = await this.verificarEmail(dados.email);
+            
+            if (verificacao.existe) {
+                return { 
+                    sucesso: false, 
+                    mensagem: '❌ Este email já está cadastrado no sistema' 
+                };
+            }
+            
+            // Preparar dados para envio ao backend
+            const dadosParaEnviar = {
+                acao: 'cadastrar',  // OBRIGATÓRIO — identifica a ação no backend
+                nome: dados.nome,
+                dataNascimento: dados.dataNascimento || '',
+                sexo: dados.sexo || '',
+                pais: dados.pais || 'Angola',
+                regiao: dados.regiao || '',
+                email: dados.email,
+                telefone: dados.telefone,
+                tipoUsuario: dados.tipoUsuario,
+                senha: dados.senha || '',
+                valorPago: dados.valorPago || '',
+                comprovativo: dados.comprovativoEnviado || 'Não',
+                descricao: dados.descricao || '',
+                dataExpiracao: dados.dataExpiracao || '' // Será calculada no backend
+            };
+            
+            // Adicionar campos específicos conforme necessário
+            if (dados.tipoUsuario === 'Serviços Personalizados') {
+                dadosParaEnviar.senha = ''; // Serviços Personalizados não tem senha
+            }
+            
+            const resultado = await this.chamarBackend(dadosParaEnviar);
+            
+            if (resultado.sucesso) {
+                // Limpar formulário após sucesso
+                setTimeout(() => {
+                    this.currentUserType = null;
+                    this.renderForm();
+                }, 3000);
+            }
+            
+            return resultado;
+            
+        } catch (erro) {
+            console.error('❌ Erro no cadastro:', erro);
+            return { 
+                sucesso: false, 
+                mensagem: 'Erro interno ao processar cadastro' 
+            };
+        }
+    }
+
+    // ============================================================
+    // FUNÇÃO 1 — FAZER LOGIN
+    // ============================================================
+    async fazerLogin(dados) {
+        try {
+            console.log('🔐 Processando login:', dados);
+
+            // Validações básicas
+            if (!dados.senha || dados.senha.trim() === '') {
+                return { sucesso: false, mensagem: 'Senha é obrigatória' };
+            }
+
+            // Preparar dados para login conforme o tipo
+            const dadosLogin = {
+                acao: 'login',  // OBRIGATÓRIO — identifica a ação no backend
+                senha: dados.senha
+            };
+
+            // Adicionar campos específicos conforme o tipo
+            if (this.currentUserType === 'Administrador') {
+                if (!dados.id || !dados.nome) {
+                    return { sucesso: false, mensagem: 'ID e Nome são obrigatórios para Administrador' };
+                }
+                dadosLogin.id = parseInt(dados.id);
+                dadosLogin.nome = dados.nome;
+                dadosLogin.tipo = 'Administrador';
+            } else {
+                // Para Parceiro e Usuário da Plataforma
+                if (dados.email && dados.email.trim() !== '') {
+                    dadosLogin.email = dados.email.trim();
+                }
+                if (dados.nome && dados.nome.trim() !== '') {
+                    dadosLogin.nome = dados.nome;
+                }
+                
+                // Validar se tem pelo menos um identificador
+                if (!dadosLogin.email && !dadosLogin.nome) {
+                    return { 
+                        sucesso: false, 
+                        mensagem: 'É necessário fornecer email OU nome para login' 
+                    };
+                }
+            }
+
+            const resultado = await this.chamarBackend(dadosLogin);
+
+            // Se login bem-sucedido, guardar na sessão
+            if (resultado.sucesso && resultado.dados) {
+                // Guardar dados do utilizador no sessionStorage
+                sessionStorage.setItem('utilizador', JSON.stringify(resultado.dados));
+                sessionStorage.setItem('logado', 'true');
+                sessionStorage.setItem('tipoUsuario', resultado.dados.tipo);
+                
+                this.exibirMensagem('sucesso', `✅ Bem-vindo, ${resultado.dados.nome}!`);
+                
+                // Redirecionar após login bem-sucedido
+                setTimeout(() => {
+                    const tipoUsuario = resultado.dados.tipo;
+                    switch(tipoUsuario) {
+                        case 'Administrador':
+                            window.location.href = 'adm.html';
+                            break;
+                        case 'Parceiro':
+                            window.location.href = '/biblioteca-audio.html';
+                            break;
+                        default:
+                            window.location.href = 'biblioteca-audio.html';
+                    }
+                }, 1500);
+            } else {
+                // Mensagens específicas para casos de erro
+                if (resultado.status === 'expirado') {
+                    this.exibirMensagem('erro', '⏰ Acesso expirado. Contacte o administrador.');
+                } else if (resultado.status === 'bloqueado') {
+                    this.exibirMensagem('erro', '🔒 Acesso revogado. Contacte o administrador.');
+                }
+            }
+
+            return resultado;
+
+        } catch (erro) {
+            console.error('❌ Erro no login:', erro);
+            return { 
+                sucesso: false, 
+                mensagem: 'Erro interno ao processar login' 
+            };
+        }
+    }
+
+    // ============================================================
+    // FUNÇÃO 3 — CONSULTAR DADOS (para páginas de admin)
+    // ============================================================
+    async consultarDados(filtro = {}) {
+        try {
+            console.log('📊 Consultando dados');
+            
+            // Verificar se está logado
+            const logado = sessionStorage.getItem('logado');
+            if (logado !== 'true') {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const dadosConsulta = {
+                acao: 'consultar',
+                ...filtro
+            };
+
+            const resultado = await this.chamarBackend(dadosConsulta);
+
+            if (resultado.sucesso && resultado.dados) {
+                this.exibirDadosNaTabela(resultado.dados);
+            } else {
+                this.exibirMensagem('erro', resultado.mensagem || 'Erro ao carregar dados');
+            }
+
+            return resultado;
+
+        } catch (erro) {
+            console.error('❌ Erro na consulta:', erro);
+            this.exibirMensagem('erro', 'Erro ao consultar dados');
+            return { sucesso: false, dados: [] };
+        }
+    }
+
+    exibirDadosNaTabela(dados) {
+        // Verificar se existe uma tabela para exibir os dados
+        const tabela = document.getElementById('teca-tabela-dados');
+        if (!tabela) return;
+
+        const tbody = tabela.querySelector('tbody');
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+
+        if (dados.length === 0) {
+            const linha = document.createElement('tr');
+            linha.innerHTML = `<td colspan="6" class="teca-sem-dados">Nenhum registo encontrado</td>`;
+            tbody.appendChild(linha);
+            return;
+        }
+
+        dados.forEach(item => {
+            const linha = document.createElement('tr');
+            linha.innerHTML = `
+                <td>${item['ID'] || ''}</td>
+                <td>${item['Nome do Usuário'] || ''}</td>
+                <td>${item['Email'] || ''}</td>
+                <td>${item['Tipo de Usuário'] || ''}</td>
+                <td>${item['Valor Pago'] || ''}</td>
+                <td>${item['Data de Registro'] || ''}</td>
+            `;
+            tbody.appendChild(linha);
+        });
+    }
+
+    // ============================================================
+    // MÉTODOS EXISTENTES (preservados sem alterações)
+    // ============================================================
+
+    switchMode(mode) {
+        if (mode === this.currentMode) return;
+        
+        this.navButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.mode === mode);
+        });
+        
+        this.currentMode = mode;
+        this.currentUserType = null;
+        this.clearMessages();
+        this.renderForm();
+    }
+
+    renderForm() {
+        if (this.currentMode === 'cadastro') {
+            this.renderCadastroForm();
         } else {
-            const mensagemId = tipo === 'admin' ? 'mensagem-admin' : 'mensagem-login';
-            mostrarMensagem(mensagemId, 'Dados incorretos. Verifique seu usuário e senha.', 'error');
+            this.renderLoginForm();
         }
-    } catch (error) {
-        console.error("Erro no login:", error);
-        const mensagemId = tipo === 'admin' ? 'mensagem-admin' : 'mensagem-login';
-        mostrarMensagem(mensagemId, 'Erro ao conectar com o servidor.', 'error');
-    } finally {
-        if (btn) {
-            btn.classList.remove('loading');
-            btn.disabled = false;
+    }
+
+    renderLoginForm() {
+        const html = `
+            <div class="teca-form-section">
+                <div class="teca-type-selector">
+                    <span class="teca-type-label"><i class="fas fa-user-tag"></i> Tipo de Usuário</span>
+                    <div class="teca-type-options">
+                        ${this.renderUserTypeOptions('login', ['Administrador', 'Parceiro', 'Usuário da Plataforma'])}
+                    </div>
+                </div>
+
+                <form id="teca-login-form" class="teca-login-form">
+                    <div id="teca-login-fields">
+                        ${this.renderLoginFields()}
+                    </div>
+
+                    <button type="submit" class="teca-submit-btn" ${!this.currentUserType ? 'disabled' : ''}>
+                        <i class="fas fa-sign-in-alt"></i>
+                        Entrar na Plataforma
+                    </button>
+                </form>
+            </div>
+        `;
+        
+        this.dynamicForm.innerHTML = html;
+    }
+
+    renderLoginFields() {
+        if (!this.currentUserType) {
+            return '<p class="teca-info-text"><i class="fas fa-info-circle"></i> Selecione um tipo de usuário</p>';
         }
+
+        if (this.currentUserType === 'Administrador') {
+            return `
+                <div class="teca-form-group">
+                    <label><i class="fas fa-id-card"></i> ID</label>
+                    <input type="number" name="id" id="loginId" placeholder="Digite seu ID" required>
+                </div>
+                <div class="teca-form-group">
+                    <label><i class="fas fa-user"></i> Nome</label>
+                    <input type="text" name="nome" id="loginNome" placeholder="Digite seu nome" required>
+                </div>
+                <div class="teca-form-group">
+                    <label><i class="fas fa-lock"></i> Senha</label>
+                    <input type="password" name="senha" id="loginSenha" placeholder="Digite sua senha" required>
+                </div>
+            `;
+        } else {
+            return `
+                <div class="teca-form-group">
+                    <label><i class="fas fa-user"></i> Nome de Usuário</label>
+                    <input type="text" name="nome" id="loginNome" placeholder="Digite seu nome de usuário">
+                </div>
+                <div class="teca-form-group">
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" name="email" id="loginEmail" placeholder="Digite seu email">
+                </div>
+                <div class="teca-form-group">
+                    <label><i class="fas fa-lock"></i> Senha</label>
+                    <input type="password" name="senha" id="loginSenha" placeholder="Digite sua senha" required>
+                </div>
+                <p class="teca-info-text"><i class="fas fa-info-circle"></i> Preencha o nome OU o email para login</p>
+            `;
+        }
+    }
+
+    renderCadastroForm() {
+        const html = `
+            <div class="teca-form-section">
+                <div class="teca-type-selector">
+                    <span class="teca-type-label"><i class="fas fa-user-plus"></i> Tipo de Cadastro</span>
+                    <div class="teca-type-options">
+                        ${this.renderUserTypeOptions('cadastro', [
+                            'Parceiro',
+                            'Simulador - Biblioteca',
+                            'Curso Online',
+                            'Formação Presencial',
+                            'Serviços Personalizados'
+                        ])}
+                    </div>
+                </div>
+
+                <form id="teca-cadastro-form" class="teca-cadastro-form">
+                    <div id="teca-cadastro-fields">
+                        ${this.renderCadastroFields()}
+                    </div>
+
+                    <button type="submit" class="teca-submit-btn" ${!this.currentUserType ? 'disabled' : ''}>
+                        <i class="fas fa-check-circle"></i>
+                        Registrar Cadastro
+                    </button>
+                </form>
+            </div>
+        `;
+        
+        this.dynamicForm.innerHTML = html;
+        
+        if (this.currentUserType === 'Formação Presencial') {
+            this.initFormacaoPresencial();
+        }
+    }
+
+    initFormacaoPresencial() {
+        this.updateValoresFormacao();
+        
+        document.querySelectorAll('#toggle-individual, #toggle-instituicao, [name="associadoParceira"]').forEach(el => {
+            el.addEventListener('change', () => this.updateValoresFormacao());
+        });
+    }
+
+    updateValoresFormacao() {
+        const selectValores = document.getElementById('select-valores');
+        if (!selectValores) return;
+        
+        const isInstituicao = document.getElementById('toggle-instituicao')?.classList.contains('active');
+        const isAssociado = document.querySelector('[name="associadoParceira"]')?.value === 'sim';
+        
+        let options = '';
+        
+        if (isInstituicao) {
+            options = `
+                <option value="">Selecione o valor</option>
+                <option value="150.000 Kz">150.000 Kz - Básico</option>
+                <option value="250.000 Kz">250.000 Kz - Intermediário</option>
+                <option value="700.000 Kz">700.000 Kz - Máximo</option>
+            `;
+            document.getElementById('campo-instituicao').style.display = 'block';
+            document.getElementById('campo-associado').style.display = 'none';
+        } else {
+            if (isAssociado) {
+                options = `
+                    <option value="7.500 Kz">7.500 Kz - Associado (15 dias)</option>
+                `;
+            } else {
+                options = `
+                    <option value="">Selecione o valor</option>
+                    <option value="20.000 Kz">20.000 Kz - Básico (90 dias)</option>
+                    <option value="70.000 Kz">70.000 Kz - Avançado (90 dias)</option>
+                `;
+            }
+            document.getElementById('campo-instituicao').style.display = 'none';
+            document.getElementById('campo-associado').style.display = 'block';
+        }
+        
+        selectValores.innerHTML = options;
+    }
+
+    renderUserTypeOptions(context, tipos) {
+        return tipos.map(tipo => {
+            const icon = this.getUserTypeIcon(tipo);
+            return `
+                <div class="teca-type-option">
+                    <input type="radio" 
+                           name="tipoUsuario" 
+                           id="tipo-${tipo.replace(/\s+/g, '-')}" 
+                           value="${tipo}"
+                           ${this.currentUserType === tipo ? 'checked' : ''}>
+                    <label for="tipo-${tipo.replace(/\s+/g, '-')}">
+                        <i class="fas ${icon}"></i>
+                        ${tipo}
+                    </label>
+                </div>
+            `;
+        }).join('');
+    }
+
+    getUserTypeIcon(tipo) {
+        const icons = {
+            'Administrador': 'fa-crown',
+            'Parceiro': 'fa-handshake',
+            'Usuário da Plataforma': 'fa-user-graduate',
+            'Simulador - Biblioteca': 'fa-calculator',
+            'Curso Online': 'fa-video',
+            'Formação Presencial': 'fa-chalkboard-teacher',
+            'Serviços Personalizados': 'fa-concierge-bell'
+        };
+        return icons[tipo] || 'fa-user';
+    }
+
+    renderCadastroFields() {
+        if (!this.currentUserType) {
+            return '<p class="teca-info-text"><i class="fas fa-info-circle"></i> Selecione um tipo de cadastro</p>';
+        }
+
+        let fields = this.renderBaseFields();
+
+        switch (this.currentUserType) {
+            case 'Parceiro':
+                fields += this.renderParceiroFields();
+                break;
+            case 'Simulador - Biblioteca':
+                fields += this.renderSimuladorBibliotecaFields();
+                break;
+            case 'Curso Online':
+                fields += this.renderCursoOnlineFields();
+                break;
+            case 'Formação Presencial':
+                fields += this.renderFormacaoPresencialFields();
+                break;
+            case 'Serviços Personalizados':
+                fields += this.renderServicosPersonalizadosFields();
+                break;
+        }
+
+        return fields;
+    }
+
+    renderBaseFields() {
+        return `
+            <div class="teca-form-grid">
+                <div class="teca-form-group full-width">
+                    <label><i class="fas fa-user"></i> Nome de Usuário</label>
+                    <input type="text" name="nome" id="nome" placeholder="Digite seu nome completo" required>
+                </div>
+                
+                ${this.currentUserType !== 'Serviços Personalizados' ? `
+                    <div class="teca-form-group">
+                        <label><i class="fas fa-calendar"></i> Data de Nascimento</label>
+                        <input type="date" name="dataNascimento" id="dataNascimento" required>
+                    </div>
+                    
+                    <div class="teca-form-group">
+                        <label><i class="fas fa-venus-mars"></i> Sexo</label>
+                        <select name="sexo" id="sexo" required>
+                            <option value="">Selecione</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                        </select>
+                    </div>
+                ` : ''}
+                
+                <div class="teca-form-group">
+                    <label><i class="fas fa-globe-africa"></i> País</label>
+                    <input type="text" name="pais" id="pais" value="Angola" placeholder="País" required>
+                </div>
+                
+                <div class="teca-form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Região/Província</label>
+                    <input type="text" name="regiao" id="regiao" placeholder="Digite sua província" required>
+                </div>
+                
+                <div class="teca-form-group">
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" name="email" id="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="teca-form-group">
+                    <label><i class="fas fa-phone-alt"></i> Telefone</label>
+                    <input type="tel" name="telefone" id="telefone" placeholder="923456789" required>
+                </div>
+            </div>
+        `;
+    }
+
+    renderParceiroFields() {
+        return `
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-briefcase"></i> Função</label>
+                <select name="descricao" id="descricao" required>
+                    <option value="">Selecione sua função</option>
+                    <option value="Líder Regional">Líder Regional</option>
+                    <option value="Formador">Formador</option>
+                    <option value="Assistente">Assistente</option>
+                </select>
+            </div>
+            
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-lock"></i> Senha de Acesso</label>
+                <input type="password" name="senha" id="senha" placeholder="Crie uma senha segura" required>
+            </div>
+            
+            <div class="teca-info-text">
+                <i class="fas fa-info-circle"></i>
+                Nível de Acesso: Moderado | Expiração: Permanente
+            </div>
+        `;
+    }
+
+    renderSimuladorBibliotecaFields() {
+        return `
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-tag"></i> Valor Pago</label>
+                <div class="teca-fixed-value">
+                    <i class="fas fa-check-circle"></i>
+                    7.500 Kz (Fixo)
+                </div>
+                <input type="hidden" name="valorPago" id="valorPago" value="7.500 Kz">
+            </div>
+            
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-check-square"></i> Comprovativo Enviado</label>
+                <select name="comprovativoEnviado" id="comprovativoEnviado" required>
+                    <option value="">Selecione</option>
+                    <option value="Sim">Sim, já enviei</option>
+                    <option value="Não">Não, enviarei depois</option>
+                </select>
+            </div>
+            
+            <div id="teca-whatsapp-container" style="display: none;">
+                <button type="button" class="teca-whatsapp-btn pulse">
+                    <i class="fab fa-whatsapp"></i>
+                    Enviar Comprovativo via WhatsApp
+                </button>
+            </div>
+            
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-lock"></i> Senha de Acesso</label>
+                <input type="password" name="senha" id="senha" placeholder="Crie uma senha segura" required>
+            </div>
+            
+            <div class="teca-info-text">
+                <i class="fas fa-info-circle"></i>
+                Nível de Acesso: Restrito | Expiração: 90 dias após registro
+            </div>
+        `;
+    }
+
+    renderCursoOnlineFields() {
+        return `
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-tag"></i> Valor do Curso</label>
+                <select name="valorPago" id="valorPago" required>
+                    <option value="">Selecione o valor</option>
+                    <option value="20.000 Kz">20.000 Kz - Curso Básico</option>
+                    <option value="50.000 Kz">50.000 Kz - Curso Completo</option>
+                </select>
+            </div>
+            
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-check-square"></i> Comprovativo Enviado</label>
+                <select name="comprovativoEnviado" id="comprovativoEnviado" required>
+                    <option value="">Selecione</option>
+                    <option value="Sim">Sim, já enviei</option>
+                    <option value="Não">Não, enviarei depois</option>
+                </select>
+            </div>
+            
+            <div id="teca-whatsapp-container" style="display: none;">
+                <button type="button" class="teca-whatsapp-btn pulse">
+                    <i class="fab fa-whatsapp"></i>
+                    Enviar Comprovativo via WhatsApp
+                </button>
+            </div>
+            
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-lock"></i> Senha de Acesso</label>
+                <input type="password" name="senha" id="senha" placeholder="Crie uma senha segura" required>
+            </div>
+            
+            <div class="teca-info-text">
+                <i class="fas fa-info-circle"></i>
+                Nível de Acesso: Restrito | Expiração: 180 dias após registro
+            </div>
+        `;
+    }
+
+    renderFormacaoPresencialFields() {
+        return `
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-building"></i> Tipo de Inscrição</label>
+                <div class="teca-toggle-container">
+                    <button type="button" class="teca-toggle-btn active" data-type="individual" id="toggle-individual">
+                        <i class="fas fa-user"></i> Individual
+                    </button>
+                    <button type="button" class="teca-toggle-btn" data-type="instituicao" id="toggle-instituicao">
+                        <i class="fas fa-building"></i> Instituição/Empresa
+                    </button>
+                </div>
+            </div>
+            
+            <div class="teca-form-group full-width" id="campo-instituicao" style="display: none;">
+                <label><i class="fas fa-building"></i> Nome da Instituição</label>
+                <input type="text" name="nomeInstituicao" id="nomeInstituicao" placeholder="Digite o nome da instituição">
+            </div>
+            
+            <div class="teca-form-group full-width" id="campo-associado" style="display: block;">
+                <label><i class="fas fa-handshake"></i> Associado a instituição parceira?</label>
+                <select name="associadoParceira" id="associadoParceira">
+                    <option value="nao">Não</option>
+                    <option value="sim">Sim, sou associado</option>
+                </select>
+            </div>
+            
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-tag"></i> Valor</label>
+                <select name="valorPago" required id="select-valores">
+                    <option value="">Selecione o valor</option>
+                    <option value="20.000 Kz">20.000 Kz - Básico (90 dias)</option>
+                    <option value="70.000 Kz">70.000 Kz - Avançado (90 dias)</option>
+                </select>
+            </div>
+            
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-check-square"></i> Comprovativo Enviado</label>
+                <select name="comprovativoEnviado" id="comprovativoEnviado" required>
+                    <option value="">Selecione</option>
+                    <option value="Sim">Sim, já enviei</option>
+                    <option value="Não">Não, enviarei depois</option>
+                </select>
+            </div>
+            
+            <div id="teca-whatsapp-container" style="display: none;">
+                <button type="button" class="teca-whatsapp-btn pulse">
+                    <i class="fab fa-whatsapp"></i>
+                    Enviar Comprovativo via WhatsApp
+                </button>
+            </div>
+            
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-lock"></i> Senha de Acesso</label>
+                <input type="password" name="senha" id="senha" placeholder="Crie uma senha segura" required>
+            </div>
+            
+            <div class="teca-info-text">
+                <i class="fas fa-info-circle"></i>
+                Nível de Acesso: Restrito | Expiração: 15 ou 90 dias conforme valor
+            </div>
+        `;
+    }
+
+    renderServicosPersonalizadosFields() {
+        return `
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-id-card"></i> Tipo de Cadastro</label>
+                <div class="teca-toggle-container">
+                    <button type="button" class="teca-toggle-btn active" data-type="singular" id="toggle-singular">
+                        <i class="fas fa-user"></i> Singular (Pessoa Física)
+                    </button>
+                    <button type="button" class="teca-toggle-btn" data-type="empresa" id="toggle-empresa">
+                        <i class="fas fa-building"></i> Empresa
+                    </button>
+                </div>
+            </div>
+            
+            <div class="teca-form-group full-width" id="campo-nome-container">
+                <label><i class="fas fa-user"></i> Nome</label>
+                <input type="text" name="nome" id="nome" placeholder="Digite seu nome" required>
+            </div>
+            
+            <div id="campos-pessoa-fisica">
+                <div class="teca-form-grid">
+                    <div class="teca-form-group">
+                        <label><i class="fas fa-calendar"></i> Data de Nascimento</label>
+                        <input type="date" name="dataNascimento" id="dataNascimento">
+                    </div>
+                    
+                    <div class="teca-form-group">
+                        <label><i class="fas fa-venus-mars"></i> Sexo</label>
+                        <select name="sexo" id="sexo">
+                            <option value="">Selecione</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="teca-form-grid">
+                <div class="teca-form-group">
+                    <label><i class="fas fa-globe-africa"></i> País</label>
+                    <input type="text" name="pais" id="pais" value="Angola" required>
+                </div>
+                
+                <div class="teca-form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Região</label>
+                    <input type="text" name="regiao" id="regiao" required>
+                </div>
+            </div>
+            
+            <div class="teca-form-grid">
+                <div class="teca-form-group">
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" name="email" id="email" required>
+                </div>
+                
+                <div class="teca-form-group">
+                    <label><i class="fas fa-phone-alt"></i> Telefone</label>
+                    <input type="tel" name="telefone" id="telefone" required>
+                </div>
+            </div>
+            
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-tag"></i> Proposta de Valor</label>
+                <input type="text" name="valorPago" id="valorPago" placeholder="Ex: 100.000 Kz" required>
+            </div>
+            
+            <div class="teca-form-group full-width">
+                <label><i class="fas fa-align-left"></i> Descrição do Serviço Pretendido</label>
+                <textarea name="descricao" id="descricao" rows="4" placeholder="Descreva detalhadamente o serviço personalizado que pretende..." required></textarea>
+            </div>
+            
+            <div class="teca-info-text">
+                <i class="fas fa-info-circle"></i>
+                Nível de Acesso: Nenhum | Este tipo não tem acesso à plataforma
+            </div>
+        `;
+    }
+
+    handleUserTypeChange(tipo) {
+        this.currentUserType = tipo;
+        if (this.currentMode === 'cadastro') {
+            this.renderCadastroForm();
+        } else {
+            this.renderLoginForm();
+        }
+    }
+
+    handleComprovativoChange(valor) {
+        const container = document.getElementById('teca-whatsapp-container');
+        if (container) {
+            container.style.display = valor === 'Sim' ? 'block' : 'none';
+        }
+    }
+
+    handleTipoPessoaToggle(tipo) {
+        document.querySelectorAll('.teca-toggle-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.type === tipo);
+        });
+
+        if (tipo === 'singular') {
+            document.getElementById('campos-pessoa-fisica').style.display = 'block';
+            document.querySelector('input[name="dataNascimento"]').required = true;
+            document.querySelector('select[name="sexo"]').required = true;
+            
+            const nomeLabel = document.querySelector('#campo-nome-container label');
+            if (nomeLabel) nomeLabel.innerHTML = '<i class="fas fa-user"></i> Nome (Pessoa Física)';
+        } else {
+            document.getElementById('campos-pessoa-fisica').style.display = 'none';
+            document.querySelector('input[name="dataNascimento"]').required = false;
+            document.querySelector('select[name="sexo"]').required = false;
+            
+            const nomeLabel = document.querySelector('#campo-nome-container label');
+            if (nomeLabel) nomeLabel.innerHTML = '<i class="fas fa-building"></i> Nome da Empresa';
+        }
+    }
+
+    openWhatsApp() {
+        const form = document.querySelector('form');
+        const formData = new FormData(form);
+        
+        const nome = formData.get('nome');
+        const tipo = this.currentUserType;
+        const valor = formData.get('valorPago');
+        const data = new Date().toLocaleDateString('pt-PT');
+        
+        const mensagem = `*TECA CAPITAL - COMPROVATIVO DE PAGAMENTO*%0A%0A` +
+                        `👤 Nome: ${nome}%0A` +
+                        `📋 Tipo: ${tipo}%0A` +
+                        `📅 Data: ${data}%0A` +
+                        `💰 Valor: ${valor}%0A%0A` +
+                        `🔗 Segue em anexo o comprovativo de pagamento.%0A%0A` +
+                        `Obrigado!`;
+        
+        window.open(`https://wa.me/${this.WHATSAPP_NUMBER}?text=${mensagem}`, '_blank');
+    }
+
+    async handleSubmit() {
+        const form = document.querySelector('form');
+        if (!form) return;
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        this.mostrarCarregando(true);
+        this.clearMessages();
+
+        try {
+            const formData = new FormData(form);
+            const data = this.processFormData(formData);
+
+            let resultado;
+            
+            if (this.currentMode === 'cadastro') {
+                resultado = await this.cadastrarUtilizador(data);
+            } else {
+                resultado = await this.fazerLogin(data);
+            }
+
+            if (resultado && resultado.sucesso) {
+                this.exibirMensagem('sucesso', resultado.mensagem || 'Operação realizada com sucesso!');
+                
+                if (this.currentMode === 'cadastro') {
+                    setTimeout(() => {
+                        this.currentUserType = null;
+                        this.renderForm();
+                    }, 3000);
+                }
+            } else {
+                this.exibirMensagem('erro', resultado?.mensagem || 'Erro ao processar');
+            }
+        } catch (error) {
+            console.error('❌ Erro no handleSubmit:', error);
+            this.exibirMensagem('erro', 'Erro de comunicação com o servidor. Tente novamente.');
+        } finally {
+            this.mostrarCarregando(false);
+        }
+    }
+
+    processFormData(formData) {
+        const data = {};
+        
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+
+        data.tipoUsuario = this.currentUserType;
+        
+        if (this.currentUserType === 'Serviços Personalizados') {
+            const tipoPessoa = document.querySelector('.teca-toggle-btn.active')?.dataset.type || 'singular';
+            const nomeOriginal = data.nome;
+            data.nome = tipoPessoa === 'singular' ? `Singular: ${nomeOriginal}` : `Empresa: ${nomeOriginal}`;
+            
+            if (tipoPessoa === 'empresa') {
+                delete data.dataNascimento;
+                delete data.sexo;
+            }
+        }
+
+        if (this.currentUserType === 'Formação Presencial') {
+            const tipo = document.querySelector('#toggle-instituicao')?.classList.contains('active') ? 'instituicao' : 'individual';
+            
+            if (tipo === 'instituicao') {
+                const instituicao = data.nomeInstituicao || '';
+                data.descricao = `Associado a: ${instituicao}`;
+                data.associadoParceira = 'nao';
+            } else {
+                const associado = data.associadoParceira === 'sim';
+                if (associado) {
+                    data.descricao = 'Associado a instituição parceira (individual)';
+                    data.valorPago = '7.500 Kz';
+                } else {
+                    data.descricao = 'Não associado a nenhuma instituição';
+                }
+            }
+        }
+
+        if (!data.pais) data.pais = 'Angola';
+        if (!data.comprovativoEnviado) data.comprovativoEnviado = 'Não';
+        
+        return data;
+    }
+
+    clearMessages() {
+        this.messageContainer.innerHTML = '';
     }
 }
 
-// ===== 11. UTILITÁRIOS =====
-function mostrarMensagem(containerId, texto, tipo = 'info') {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    
-    const alertClass = {
-        'success': 'alert-success',
-        'error': 'alert-error',
-        'warning': 'alert-warning',
-        'info': 'alert-info'
-    }[tipo] || 'alert-info';
-    
-    const alertDiv = document.createElement('div');
-    alertDiv.className = alertClass;
-    alertDiv.innerHTML = `
-        <i class="fas fa-${tipo === 'success' ? 'check-circle' : tipo === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-        ${texto}
-    `;
-    
-    container.innerHTML = '';
-    container.appendChild(alertDiv);
-    
-    if (tipo === 'success') {
-        setTimeout(() => {
-            if (container.contains(alertDiv)) {
-                alertDiv.remove();
-            }
-        }, 5000);
-    }
-}
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    new TecaForm();
+});

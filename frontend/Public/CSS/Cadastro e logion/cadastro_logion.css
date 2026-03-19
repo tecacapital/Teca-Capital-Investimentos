@@ -1,167 +1,195 @@
-/* ===== VARIÁVEIS GLOBAIS ===== */
-:root {
-    /* CORES PRINCIPAIS */
-    --primary-black: #000000;
-    --primary-gold: rgb(214, 174, 100);
-    --primary-white: #FFFFFF;
-    
-    /* CORES SECUNDÁRIAS */
-    --secondary-blue: #1976D2;
-    --secondary-red: #dc3545;
-    --secondary-green: #28a745;
-    --accent-orange: #FF9800;
-    
-    /* ESCALA DE CINZA */
-    --text-gray: #CCCCCC;
-    --text-dim: #AAAAAA;
-    --border-dark: rgba(255, 255, 255, 0.1);
-    --border-darker: rgba(255, 255, 255, 0.2);
-    
-    /* FUNDOS */
-    --bg-card: rgba(255, 255, 255, 0.03);
-    --bg-card-hover: rgba(255, 255, 255, 0.05);
-    --bg-soft-black: #0a0a0a;
-    
-    /* ESPAÇAMENTOS */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    
-    /* BORDAS */
-    --border-radius-sm: 8px;
-    --border-radius-md: 12px;
-    --border-radius-lg: 20px;
-    --border-radius-xl: 40px;
-    
-    /* TRANSIÇÕES */
-    --transition-fast: 0.2s ease;
-    --transition-normal: 0.3s ease;
-    --transition-slow: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+/* ===== TECA CAPITAL - FORMULÁRIO DINÂMICO ===== */
+/* Todos os estilos são encapsulados com prefixo teca- */
 
-/* ===== RESET E BASE ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 80px;
-}
-
-body {
-    font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
-    background-color: var(--primary-black);
-    color: var(--primary-white);
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    margin-top: 60px;
-}
-
-/* ===== CONTAINER PRINCIPAL ===== */
-.plataforma-container {
+/* Container principal - Respeita o contexto do site */
+.teca-form-container {
     max-width: 800px;
-    width: 90%;
     margin: 2rem auto;
-    padding: 2rem;
-    background: var(--bg-soft-black);
-    border: 1px solid var(--border-dark);
-    border-radius: var(--border-radius-lg);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
-/* ===== HEADER DA PÁGINA ===== */
-.page-header {
+/* Card do formulário */
+.teca-form-card {
+    background: rgba(20, 20, 20, 0.95);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(214, 174, 100, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.teca-form-card:hover {
+    border-color: rgba(214, 174, 100, 0.4);
+    box-shadow: 0 25px 50px rgba(214, 174, 100, 0.1);
+}
+
+/* Cabeçalho do formulário */
+.teca-form-header {
     text-align: center;
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: 2.5rem;
 }
 
-.logo-placeholder {
-    margin-bottom: var(--spacing-md);
-}
-
-.logo-img {
-    max-width: 200px;
-    height: auto;
-}
-
-.page-title {
-    font-size: clamp(1.8rem, 5vw, 2.5rem);
-    font-weight: 700;
-    margin-bottom: var(--spacing-xs);
-    color: var(--primary-white);
-}
-
-.page-subtitle {
-    color: var(--text-gray);
-    font-size: clamp(0.9rem, 3vw, 1rem);
-}
-
-/* ===== SISTEMA DE ABAS ===== */
-.tabs-container {
+.teca-form-logo {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: var(--spacing-xl);
-    border-bottom: 1px solid var(--border-dark);
-    padding-bottom: var(--spacing-md);
-}
-
-.tab-btn {
-    flex: 1 1 auto;
-    min-width: 120px;
-    min-height: 44px;
-    padding: 12px 16px;
-    background: transparent;
-    border: 1px solid var(--border-dark);
-    border-radius: var(--border-radius-xl);
-    color: var(--text-gray);
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 0.75rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
 }
 
-.tab-btn i {
+.teca-form-logo i {
+    font-size: 2.2rem;
+    color: rgb(214, 174, 100);
+}
+
+.teca-form-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+/* Navegação entre Cadastro e Login */
+.teca-nav-container {
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.teca-nav-buttons {
+    display: flex;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem;
+    border-radius: 60px;
+    border: 1px solid rgba(214, 174, 100, 0.2);
+}
+
+.teca-nav-btn {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.teca-nav-btn i {
     font-size: 1.1rem;
+    transition: transform 0.3s ease;
 }
 
-.tab-btn:hover {
-    border-color: var(--primary-gold);
-    color: var(--primary-gold);
-    background: rgba(214, 174, 100, 0.05);
+.teca-nav-btn:hover {
+    color: white;
+    background: rgba(214, 174, 100, 0.1);
 }
 
-.tab-btn.active {
-    background: var(--primary-gold);
-    color: var(--primary-black);
-    border-color: var(--primary-gold);
+.teca-nav-btn:hover i {
+    transform: translateY(-2px);
 }
 
-/* ===== CONTEÚDO DAS ABAS ===== */
-.tab-content {
-    display: none;
-    animation: fadeIn 0.5s ease forwards;
+.teca-nav-btn.active {
+    background: rgb(214, 174, 100);
+    color: black;
+    box-shadow: 0 8px 20px rgba(214, 174, 100, 0.3);
 }
 
-.tab-content.active {
+.teca-nav-btn.active i {
+    color: black;
+}
+
+/* Seletor de tipo de usuário */
+.teca-type-selector {
+    margin-bottom: 2rem;
+}
+
+.teca-type-label {
     display: block;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
 }
 
-@keyframes fadeIn {
+.teca-type-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+}
+
+.teca-type-option {
+    position: relative;
+}
+
+.teca-type-option input[type="radio"] {
+    display: none;
+}
+
+.teca-type-option label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.teca-type-option label i {
+    color: rgb(214, 174, 100);
+    font-size: 1rem;
+}
+
+.teca-type-option input[type="radio"]:checked + label {
+    background: rgba(214, 174, 100, 0.15);
+    border-color: rgb(214, 174, 100);
+    color: rgb(214, 174, 100);
+    box-shadow: 0 4px 12px rgba(214, 174, 100, 0.2);
+}
+
+.teca-type-option input[type="radio"]:checked + label i {
+    color: rgb(214, 174, 100);
+}
+
+.teca-type-option label:hover {
+    background: rgba(214, 174, 100, 0.1);
+    border-color: rgba(214, 174, 100, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Formulário dinâmico */
+.teca-dynamic-form {
+    transition: opacity 0.3s ease;
+}
+
+.teca-form-section {
+    animation: tecaFadeIn 0.5s ease;
+}
+
+@keyframes tecaFadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
@@ -169,530 +197,339 @@ body {
     }
 }
 
-/* ===== FORMULÁRIOS ===== */
-.form-section {
-    background: var(--bg-card);
-    border: 1px solid var(--border-dark);
-    border-radius: var(--border-radius-md);
-    padding: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
-}
-
-.section-title {
-    font-size: 1.3rem;
-    margin-bottom: var(--spacing-lg);
-    color: var(--primary-gold);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid var(--border-dark);
-    padding-bottom: var(--spacing-sm);
-}
-
-.form-row {
+/* Grid de campos */
+.teca-form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
 }
 
-.form-group {
-    margin-bottom: var(--spacing-md);
+.teca-form-group {
+    margin-bottom: 1rem;
 }
 
-.form-group label {
+.teca-form-group.full-width {
+    grid-column: span 2;
+}
+
+.teca-form-group label {
     display: block;
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-gray);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
     font-weight: 500;
-    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
 }
 
-.required {
-    color: var(--secondary-red);
-    margin-left: 2px;
-}
-
-.form-control {
-    width: 100%;
-    padding: 14px 18px;
-    background: var(--bg-soft-black);
-    border: 1px solid var(--border-dark);
-    border-radius: var(--border-radius-md);
-    color: var(--primary-white);
-    font-size: 1rem;
-    transition: var(--transition-fast);
-    font-family: inherit;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--primary-gold);
-    box-shadow: 0 0 0 3px rgba(214, 174, 100, 0.1);
-}
-
-.form-control::placeholder {
-    color: var(--text-dim);
-}
-
-.form-control:invalid:not(:placeholder-shown) {
-    border-color: var(--secondary-red);
-}
-
-select.form-control {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23CCCCCC' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 18px center;
-    background-size: 16px;
-    padding-right: 50px;
-}
-
-textarea.form-control {
-    resize: vertical;
-    min-height: 100px;
-}
-
-/* ===== VALIDAÇÃO E ERROS ===== */
-.error-message {
-    color: var(--secondary-red);
-    font-size: 0.85rem;
-    margin-top: 5px;
-    min-height: 20px;
-}
-
-/* ===== BOTÕES ===== */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 28px;
-    border-radius: var(--border-radius-xl);
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    border: none;
-    min-height: 44px;
-    min-width: 44px;
-    font-family: inherit;
-}
-
-.btn-primary {
-    background: var(--primary-gold);
-    color: var(--primary-black);
-}
-
-.btn-primary:hover:not(:disabled) {
-    background: var(--primary-white);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(214, 174, 100, 0.4);
-}
-
-.btn-primary:active:not(:disabled) {
-    transform: translateY(0);
-}
-
-.btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.btn-large {
-    padding: 16px 36px;
-    font-size: 1.1rem;
-    width: 100%;
-}
-
-.form-actions {
-    margin-top: var(--spacing-xl);
-    text-align: center;
-}
-
-/* ===== LOADING STATE ===== */
-.btn.loading {
-    position: relative;
-    color: transparent !important;
-    pointer-events: none;
-}
-
-.btn.loading::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: 50%;
-    left: 50%;
-    margin-left: -10px;
-    margin-top: -10px;
-    border: 2px solid var(--primary-black);
-    border-radius: 50%;
-    border-top-color: transparent;
-    animation: spinner 0.8s linear infinite;
-}
-
-@keyframes spinner {
-    to { transform: rotate(360deg); }
-}
-
-/* ===== ALERTAS E MENSAGENS ===== */
-.alert-container {
-    margin-top: var(--spacing-lg);
-}
-
-.alert-success {
-    background: rgba(40, 167, 69, 0.1);
-    border: 1px solid var(--secondary-green);
-    color: var(--secondary-green);
-    padding: 15px 20px;
-    border-radius: var(--border-radius-md);
-    margin: 20px 0;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.alert-error {
-    background: rgba(220, 53, 69, 0.1);
-    border: 1px solid var(--secondary-red);
-    color: var(--secondary-red);
-    padding: 15px 20px;
-    border-radius: var(--border-radius-md);
-    margin: 20px 0;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.alert-warning {
-    background: rgba(255, 152, 0, 0.1);
-    border: 1px solid var(--accent-orange);
-    color: var(--accent-orange);
-    padding: 15px 20px;
-    border-radius: var(--border-radius-md);
-    margin: 20px 0;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.alert-info {
-    background: rgba(25, 118, 210, 0.1);
-    border: 1px solid var(--secondary-blue);
-    color: var(--secondary-blue);
-    padding: 15px 20px;
-    border-radius: var(--border-radius-md);
-    margin: 20px 0;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-/* ===== CARD DE SENHA (TIMER) ===== */
-.senha-card {
-    background: var(--bg-card);
-    border: 2px solid var(--primary-gold);
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-xl);
-    text-align: center;
-    margin: var(--spacing-lg) 0;
-    animation: pulse-border 2s infinite;
-    position: relative;
-}
-
-@keyframes pulse-border {
-    0% { border-color: var(--primary-gold); }
-    50% { border-color: var(--secondary-blue); }
-    100% { border-color: var(--primary-gold); }
-}
-
-.senha-card h4 {
-    font-size: 1.2rem;
-    color: var(--text-gray);
-    margin-bottom: var(--spacing-md);
-}
-
-.senha-card .codigo {
-    font-size: clamp(2rem, 8vw, 3rem);
-    font-weight: 800;
-    color: var(--primary-gold);
-    letter-spacing: 2px;
-    margin: var(--spacing-md) 0;
-    word-break: break-word;
-}
-
-.timer-container {
-    margin: var(--spacing-lg) 0;
-}
-
-.timer-display {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--secondary-red);
-    transition: all 0.3s ease;
-}
-
-.timer-display.urgent {
-    animation: blink 1s infinite;
-    color: #ff4444;
-}
-
-@keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0.5; }
-}
-
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background: var(--border-dark);
-    border-radius: 4px;
-    margin: var(--spacing-md) 0;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary-gold), var(--secondary-red));
-    transition: width 1s linear;
-}
-
-.senha-card .aviso {
-    color: var(--text-dim);
-    font-size: 0.95rem;
-    margin-top: var(--spacing-lg);
-    padding-top: var(--spacing-md);
-    border-top: 1px solid var(--border-dark);
-}
-
-/* ===== CONTACT INFO ===== */
-.contact-info {
-    margin-top: var(--spacing-xl);
-    padding-top: var(--spacing-lg);
-    border-top: 1px solid var(--border-dark);
-    text-align: center;
-    color: var(--text-gray);
+.teca-form-group label i {
+    color: rgb(214, 174, 100);
+    margin-right: 0.5rem;
     font-size: 0.9rem;
 }
 
-.contact-info p {
-    margin: var(--spacing-xs) 0;
+/* Inputs e selects */
+.teca-form-group input,
+.teca-form-group select,
+.teca-form-group textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
 }
 
-.contact-info i {
-    color: var(--primary-gold);
-    margin-right: var(--spacing-sm);
+.teca-form-group input:focus,
+.teca-form-group select:focus,
+.teca-form-group textarea:focus {
+    outline: none;
+    border-color: rgb(214, 174, 100);
+    background: rgba(214, 174, 100, 0.05);
+    box-shadow: 0 0 0 3px rgba(214, 174, 100, 0.1);
 }
 
-/* ===== RESPONSIVIDADE ===== */
+.teca-form-group input:hover,
+.teca-form-group select:hover,
+.teca-form-group textarea:hover {
+    border-color: rgba(214, 174, 100, 0.5);
+}
 
-/* 393x852 - iPhone 12/13/14 Pro */
-@media (width: 393px) and (height: 852px),
-       (max-width: 393px) and (min-height: 852px) {
-    
-    .plataforma-container {
-        width: 95%;
+.teca-form-group input:disabled,
+.teca-form-group select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Campo de valor fixo */
+.teca-fixed-value {
+    padding: 0.875rem 1rem;
+    background: rgba(214, 174, 100, 0.1);
+    border: 1px solid rgb(214, 174, 100);
+    border-radius: 12px;
+    color: rgb(214, 174, 100);
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.teca-fixed-value i {
+    color: rgb(214, 174, 100);
+}
+
+/* Toggle Singular/Empresa */
+.teca-toggle-container {
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.25rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.teca-toggle-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.teca-toggle-btn i {
+    color: rgb(214, 174, 100);
+}
+
+.teca-toggle-btn.active {
+    background: rgb(214, 174, 100);
+    color: black;
+}
+
+.teca-toggle-btn.active i {
+    color: black;
+}
+
+/* Botão de WhatsApp */
+.teca-whatsapp-btn {
+    width: 100%;
+    padding: 1rem;
+    background: #25D366;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.teca-whatsapp-btn:hover {
+    background: #20bd5a;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+}
+
+.teca-whatsapp-btn i {
+    font-size: 1.2rem;
+}
+
+/* Botão de submit */
+.teca-submit-btn {
+    width: 100%;
+    padding: 1.125rem;
+    background: rgb(214, 174, 100);
+    border: none;
+    border-radius: 16px;
+    color: black;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    letter-spacing: 0.5px;
+}
+
+.teca-submit-btn:hover {
+    background: rgb(234, 194, 120);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(214, 174, 100, 0.3);
+}
+
+.teca-submit-btn i {
+    font-size: 1.1rem;
+}
+
+.teca-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Mensagens de erro */
+.teca-error-message {
+    color: #ff4444;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.teca-error-message i {
+    font-size: 0.8rem;
+    color: #ff4444;
+}
+
+/* Mensagens de sucesso/erro gerais */
+.teca-message-container {
+    margin-top: 1.5rem;
+}
+
+.teca-message {
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    animation: tecaSlideIn 0.3s ease;
+}
+
+@keyframes tecaSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.teca-message.success {
+    background: rgba(214, 174, 100, 0.1);
+    border: 1px solid rgb(214, 174, 100);
+    color: rgb(214, 174, 100);
+}
+
+.teca-message.error {
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid #ff4444;
+    color: #ff4444;
+}
+
+.teca-message i {
+    font-size: 1.1rem;
+}
+
+/* Info adicional */
+.teca-info-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.teca-info-text i {
+    color: rgb(214, 174, 100);
+}
+
+/* Loading state */
+.teca-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(214, 174, 100, 0.3);
+    border-radius: 50%;
+    border-top-color: rgb(214, 174, 100);
+    animation: tecaSpin 1s ease-in-out infinite;
+}
+
+@keyframes tecaSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .teca-form-card {
         padding: 1.5rem;
     }
-    
-    .page-title {
-        font-size: 2rem;
-    }
-    
-    .form-row {
+
+    .teca-form-grid {
         grid-template-columns: 1fr;
-        gap: 0;
     }
-    
-    .form-section {
-        padding: var(--spacing-md);
+
+    .teca-form-group.full-width {
+        grid-column: span 1;
     }
-    
-    .btn {
-        width: 100%;
-        padding: 14px 20px;
+
+    .teca-nav-buttons {
+        flex-direction: column;
+        border-radius: 24px;
     }
-    
-    .tabs-container {
+
+    .teca-type-options {
+        grid-template-columns: 1fr;
+    }
+
+    .teca-toggle-container {
         flex-direction: column;
     }
-    
-    .tab-btn {
-        width: 100%;
+}
+
+/* Animações adicionais */
+@keyframes tecaPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
     }
 }
 
-/* 480x1040 - Pixel 5 / S21 Ultra */
-@media (width: 480px) and (height: 1040px),
-       (max-width: 480px) and (min-height: 1040px) {
-    
-    .plataforma-container {
-        padding: 1.8rem;
-    }
-    
-    .form-row {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .tabs-container {
-        flex-wrap: wrap;
-    }
-    
-    .tab-btn {
-        flex: 1 1 calc(50% - 5px);
-    }
+.teca-whatsapp-btn.pulse {
+    animation: tecaPulse 2s ease-in-out infinite;
 }
 
-/* 430x932 - iPhone 15 Pro / S23+ */
-@media (width: 430px) and (height: 932px),
-       (max-width: 430px) and (min-height: 932px) {
-    
-    .plataforma-container {
-        padding: 1.5rem;
-    }
-    
-    .page-title {
-        font-size: 2.2rem;
-    }
-    
-    .form-section {
-        padding: var(--spacing-md);
-    }
+/* Scrollbar personalizada */
+.teca-form-card::-webkit-scrollbar {
+    width: 8px;
 }
 
-/* TELAS MUITO PEQUENAS (≤ 350px) */
-@media (max-width: 349px) {
-    .plataforma-container {
-        width: 98%;
-        padding: 1rem;
-    }
-    
-    .page-title {
-        font-size: 1.6rem;
-    }
-    
-    .page-subtitle {
-        font-size: 0.85rem;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-control {
-        padding: 12px 14px;
-    }
-    
-    .btn {
-        padding: 12px 16px;
-        font-size: 0.9rem;
-    }
-    
-    .section-title {
-        font-size: 1.1rem;
-    }
-    
-    .senha-card .codigo {
-        font-size: 1.8rem;
-    }
-    
-    .timer-display {
-        font-size: 2rem;
-    }
+.teca-form-card::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
 }
 
-/* ===== TOUCH TARGETS ===== */
-.btn,
-.tab-btn,
-.form-control,
-select,
-input[type="checkbox"],
-input[type="radio"],
-.contact-info a {
-    min-height: 44px;
-    min-width: 44px;
+.teca-form-card::-webkit-scrollbar-thumb {
+    background: rgba(214, 174, 100, 0.3);
+    border-radius: 4px;
 }
 
-/* ===== SCROLLBAR PERSONALIZADA ===== */
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--primary-black);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--border-dark);
-    border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-gold);
-}
-
-/* Senha Javascript */
-
-.card-senha {
-    background: var(--bg-card);
-    border: 2px solid var(--primary-gold);
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-lg);
-    text-align: center;
-    margin: var(--spacing-lg) 0;
-    animation: pulseBorder 2s infinite;
-}
-
-.card-senha p {
-    color: var(--text-gray);
-    margin-bottom: var(--spacing-sm);
-}
-
-.card-senha h2 {
-    color: var(--primary-gold);
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    margin: var(--spacing-md) 0;
-    word-break: break-all;
-}
-
-.card-senha strong {
-    color: var(--secondary-red);
-}
-
-.card-senha .btn-primary {
-    background: var(--primary-gold);
-    color: var(--bg-dark);
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--border-radius-md);
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    margin: 0 5px;
-}
-
-.card-senha .btn-primary:hover {
-    background: var(--secondary-blue);
-    color: white;
-    transform: translateY(-2px);
-}
-
-#timer {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--secondary-red);
-}
-
-@keyframes pulseBorder {
-    0% { border-color: var(--primary-gold); }
-    50% { border-color: var(--secondary-blue); }
-    100% { border-color: var(--primary-gold); }
+.teca-form-card::-webkit-scrollbar-thumb:hover {
+    background: rgba(214, 174, 100, 0.5);
 }

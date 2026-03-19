@@ -5724,3 +5724,550 @@ body.ext-new-year {
         left: 100%;
     }
 }
+
+
+/* ============================================
+   FICHEIRO COMPLEMENTAR: mercado-mobile.css
+   APENAS ESTILOS - NÃO ALTERA FUNCIONALIDADES
+   Linkar APÓS o CSS principal
+============================================ */
+
+/* ============================================
+   CORRECÇÃO 1 - REDUZIR FLICKERING (Apenas CSS)
+   Melhora performance visual sem alterar lógica
+============================================ */
+@media screen and (max-width: 768px) {
+    /* Estabilizar elementos que atualizam frequentemente */
+    .price-value,
+    .price-change,
+    .ext-currency-rate {
+        will-change: transform;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+    }
+
+    /* Reduzir duração de transições para evitar arrasto visual */
+    .asset-card,
+    .allocation-bar {
+        transition-duration: 0.15s !important;
+    }
+
+    /* Desativar apenas animações decorativas problemáticas */
+    .allocation-bar::after {
+        animation: none !important;
+    }
+
+    .asset-card::before,
+    .profile-card::before,
+    .scenario-card::before {
+        display: none !important;
+    }
+
+    /* Garantir que inputs não causem zoom (apenas iOS) */
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* ============================================
+   CORRECÇÃO 2 - MODAL DE COMPRA/VENDA RESPONSIVO
+   Apenas ajustes visuais - não mexe em eventos
+============================================ */
+@media screen and (max-width: 768px) {
+    /* Container do modal - ajuste visual apenas */
+    #trade-modal .modal-content {
+        width: 95% !important;
+        max-width: 95% !important;
+        margin: 10% auto !important;
+        padding: 20px 15px !important;
+        max-height: 80vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* Textos */
+    #trade-modal .modal-content h3 {
+        font-size: 1.3rem !important;
+        padding-right: 30px;
+    }
+
+    #trade-modal .asset-details {
+        padding: 12px !important;
+        margin-bottom: 15px !important;
+    }
+
+    #modal-price {
+        font-size: 1.4rem !important;
+        display: block !important;
+        text-align: center !important;
+        margin: 10px 0 !important;
+    }
+
+    /* Input */
+    #trade-modal #trade-quantity {
+        width: 100% !important;
+        padding: 12px !important;
+        font-size: 16px !important;
+        min-height: 44px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Resumo */
+    #trade-modal .trade-summary {
+        padding: 12px !important;
+        font-size: 0.95rem !important;
+    }
+
+    #trade-total {
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+    }
+
+    /* Botões em coluna */
+    #trade-modal .modal-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+    #trade-modal .modal-actions button {
+        width: 100% !important;
+        min-height: 44px !important;
+        font-size: 1rem !important;
+        padding: 12px !important;
+        margin: 0 !important;
+    }
+
+    /* Botão fechar */
+    #trade-modal .close {
+        position: absolute !important;
+        top: 10px !important;
+        right: 15px !important;
+        font-size: 2rem !important;
+        z-index: 10 !important;
+        padding: 0 5px !important;
+    }
+
+    /* Opções de ordem (se existirem) */
+    .ext-order-type-selector {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+
+    .ext-order-type-card {
+        padding: 10px !important;
+    }
+}
+
+/* ============================================
+   CORRECÇÃO 3 - MODAL DE NOTÍCIAS RESPONSIVO
+   Apenas ajustes visuais
+============================================ */
+@media screen and (max-width: 768px) {
+    /* Container do modal */
+    #ext-news-modal .modal-content {
+        width: 90vw !important;
+        max-width: 90vw !important;
+        max-height: 80vh !important;
+        margin: 10vh auto !important;
+        padding: 20px 15px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* Título */
+    #ext-news-modal .modal-content h3 {
+        font-size: 1.3rem !important;
+        padding-right: 30px;
+        margin-bottom: 10px !important;
+    }
+
+    /* Disclaimer */
+    .ext-news-disclaimer {
+        font-size: 0.8rem !important;
+        padding: 8px !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Feed de notícias */
+    #ext-news-feed {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+
+    /* Cada notícia */
+    .ext-news-item {
+        width: 100% !important;
+        padding: 12px !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Cabeçalho */
+    .ext-news-header {
+        flex-wrap: wrap !important;
+        gap: 5px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .ext-news-ticker {
+        font-size: 0.9rem !important;
+    }
+
+    .ext-news-time {
+        font-size: 0.75rem !important;
+        margin-left: auto !important;
+    }
+
+    /* Corpo */
+    .ext-news-body {
+        font-size: 0.9rem !important;
+        line-height: 1.4 !important;
+        word-wrap: break-word !important;
+    }
+
+    /* Botão fechar */
+    #ext-news-close {
+        position: absolute !important;
+        top: 10px !important;
+        right: 15px !important;
+        font-size: 2rem !important;
+        z-index: 10 !important;
+        padding: 0 5px !important;
+    }
+}
+
+/* ============================================
+   CORRECÇÃO 4 - AJUSTES RESPONSIVOS GERAIS
+   Apenas para melhor visualização
+============================================ */
+@media screen and (max-width: 768px) {
+    /* Gráfico de alocação */
+    #allocation-pie {
+        width: 180px !important;
+        height: 180px !important;
+        margin: 0 auto !important;
+    }
+
+    /* Indicadores */
+    .ext-mini-indicators {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 5px !important;
+    }
+
+    .ext-indicator-item {
+        padding: 6px !important;
+    }
+
+    .ext-indicator-item .value {
+        font-size: 0.9rem !important;
+    }
+
+    /* Data simulada */
+    #simulated-date {
+        font-size: 0.9rem !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+    }
+
+    /* Contagem regressiva de títulos */
+    .bond-countdown {
+        font-size: 0.8rem !important;
+        padding: 8px !important;
+    }
+
+    /* Ranking */
+    .ranking-item {
+        padding: 8px !important;
+        font-size: 0.8rem !important;
+    }
+
+    .ranking-position {
+        min-width: 25px !important;
+    }
+
+    /* Posições abertas */
+    .position-item {
+        padding: 12px !important;
+    }
+
+    .btn-sell-small {
+        min-height: 36px !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media screen and (max-width: 480px) {
+    #trade-modal .modal-content {
+        padding: 15px 12px !important;
+    }
+
+    #modal-price {
+        font-size: 1.2rem !important;
+    }
+
+    .ext-mini-indicators {
+        grid-template-columns: 1fr !important;
+    }
+
+    .ext-news-item {
+        padding: 10px !important;
+    }
+
+    .ext-news-body {
+        font-size: 0.85rem !important;
+    }
+
+    .ranking-item {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* ============================================
+   CONTROLE DE VISIBILIDADE PARA MOBILE (≤ 768px)
+   ============================================ */
+@media screen and (max-width: 768px) {
+
+    /* Quando a simulação NÃO está rodando */
+    body:not(.simulation-active) #dashboard,
+    body:not(.simulation-active) .ext-dividends-panel,
+    body:not(.simulation-active) .ext-fundamentals-panel,
+    body:not(.simulation-active) .ext-pnl-accumulation,
+    body:not(.simulation-active) .ext-market-cap-ranking,
+    body:not(.simulation-active) .ext-advanced-indicators {
+        display: none !important;
+    }
+
+    body:not(.simulation-active) #onboarding {
+        display: block !important; /* Garante que o formulário inicial apareça */
+    }
+
+    /* Quando a simulação ESTÁ rodando */
+    body.simulation-active #onboarding {
+        display: none !important;
+    }
+
+    body.simulation-active #dashboard,
+    body.simulation-active .ext-dividends-panel,
+    body.simulation-active .ext-fundamentals-panel,
+    body.simulation-active .ext-pnl-accumulation,
+    body.simulation-active .ext-market-cap-ranking,
+    body.simulation-active .ext-advanced-indicators {
+        display: block !important;
+    }
+
+    /* Ajuste fino para que o dashboard ocupe o espaço corretamente */
+    body.simulation-active main {
+        padding-top: 10px;
+    }
+
+    /* Evita que elementos ocultos causem layout shift */
+    #onboarding {
+        min-height: 100vh;
+    }
+}
+
+/* ============================================
+   CORREÇÕES DE INTERFACE PARA MOBILE (≤ 768px)
+   BASEADO NO CÓDIGO EXISTENTE DO SIMULADOR
+   ============================================ */
+@media screen and (max-width: 768px) {
+
+    /* --------------------------------------------
+       1. LÓGICA DE ALTERNÂNCIA DE VISIBILIDADE
+       Usa a classe .simulation-active no body
+    -------------------------------------------- */
+    
+    /* Por padrão (simulação não ativa): mostra onboarding, oculta dashboard */
+    body:not(.simulation-active) #dashboard,
+    body:not(.simulation-active) .ext-dividends-panel,
+    body:not(.simulation-active) .ext-fundamentals-panel,
+    body:not(.simulation-active) .ext-pnl-accumulation,
+    body:not(.simulation-active) .ext-market-cap-ranking,
+    body:not(.simulation-active) .ext-advanced-indicators,
+    body:not(.simulation-active) .transaction-history,
+    body:not(.simulation-active) .positions-list,
+    body:not(.simulation-active) .performance-ranking,
+    body:not(.simulation-active) .portfolio-allocation-details {
+        display: none !important;
+    }
+
+    body:not(.simulation-active) #onboarding {
+        display: block !important;
+    }
+
+    /* Quando simulação está ativa: oculta onboarding, mostra dashboard */
+    body.simulation-active #onboarding {
+        display: none !important;
+    }
+
+    body.simulation-active #dashboard,
+    body.simulation-active .ext-dividends-panel,
+    body.simulation-active .ext-fundamentals-panel,
+    body.simulation-active .ext-pnl-accumulation,
+    body.simulation-active .ext-market-cap-ranking,
+    body.simulation-active .ext-advanced-indicators,
+    body.simulation-active .transaction-history,
+    body.simulation-active .positions-list,
+    body.simulation-active .performance-ranking,
+    body.simulation-active .portfolio-allocation-details {
+        display: block !important;
+    }
+
+    /* Garantir que o main tenha padding adequado */
+    body.simulation-active main {
+        padding: 10px !important;
+    }
+
+    /* --------------------------------------------
+       2. REMOÇÃO VISUAL DA BARRA DE ROLAGEM
+       Mantém a funcionalidade de scroll
+    -------------------------------------------- */
+    
+    /* Para navegadores WebKit (Chrome, Safari, Edge) */
+    body::-webkit-scrollbar,
+    main::-webkit-scrollbar,
+    #dashboard::-webkit-scrollbar,
+    .dashboard-grid::-webkit-scrollbar,
+    .assets-container::-webkit-scrollbar,
+    .history-table-container::-webkit-scrollbar,
+    .modal-content::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        background: transparent !important;
+    }
+
+    /* Para Firefox */
+    body, main, #dashboard, .dashboard-grid, 
+    .assets-container, .history-table-container, 
+    .modal-content {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important; /* Para Internet Explorer e Edge antigo */
+    }
+
+    /* Garantir que a rolagem funcione apesar da barra invisível */
+    body, html {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important; /* Scroll suave no iOS */
+    }
+
+    /* --------------------------------------------
+       3. DESTRAVAMENTO DO SCROLL
+       Remove qualquer bloqueio de posicionamento
+    -------------------------------------------- */
+    
+    /* Garantir que nenhum elemento fixo esteja bloqueando */
+    body, html, main, #dashboard, .dashboard-grid {
+        position: relative !important;
+        overflow: visible !important;
+        overflow-y: auto !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        max-height: none !important;
+    }
+
+    /* Remover qualquer overflow: hidden que possa existir */
+    * {
+        max-height: none !important;
+    }
+
+    /* Garantir que containers roláveis internos também funcionem */
+    .history-table-container,
+    .assets-container,
+    .modal-content,
+    .asset-tabs {
+        overflow-y: auto !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        max-height: none !important;
+    }
+
+    /* Corrigir posicionamento dos modais para não interferirem no scroll */
+    .modal {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .modal-content {
+        position: relative !important;
+        top: auto !important;
+        transform: none !important;
+        margin: 20px auto !important;
+        max-height: 80vh !important;
+        overflow-y: auto !important;
+    }
+
+    /* --------------------------------------------
+       4. AJUSTES ADICIONAIS PARA MOBILE
+       Melhorar a experiência sem quebrar funcionalidades
+    -------------------------------------------- */
+    
+    /* Indicador visual sutil de que há mais conteúdo */
+    .asset-tabs::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 30px;
+        background: linear-gradient(90deg, transparent, var(--gray-dark));
+        pointer-events: none;
+        opacity: 0.7;
+        z-index: 2;
+    }
+
+    /* Garantir que o gráfico de pizza não quebre */
+    #allocation-pie {
+        max-width: 200px !important;
+        max-height: 200px !important;
+        margin: 0 auto !important;
+    }
+
+    /* Ajustar altura mínima dos cards */
+    .asset-card {
+        min-height: auto !important;
+        height: auto !important;
+    }
+
+    /* Garantir que o botão de reiniciar esteja sempre acessível */
+    #reset-simulation {
+        position: relative !important;
+        bottom: auto !important;
+        right: auto !important;
+        margin-top: 10px !important;
+    }
+}
+
+/* ============================================
+   AJUSTES PARA TELAS MUITO PEQUENAS (≤ 480px)
+   ============================================ */
+@media screen and (max-width: 480px) {
+    body.simulation-active .dashboard-header {
+        padding: 10px !important;
+        margin-bottom: 10px !important;
+    }
+
+    body.simulation-active .dashboard-header h2 {
+        font-size: 1.2rem !important;
+    }
+
+    .header-actions {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .header-actions button {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* Ajuste fino para tabelas */
+    .history-table-container {
+        margin: 0 -5px !important;
+        width: calc(100% + 10px) !important;
+    }
+}

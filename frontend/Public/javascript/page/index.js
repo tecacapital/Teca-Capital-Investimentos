@@ -864,3 +864,342 @@
     };
     
 })();
+
+/**
+ * ============================================
+ * SKYLINEBROTHERS - FORMULÁRIO DE CONTATO
+ * Primeiro Parceiro Oficial da Teca Capital EdTech
+ * Compatível com Teca Capital EdTech
+ * ============================================
+ */
+
+(function() {
+    'use strict';
+
+    // CONFIGURAÇÕES
+    const CONFIG = {
+        whatsappNumber: '244929965182',
+        codigoPrefix: 'TECASKY',
+        nomeMinLength: 3,
+        regiaoMinLength: 2,
+        paisMinLength: 2
+    };
+
+    // ============================================
+    // UTILITÁRIOS
+    // ============================================
+
+    const Utils = {
+        /**
+         * Formata data para DD/MM/YYYY
+         */
+        formatDate: function() {
+            const date = new Date();
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        },
+
+        /**
+         * Gera código TECASKY-YYYYMMDD-XXXX
+         */
+        generateCodigo: function() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const dateStr = `${year}${month}${day}`;
+            
+            // Gerar número aleatório de 4 dígitos (1000-9999)
+            const random = Math.floor(Math.random() * 9000) + 1000;
+            
+            return `${CONFIG.codigoPrefix}-${dateStr}-${random}`;
+        },
+
+        /**
+         * Codifica mensagem para URL do WhatsApp
+         */
+        encodeMessage: function(message) {
+            return encodeURIComponent(message).replace(/%0A/g, '%0A');
+        },
+
+        /**
+         * Mostra mensagem de erro em um campo
+         */
+        showError: function(element, message) {
+            const formGroup = element.closest('.form-group');
+            if (!formGroup) return;
+            
+            formGroup.classList.add('error');
+            const errorElement = formGroup.querySelector('.error-message');
+            if (errorElement) {
+                errorElement.textContent = message;
+            }
+        },
+
+        /**
+         * Limpa mensagem de erro de um campo
+         */
+        clearError: function(element) {
+            const formGroup = element.closest('.form-group');
+            if (!formGroup) return;
+            
+            formGroup.classList.remove('error');
+            const errorElement = formGroup.querySelector('.error-message');
+            if (errorElement) {
+                errorElement.textContent = '';
+            }
+        },
+
+        /**
+         * Valida campo obrigatório
+         */
+        validateRequired: function(element, fieldName) {
+            const value = element.value.trim();
+            if (!value) {
+                Utils.showError(element, `${fieldName} é obrigatório`);
+                return false;
+            }
+            return true;
+        },
+
+        /**
+         * Valida tamanho mínimo
+         */
+        validateMinLength: function(element, fieldName, minLength) {
+            const value = element.value.trim();
+            if (value.length < minLength) {
+                Utils.showError(element, `${fieldName} deve ter pelo menos ${minLength} caracteres`);
+                return false;
+            }
+            return true;
+        }
+    };
+
+    // ============================================
+    // GERENCIADOR DO FORMULÁRIO
+    // ============================================
+
+    class SkylineFormManager {
+        constructor() {
+            this.form = document.getElementById('skylinebrothers-form');
+            if (!this.form) return;
+
+            this.nomeInput = document.getElementById('nome');
+            this.tipoSelect = document.getElementById('tipo');
+            this.paisInput = document.getElementById('pais');
+            this.regiaoInput = document.getElementById('regiao');
+            this.codigoInput = document.getElementById('codigo');
+            this.dataInput = document.getElementById('data');
+            this.copyButton = document.getElementById('copy-codigo');
+            this.submitButton = document.getElementById('submit-skyline');
+
+            this.init();
+        }
+
+        init() {
+            if (!this.form) return;
+
+            // Preencher campos automáticos
+            this.setupAutomaticFields();
+            
+            // Configurar eventos
+            this.setupEventListeners();
+            
+            // Configurar cópia do código
+            this.setupCopyButton();
+            
+            // Configurar limpeza de erros ao digitar
+            this.setupErrorClearing();
+
+            console.log('✅ SkylineFormManager inicializado');
+        }
+
+        setupAutomaticFields() {
+            // Gerar código único
+            if (this.codigoInput) {
+                this.codigoInput.value = Utils.generateCodigo();
+            }
+
+            // Preencher data atual
+            if (this.dataInput) {
+                this.dataInput.value = Utils.formatDate();
+            }
+        }
+
+        setupEventListeners() {
+            if (this.form) {
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+            }
+        }
+
+        setupCopyButton() {
+            if (this.copyButton && this.codigoInput) {
+                this.copyButton.addEventListener('click', () => {
+                    this.codigoInput.select();
+                    this.codigoInput.setSelectionRange(0, 99999);
+                    
+                    navigator.clipboard.writeText(this.codigoInput.value).then(() => {
+                        // Feedback visual
+                        this.copyButton.classList.add('copied');
+                        this.copyButton.innerHTML = '<i class="fas fa-check"></i>';
+                        
+                        setTimeout(() => {
+                            this.copyButton.classList.remove('copied');
+                            this.copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Erro ao copiar:', err);
+                    });
+                });
+            }
+        }
+
+        setupErrorClearing() {
+            const inputs = [this.nomeInput, this.paisInput, this.regiaoInput];
+            inputs.forEach(input => {
+                if (input) {
+                    input.addEventListener('input', () => {
+                        Utils.clearError(input);
+                    });
+                }
+            });
+
+            if (this.tipoSelect) {
+                this.tipoSelect.addEventListener('change', () => {
+                    Utils.clearError(this.tipoSelect);
+                });
+            }
+        }
+
+        validateForm() {
+            let isValid = true;
+
+            // Limpar todos os erros primeiro
+            document.querySelectorAll('.form-group.error').forEach(group => {
+                group.classList.remove('error');
+            });
+
+            // Validar Nome
+            if (this.nomeInput) {
+                if (!Utils.validateRequired(this.nomeInput, 'Nome')) isValid = false;
+                else if (!Utils.validateMinLength(this.nomeInput, 'Nome', CONFIG.nomeMinLength)) isValid = false;
+            }
+
+            // Validar Tipo (já tem valor padrão, mas verificar se selecionou)
+            if (this.tipoSelect && !this.tipoSelect.value) {
+                Utils.showError(this.tipoSelect, 'Selecione o tipo');
+                isValid = false;
+            }
+
+            // Validar País
+            if (this.paisInput) {
+                if (!Utils.validateRequired(this.paisInput, 'País')) isValid = false;
+                else if (!Utils.validateMinLength(this.paisInput, 'País', CONFIG.paisMinLength)) isValid = false;
+            }
+
+            // Validar Região
+            if (this.regiaoInput) {
+                if (!Utils.validateRequired(this.regiaoInput, 'Região')) isValid = false;
+                else if (!Utils.validateMinLength(this.regiaoInput, 'Região', CONFIG.regiaoMinLength)) isValid = false;
+            }
+
+            return isValid;
+        }
+
+        buildWhatsAppMessage() {
+            const nome = this.nomeInput ? this.nomeInput.value.trim() : 'Não informado';
+            const tipo = this.tipoSelect ? this.tipoSelect.options[this.tipoSelect.selectedIndex].text : 'Não informado';
+            const pais = this.paisInput ? this.paisInput.value.trim() : 'Não informado';
+            const regiao = this.regiaoInput ? this.regiaoInput.value.trim() : 'Não informado';
+            const codigo = this.codigoInput ? this.codigoInput.value : 'Não gerado';
+            const data = this.dataInput ? this.dataInput.value : Utils.formatDate();
+
+            // Construir mensagem formatada
+            const message = `🏢 *NOVA SOLICITAÇÃO DE CONSULTORIA*
+━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 *Dados do Cliente*
+──────────────────
+Nome: ${nome}
+Tipo: ${tipo}
+País: ${pais}
+Região: ${regiao}
+
+🔑 *Código de Intermediação*
+──────────────────
+Código: ${codigo}
+Data: ${data}
+
+━━━━━━━━━━━━━━━━━━━━━━━
+🔄 *Solicitação enviada via Teca Capital EdTech*
+🌐 tecacapitaledtech@gmail.com`;
+
+            return message;
+        }
+
+        openWhatsApp(message) {
+            const encodedMessage = Utils.encodeMessage(message);
+            const whatsappUrl = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodedMessage}`;
+            
+            // Abrir em nova aba
+            window.open(whatsappUrl, '_blank');
+            
+            return whatsappUrl;
+        }
+
+        handleSubmit(e) {
+            e.preventDefault();
+
+            // Validar formulário
+            if (!this.validateForm()) {
+                // Rolar para o primeiro erro
+                const firstError = document.querySelector('.form-group.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+
+            // Construir mensagem
+            const message = this.buildWhatsAppMessage();
+
+            // Abrir WhatsApp
+            this.openWhatsApp(message);
+
+            // Feedback visual no botão
+            if (this.submitButton) {
+                const originalText = this.submitButton.innerHTML;
+                this.submitButton.innerHTML = '<i class="fas fa-check-circle"></i> Redirecionando...';
+                this.submitButton.disabled = true;
+
+                setTimeout(() => {
+                    this.submitButton.innerHTML = originalText;
+                    this.submitButton.disabled = false;
+                }, 3000);
+            }
+
+            console.log('✅ Solicitação enviada para WhatsApp');
+        }
+    }
+
+    // ============================================
+    // INICIALIZAÇÃO
+    // ============================================
+
+    function initialize() {
+        // Aguardar DOM estar pronto
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                new SkylineFormManager();
+            });
+        } else {
+            new SkylineFormManager();
+        }
+    }
+
+    // Iniciar
+    initialize();
+
+})();
