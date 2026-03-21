@@ -1203,3 +1203,228 @@ Data: ${data}
     initialize();
 
 })();
+
+// ===================================================
+// SISTEMA DE ACESSO À PLATAFORMA - INTERATIVIDADE
+// ===================================================
+
+(function() {
+    'use strict';
+    
+    class AcessoPlataforma {
+        constructor() {
+            this.init();
+        }
+        
+        init() {
+            // Verificar se a seção existe
+            const secaoAcesso = document.querySelector('.acesso-fluxo-section');
+            if (!secaoAcesso) return;
+            
+            console.log('📋 Seção de Acesso à Plataforma inicializada');
+            
+            // Adicionar efeitos de destaque nos serviços
+            this.addServiceHighlight();
+            
+            // Adicionar animação nos cards ao scroll
+            this.addScrollAnimations();
+            
+            // Adicionar contador de tempo para aviso (opcional)
+            this.addTimeWarning();
+            
+            // Adicionar tracking de clique nos botões de contato
+            this.addContactTracking();
+        }
+        
+        addServiceHighlight() {
+            const servicos = document.querySelectorAll('.servico-item');
+            
+            servicos.forEach(servico => {
+                // Adicionar efeito de clique
+                servico.addEventListener('click', (e) => {
+                    // Não interferir se clicou em links dentro do card
+                    if (e.target.tagName === 'A' || e.target.closest('a')) return;
+                    
+                    // Remover destaque de outros cards
+                    servicos.forEach(s => s.classList.remove('selected'));
+                    
+                    // Adicionar destaque ao card clicado
+                    servico.classList.add('selected');
+                    
+                    // Scroll suave para o CTA após 500ms
+                    setTimeout(() => {
+                        const cta = document.querySelector('.cta-acesso');
+                        if (cta) {
+                            cta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }, 500);
+                });
+                
+                // Efeito hover aprimorado
+                servico.addEventListener('mouseenter', () => {
+                    const preco = servico.querySelector('.servico-preco');
+                    if (preco) {
+                        preco.style.transform = 'scale(1.05)';
+                        preco.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                servico.addEventListener('mouseleave', () => {
+                    const preco = servico.querySelector('.servico-preco');
+                    if (preco) {
+                        preco.style.transform = 'scale(1)';
+                    }
+                });
+            });
+        }
+        
+        addScrollAnimations() {
+            const elementos = document.querySelectorAll('.step-card, .servico-item, .metodo-card, .contato-card');
+            
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = '0';
+                            entry.target.style.transform = 'translateY(30px)';
+                            
+                            setTimeout(() => {
+                                entry.target.style.transition = 'all 0.6s ease';
+                                entry.target.style.opacity = '1';
+                                entry.target.style.transform = 'translateY(0)';
+                            }, 100);
+                            
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1, rootMargin: '50px' });
+                
+                elementos.forEach(el => observer.observe(el));
+            }
+        }
+        
+        addTimeWarning() {
+            // Criar elemento de aviso temporizado (opcional)
+            const aviso = document.querySelector('.aviso-importante');
+            if (!aviso) return;
+            
+            // Adicionar ícone de relógio animado
+            const relogioIcon = document.createElement('i');
+            relogioIcon.className = 'fas fa-clock';
+            relogioIcon.style.marginRight = '10px';
+            relogioIcon.style.color = 'rgb(214, 174, 100)';
+            
+            const primeiroTexto = aviso.innerHTML;
+            aviso.insertBefore(relogioIcon, aviso.firstChild);
+            
+            // Animação de piscar para o relógio
+            setInterval(() => {
+                relogioIcon.style.opacity = relogioIcon.style.opacity === '0.5' ? '1' : '0.5';
+            }, 1000);
+        }
+        
+        addContactTracking() {
+            const contatos = document.querySelectorAll('.contato-card');
+            
+            contatos.forEach(contato => {
+                contato.addEventListener('click', (e) => {
+                    const tipo = contato.classList.contains('whatsapp') ? 'WhatsApp' : 'Email';
+                    console.log(`📱 Usuário clicou em contato via ${tipo}`);
+                    
+                    // Adicionar feedback visual
+                    contato.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        contato.style.transform = '';
+                    }, 200);
+                });
+            });
+            
+            // Tracking do botão de cadastro
+            const btnCadastro = document.querySelector('.cta-acesso .btn-primary');
+            if (btnCadastro) {
+                btnCadastro.addEventListener('click', () => {
+                    console.log('📝 Usuário iniciou processo de cadastro');
+                    
+                    // Salvar no localStorage que o usuário veio da seção de acesso
+                    localStorage.setItem('teca_acesso_origem', 'secao_fluxo');
+                    localStorage.setItem('teca_acesso_timestamp', Date.now());
+                });
+            }
+        }
+        
+        // Método para exibir modal com informações detalhadas do serviço (opcional)
+        showServiceDetails(servico) {
+            const titulo = servico.querySelector('h4')?.innerText || 'Serviço';
+            const preco = servico.querySelector('.servico-preco')?.innerText || '';
+            
+            // Criar modal simples
+            const modal = document.createElement('div');
+            modal.className = 'modal-servico';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="modal-close">&times;</span>
+                    <h3>${titulo}</h3>
+                    <p class="modal-preco">${preco}</p>
+                    <div class="modal-beneficios">
+                        ${servico.querySelector('.servico-beneficios')?.innerHTML || ''}
+                    </div>
+                    <a href="casdastro-logion.html" class="btn btn-primary">Prosseguir para Cadastro</a>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Estilizar modal
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease;
+            `;
+            
+            const modalContent = modal.querySelector('.modal-content');
+            modalContent.style.cssText = `
+                background: #000;
+                border: 2px solid rgb(214, 174, 100);
+                border-radius: 16px;
+                padding: 30px;
+                max-width: 400px;
+                width: 90%;
+                position: relative;
+                animation: slideUp 0.3s ease;
+            `;
+            
+            const closeBtn = modal.querySelector('.modal-close');
+            closeBtn.style.cssText = `
+                position: absolute;
+                top: 15px;
+                right: 20px;
+                font-size: 28px;
+                cursor: pointer;
+                color: rgb(214, 174, 100);
+            `;
+            
+            closeBtn.onclick = () => modal.remove();
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.remove();
+            };
+        }
+    }
+    
+    // Inicializar quando o DOM estiver pronto
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            new AcessoPlataforma();
+        });
+    } else {
+        new AcessoPlataforma();
+    }
+    
+})();

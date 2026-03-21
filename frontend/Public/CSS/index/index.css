@@ -1412,3 +1412,453 @@ video {
 .text-center {
     text-align: center;
 }
+
+/* =================================================== */
+/* SEÇÃO 7: COMO ACESSAR A PLATAFORMA (FLUXO COMPLETO) */
+/* =================================================== */
+
+.acesso-fluxo-section {
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Passo a passo */
+.fluxo-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.step-card {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.step-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, rgb(214, 174, 100), #0066cc, #cc3333, rgb(214, 174, 100));
+    background-size: 400% 400%;
+    border-radius: 18px;
+    z-index: -1;
+    animation: borderRotate 4s linear infinite;
+    opacity: 0.7;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+}
+
+.step-card:hover::before {
+    opacity: 1;
+    animation-duration: 2s;
+}
+
+.step-number {
+    width: 45px;
+    height: 45px;
+    background: rgb(214, 174, 100);
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.step-icon {
+    font-size: 2.5rem;
+    color: rgb(214, 174, 100);
+    margin-bottom: 15px;
+}
+
+.step-card h3 {
+    font-size: 1.3rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.step-card p {
+    color: #ccc;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Serviços e tabela */
+.servicos-acesso {
+    max-width: 1200px;
+    margin: 0 auto 60px;
+}
+
+.subsection-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #fff;
+}
+
+.servicos-tabela {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+.servico-item {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(214, 174, 100, 0.3);
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.servico-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: rgb(214, 174, 100);
+    transition: width 0.3s ease;
+}
+
+.servico-item:hover::before {
+    width: 100%;
+    opacity: 0.05;
+}
+
+.servico-item.destaque {
+    border: 2px solid rgb(214, 174, 100);
+    background: linear-gradient(135deg, rgba(214, 174, 100, 0.05), rgba(0, 0, 0, 0.8));
+    transform: scale(1.02);
+}
+
+.servico-item.personalizado {
+    border-color: #0066cc;
+}
+
+.servico-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.servico-header i {
+    font-size: 2rem;
+    color: rgb(214, 174, 100);
+}
+
+.servico-header h4 {
+    font-size: 1.2rem;
+    color: #fff;
+    margin: 0;
+}
+
+.badge {
+    background: rgba(214, 174, 100, 0.2);
+    color: rgb(214, 174, 100);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: normal;
+    margin-left: 8px;
+}
+
+.badge.gold {
+    background: rgb(214, 174, 100);
+    color: #000;
+}
+
+.servico-preco {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: rgb(214, 174, 100);
+    margin: 15px 0;
+}
+
+.servico-acesso {
+    color: #aaa;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.servico-beneficios {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.servico-beneficios li {
+    color: #ddd;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.servico-beneficios li i {
+    width: 20px;
+}
+
+.servico-beneficios li i.fa-check {
+    color: #4caf50;
+}
+
+.servico-beneficios li i.fa-times {
+    color: #f44336;
+}
+
+/* Formas de pagamento */
+.pagamento-info {
+    max-width: 1200px;
+    margin: 0 auto 60px;
+}
+
+.pagamento-metodos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.metodo-card {
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.metodo-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, rgb(214, 174, 100), #0066cc);
+    background-size: 400% 400%;
+    border-radius: 14px;
+    z-index: -1;
+    animation: borderRotate 3s linear infinite;
+    opacity: 0.5;
+}
+
+.metodo-card:hover::before {
+    opacity: 1;
+}
+
+.metodo-card i {
+    font-size: 3rem;
+    color: rgb(214, 174, 100);
+    margin-bottom: 20px;
+}
+
+.metodo-card h4 {
+    font-size: 1.3rem;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.metodo-card p {
+    color: #ddd;
+    margin: 8px 0;
+    font-size: 0.95rem;
+}
+
+.metodo-card .titular {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.85rem;
+    color: rgb(214, 174, 100);
+}
+
+/* Contato para envio do comprovativo */
+.contato-envio {
+    max-width: 900px;
+    margin: 0 auto 60px;
+    text-align: center;
+}
+
+.aviso-importante {
+    background: rgba(214, 174, 100, 0.1);
+    border-left: 4px solid rgb(214, 174, 100);
+    padding: 20px;
+    margin: 30px 0;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.aviso-importante strong {
+    color: rgb(214, 174, 100);
+}
+
+.contatos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.contato-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(214, 174, 100, 0.3);
+}
+
+.contato-card:hover {
+    transform: translateY(-3px);
+    border-color: rgb(214, 174, 100);
+    background: rgba(214, 174, 100, 0.1);
+}
+
+.contato-card i {
+    font-size: 2.5rem;
+}
+
+.contato-card.whatsapp i {
+    color: #25D366;
+}
+
+.contato-card.email i {
+    color: rgb(214, 174, 100);
+}
+
+.contato-card h4 {
+    color: #fff;
+    margin: 0 0 5px;
+    font-size: 1.1rem;
+}
+
+.contato-card p {
+    color: #aaa;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Chamada para ação */
+.cta-acesso {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 40px;
+    background: rgba(214, 174, 100, 0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(214, 174, 100, 0.3);
+}
+
+.cta-acesso h3 {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.cta-acesso p {
+    color: #ddd;
+    margin-bottom: 25px;
+}
+
+.btn-grande {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    min-width: 250px;
+}
+
+.info-extra {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .fluxo-steps {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+    }
+    
+    .step-card {
+        padding: 20px 15px;
+    }
+    
+    .servicos-tabela {
+        grid-template-columns: 1fr;
+    }
+    
+    .servico-item.destaque {
+        transform: scale(1);
+    }
+    
+    .subsection-title {
+        font-size: 1.5rem;
+    }
+    
+    .cta-acesso {
+        padding: 30px 20px;
+    }
+    
+    .cta-acesso h3 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .contatos-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .pagamento-metodos {
+        grid-template-columns: 1fr;
+    }
+    
+    .step-card {
+        padding: 15px;
+    }
+    
+    .step-icon {
+        font-size: 2rem;
+    }
+    
+    .step-card h3 {
+        font-size: 1.1rem;
+    }
+}
