@@ -1,392 +1,956 @@
- /* === style.css – todas as regras absolutas do projeto === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+/* ==========================================================================
+   TECA CAPITAL - FORMAÇÕES PRESENCIAIS PREMIUM
+   Arquivo: frontend/Public/CSS/pages/formacoes-presenciais.css
+   Descrição: Estilos específicos da página de formações presenciais
+   Dependências: global-variables.css, main-rules.css
+   ========================================================================== */
 
-        :root {
-            --primary-black: #000000;
-            --primary-white: #ffffff;
-            --primary-gold: rgb(214, 174, 100);
-            --gold-rgb: 214, 174, 100;
-            --text-gray: #cccccc;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --border-light: rgba(255, 255, 255, 0.1);
-            --secondary-blue: #0066cc;
-            --secondary-red: #cc3333;
-            --accent-green: #2e8b57;      /* subtil para gestão */
-            --accent-orange: #cc7a2b;      /* subtil para economia */
-            --border-radius-card: 20px;
-            --border-radius-table: 8px;
-            --transition-default: 0.3s ease;
-        }
+/* ==========================================================================
+   VARIÁVEIS ESPECÍFICAS DA PÁGINA
+   ========================================================================== */
+:root {
+  /* Cores específicas */
+  --formacoes-gold: rgb(214, 174, 100);
+  --formacoes-gold-rgb: 214, 174, 100;
+  --formacoes-blue: #0066cc;
+  --formacoes-red: #cc3333;
+  --formacoes-green: #2e8b57;
+  --formacoes-orange: #cc7a2b;
+  
+  /* Cores de texto e fundo - TODAS AS CORES DE TEXTO EM BRANCO/CINZA CLARO */
+  --formacoes-text-primary: #ffffff;
+  --formacoes-text-secondary: #e0e0e0;
+  --formacoes-text-tertiary: #cccccc;
+  --formacoes-text-muted: #aaaaaa;
+  --formacoes-bg-card: rgba(255, 255, 255, 0.03);
+  --formacoes-bg-hover: rgba(255, 255, 255, 0.05);
+  --formacoes-border-light: rgba(255, 255, 255, 0.1);
+  
+  /* Espaçamentos específicos */
+  --formacoes-border-radius-card: 20px;
+  --formacoes-border-radius-table: 12px;
+  --formacoes-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        body {
-            background-color: var(--primary-black);
-            color: var(--primary-white);
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
+/* ==========================================================================
+   FUNDO TOTALMENTE PRETO
+   ========================================================================== */
+body,
+.teca-page.formacoes-presenciais,
+.teca-page.formacoes-presenciais > section {
+  background-color: #000000 !important;
+  margin-top: 50px;
+}
 
-        /* MAIN — único container, sem header/footer globais */
-        .teca-page.formacoes-presenciais {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
-        }
+/* ==========================================================================
+   CONTAINER PRINCIPAL DA PÁGINA
+   ========================================================================== */
+.teca-page.formacoes-presenciais {
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: var(--spacing-xl) 0 var(--spacing-3xl);
+  background-color: #000000 !important;
+}
 
-        /* tipografia */
-        h1, h2, h3 {
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-        h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); }
-        h2 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 2rem; }
-        h3 { font-size: 1.4rem; margin-bottom: 1rem; }
+/* ==========================================================================
+   SEÇÕES
+   ========================================================================== */
+.teca-page.formacoes-presenciais > section {
+  width: 100%;
+  margin-bottom: var(--spacing-3xl);
+  position: relative;
+  background-color: #000000 !important;
+}
 
-        /* todas as listas SEM text-decoration (apenas links podem ter, mas aqui não usamos sublinhados) */
-        ul, ol, dl {
-            list-style: none;
-        }
-        li {
-            margin-bottom: 0.5rem;
-        }
-        /* garantia absoluta para tabelas */
-        table, td, th, tr {
-            text-decoration: none !important;
-            list-style: none;
-        }
+.teca-page.formacoes-presenciais > section:last-child {
+  margin-bottom: 0;
+}
 
-        /* ícones dourados (global) */
-        i[class^="fa-"], i[class*=" fa-"] {
-            color: var(--primary-gold);
-        }
-        /* excepções apenas para botões onde o ícone herda cor do texto */
-        .btn-primary i, .btn-secondary i, .btn-link i {
-            color: currentColor;
-            margin-left: 8px;
-            margin-right: 0;
-        }
+/* ==========================================================================
+   TIPOGRAFIA - TODOS OS TEXTOS EM BRANCO OU CINZA CLARO
+   ========================================================================== */
+.teca-page.formacoes-presenciais h1 {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  margin-bottom: var(--spacing-md);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--formacoes-text-primary) !important;
+}
 
-        /* === BORDAS ANIMADAS (REGRA #4) === */
-        .animated-border {
-            position: relative;
-            background: var(--bg-card);
-            border-radius: var(--border-radius-card);
-            z-index: 0;
-        }
-        .animated-border::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: calc(var(--border-radius-card) + 2px);
-            padding: 2px;
-            background: linear-gradient(300deg, 
-                rgba(var(--gold-rgb), 0.5), 
-                rgba(0, 102, 204, 0.5), 
-                rgba(204, 51, 51, 0.5), 
-                rgba(var(--gold-rgb), 0.5));
-            background-size: 300% 300%;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: borderRotate 6s ease infinite;
-            transition: opacity 0.3s, animation-duration 0.3s;
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        .animated-border:hover::before {
-            opacity: 0.9;
-            animation-duration: 3s;
-        }
+.teca-page.formacoes-presenciais h2 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--formacoes-text-primary) !important;
+}
 
-        @keyframes borderRotate {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+.teca-page.formacoes-presenciais h2 i {
+  margin-right: var(--spacing-xs);
+  font-size: 0.9em;
+  color: var(--formacoes-gold);
+}
 
-        /* badges */
-        .badge {
-            display: inline-block;
-            border: 1px solid var(--primary-gold);
-            color: var(--primary-gold);
-            padding: 0.4rem 1rem;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            background: transparent;
-        }
-        .badge-gold {
-            background: var(--primary-gold);
-            color: #000;
-            border: none;
-        }
-        .badge-gold i {
-            color: #000;
-            margin-right: 5px;
-        }
+.teca-page.formacoes-presenciais h3 {
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+  margin-bottom: var(--spacing-md);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--formacoes-text-primary) !important;
+}
 
-        /* cards */
-        .card-categoria {
-            background: var(--bg-card);
-            border-radius: var(--border-radius-card);
-            padding: 1.8rem 1.5rem;
-            height: 100%;
-            transition: transform var(--transition-default);
-        }
-        .card-categoria:hover {
-            transform: translateY(-8px);
-        }
-        /* overlay subtil por categoria (opcional, mantém dourado nos ícones) */
-        .card-categoria.mercado {
-            border-left: 4px solid var(--secondary-blue);
-        }
-        .card-categoria.gestao {
-            border-left: 4px solid var(--accent-green);
-        }
-        .card-categoria.economia {
-            border-left: 4px solid var(--accent-orange);
-        }
+.teca-page.formacoes-presenciais p {
+  color: var(--formacoes-text-secondary) !important;
+}
 
-        /* tabelas – perfeitas, sem quebras */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            margin: 2rem 0;
-            border-radius: var(--border-radius-table);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-            min-width: 600px;  /* garante estrutura em mobile com scroll */
-        }
-        th, td {
-            padding: 15px 20px;
-            border: 1px solid var(--border-light);
-            text-align: left;
-            vertical-align: middle;
-        }
-        th {
-            background: rgba(214, 174, 100, 0.1);
-            color: var(--primary-gold);
-            font-weight: 600;
-        }
-        td {
-            background: transparent;
-        }
-        tbody tr:nth-child(even) td {
-            background: rgba(255, 255, 255, 0.02);
-        }
-        tbody tr:hover td {
-            background: rgba(214, 174, 100, 0.05);
-        }
-        td i {
-            font-size: 18px;
-            margin-right: 5px;
-            vertical-align: middle;
-        }
-        /* alinhamento primeira coluna à esquerda, demais centralizado */
-        th:first-child, td:first-child {
-            text-align: left;
-        }
-        th:not(:first-child), td:not(:first-child) {
-            text-align: center;
-        }
+.section-title {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  position: relative;
+  color: var(--formacoes-text-primary) !important;
+}
 
-        /* botões */
-        .btn-primary, .btn-secondary, .btn-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.9rem 2rem;
-            border-radius: 60px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all var(--transition-default);
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            gap: 0.5rem;
-        }
-        .btn-primary {
-            background: var(--primary-gold);
-            color: #000;
-        }
-        .btn-primary:hover {
-            background: #c49b4c;
-            transform: scale(1.02);
-        }
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--primary-gold);
-            color: var(--primary-white);
-        }
-        .btn-secondary:hover {
-            background: rgba(214, 174, 100, 0.1);
-        }
-        .btn-link {
-            background: transparent;
-            color: var(--primary-gold);
-            padding: 0.5rem 1rem;
-        }
-        .btn-link:hover {
-            text-decoration: underline;
-        }
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--formacoes-gold);
+  margin: var(--spacing-md) auto 0;
+  border-radius: 3px;
+}
 
-        /* grids */
-        .grid-cards {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-        @media (min-width: 768px) {
-            .grid-cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (min-width: 1024px) {
-            .grid-cards {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
+.text-gold {
+  color: var(--formacoes-gold) !important;
+}
 
-        /* seções */
-        section {
-            margin-bottom: 5rem;
-        }
-        .section-title i {
-            font-size: 28px;
-            margin-right: 12px;
-        }
+.text-gray {
+  color: var(--formacoes-text-tertiary) !important;
+}
 
-        /* feedbacks (depoimentos) */
-        .feedback-card {
-            background: var(--bg-card);
-            border-radius: var(--border-radius-card);
-            padding: 2rem 1.8rem;
-            height: 100%;
-        }
-        .avatar-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--primary-gold);
-            color: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.5rem;
-            margin-right: 1rem;
-        }
-        .estrelas i {
-            color: var(--primary-gold);
-            margin-right: 3px;
-            font-size: 16px;
-        }
-        .fa-quote-left {
-            font-size: 2rem;
-            opacity: 0.4;
-            margin-bottom: 0.5rem;
-        }
+/* ==========================================================================
+   SEÇÃO HERO
+   ========================================================================== */
+.teca-page.formacoes-presenciais > section:first-child {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+  background-color: #000000 !important;
+}
 
-        /* FAQ accordion */
-        .faq-item {
-            background: var(--bg-card);
-            border-radius: 16px;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-light);
-        }
-        .faq-question {
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .faq-question i {
-            font-size: 24px;
-            width: 32px;
-        }
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-            padding: 0 1.5rem 0 3.5rem;
-            background: rgba(0,0,0,0.2);
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-        }
-        .faq-answer p {
-            padding-bottom: 1.5rem;
-            color: var(--text-gray);
-        }
-        .faq-question[aria-expanded="true"] + .faq-answer {
-            max-height: 300px; /* valor grande o suficiente */
-        }
+.flex-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-lg);
+}
 
-        /* call to action final */
-        .cta-duo {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            background: linear-gradient(145deg, #0a0a0a, #000);
-            border-radius: 32px;
-            padding: 3rem;
-            margin-top: 3rem;
-        }
-        @media (min-width: 700px) {
-            .cta-duo {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        .cta-card {
-            background: rgba(255,255,255,0.02);
-            border-radius: 24px;
-            padding: 2rem;
-            text-align: center;
-        }
+.flex-row i {
+  font-size: 3rem;
+  color: var(--formacoes-gold);
+}
 
-        /* utilitários */
-        .text-gold {
-            color: var(--primary-gold);
-        }
-        .text-small {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
-        .mt-2 { margin-top: 0.5rem; }
-        .mb-2 { margin-bottom: 1rem; }
-        .flex-row {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        hr {
-            border: none;
-            border-top: 1px solid var(--border-light);
-            margin: 2rem 0;
-        }
+.teca-page.formacoes-presenciais > section:first-child p {
+  max-width: 700px;
+  margin: var(--spacing-md) auto 0;
+  color: var(--formacoes-text-secondary) !important;
+}
 
-        /* mobile touch */
-        button, a, [role="button"] {
-            min-height: 44px;
-            min-width: 44px;
-        }
+.teca-page.formacoes-presenciais > section:first-child p:first-of-type {
+  font-size: clamp(1.1rem, 4vw, 1.4rem);
+  font-weight: 500;
+  color: var(--formacoes-text-primary) !important;
+}
 
-        /* garantir que nenhum elemento de lista ou tabela recebe text-decoration */
-        td, th, tr, tbody, thead, table, ul, ol, dl, li {
-            text-decoration: none !important;
-        }
-   
+/* ==========================================================================
+   GRID DE CARDS
+   ========================================================================== */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-xl);
+  margin: var(--spacing-xl) 0;
+  width: 100%;
+}
+
+/* Cards de categoria */
+.card-categoria {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-radius: var(--formacoes-border-radius-card);
+  padding: var(--spacing-xl);
+  transition: all var(--formacoes-transition);
+  position: relative;
+  overflow: hidden;
+  height: auto;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-left: 4px solid transparent;
+}
+
+.card-categoria:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.card-categoria.mercado {
+  border-left-color: var(--formacoes-gold);
+}
+
+.card-categoria.gestao {
+  border-left-color: var(--formacoes-blue);
+}
+
+.card-categoria.economia {
+  border-left-color: var(--formacoes-red);
+}
+
+/* Títulos dentro dos cards */
+.card-categoria h3 {
+  color: var(--formacoes-text-primary) !important;
+}
+
+.card-categoria h3 i {
+  color: var(--formacoes-gold);
+}
+
+/* Badges de preço */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid var(--formacoes-gold);
+  color: var(--formacoes-gold) !important;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  background: transparent;
+  transition: all var(--formacoes-transition);
+  white-space: nowrap;
+}
+
+.badge-gold {
+  background: var(--formacoes-gold) !important;
+  color: #000000 !important;
+  border: none;
+}
+
+.badge-gold i {
+  color: #000000 !important;
+}
+
+/* Listas nos cards */
+.card-categoria ul {
+  list-style: none;
+  margin: var(--spacing-md) 0;
+  padding-left: 0;
+  flex: 1;
+}
+
+.card-categoria li {
+  padding: var(--spacing-xs) 0;
+  color: var(--formacoes-text-secondary) !important;
+  position: relative;
+  padding-left: var(--spacing-lg);
+  font-size: 0.9rem;
+}
+
+.card-categoria li::before {
+  content: '▹';
+  position: absolute;
+  left: 0;
+  color: var(--formacoes-gold);
+}
+
+.card-categoria p {
+  margin: var(--spacing-xs) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 0.9rem;
+  color: var(--formacoes-text-tertiary) !important;
+}
+
+.card-categoria p i {
+  width: 24px;
+  font-size: 1rem;
+  flex-shrink: 0;
+  color: var(--formacoes-gold);
+}
+
+.card-categoria p strong {
+  color: var(--formacoes-text-primary) !important;
+}
+
+/* ==========================================================================
+   TABELAS - CORREÇÃO COMPLETA
+   ========================================================================== */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin: var(--spacing-xl) 0;
+  border-radius: var(--formacoes-border-radius-table);
+  background: transparent;
+  position: relative;
+}
+
+/* Estilo base da tabela */
+.table-responsive table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  min-width: 650px;
+  table-layout: auto;
+  margin: 0 auto;
+  display: table;
+  background-color: transparent;
+}
+
+/* Células da tabela */
+.table-responsive th,
+.table-responsive td {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 1px solid var(--formacoes-border-light);
+  text-align: left;
+  vertical-align: middle;
+  background-color: transparent;
+}
+
+/* Cabeçalho */
+.table-responsive th {
+  background: rgba(214, 174, 100, 0.1);
+  color: var(--formacoes-gold) !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Células de dados */
+.table-responsive td {
+  background: transparent;
+  color: var(--formacoes-text-secondary) !important;
+}
+
+.table-responsive td strong {
+  color: var(--formacoes-text-primary) !important;
+}
+
+/* Efeito hover nas linhas */
+.table-responsive tbody tr {
+  transition: background var(--formacoes-transition);
+}
+
+.table-responsive tbody tr:hover td {
+  background: rgba(214, 174, 100, 0.05);
+}
+
+/* Ícones dentro da tabela */
+.table-responsive td i {
+  font-size: 1rem;
+  margin-right: var(--spacing-xs);
+  vertical-align: middle;
+  color: var(--formacoes-gold);
+}
+
+/* Alinhamento das colunas - GARANTE CENTRALIZAÇÃO */
+.table-responsive th:first-child,
+.table-responsive td:first-child {
+  text-align: left;
+  font-weight: 600;
+  width: 35%;
+}
+
+.table-responsive th:not(:first-child),
+.table-responsive td:not(:first-child) {
+  text-align: center;
+  width: 32.5%;
+}
+
+/* ==========================================================================
+   ANIMAÇÃO DE BORDA
+   ========================================================================== */
+.animated-border {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-radius: var(--formacoes-border-radius-card);
+  z-index: 0;
+}
+
+.animated-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: calc(var(--formacoes-border-radius-card) + 2px);
+  background: linear-gradient(300deg, 
+    rgba(214, 174, 100, 0.5), 
+    rgba(0, 102, 204, 0.5), 
+    rgba(204, 51, 51, 0.5), 
+    rgba(214, 174, 100, 0.5));
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: borderRotate 6s ease infinite;
+  transition: opacity 0.3s, animation-duration 0.3s;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.animated-border:hover::before {
+  opacity: 0.9;
+  animation-duration: 3s;
+}
+
+@keyframes borderRotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==========================================================================
+   BOTÕES
+   ========================================================================== */
+.btn-primary,
+.btn-secondary,
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all var(--formacoes-transition);
+  cursor: pointer;
+  border: none;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.btn-primary {
+  background: var(--formacoes-gold) !important;
+  color: #000000 !important;
+}
+
+.btn-primary:hover {
+  background: #c49b4c !important;
+  transform: scale(1.02);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--formacoes-gold);
+  color: var(--formacoes-text-primary) !important;
+}
+
+.btn-secondary:hover {
+  background: rgba(214, 174, 100, 0.1);
+  transform: scale(1.02);
+}
+
+.btn-link {
+  background: transparent;
+  color: var(--formacoes-gold) !important;
+  padding: var(--spacing-xs) var(--spacing-md);
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   FEEDBACKS E DEPOIMENTOS
+   ========================================================================== */
+.feedback-card {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-radius: var(--formacoes-border-radius-card);
+  padding: var(--spacing-xl);
+  height: 100%;
+  transition: all var(--formacoes-transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.feedback-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.feedback-card i.fa-quote-left {
+  font-size: 2rem;
+  color: var(--formacoes-gold);
+  opacity: 0.4;
+  margin-bottom: var(--spacing-md);
+  display: block;
+}
+
+.feedback-card p {
+  color: var(--formacoes-text-secondary) !important;
+}
+
+.feedback-card strong {
+  color: var(--formacoes-text-primary) !important;
+}
+
+.avatar-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--formacoes-gold) !important;
+  color: #000000 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.estrelas {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin: var(--spacing-xs) 0;
+}
+
+.estrelas i {
+  color: var(--formacoes-gold);
+  font-size: 0.9rem;
+}
+
+.mt-2 {
+  margin-top: var(--spacing-xs);
+}
+
+/* ==========================================================================
+   FAQ ACCORDION
+   ========================================================================== */
+.faq-list {
+  margin: var(--spacing-xl) 0;
+  width: 100%;
+}
+
+.faq-item {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-radius: 16px;
+  margin-bottom: var(--spacing-md);
+  border: 1px solid var(--formacoes-border-light);
+  transition: all var(--formacoes-transition);
+  width: 100%;
+}
+
+.faq-item:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.faq-question {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all var(--formacoes-transition);
+  min-height: 60px;
+  width: 100%;
+  color: var(--formacoes-text-primary) !important;
+}
+
+.faq-question i {
+  font-size: 1.25rem;
+  width: 32px;
+  flex-shrink: 0;
+  color: var(--formacoes-gold);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 var(--spacing-xl) 0 calc(var(--spacing-xl) + 32px);
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.faq-answer.open {
+  max-height: 300px;
+  padding-bottom: var(--spacing-lg);
+}
+
+.faq-answer p {
+  color: var(--formacoes-text-tertiary) !important;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.faq-question[aria-expanded="true"] {
+  color: var(--formacoes-gold) !important;
+}
+
+/* ==========================================================================
+   CTA FINAL
+   ========================================================================== */
+.cta-duo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+  margin: var(--spacing-xl) 0;
+  width: 100%;
+}
+
+.cta-card {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-radius: 24px;
+  padding: var(--spacing-xl);
+  text-align: center;
+  transition: all var(--formacoes-transition);
+  width: 100%;
+}
+
+.cta-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.cta-card h3 {
+  margin-bottom: var(--spacing-md);
+  font-size: 1.5rem;
+  color: var(--formacoes-text-primary) !important;
+}
+
+.cta-card p {
+  color: var(--formacoes-text-secondary) !important;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* ==========================================================================
+   SEÇÃO COMO FUNCIONA
+   ========================================================================== */
+.teca-page.formacoes-presenciais > section:nth-of-type(8) > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  width: 100%;
+}
+
+.teca-page.formacoes-presenciais > section:nth-of-type(8) > div > div {
+  background: rgba(255, 255, 255, 0.03) !important;
+  padding: var(--spacing-lg);
+  border-radius: 12px;
+  text-align: center;
+  transition: all var(--formacoes-transition);
+}
+
+.teca-page.formacoes-presenciais > section:nth-of-type(8) > div > div:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  transform: translateY(-3px);
+}
+
+.teca-page.formacoes-presenciais > section:nth-of-type(8) > div > div i {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  color: var(--formacoes-gold);
+}
+
+.teca-page.formacoes-presenciais > section:nth-of-type(8) > div > div strong {
+  color: var(--formacoes-text-primary) !important;
+}
+
+.teca-page.formacoes-presenciais > section:nth-of-type(8) > div > div {
+  color: var(--formacoes-text-secondary) !important;
+}
+
+/* ==========================================================================
+   ÍCONES GLOBAIS
+   ========================================================================== */
+i[class^="fa-"],
+i[class*=" fa-"] {
+  color: var(--formacoes-gold);
+}
+
+.btn-primary i,
+.btn-secondary i,
+.btn-link i {
+  color: currentColor;
+}
+
+/* ==========================================================================
+   ANIMAÇÕES DE REVELAÇÃO
+   ========================================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - TABLET (768px - 1024px)
+   ========================================================================== */
+@media screen and (max-width: 1024px) {
+  .grid-cards {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+  }
+  
+  .card-categoria {
+    min-height: 480px;
+    padding: var(--spacing-lg);
+  }
+  
+  .table-responsive th,
+  .table-responsive td {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - MOBILE (< 768px)
+   ========================================================================== */
+@media screen and (max-width: 767px) {
+  .teca-page.formacoes-presenciais {
+    padding: var(--spacing-lg) 0 var(--spacing-2xl);
+  }
+  
+  .teca-page.formacoes-presenciais > section {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .grid-cards {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+  
+  .card-categoria {
+    min-height: auto;
+    padding: var(--spacing-lg);
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .badge,
+  .badge-gold {
+    font-size: 0.75rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .flex-row {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-xs);
+  }
+  
+  .section-title {
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .section-title::after {
+    width: 40px;
+  }
+  
+  .table-responsive {
+    margin: var(--spacing-lg) 0;
+  }
+  
+  .table-responsive th,
+  .table-responsive td {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.8rem;
+  }
+  
+  .table-responsive th:first-child,
+  .table-responsive td:first-child {
+    width: 40%;
+  }
+  
+  .faq-question {
+    padding: var(--spacing-md) var(--spacing-lg);
+    gap: var(--spacing-sm);
+    font-size: 0.9rem;
+  }
+  
+  .faq-question i {
+    font-size: 1rem;
+    width: 24px;
+  }
+  
+  .faq-answer {
+    padding: 0 var(--spacing-lg) 0 calc(var(--spacing-lg) + 24px);
+  }
+  
+  .faq-answer.open {
+    padding-bottom: var(--spacing-md);
+  }
+  
+  .cta-duo {
+    gap: var(--spacing-lg);
+  }
+  
+  .cta-card {
+    padding: var(--spacing-lg);
+  }
+  
+  .cta-card h3 {
+    font-size: 1.25rem;
+  }
+  
+  .avatar-circle {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+  
+  .feedback-card {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE - MOBILE PEQUENO (< 480px)
+   ========================================================================== */
+@media screen and (max-width: 480px) {
+  .teca-page.formacoes-presenciais {
+    padding: var(--spacing-md) 0 var(--spacing-xl);
+  }
+  
+  h1 {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  h3 {
+    font-size: 1.125rem;
+  }
+  
+  .card-categoria {
+    padding: var(--spacing-md);
+  }
+  
+  .card-categoria ul {
+    margin: var(--spacing-sm) 0;
+  }
+  
+  .card-categoria li {
+    font-size: 0.85rem;
+    padding-left: var(--spacing-md);
+  }
+  
+  .table-responsive {
+    margin: var(--spacing-md) 0;
+  }
+  
+  .table-responsive table {
+    min-width: 550px;
+  }
+  
+  .table-responsive th,
+  .table-responsive td {
+    padding: var(--spacing-xs);
+    font-size: 0.75rem;
+  }
+  
+  .table-responsive th:first-child,
+  .table-responsive td:first-child {
+    width: 45%;
+  }
+  
+  .faq-question {
+    font-size: 0.85rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .faq-answer p {
+    font-size: 0.8rem;
+  }
+  
+  .estrelas i {
+    font-size: 0.75rem;
+  }
+}
+
+/* ==========================================================================
+   SUPORTE A PREFERÊNCIA DE MOVIMENTO REDUZIDO
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animated-border::before {
+    animation: none;
+    opacity: 0.3;
+  }
+  
+  .card-categoria:hover {
+    transform: none;
+  }
+  
+  .reveal {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   SUPORTE A ALTO CONTRASTE
+   ========================================================================== */
+@media (prefers-contrast: high) {
+  :root {
+    --formacoes-gold: #ffd700;
+    --formacoes-border-light: #ffffff;
+    --formacoes-text-primary: #ffffff;
+    --formacoes-text-secondary: #ffffff;
+    --formacoes-text-tertiary: #f0f0f0;
+  }
+  
+  .badge {
+    border-width: 2px;
+  }
+  
+  .table-responsive th {
+    background: rgba(255, 215, 0, 0.2);
+  }
+  
+  .card-categoria {
+    border-left-width: 6px;
+  }
+}
+
+ul {
+    list-style: none;
+     li  {
+        color: var(--formacoes-text-primary);
+     }
+  }

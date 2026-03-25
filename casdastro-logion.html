@@ -69,46 +69,44 @@
         </div>
     </header>
 
-   <main>
-
-        <!-- Formulário TECA Capital - Totalmente encapsulado -->
-        <div class="teca-form-container">
-            <div class="teca-form-card">
-                <!-- Cabeçalho do formulário -->
-                <div class="teca-form-header">
-                    <div class="teca-form-logo">
-                        <i class="fas fa-chart-line" style="color: rgb(214, 174, 100);"></i>
-                        <span>TECA CAPITAL</span>
+   <main id="teca-main">
+            <!-- Decoração de fundo -->
+            <div class="teca-bg-grid"></div>
+            
+            <section class="teca-container">
+                <!-- Cabeçalho -->
+                <div class="teca-section-header">
+                    <div class="teca-brand">
+                        <h1 class="teca-title">TECA CAPITAL - EdTech</h1>
                     </div>
-                    <p class="teca-form-subtitle">Acesso à plataforma de investimentos</p>
+                    <p class="teca-subtitle">Educação Prática, Com Os Nossos Laboratórios Digitais</p>
+                    <div class="teca-divider"></div>
                 </div>
 
-                <!-- Navegação principal (Cadastro/Login) -->
-                <div class="teca-nav-container">
-                    <div class="teca-nav-buttons">
+                <!-- Painel principal -->
+                <div class="teca-panel">
+                    <nav class="teca-nav">
                         <button class="teca-nav-btn active" data-mode="cadastro">
-                            <i class="fas fa-user-plus"></i>
-                            Cadastramento
+                            <i class="fas fa-user-plus"></i> Criar Conta
                         </button>
                         <button class="teca-nav-btn" data-mode="login">
-                            <i class="fas fa-sign-in-alt"></i>
-                            Login
+                            <i class="fas fa-sign-in-alt"></i> Entrar
                         </button>
+                    </nav>
+
+                    <div id="teca-message-container" class="teca-message-container"></div>
+                    <div id="teca-dynamic-form" class="teca-dynamic-form"></div>
+                </div>
+
+                <!-- Rodapé -->
+                <div class="teca-section-footer">
+                    <div class="teca-footer-content">
+                        <p><i class="fas fa-lock"></i> Conexão segura com encriptação SSL</p>
+                        <p><i class="fas fa-shield-alt"></i> Dados protegidos pela Lei Angolana n.º 22/11</p>
+                        <p><i class="fas fa-map-marker-alt"></i> Huambo, Angola</p>
                     </div>
-                    <div class="teca-nav-indicator"></div>
                 </div>
-
-                <!-- Container dinâmico do formulário -->
-                <div id="teca-dynamic-form" class="teca-dynamic-form">
-                    <!-- Conteúdo carregado via JavaScript -->
-                </div>
-
-                <!-- Mensagens de status -->
-                <div id="teca-message-container" class="teca-message-container"></div>
-            </div>
-        </div>
-
-
+        </section>
     </main>
     
     <footer class="site-footer">

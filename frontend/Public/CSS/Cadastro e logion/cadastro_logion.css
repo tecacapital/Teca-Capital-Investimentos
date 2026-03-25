@@ -1,423 +1,202 @@
-/* ===== TECA CAPITAL - FORMULÁRIO DINÂMICO ===== */
-/* Todos os estilos são encapsulados com prefixo teca- */
+/* ============================================================
+   TECA CAPITAL EDTECH - ESTILOS PRINCIPAIS 
+   ============================================================
+   Plataforma: Edtech Angolana
+   ============================================================ */
 
-/* Container principal - Respeita o contexto do site */
-.teca-form-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
+:root {
+    --gold: rgb(214, 174, 100);
+    --gold-dark: rgb(160, 126, 60);
+    --gold-light: rgba(214, 174, 100, 0.1);
+    --gold-glow: rgba(214, 174, 100, 0.15);
+    --gold-border: rgba(214, 174, 100, 0.30);
+    --blue: #1a6de8;
+    --blue-dark: #0e5ac4;
+    --blue-muted: rgba(26, 109, 232, 0.15);
+    --red: #d63031;
+    --red-muted: rgba(214, 48, 49, 0.15);
+    --green: #25D366;
+    --green-dark: #20b859;
+    --bg: #050505;
+    --bg-panel: #0d0d0d;
+    --bg-card: #111111;
+    --bg-input: #161616;
+    --bg-hover: #1a1a1a;
+    --text-white: #f0f0f0;
+    --text-muted: #888888;
+    --text-dim: #555555;
+    --border: rgba(255, 255, 255, 0.07);
+    --transition: all 0.3s ease;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
-/* Card do formulário */
-.teca-form-card {
-    background: rgba(20, 20, 20, 0.95);
-    border-radius: 24px;
-    padding: 2.5rem;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(214, 174, 100, 0.2);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+body {
+    background: var(--bg);
+    color: var(--text-white);
+    font-family: 'Segoe UI', 'Inter', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    margin-top: 45px;
 }
 
-.teca-form-card:hover {
-    border-color: rgba(214, 174, 100, 0.4);
-    box-shadow: 0 25px 50px rgba(214, 174, 100, 0.1);
-}
-
-/* Cabeçalho do formulário */
-.teca-form-header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-}
-
-.teca-form-logo {
+#teca-main {
+    position: relative;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    font-size: 2rem;
-    font-weight: 700;
-    color: white;
+    padding: 2rem 1rem;
+}
+
+.teca-bg-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(214, 174, 100, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(214, 174, 100, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.teca-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.teca-section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.teca-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
     margin-bottom: 0.5rem;
 }
 
-.teca-form-logo i {
+.teca-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    object-fit: cover;
+}
+
+.teca-title {
     font-size: 2.2rem;
-    color: rgb(214, 174, 100);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--gold) 0%, #ffffff 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.teca-form-subtitle {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 1rem;
-    letter-spacing: 0.5px;
+.teca-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
 
-/* Navegação entre Cadastro e Login */
-.teca-nav-container {
-    margin-bottom: 2.5rem;
-    position: relative;
+.teca-divider {
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1rem auto 0;
 }
 
-.teca-nav-buttons {
+.teca-panel {
+    background: var(--bg-panel);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.teca-nav {
     display: flex;
     gap: 1rem;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 0.5rem;
-    border-radius: 60px;
-    border: 1px solid rgba(214, 174, 100, 0.2);
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
 }
 
 .teca-nav-btn {
     flex: 1;
-    padding: 1rem 1.5rem;
+    background: transparent;
     border: none;
-    border-radius: 50px;
+    color: var(--text-muted);
     font-size: 1rem;
     font-weight: 600;
+    padding: 0.875rem 1rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: transparent;
-    color: rgba(255, 255, 255, 0.7);
+    transition: var(--transition);
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
-}
-
-.teca-nav-btn i {
-    font-size: 1.1rem;
-    transition: transform 0.3s ease;
-}
-
-.teca-nav-btn:hover {
-    color: white;
-    background: rgba(214, 174, 100, 0.1);
-}
-
-.teca-nav-btn:hover i {
-    transform: translateY(-2px);
 }
 
 .teca-nav-btn.active {
-    background: rgb(214, 174, 100);
-    color: black;
-    box-shadow: 0 8px 20px rgba(214, 174, 100, 0.3);
+    background: var(--gold-glow);
+    color: var(--gold);
 }
 
-.teca-nav-btn.active i {
-    color: black;
+.teca-nav-btn:hover:not(.active) {
+    color: var(--text-white);
+    background: var(--bg-hover);
 }
 
-/* Seletor de tipo de usuário */
-.teca-type-selector {
+.teca-message-container {
     margin-bottom: 2rem;
 }
 
-.teca-type-label {
-    display: block;
-    color: white;
-    font-size: 0.95rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
-    letter-spacing: 0.5px;
-}
-
-.teca-type-options {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 0.75rem;
-}
-
-.teca-type-option {
-    position: relative;
-}
-
-.teca-type-option input[type="radio"] {
-    display: none;
-}
-
-.teca-type-option label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.875rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
-}
-
-.teca-type-option label i {
-    color: rgb(214, 174, 100);
-    font-size: 1rem;
-}
-
-.teca-type-option input[type="radio"]:checked + label {
-    background: rgba(214, 174, 100, 0.15);
-    border-color: rgb(214, 174, 100);
-    color: rgb(214, 174, 100);
-    box-shadow: 0 4px 12px rgba(214, 174, 100, 0.2);
-}
-
-.teca-type-option input[type="radio"]:checked + label i {
-    color: rgb(214, 174, 100);
-}
-
-.teca-type-option label:hover {
-    background: rgba(214, 174, 100, 0.1);
-    border-color: rgba(214, 174, 100, 0.3);
-    transform: translateY(-2px);
-}
-
-/* Formulário dinâmico */
-.teca-dynamic-form {
-    transition: opacity 0.3s ease;
-}
-
-.teca-form-section {
-    animation: tecaFadeIn 0.5s ease;
-}
-
-@keyframes tecaFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Grid de campos */
-.teca-form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-}
-
-.teca-form-group {
-    margin-bottom: 1rem;
-}
-
-.teca-form-group.full-width {
-    grid-column: span 2;
-}
-
-.teca-form-group label {
-    display: block;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-
-.teca-form-group label i {
-    color: rgb(214, 174, 100);
-    margin-right: 0.5rem;
-    font-size: 0.9rem;
-}
-
-/* Inputs e selects */
-.teca-form-group input,
-.teca-form-group select,
-.teca-form-group textarea {
-    width: 100%;
-    padding: 0.875rem 1rem;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: white;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-}
-
-.teca-form-group input:focus,
-.teca-form-group select:focus,
-.teca-form-group textarea:focus {
-    outline: none;
-    border-color: rgb(214, 174, 100);
-    background: rgba(214, 174, 100, 0.05);
-    box-shadow: 0 0 0 3px rgba(214, 174, 100, 0.1);
-}
-
-.teca-form-group input:hover,
-.teca-form-group select:hover,
-.teca-form-group textarea:hover {
-    border-color: rgba(214, 174, 100, 0.5);
-}
-
-.teca-form-group input:disabled,
-.teca-form-group select:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background: rgba(0, 0, 0, 0.5);
-}
-
-/* Campo de valor fixo */
-.teca-fixed-value {
-    padding: 0.875rem 1rem;
-    background: rgba(214, 174, 100, 0.1);
-    border: 1px solid rgb(214, 174, 100);
-    border-radius: 12px;
-    color: rgb(214, 174, 100);
-    font-size: 1rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.teca-fixed-value i {
-    color: rgb(214, 174, 100);
-}
-
-/* Toggle Singular/Empresa */
-.teca-toggle-container {
-    display: flex;
-    gap: 0.5rem;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 0.25rem;
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.teca-toggle-btn {
-    flex: 1;
-    padding: 0.75rem 1rem;
-    border: none;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background: transparent;
-    color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.teca-toggle-btn i {
-    color: rgb(214, 174, 100);
-}
-
-.teca-toggle-btn.active {
-    background: rgb(214, 174, 100);
-    color: black;
-}
-
-.teca-toggle-btn.active i {
-    color: black;
-}
-
-/* Botão de WhatsApp */
-.teca-whatsapp-btn {
-    width: 100%;
-    padding: 1rem;
-    background: #25D366;
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-top: 0.5rem;
-}
-
-.teca-whatsapp-btn:hover {
-    background: #20bd5a;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
-}
-
-.teca-whatsapp-btn i {
-    font-size: 1.2rem;
-}
-
-/* Botão de submit */
-.teca-submit-btn {
-    width: 100%;
-    padding: 1.125rem;
-    background: rgb(214, 174, 100);
-    border: none;
-    border-radius: 16px;
-    color: black;
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-top: 2rem;
-    letter-spacing: 0.5px;
-}
-
-.teca-submit-btn:hover {
-    background: rgb(234, 194, 120);
-    transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(214, 174, 100, 0.3);
-}
-
-.teca-submit-btn i {
-    font-size: 1.1rem;
-}
-
-.teca-submit-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* Mensagens de erro */
-.teca-error-message {
-    color: #ff4444;
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-}
-
-.teca-error-message i {
-    font-size: 0.8rem;
-    color: #ff4444;
-}
-
-/* Mensagens de sucesso/erro gerais */
-.teca-message-container {
-    margin-top: 1.5rem;
-}
-
 .teca-message {
-    padding: 1rem 1.25rem;
-    border-radius: 12px;
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    font-size: 0.95rem;
-    animation: tecaSlideIn 0.3s ease;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    animation: slideIn 0.3s ease;
 }
 
-@keyframes tecaSlideIn {
+.teca-message.sucesso {
+    background: rgba(39, 174, 96, 0.12);
+    border-left: 3px solid #27ae60;
+    color: #27ae60;
+}
+
+.teca-message.erro {
+    background: var(--red-muted);
+    border-left: 3px solid var(--red);
+    color: var(--red);
+}
+
+.teca-message.aviso {
+    background: rgba(214, 174, 100, 0.12);
+    border-left: 3px solid var(--gold);
+    color: var(--gold);
+}
+
+@keyframes slideIn {
     from {
         opacity: 0;
         transform: translateY(-10px);
@@ -428,108 +207,1041 @@
     }
 }
 
-.teca-message.success {
-    background: rgba(214, 174, 100, 0.1);
-    border: 1px solid rgb(214, 174, 100);
-    color: rgb(214, 174, 100);
+.teca-type-selector {
+    margin-bottom: 2rem;
 }
 
-.teca-message.error {
-    background: rgba(255, 68, 68, 0.1);
-    border: 1px solid #ff4444;
-    color: #ff4444;
+.teca-type-label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.teca-message i {
-    font-size: 1.1rem;
+.teca-type-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
 }
 
-/* Info adicional */
-.teca-info-text {
-    color: rgba(255, 255, 255, 0.6);
+.teca-type-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.teca-type-option label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.teca-type-option input[type="radio"]:checked + label {
+    background: var(--gold-glow);
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.teca-type-option label:hover {
+    border-color: var(--gold-border);
+    background: var(--bg-hover);
+}
+
+.teca-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.teca-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.teca-form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.teca-form-group label {
     font-size: 0.85rem;
-    margin-top: 0.5rem;
+    font-weight: 500;
+    color: var(--text-muted);
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.teca-info-text i {
-    color: rgb(214, 174, 100);
+.teca-form-group input,
+.teca-form-group select,
+.teca-form-group textarea {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.875rem 1rem;
+    color: var(--text-white);
+    font-size: 0.9rem;
+    transition: var(--transition);
+    font-family: inherit;
+    width: 100%;
 }
 
-/* Loading state */
+.teca-form-group input:focus,
+.teca-form-group select:focus,
+.teca-form-group textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px var(--blue-muted);
+}
+
+.teca-form-group input:hover:not(:focus),
+.teca-form-group select:hover:not(:focus),
+.teca-form-group textarea:hover:not(:focus) {
+    border-color: var(--gold-border);
+    background: var(--bg-hover);
+}
+
+.teca-field-hint {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+}
+
+.teca-fixed-value {
+    background: var(--gold-glow);
+    border: 1px solid var(--gold-border);
+    border-radius: var(--radius-md);
+    padding: 0.875rem 1rem;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+}
+
+.teca-info-text {
+    background: var(--bg-card);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1rem 0;
+    border-left: 3px solid var(--gold);
+}
+
+.teca-info-text i {
+    color: var(--gold);
+}
+
+.teca-submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+    border: none;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    color: var(--bg);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.teca-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(214, 174, 100, 0.4);
+}
+
+.teca-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.teca-whatsapp-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+    border: none;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.teca-whatsapp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+.teca-toggle-container {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--bg-card);
+    padding: 0.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+.teca-toggle-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0.75rem;
+    border-radius: calc(var(--radius-md) - 4px);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.teca-toggle-btn.active {
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+    color: var(--bg);
+}
+
+.teca-toggle-btn:hover:not(.active) {
+    background: var(--bg-hover);
+    color: var(--text-white);
+}
+
+.teca-loader {
+    background: rgba(5, 5, 5, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--gold-border);
+}
+
 .teca-loading {
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 3px solid rgba(214, 174, 100, 0.3);
+    border: 2px solid var(--gold);
+    border-top-color: transparent;
     border-radius: 50%;
-    border-top-color: rgb(214, 174, 100);
-    animation: tecaSpin 1s ease-in-out infinite;
+    animation: spin 0.8s linear infinite;
 }
 
-@keyframes tecaSpin {
+@keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+.teca-senha-temporaria {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-panel));
+    border: 1px solid var(--gold-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+    animation: slideIn 0.3s ease;
+}
+
+.teca-senha-temporaria h4 {
+    color: var(--gold);
+    margin-bottom: 1rem;
+}
+
+.teca-senha-valor {
+    background: var(--bg);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    font-family: monospace;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    margin: 1rem 0;
+    border: 1px solid var(--gold-border);
+    font-weight: bold;
+}
+
+.teca-timer {
+    color: var(--red);
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+/* Termos de Uso */
+.teca-termos-container {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
+}
+
+.teca-termos-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    color: var(--gold);
+}
+
+.teca-termos-header h4 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.teca-termos-conteudo {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.teca-termos-conteudo ul {
+    margin: 0.5rem 0 0.5rem 1.5rem;
+}
+
+.teca-termos-conteudo li {
+    margin: 0.25rem 0;
+}
+
+.teca-termos-checkbox {
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+}
+
+.teca-termos-checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    color: var(--text-white);
+    font-size: 0.85rem;
+}
+
+.teca-termos-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--gold);
+}
+
+.teca-termos-checkbox i {
+    color: var(--gold);
+}
+
+.teca-section-footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.teca-footer-content {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.teca-footer-content p {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.teca-footer-content i {
+    color: var(--gold);
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
-    .teca-form-card {
-        padding: 1.5rem;
-    }
-
-    .teca-form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .teca-form-group.full-width {
-        grid-column: span 1;
-    }
-
-    .teca-nav-buttons {
-        flex-direction: column;
-        border-radius: 24px;
-    }
-
-    .teca-type-options {
-        grid-template-columns: 1fr;
-    }
-
-    .teca-toggle-container {
-        flex-direction: column;
-    }
+    .teca-panel { padding: 1.5rem; }
+    .teca-form-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .teca-type-options { grid-template-columns: repeat(2, 1fr); }
+    .teca-nav { flex-direction: column; }
+    .teca-title { font-size: 1.6rem; }
+    .teca-logo { width: 48px; height: 48px; }
+    .teca-footer-content { flex-direction: column; gap: 0.5rem; }
 }
 
-/* Animações adicionais */
-@keyframes tecaPulse {
-    0%, 100% {
+@media (max-width: 480px) {
+    .teca-panel { padding: 1rem; }
+    .teca-type-options { grid-template-columns: 1fr; }
+    .teca-type-option label { font-size: 0.85rem; padding: 0.75rem; }
+    .teca-submit-btn, .teca-whatsapp-btn { padding: 0.75rem; font-size: 0.9rem; }
+    .teca-senha-valor { font-size: 1rem; }
+    .teca-termos-container { padding: 1rem; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-card); }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* Focus visible */
+:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}/* ============================================================
+   TECA CAPITAL INVESTIMENTOS - ESTILOS PRINCIPAIS (V6)
+   ============================================================ */
+
+:root {
+    --gold: rgb(214, 174, 100);
+    --gold-dark: rgb(160, 126, 60);
+    --gold-light: rgba(214, 174, 100, 0.1);
+    --gold-glow: rgba(214, 174, 100, 0.15);
+    --gold-border: rgba(214, 174, 100, 0.30);
+    --blue: #1a6de8;
+    --blue-dark: #0e5ac4;
+    --blue-muted: rgba(26, 109, 232, 0.15);
+    --red: #d63031;
+    --red-muted: rgba(214, 48, 49, 0.15);
+    --green: #25D366;
+    --green-dark: #20b859;
+    --bg: #050505;
+    --bg-panel: #0d0d0d;
+    --bg-card: #111111;
+    --bg-input: #161616;
+    --bg-hover: #1a1a1a;
+    --text-white: #f0f0f0;
+    --text-muted: #888888;
+    --text-dim: #555555;
+    --border: rgba(255, 255, 255, 0.07);
+    --transition: all 0.3s ease;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text-white);
+    font-family: 'Segoe UI', 'Inter', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+#teca-main {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.teca-bg-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(214, 174, 100, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(214, 174, 100, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.teca-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.teca-section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.teca-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.teca-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+    object-fit: cover;
+}
+
+.teca-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--gold) 0%, #ffffff 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.teca-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.teca-divider {
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1rem auto 0;
+}
+
+.teca-panel {
+    background: var(--bg-panel);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.teca-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+}
+
+.teca-nav-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.875rem 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.teca-nav-btn.active {
+    background: var(--gold-glow);
+    color: var(--gold);
+}
+
+.teca-nav-btn:hover:not(.active) {
+    color: var(--text-white);
+    background: var(--bg-hover);
+}
+
+.teca-message-container {
+    margin-bottom: 2rem;
+}
+
+.teca-message {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    animation: slideIn 0.3s ease;
+}
+
+.teca-message.sucesso {
+    background: rgba(39, 174, 96, 0.12);
+    border-left: 3px solid #27ae60;
+    color: #27ae60;
+}
+
+.teca-message.erro {
+    background: var(--red-muted);
+    border-left: 3px solid var(--red);
+    color: var(--red);
+}
+
+.teca-message.aviso {
+    background: rgba(214, 174, 100, 0.12);
+    border-left: 3px solid var(--gold);
+    color: var(--gold);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
         opacity: 1;
-    }
-    50% {
-        opacity: 0.7;
+        transform: translateY(0);
     }
 }
 
-.teca-whatsapp-btn.pulse {
-    animation: tecaPulse 2s ease-in-out infinite;
+.teca-type-selector {
+    margin-bottom: 2rem;
 }
 
-/* Scrollbar personalizada */
-.teca-form-card::-webkit-scrollbar {
-    width: 8px;
+.teca-type-label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.teca-form-card::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
+.teca-type-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
 }
 
-.teca-form-card::-webkit-scrollbar-thumb {
-    background: rgba(214, 174, 100, 0.3);
-    border-radius: 4px;
+.teca-type-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
-.teca-form-card::-webkit-scrollbar-thumb:hover {
-    background: rgba(214, 174, 100, 0.5);
+.teca-type-option label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    font-weight: 500;
 }
+
+.teca-type-option input[type="radio"]:checked + label {
+    background: var(--gold-glow);
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.teca-type-option label:hover {
+    border-color: var(--gold-border);
+    background: var(--bg-hover);
+}
+
+.teca-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.teca-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.teca-form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.teca-form-group label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.teca-form-group input,
+.teca-form-group select,
+.teca-form-group textarea {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.875rem 1rem;
+    color: var(--text-white);
+    font-size: 0.9rem;
+    transition: var(--transition);
+    font-family: inherit;
+    width: 100%;
+}
+
+.teca-form-group input:focus,
+.teca-form-group select:focus,
+.teca-form-group textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px var(--blue-muted);
+}
+
+.teca-form-group input:hover:not(:focus),
+.teca-form-group select:hover:not(:focus),
+.teca-form-group textarea:hover:not(:focus) {
+    border-color: var(--gold-border);
+    background: var(--bg-hover);
+}
+
+.teca-field-hint {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+}
+
+.teca-fixed-value {
+    background: var(--gold-glow);
+    border: 1px solid var(--gold-border);
+    border-radius: var(--radius-md);
+    padding: 0.875rem 1rem;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+}
+
+.teca-info-text {
+    background: var(--bg-card);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1rem 0;
+    border-left: 3px solid var(--gold);
+}
+
+.teca-info-text i {
+    color: var(--gold);
+}
+
+.teca-submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+    border: none;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    color: var(--bg);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.teca-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(214, 174, 100, 0.4);
+}
+
+.teca-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.teca-whatsapp-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+    border: none;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.teca-whatsapp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+.teca-toggle-container {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--bg-card);
+    padding: 0.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+.teca-toggle-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0.75rem;
+    border-radius: calc(var(--radius-md) - 4px);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.teca-toggle-btn.active {
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+    color: var(--bg);
+}
+
+.teca-toggle-btn:hover:not(.active) {
+    background: var(--bg-hover);
+    color: var(--text-white);
+}
+
+.teca-loader {
+    background: rgba(5, 5, 5, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--gold-border);
+}
+
+.teca-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--gold);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.teca-senha-temporaria {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-panel));
+    border: 1px solid var(--gold-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+    animation: slideIn 0.3s ease;
+}
+
+.teca-senha-temporaria h4 {
+    color: var(--gold);
+    margin-bottom: 1rem;
+}
+
+.teca-senha-valor {
+    background: var(--bg);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    font-family: monospace;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    margin: 1rem 0;
+    border: 1px solid var(--gold-border);
+    font-weight: bold;
+}
+
+.teca-timer {
+    color: var(--red);
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+/* Termos de Uso */
+.teca-termos-container {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
+}
+
+.teca-termos-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    color: var(--gold);
+}
+
+.teca-termos-header h4 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.teca-termos-conteudo {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.teca-termos-conteudo ul {
+    margin: 0.5rem 0 0.5rem 1.5rem;
+}
+
+.teca-termos-conteudo li {
+    margin: 0.25rem 0;
+}
+
+.teca-termos-checkbox {
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+}
+
+.teca-termos-checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    color: var(--text-white);
+    font-size: 0.85rem;
+}
+
+.teca-termos-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--gold);
+}
+
+.teca-termos-checkbox i {
+    color: var(--gold);
+}
+
+.teca-section-footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.teca-footer-content {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.teca-footer-content p {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.teca-footer-content i {
+    color: var(--gold);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .teca-panel { padding: 1.5rem; }
+    .teca-form-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .teca-type-options { grid-template-columns: repeat(2, 1fr); }
+    .teca-nav { flex-direction: column; }
+    .teca-title { font-size: 1.6rem; }
+    .teca-logo { width: 48px; height: 48px; }
+    .teca-footer-content { flex-direction: column; gap: 0.5rem; }
+}
+
+@media (max-width: 480px) {
+    .teca-panel { padding: 1rem; }
+    .teca-type-options { grid-template-columns: 1fr; }
+    .teca-type-option label { font-size: 0.85rem; padding: 0.75rem; }
+    .teca-submit-btn, .teca-whatsapp-btn { padding: 0.75rem; font-size: 0.9rem; }
+    .teca-senha-valor { font-size: 1rem; }
+    .teca-termos-container { padding: 1rem; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-card); }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* Focus visible */
+:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
