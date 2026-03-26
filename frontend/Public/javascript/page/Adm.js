@@ -1,35 +1,175 @@
 // ============================================================
-// TECA CAPITAL EDTECH - PAINEL ADMINISTRATIVO (V1)
+// TECA CAPITAL EDTECH - PAINEL ADMINISTRATIVO V2 (RECONSTRUÇÃO COMPLETA)
 // ============================================================
-// Integrado ao sistema de login existente
-// Controle de sessão: 2 minutos de inatividade com aviso
+// Versão: 2.0
+// Data: 26/03/2026
+// Autor: Engenharia Sénior
+// Descrição: Sistema administrativo completo com gestão de sessão,
+//            dashboard, gestão de utilizadores por aba, insights financeiros,
+//            visualização de senhas com toggle, logs de login, etc.
 // ============================================================
 
-// Configuração
+// ============================================================
+// SECÇÃO 1 — CONFIGURAÇÃO GLOBAL
+// ============================================================
+
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzeahMxXzXIDou1hTshRYLmSPeHRFx5RmQvEe5iFP717iKbvyTt1covpO-ydpzmiD_Abg/exec';
 
-// Status badges configuration
+// ============================================================
+// MAPA DE ABAS — FONTE DE VERDADE ÚNICA
+// ============================================================
+const MAPA_ABAS = {
+    dashboard: {
+        idHTML: 'dashboard',
+        cacheKey: 'dashboard',
+        icone: 'fa-tachometer-alt',
+        label: 'Dashboard'
+    },
+    parceiros: {
+        nomeAba: 'Parceiros',
+        idHTML: 'parceiros',
+        cacheKey: 'aba_parceiros',
+        colunas: ['ID', 'Nome', 'Email', 'Telefone', 'Região', 'Função', 'Status', 'Data Registo', 'Expiração', 'Ações'],
+        temStatus: true,
+        temFuncao: true,
+        temTurma: false,
+        temValor: true,
+        temInstituicao: false,
+        temSenha: true,
+        icone: 'fa-handshake',
+        label: 'Parceiros'
+    },
+    simuladores: {
+        nomeAba: 'Simuladores-Bibliotecas',
+        idHTML: 'simuladores',
+        cacheKey: 'aba_simuladores',
+        colunas: ['ID', 'Nome', 'Email', 'Telefone', 'Região', 'Valor Pago', 'Status', 'Data Registo', 'Expiração', 'Ações'],
+        temStatus: true,
+        temFuncao: false,
+        temTurma: false,
+        temValor: true,
+        temInstituicao: false,
+        temSenha: true,
+        icone: 'fa-calculator',
+        label: 'Simuladores e Biblioteca'
+    },
+    cursos: {
+        nomeAba: 'Cursos Online',
+        idHTML: 'cursos',
+        cacheKey: 'aba_cursos',
+        colunas: ['ID', 'Nome', 'Email', 'Telefone', 'Região', 'Turma', 'Valor', 'Status', 'Data Registo', 'Expiração', 'Ações'],
+        temStatus: true,
+        temFuncao: false,
+        temTurma: true,
+        temValor: true,
+        temInstituicao: false,
+        temSenha: true,
+        icone: 'fa-video',
+        label: 'Cursos Online'
+    },
+    formacao: {
+        nomeAba: 'Formação Presencial',
+        idHTML: 'formacao',
+        cacheKey: 'aba_formacao',
+        colunas: ['ID', 'Nome', 'Email', 'Telefone', 'Região', 'Instituição', 'Turma', 'Valor', 'Status', 'Data Registo', 'Expiração', 'Ações'],
+        temStatus: true,
+        temFuncao: false,
+        temTurma: true,
+        temValor: true,
+        temInstituicao: true,
+        temSenha: true,
+        icone: 'fa-chalkboard-teacher',
+        label: 'Formação Presencial'
+    },
+    servicos: {
+        nomeAba: 'Serviços Personalizados',
+        idHTML: 'servicos',
+        cacheKey: 'aba_servicos',
+        colunas: ['ID', 'Nome', 'Email', 'Telefone', 'Proposta Valor', 'Descrição', 'Status', 'Data Registo', 'Ações'],
+        temStatus: true,
+        temFuncao: false,
+        temTurma: false,
+        temValor: true,
+        temInstituicao: false,
+        temSenha: false,
+        icone: 'fa-concierge-bell',
+        label: 'Serviços Personalizados'
+    },
+    naopagos: {
+        nomeAba: 'Usuários Não Pagos',
+        idHTML: 'naopagos',
+        cacheKey: 'aba_naopagos',
+        colunas: ['ID', 'Nome', 'Email', 'Telefone', 'Região', 'Data Registo', 'Expiração', 'Ações'],
+        temStatus: false,
+        temFuncao: false,
+        temTurma: false,
+        temValor: false,
+        temInstituicao: false,
+        temSenha: true,
+        icone: 'fa-user-slash',
+        label: 'Usuários Não Pagos'
+    },
+    todos: {
+        nomeAba: null,
+        idHTML: 'todos',
+        cacheKey: 'aba_todos',
+        colunas: ['ID', 'Nome', 'Email', 'Telefone', 'Região', 'Tipo', 'Planilha', 'Status', 'Data Registo', 'Expiração', 'Ações'],
+        temStatus: true,
+        temFuncao: false,
+        temTurma: false,
+        temValor: false,
+        temInstituicao: false,
+        temSenha: true,
+        icone: 'fa-users',
+        label: 'Todos os Utilizadores'
+    }
+};
+
+// ============================================================
+// STATUS CONFIGURATION
+// ============================================================
 const STATUS_CONFIG = {
-    'aguardando validacao': { cor: 'var(--gold)', icone: 'fa-clock', label: 'Aguardando' },
+    'aguardando validacao': { cor: 'var(--orange)', icone: 'fa-clock', label: 'Aguardando' },
     'aprovado': { cor: 'var(--green)', icone: 'fa-check-circle', label: 'Aprovado' },
     'removido': { cor: 'var(--red)', icone: 'fa-ban', label: 'Removido' },
     'negociacao': { cor: 'var(--blue)', icone: 'fa-handshake', label: 'Negociação' },
     'fechado': { cor: 'var(--text-dim)', icone: 'fa-times-circle', label: 'Fechado' }
 };
 
-// Mapeamento de abas
-const ABAS_CONFIG = {
-    'Parceiros': { nome: 'Parceiros', temStatus: true, temFuncao: true, temTurma: false, temValor: true, temInstituicao: false },
-    'Simuladores-Bibliotecas': { nome: 'Simuladores-Bibliotecas', temStatus: true, temFuncao: false, temTurma: false, temValor: true, temInstituicao: false },
-    'Cursos Online': { nome: 'Cursos Online', temStatus: true, temFuncao: false, temTurma: true, temValor: true, temInstituicao: false },
-    'Formação Presencial': { nome: 'Formação Presencial', temStatus: true, temFuncao: false, temTurma: true, temValor: true, temInstituicao: true },
-    'Serviços Personalizados': { nome: 'Serviços Personalizados', temStatus: true, temFuncao: false, temTurma: false, temValor: true, temInstituicao: false, semSenha: true },
-    'Usuários Não Pagos': { nome: 'Usuários Não Pagos', temStatus: false, temFuncao: false, temTurma: false, temValor: false, temInstituicao: false }
-};
+// ============================================================
+// FUNÇÃO DE NORMALIZAÇÃO DE DADOS DO UTILIZADOR
+// ============================================================
+function normalizarUser(user) {
+    if (!user) return {};
+    
+    return {
+        ...user,
+        id: user.id || user.ID || '',
+        nome: user.nome || user['Nome do Usuário'] || user.NOME || '',
+        email: user.email || user.Email || user.EMAIL || '',
+        telefone: user.telefone || user['Número de Telefone'] || user.TELEFONE || '-',
+        regiao: user.regiao || user.Região || user.REGIAO || '-',
+        status: user.status || user.Status || user.STATUS || '',
+        funcao: user.funcao || user.Função || user.FUNCAO || '-',
+        valorPago: user.valorPago || user['Valor Pago'] || user.VALOR_PAGO || '-',
+        turma: user.turma || user.Turma || user.TURMA || '-',
+        instituicao: user.instituicao || user['Instituição Associada'] || user.INSTITUICAO || '-',
+        descricao: user.descricao || user.Descrição || user.DESCRICAO || '-',
+        senha: user.senha || user.Senha || user.SENHA || '',
+        dataRegistro: user.dataRegistro || user['Data de Registro'] || user.DATA_REGISTRO || '',
+        dataExpiracao: user.dataExpiracao || user['Data Para Expirar o Acesso'] || user.DATA_EXPIRACAO || 'Permanente',
+        dataNascimento: user.dataNascimento || user['Data de Nascimento'] || '-',
+        sexo: user.sexo || user.Sexo || '-',
+        pais: user.pais || user.País || 'Angola',
+        tipo: user.tipo || user['Tipo de Usuario'] || user.aba || '-',
+        aba: user.aba || ''
+    };
+}
 
 // ============================================================
-// CLASSE PRINCIPAL DO PAINEL ADMIN
+// SECÇÃO 2 — CLASSE AdminPanel
 // ============================================================
+
 class AdminPanel {
     constructor() {
         this.adminInfo = null;
@@ -39,34 +179,32 @@ class AdminPanel {
         this.paginacao = {};
         this.timerInactividade = null;
         this.timerAviso = null;
+        this.timerDisplay = null;
         this.TEMPO_MAX = 120000;
         this.TEMPO_AVISO = 90000;
         this.ultimaAtividade = Date.now();
         this.aguardandoConfirmacao = null;
+        this.logsLogin = [];
         
         this.init();
     }
-
+    
     // ============================================================
-    // INICIALIZAÇÃO
+    // 2.1 INICIALIZAÇÃO
     // ============================================================
     async init() {
-        // 1. Verificar acesso antes de tudo
         if (!this.verificarAcesso()) return;
         
-        // 2. Carregar info do admin
         this.carregarInfoAdmin();
-        
-        // 3. Iniciar timer de sessão
+        this.carregarLogsPersistidos();
+        this.registarLogLogin();
         this.iniciarTimerSessao();
-        
-        // 4. Attach eventos globais
         this.attachEventosGlobais();
+        this.iniciarTimerDisplay();
         
-        // 5. Carregar dashboard
         await this.navegarPara('dashboard');
     }
-
+    
     verificarAcesso() {
         const logado = sessionStorage.getItem('teca_logado');
         const tipo = sessionStorage.getItem('teca_tipo');
@@ -77,42 +215,81 @@ class AdminPanel {
         }
         return true;
     }
-
+    
     carregarInfoAdmin() {
         const usuarioStr = sessionStorage.getItem('teca_utilizador');
         if (usuarioStr) {
             this.adminInfo = JSON.parse(usuarioStr);
-            document.getElementById('adm-admin-nome').textContent = this.adminInfo.nome || 'Administrador';
+            const nomeEl = document.getElementById('adm-admin-nome');
+            if (nomeEl) nomeEl.textContent = this.adminInfo.nome || 'Administrador';
         }
     }
-
+    
+    carregarLogsPersistidos() {
+        try {
+            const logsSalvos = sessionStorage.getItem('teca_logs');
+            if (logsSalvos) {
+                this.logsLogin = JSON.parse(logsSalvos);
+            }
+        } catch (e) {
+            console.error('Erro ao carregar logs:', e);
+        }
+    }
+    
+    registarLogLogin() {
+        this.registarLog({
+            tipo: 'success',
+            acao: 'LOGIN',
+            utilizador: this.adminInfo?.nome || 'Administrador',
+            tipoUtilizador: 'Administrador',
+            detalhes: `Sessão iniciada — ${new Date().toLocaleString('pt-PT')}`
+        });
+    }
+    
+    registarLog(dadosLog) {
+        const log = {
+            timestamp: new Date().toLocaleString('pt-PT'),
+            ...dadosLog
+        };
+        this.logsLogin.unshift(log);
+        
+        if (this.logsLogin.length > 200) this.logsLogin.pop();
+        
+        try {
+            sessionStorage.setItem('teca_logs', JSON.stringify(this.logsLogin.slice(0, 50)));
+        } catch (e) {}
+    }
+    
     // ============================================================
-    // CONTROLE DE SESSÃO
+    // 2.2 CONTROLE DE SESSÃO
     // ============================================================
     iniciarTimerSessao() {
         this.resetarTimer();
         
-        // Eventos que reiniciam o contador
         const eventos = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'];
         eventos.forEach(evento => {
             document.addEventListener(evento, () => this.resetarTimer());
         });
     }
-
+    
     resetarTimer() {
         this.ultimaAtividade = Date.now();
-        this.atualizarTimerDisplay();
         
         if (this.timerAviso) clearTimeout(this.timerAviso);
         if (this.timerInactividade) clearTimeout(this.timerInactividade);
         
-        // Agendar aviso (90 segundos)
         this.timerAviso = setTimeout(() => this.mostrarAvisoSessao(), this.TEMPO_AVISO);
-        
-        // Agendar logout (120 segundos)
         this.timerInactividade = setTimeout(() => this.logoutAutomatico(), this.TEMPO_MAX);
     }
-
+    
+    iniciarTimerDisplay() {
+        if (this.timerDisplay) clearInterval(this.timerDisplay);
+        
+        this.timerDisplay = setInterval(() => {
+            this.atualizarTimerDisplay();
+        }, 1000);
+    }
+    
     atualizarTimerDisplay() {
         const tempoDecorrido = Date.now() - this.ultimaAtividade;
         const tempoRestante = Math.max(0, this.TEMPO_MAX - tempoDecorrido);
@@ -126,11 +303,13 @@ class AdminPanel {
         if (timerDisplay) timerDisplay.textContent = display;
         if (topbarTimer) topbarTimer.textContent = display;
     }
-
+    
     mostrarAvisoSessao() {
         let tempoRestante = 30;
         const modal = document.getElementById('adm-modal-sessao');
         const timerSpan = document.getElementById('adm-tempo-restante');
+        
+        if (!modal) return;
         
         modal.style.display = 'flex';
         
@@ -153,37 +332,44 @@ class AdminPanel {
         };
         continuarBtn.addEventListener('click', continuarHandler);
     }
-
+    
     logoutAutomatico() {
         this.mostrarToast('Sessão expirada por inatividade. Faça login novamente.', 'aviso');
         this.logout();
     }
-
+    
     logout() {
         if (this.timerInactividade) clearTimeout(this.timerInactividade);
         if (this.timerAviso) clearTimeout(this.timerAviso);
+        if (this.timerDisplay) clearInterval(this.timerDisplay);
+        
+        this.registarLog({
+            tipo: 'info',
+            acao: 'LOGOUT',
+            utilizador: this.adminInfo?.nome || 'Administrador',
+            tipoUtilizador: 'Administrador',
+            detalhes: 'Sessão encerrada'
+        });
+        
         sessionStorage.removeItem('teca_logado');
         sessionStorage.removeItem('teca_utilizador');
         sessionStorage.removeItem('teca_tipo');
         window.location.href = 'index.html';
     }
-
+    
     // ============================================================
-    // EVENTOS GLOBAIS
+    // 2.3 EVENTOS GLOBAIS
     // ============================================================
     attachEventosGlobais() {
-        // Logout manual
-        document.getElementById('adm-logout-btn').addEventListener('click', () => this.logout());
+        document.getElementById('adm-logout-btn')?.addEventListener('click', () => this.logout());
         
-        // Navegação sidebar
         document.querySelectorAll('.adm-nav-item').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const secao = btn.dataset.secao;
-                this.navegarPara(secao);
+                if (secao) this.navegarPara(secao);
             });
         });
         
-        // Menu toggle mobile
         const menuToggle = document.getElementById('adm-menu-toggle');
         const sidebar = document.getElementById('adm-sidebar');
         if (menuToggle && sidebar) {
@@ -192,55 +378,103 @@ class AdminPanel {
             });
         }
         
-        // Refresh buttons
         document.querySelectorAll('.adm-btn-refresh').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const aba = btn.dataset.aba;
                 if (aba === 'todos') {
-                    this.carregarTodosUtilizadores(true);
-                } else {
-                    this.carregarDadosAba(aba, true);
+                    this.carregarTodos(true);
+                } else if (aba) {
+                    const config = Object.values(MAPA_ABAS).find(c => c.nomeAba === aba || c.idHTML === aba);
+                    if (config) this.carregarDadosSecao(config.idHTML, true);
                 }
             });
         });
         
-        // Export buttons
         document.querySelectorAll('.adm-btn-export').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const aba = btn.dataset.aba;
-                this.exportarCSV(aba);
+                if (aba) {
+                    const config = Object.values(MAPA_ABAS).find(c => c.nomeAba === aba || c.idHTML === aba);
+                    if (config) this.exportarCSV(config.idHTML);
+                }
             });
         });
         
-        // Clear filters buttons
         document.querySelectorAll('.adm-btn-clear').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const aba = btn.dataset.aba;
-                this.limparFiltros(aba);
+                if (aba) {
+                    const config = Object.values(MAPA_ABAS).find(c => c.nomeAba === aba || c.idHTML === aba);
+                    if (config) this.limparFiltros(config.idHTML);
+                }
             });
         });
         
-        // Search inputs
-        const abas = ['parceiros', 'simuladores', 'cursos', 'formacao', 'servicos', 'naopagos', 'todos'];
-        abas.forEach(aba => {
-            const searchInput = document.getElementById(`adm-search-${aba}`);
-            if (searchInput) {
-                searchInput.addEventListener('input', (e) => {
-                    this.estadoFiltros[aba] = this.estadoFiltros[aba] || {};
-                    this.estadoFiltros[aba].texto = e.target.value;
-                    this.aplicarFiltros(aba);
+        // Inputs de busca com debounce
+        const idsBusca = ['parceiros', 'simuladores', 'cursos', 'formacao', 'servicos', 'naopagos', 'todos'];
+        idsBusca.forEach(id => {
+            const input = document.getElementById(`adm-search-${id}`);
+            if (input) {
+                let debounceTimeout;
+                input.addEventListener('input', (e) => {
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(() => {
+                        this.estadoFiltros[id] = this.estadoFiltros[id] || {};
+                        this.estadoFiltros[id].texto = e.target.value;
+                        this.aplicarFiltros(id);
+                    }, 300);
                 });
             }
         });
         
-        // Fechar modal ao clicar fora
+        // Filtros de região e status para cada aba
+        Object.keys(MAPA_ABAS).forEach(idHTML => {
+            if (idHTML === 'dashboard') return;
+            
+            const regiaoSelect = document.getElementById(`adm-filtro-regiao-${idHTML}`);
+            if (regiaoSelect) {
+                regiaoSelect.addEventListener('change', () => {
+                    this.estadoFiltros[idHTML] = this.estadoFiltros[idHTML] || {};
+                    this.estadoFiltros[idHTML].regiao = regiaoSelect.value;
+                    this.aplicarFiltros(idHTML);
+                });
+            }
+            
+            const statusSelect = document.getElementById(`adm-filtro-status-${idHTML}`);
+            if (statusSelect && MAPA_ABAS[idHTML].temStatus) {
+                statusSelect.addEventListener('change', () => {
+                    this.estadoFiltros[idHTML] = this.estadoFiltros[idHTML] || {};
+                    this.estadoFiltros[idHTML].status = statusSelect.value;
+                    this.aplicarFiltros(idHTML);
+                });
+            }
+        });
+        
+        // Filtros especiais para a aba "todos"
+        const tipoSelect = document.getElementById('adm-filtro-tipo-todos');
+        if (tipoSelect) {
+            tipoSelect.addEventListener('change', () => {
+                this.estadoFiltros.todos = this.estadoFiltros.todos || {};
+                this.estadoFiltros.todos.tipo = tipoSelect.value;
+                this.aplicarFiltros('todos');
+            });
+        }
+        
+        const abaSelect = document.getElementById('adm-filtro-aba-todos');
+        if (abaSelect) {
+            abaSelect.addEventListener('change', () => {
+                this.estadoFiltros.todos = this.estadoFiltros.todos || {};
+                this.estadoFiltros.todos.aba = abaSelect.value;
+                this.aplicarFiltros('todos');
+            });
+        }
+        
         window.addEventListener('click', (e) => {
-            if (e.target.classList.contains('adm-modal')) {
+            if (e.target.classList && e.target.classList.contains('adm-modal')) {
                 e.target.style.display = 'none';
             }
         });
         
-        // Confirm modal buttons
         document.getElementById('adm-confirm-cancelar')?.addEventListener('click', () => {
             document.getElementById('adm-modal-confirmacao').style.display = 'none';
             this.aguardandoConfirmacao = null;
@@ -254,105 +488,141 @@ class AdminPanel {
             document.getElementById('adm-modal-confirmacao').style.display = 'none';
         });
     }
-
+    
     // ============================================================
-    // NAVEGAÇÃO
+    // 2.4 NAVEGAÇÃO
     // ============================================================
     async navegarPara(secao) {
         this.secaoActiva = secao;
         
-        // Atualizar sidebar
         document.querySelectorAll('.adm-nav-item').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.secao === secao);
         });
         
-        // Atualizar views
         document.querySelectorAll('.adm-secao').forEach(view => {
             view.classList.remove('active');
         });
+        
         const viewAtiva = document.getElementById(`adm-secao-${secao}`);
         if (viewAtiva) viewAtiva.classList.add('active');
         
-        // Fechar sidebar mobile
         const sidebar = document.getElementById('adm-sidebar');
         if (sidebar) sidebar.classList.remove('adm-sidebar-mobile-open');
         
-        // Carregar dados conforme secao
-        switch(secao) {
-            case 'dashboard':
-                await this.carregarDashboard();
-                break;
-            case 'parceiros':
-                await this.carregarDadosAba('Parceiros');
-                break;
-            case 'simuladores':
-                await this.carregarDadosAba('Simuladores-Bibliotecas');
-                break;
-            case 'cursos':
-                await this.carregarDadosAba('Cursos Online');
-                break;
-            case 'formacao':
-                await this.carregarDadosAba('Formação Presencial');
-                break;
-            case 'servicos':
-                await this.carregarDadosAba('Serviços Personalizados');
-                break;
-            case 'naopagos':
-                await this.carregarDadosAba('Usuários Não Pagos');
-                break;
-            case 'todos':
-                await this.carregarTodosUtilizadores();
-                break;
+        if (secao === 'dashboard') {
+            await this.carregarDashboard();
+        } else if (MAPA_ABAS[secao]) {
+            await this.carregarDadosSecao(secao);
         }
     }
-
+    
     // ============================================================
-    // BACKEND COMMUNICATION
+    // 2.5 COMUNICAÇÃO COM BACKEND
     // ============================================================
+    async chamarBackendGet(params) {
+        const url = new URL(APPS_SCRIPT_URL);
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        
+        try {
+            const resposta = await fetch(url.toString(), {
+                method: 'GET',
+                signal: controller.signal,
+                redirect: 'follow'
+            });
+            clearTimeout(timeoutId);
+            
+            if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+            const dados = await resposta.json();
+            
+            this.registarLog({
+                tipo: 'info',
+                acao: 'DADOS_CARREGADOS',
+                utilizador: this.adminInfo?.nome || 'Sistema',
+                tipoUtilizador: 'Sistema',
+                detalhes: `GET ${JSON.stringify(params)} — Sucesso`
+            });
+            
+            return dados;
+        } catch (erro) {
+            clearTimeout(timeoutId);
+            console.error('Erro GET:', erro);
+            
+            this.registarLog({
+                tipo: 'error',
+                acao: 'ERRO_API',
+                utilizador: this.adminInfo?.nome || 'Sistema',
+                tipoUtilizador: 'Sistema',
+                detalhes: `GET ${JSON.stringify(params)} — ${erro.message}`
+            });
+            
+            return { status: 'error', mensagem: 'Erro de conexão com o servidor' };
+        }
+    }
+    
     async chamarBackendPost(payload) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        
         try {
             const resposta = await fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
                 body: JSON.stringify(payload),
+                signal: controller.signal,
                 redirect: 'follow'
             });
-            if (!resposta.ok) throw new Error(`Erro HTTP: ${resposta.status}`);
-            return await resposta.json();
+            clearTimeout(timeoutId);
+            
+            if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+            const dados = await resposta.json();
+            
+            this.registarLog({
+                tipo: dados.status === 'success' ? 'success' : 'error',
+                acao: payload.acao.toUpperCase(),
+                utilizador: this.adminInfo?.nome || 'Sistema',
+                tipoUtilizador: 'Administrador',
+                detalhes: `${payload.acao} — ${dados.mensagem || 'Executado'}`
+            });
+            
+            return dados;
         } catch (erro) {
-            console.error('Erro na comunicação:', erro);
+            clearTimeout(timeoutId);
+            console.error('Erro POST:', erro);
+            
+            this.registarLog({
+                tipo: 'error',
+                acao: 'ERRO_API',
+                utilizador: this.adminInfo?.nome || 'Sistema',
+                tipoUtilizador: 'Sistema',
+                detalhes: `POST ${payload.acao} — ${erro.message}`
+            });
+            
             return { status: 'error', mensagem: 'Erro de conexão com o servidor' };
         }
     }
-
-    async chamarBackendGet(params) {
-        const url = new URL(APPS_SCRIPT_URL);
-        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-        try {
-            const resposta = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
-            if (!resposta.ok) throw new Error(`Erro HTTP: ${resposta.status}`);
-            return await resposta.json();
-        } catch (erro) {
-            console.error('Erro na comunicação:', erro);
-            return { status: 'error', mensagem: 'Erro de conexão com o servidor' };
-        }
-    }
-
+    
     // ============================================================
-    // DASHBOARD
+    // 2.6 DASHBOARD
     // ============================================================
     async carregarDashboard() {
         try {
             const resultado = await this.chamarBackendGet({ acao: 'listar' });
             if (resultado.status === 'success' && resultado.dados) {
-                this.calcularEstatisticas(resultado.dados);
-                this.renderizarUltimosCadastros(resultado.dados);
-                this.renderizarGrafico(resultado.dados);
+                const dadosNormalizados = resultado.dados.map(normalizarUser);
+                this.calcularEstatisticas(dadosNormalizados);
+                this.renderizarUltimosCadastros(dadosNormalizados);
+                this.renderizarGraficoBarras(dadosNormalizados);
+            } else {
+                this.mostrarToast('Erro ao carregar dashboard', 'erro');
             }
         } catch (error) {
+            console.error('Dashboard error:', error);
             this.mostrarToast('Erro ao carregar dashboard', 'erro');
         }
     }
-
+    
     calcularEstatisticas(dados) {
         const stats = {
             total: 0,
@@ -362,8 +632,19 @@ class AdminPanel {
             formacao: 0,
             servicos: 0,
             naopagos: 0,
-            aguardando: 0
+            aguardando: 0,
+            porStatus: {},
+            porRegiao: {},
+            ultimos30Dias: 0,
+            expirados: 0,
+            aExpirar30Dias: 0
         };
+        
+        const hoje = new Date();
+        const trintaDiasAtras = new Date();
+        trintaDiasAtras.setDate(hoje.getDate() - 30);
+        const trintaDiasFrente = new Date();
+        trintaDiasFrente.setDate(hoje.getDate() + 30);
         
         dados.forEach(user => {
             if (user.aba !== 'Administrador') {
@@ -379,12 +660,39 @@ class AdminPanel {
                 }
                 
                 if (user.status === 'aguardando validacao') stats.aguardando++;
+                if (user.status) stats.porStatus[user.status] = (stats.porStatus[user.status] || 0) + 1;
+                if (user.regiao && user.regiao !== '-') stats.porRegiao[user.regiao] = (stats.porRegiao[user.regiao] || 0) + 1;
+                
+                if (user.dataRegistro) {
+                    const dataReg = this.parseData(user.dataRegistro);
+                    if (dataReg && dataReg >= trintaDiasAtras) stats.ultimos30Dias++;
+                }
+                
+                if (user.dataExpiracao && user.dataExpiracao !== 'Permanente') {
+                    const dataExp = this.parseData(user.dataExpiracao);
+                    if (dataExp) {
+                        if (dataExp < hoje) stats.expirados++;
+                        else if (dataExp <= trintaDiasFrente) stats.aExpirar30Dias++;
+                    }
+                }
             }
         });
         
         this.renderizarCards(stats);
     }
-
+    
+    parseData(dataStr) {
+        if (!dataStr) return null;
+        if (dataStr.includes('/')) {
+            const partes = dataStr.split('/');
+            if (partes.length === 3) {
+                return new Date(parseInt(partes[2]), parseInt(partes[1]) - 1, parseInt(partes[0]));
+            }
+        }
+        const d = new Date(dataStr);
+        return isNaN(d.getTime()) ? null : d;
+    }
+    
     renderizarCards(stats) {
         const grid = document.getElementById('adm-stats-grid');
         if (!grid) return;
@@ -393,6 +701,7 @@ class AdminPanel {
             { valor: stats.total, label: 'Total de Utilizadores', icone: 'fa-users', cor: 'gold', secao: 'todos' },
             { valor: stats.parceiros, label: 'Parceiros', icone: 'fa-handshake', cor: 'gold', secao: 'parceiros' },
             { valor: stats.aguardando, label: 'Aguardando Validação', icone: 'fa-clock', cor: 'gold', secao: 'parceiros' },
+            { valor: stats.simuladores, label: 'Simuladores e Biblioteca', icone: 'fa-calculator', cor: 'blue', secao: 'simuladores' },
             { valor: stats.cursos, label: 'Cursos Online', icone: 'fa-video', cor: 'blue', secao: 'cursos' },
             { valor: stats.formacao, label: 'Formação Presencial', icone: 'fa-chalkboard-teacher', cor: 'blue', secao: 'formacao' },
             { valor: stats.servicos, label: 'Serviços Personalizados', icone: 'fa-concierge-bell', cor: 'blue', secao: 'servicos' },
@@ -409,7 +718,6 @@ class AdminPanel {
             </div>
         `).join('');
         
-        // Adicionar evento de clique nos cards
         grid.querySelectorAll('.adm-stat-card').forEach(card => {
             card.addEventListener('click', () => {
                 const secao = card.dataset.secao;
@@ -417,14 +725,14 @@ class AdminPanel {
             });
         });
     }
-
-    renderizarGrafico(dados) {
+    
+    renderizarGraficoBarras(dados) {
         const container = document.getElementById('adm-grafico-barras');
         if (!container) return;
         
         const categorias = {
             'Parceiros': 0,
-            'Simuladores': 0,
+            'Simuladores-Bibliotecas': 0,
             'Cursos Online': 0,
             'Formação Presencial': 0,
             'Serviços Personalizados': 0,
@@ -447,7 +755,7 @@ class AdminPanel {
                         <div class="adm-grafico-bar">
                             <div class="adm-grafico-label">${categoria}</div>
                             <div class="adm-grafico-bar-container">
-                                <div class="adm-grafico-bar-fill" style="width: ${percentual}%; height: ${altura}px;"></div>
+                                <div class="adm-grafico-bar-fill" style="height: ${altura}px; width: 40px;"></div>
                             </div>
                             <div class="adm-grafico-valor">${valor} (${percentual}%)</div>
                         </div>
@@ -456,7 +764,7 @@ class AdminPanel {
             </div>
         `;
     }
-
+    
     renderizarUltimosCadastros(dados) {
         const tbody = document.getElementById('adm-ultimos-body');
         if (!tbody) return;
@@ -481,48 +789,56 @@ class AdminPanel {
             </tr>
         `).join('');
     }
-
+    
     // ============================================================
-    // CARREGAMENTO DE DADOS POR ABA
+    // 2.7 CARREGAMENTO DE DADOS POR SECÇÃO
     // ============================================================
-    async carregarDadosAba(aba, forceReload = false) {
-        const cacheKey = `aba_${aba}`;
+    async carregarDadosSecao(idHTML, forceReload = false) {
+        const config = MAPA_ABAS[idHTML];
+        if (!config || !config.nomeAba) {
+            if (idHTML === 'todos') return this.carregarTodos(forceReload);
+            return;
+        }
+        
+        const cacheKey = config.cacheKey;
         const agora = Date.now();
         
         if (!forceReload && this.dadosCache.has(cacheKey)) {
             const cached = this.dadosCache.get(cacheKey);
-            if (agora - cached.timestamp < 60000) { // 60 segundos de cache
+            if (agora - cached.timestamp < 60000) {
                 this.dadosFiltrados = cached.dados;
-                this.renderizarTabela(aba, cached.dados);
-                this.inicializarFiltros(aba, cached.dados);
+                this.renderizarTabela(idHTML, cached.dados);
+                this.inicializarFiltros(idHTML, cached.dados);
                 return;
             }
         }
         
-        this.mostrarSkeleton(aba);
+        this.mostrarSkeleton(idHTML);
         
         try {
-            const resultado = await this.chamarBackendGet({ acao: 'listar', aba: aba });
+            const resultado = await this.chamarBackendGet({ acao: 'listar', aba: config.nomeAba });
             if (resultado.status === 'success' && resultado.dados) {
+                const dadosNormalizados = resultado.dados.map(normalizarUser);
                 this.dadosCache.set(cacheKey, {
-                    dados: resultado.dados,
+                    dados: dadosNormalizados,
                     timestamp: agora
                 });
-                this.dadosFiltrados = resultado.dados;
-                this.renderizarTabela(aba, resultado.dados);
-                this.inicializarFiltros(aba, resultado.dados);
+                this.dadosFiltrados = dadosNormalizados;
+                this.renderizarTabela(idHTML, dadosNormalizados);
+                this.inicializarFiltros(idHTML, dadosNormalizados);
             } else {
-                this.mostrarToast(`Erro ao carregar ${aba}`, 'erro');
-                this.renderizarTabela(aba, []);
+                this.mostrarToast(`Erro ao carregar ${config.label}`, 'erro');
+                this.renderizarTabela(idHTML, []);
             }
         } catch (error) {
-            this.mostrarToast(`Erro ao carregar ${aba}`, 'erro');
-            this.renderizarTabela(aba, []);
+            console.error(`Erro ao carregar ${idHTML}:`, error);
+            this.mostrarToast(`Erro ao carregar ${config.label}`, 'erro');
+            this.renderizarTabela(idHTML, []);
         }
     }
-
-    async carregarTodosUtilizadores(forceReload = false) {
-        const cacheKey = 'todos_utilizadores';
+    
+    async carregarTodos(forceReload = false) {
+        const cacheKey = MAPA_ABAS.todos.cacheKey;
         const agora = Date.now();
         
         if (!forceReload && this.dadosCache.has(cacheKey)) {
@@ -540,7 +856,7 @@ class AdminPanel {
         try {
             const resultado = await this.chamarBackendGet({ acao: 'listar' });
             if (resultado.status === 'success' && resultado.dados) {
-                const dadosFiltrados = resultado.dados.filter(u => u.aba !== 'Administrador');
+                const dadosFiltrados = resultado.dados.filter(u => u.aba !== 'Administrador').map(normalizarUser);
                 this.dadosCache.set(cacheKey, {
                     dados: dadosFiltrados,
                     timestamp: agora
@@ -549,7 +865,6 @@ class AdminPanel {
                 this.renderizarTabela('todos', dadosFiltrados);
                 this.inicializarFiltros('todos', dadosFiltrados);
                 
-                // Populate aba filter
                 const abasUnicas = [...new Set(dadosFiltrados.map(u => u.aba))];
                 const abaSelect = document.getElementById('adm-filtro-aba-todos');
                 if (abaSelect) {
@@ -561,171 +876,120 @@ class AdminPanel {
                 this.renderizarTabela('todos', []);
             }
         } catch (error) {
+            console.error('Erro ao carregar todos:', error);
             this.mostrarToast('Erro ao carregar todos os utilizadores', 'erro');
             this.renderizarTabela('todos', []);
         }
     }
-
+    
     // ============================================================
-    // RENDERIZAÇÃO DE TABELAS
+    // 2.8 RENDERIZAÇÃO DE TABELAS (CORRIGIDA)
     // ============================================================
-    renderizarTabela(aba, dados) {
-        const tbody = document.getElementById(`adm-table-body-${aba.toLowerCase()}`);
+    renderizarTabela(idHTML, dados) {
+        const config = MAPA_ABAS[idHTML];
+        if (!config) return;
+        
+        const tbody = document.getElementById(`adm-table-body-${config.idHTML}`);
+        const contadorSpan = document.getElementById(`adm-contador-${config.idHTML}`);
+        
         if (!tbody) return;
         
         if (!dados || dados.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="10" class="adm-text-center">Nenhum registro encontrado</td></tr>';
-            document.getElementById(`adm-contador-${aba.toLowerCase()}`).textContent = '0';
+            tbody.innerHTML = '}<tr><td colspan="10" class="adm-text-center">Nenhum registro encontrado</td></tr>';
+            if (contadorSpan) contadorSpan.textContent = '0';
             return;
         }
         
-        const config = ABAS_CONFIG[aba] || { temStatus: true, temFuncao: false, temTurma: false, temValor: true, temInstituicao: false };
         const registrosPorPagina = 20;
-        const paginaActual = this.paginacao[aba]?.pagina || 1;
+        const paginaActual = this.paginacao[idHTML]?.pagina || 1;
         const inicio = (paginaActual - 1) * registrosPorPagina;
         const paginados = dados.slice(inicio, inicio + registrosPorPagina);
         
-        document.getElementById(`adm-contador-${aba.toLowerCase()}`).textContent = dados.length;
+        if (contadorSpan) contadorSpan.textContent = dados.length;
         
-        tbody.innerHTML = paginados.map(user => this.renderizarLinhaTabela(user, aba, config)).join('');
-        this.renderizarPaginacao(aba, dados.length, registrosPorPagina, paginaActual);
+        tbody.innerHTML = paginados.map(user => this.renderizarLinhaTabela(user, idHTML)).join('');
+        this.renderizarPaginacao(idHTML, dados.length, registrosPorPagina, paginaActual);
     }
-
-    renderizarLinhaTabela(user, aba, config) {
+    
+    renderizarLinhaTabela(user, idHTML) {
+        const config = MAPA_ABAS[idHTML];
+        if (!config) return '';
+        
         const statusBadge = config.temStatus ? this.renderizarStatusBadge(user.status) : '<span class="adm-badge adm-badge-neutral">N/A</span>';
-        const acoes = this.renderizarAcoes(user, aba, config);
+        const acoes = this.renderizarAcoes(user, idHTML);
+        
+        const nome = this.escapeHtml(user.nome || '-');
+        const email = this.escapeHtml(user.email || '-');
+        const telefone = user.telefone || '-';
+        const regiao = user.regiao || '-';
+        const dataRegistro = this.formatarData(user.dataRegistro);
+        const dataExpiracao = user.dataExpiracao || 'Permanente';
         
         const colunasBase = `
             <td>${user.id || '-'}</td>
-            <td>${this.escapeHtml(user.nome || '-')}</td>
-            <td>${this.escapeHtml(user.email || '-')}</td>
-            <td>${user.telefone || '-'}</td>
-            <td>${user.regiao || '-'}</td>
+            <td>${nome}</td>
+            <td>${email}</td>
+            <td>${telefone}</td>
+            <td>${regiao}</td>
         `;
         
-        if (aba === 'Parceiros') {
-            return `<tr>
-                ${colunasBase}
-                <td>${user.funcao || '-'}</td>
-                <td>${statusBadge}</td>
-                <td>${this.formatarData(user.dataRegistro)}</td>
-                <td>${user.dataExpiracao || 'Permanente'}</td>
-                ${acoes}
-            </tr>`;
+        switch(idHTML) {
+            case 'parceiros':
+                return `<tr>${colunasBase}<td>${user.funcao || '-'}</td><td>${statusBadge}</td><td>${dataRegistro}</td><td>${dataExpiracao}</td>${acoes}</tr>`;
+            case 'simuladores':
+                return `<tr>${colunasBase}<td>${user.valorPago || '-'}</td><td>${statusBadge}</td><td>${dataRegistro}</td><td>${dataExpiracao}</td>${acoes}</tr>`;
+            case 'cursos':
+                return `<tr>${colunasBase}<td>${user.turma || '-'}</td><td>${user.valorPago || '-'}</td><td>${statusBadge}</td><td>${dataRegistro}</td><td>${dataExpiracao}</td>${acoes}</tr>`;
+            case 'formacao':
+                return `<tr>${colunasBase}<td>${user.instituicao || '-'}</td><td>${user.turma || '-'}</td><td>${user.valorPago || '-'}</td><td>${statusBadge}</td><td>${dataRegistro}</td><td>${dataExpiracao}</td>${acoes}</tr>`;
+            case 'servicos':
+                return `<tr><td>${user.id || '-'}</td><td>${nome}</td><td>${email}</td><td>${telefone}</td><td title="${user.valorPago}">${this.truncarTexto(user.valorPago || '-', 30)}</td><td title="${user.descricao}">${this.truncarTexto(user.descricao || '-', 40)}</td><td>${statusBadge}</td><td>${dataRegistro}</td>${acoes}</tr>`;
+            case 'naopagos':
+                return `<tr>${colunasBase}<td>${dataRegistro}</td><td>${dataExpiracao}</td>${acoes}</tr>`;
+            case 'todos':
+                return `<tr><td>${user.id || '-'}</td><td>${nome}</td><td>${email}</td><td>${telefone}</td><td>${regiao}</td><td>${user.tipo || user.aba || '-'}</td><td>${user.aba || '-'}</td><td>${user.status ? this.renderizarStatusBadge(user.status) : '<span class="adm-badge adm-badge-neutral">N/A</span>'}</td><td>${dataRegistro}</td><td>${dataExpiracao}</td>${acoes}</tr>`;
+            default:
+                return `<tr>${colunasBase}<td colspan="4">${statusBadge}${acoes}</td></tr>`;
         }
-        
-        if (aba === 'Simuladores-Bibliotecas') {
-            return `<tr>
-                ${colunasBase}
-                <td>${user.valorPago || '-'}</td>
-                <td>${statusBadge}</td>
-                <td>${this.formatarData(user.dataRegistro)}</td>
-                <td>${user.dataExpiracao || '-'}</td>
-                ${acoes}
-            </tr>`;
-        }
-        
-        if (aba === 'Cursos Online') {
-            return `<tr>
-                ${colunasBase}
-                <td>${user.turma || '-'}</td>
-                <td>${user.valorPago || '-'}</td>
-                <td>${statusBadge}</td>
-                <td>${this.formatarData(user.dataRegistro)}</td>
-                <td>${user.dataExpiracao || '-'}</td>
-                ${acoes}
-            </tr>`;
-        }
-        
-        if (aba === 'Formação Presencial') {
-            return `<tr>
-                ${colunasBase}
-                <td>${user.instituicao || '-'}</td>
-                <td>${user.turma || '-'}</td>
-                <td>${user.valorPago || '-'}</td>
-                <td>${statusBadge}</td>
-                <td>${this.formatarData(user.dataRegistro)}</td>
-                <td>${user.dataExpiracao || '-'}</td>
-                ${acoes}
-            </tr>`;
-        }
-        
-        if (aba === 'Serviços Personalizados') {
-            return `<tr>
-                <td>${user.id || '-'}</td>
-                <td>${this.escapeHtml(user.nome || '-')}</td>
-                <td>${this.escapeHtml(user.email || '-')}</td>
-                <td>${user.telefone || '-'}</td>
-                <td title="${this.escapeHtml(user.valorPago || '-')}">${this.truncarTexto(user.valorPago || '-', 30)}</td>
-                <td title="${this.escapeHtml(user.descricao || '-')}">${this.truncarTexto(user.descricao || '-', 40)}</td>
-                <td>${statusBadge}</td>
-                <td>${this.formatarData(user.dataRegistro)}</td>
-                ${acoes}
-            </tr>`;
-        }
-        
-        if (aba === 'Usuários Não Pagos') {
-            return `<tr>
-                ${colunasBase}
-                <td>${this.formatarData(user.dataRegistro)}</td>
-                <td>${user.dataExpiracao || '-'}</td>
-                ${acoes}
-            </tr>`;
-        }
-        
-        if (aba === 'todos') {
-            return `<tr>
-                <td>${user.id || '-'}</td>
-                <td>${this.escapeHtml(user.nome || '-')}</td>
-                <td>${this.escapeHtml(user.email || '-')}</td>
-                <td>${user.telefone || '-'}</td>
-                <td>${user.regiao || '-'}</td>
-                <td>${user.tipo || user.aba || '-'}</td>
-                <td>${user.aba || '-'}</td>
-                <td>${user.status ? this.renderizarStatusBadge(user.status) : '<span class="adm-badge adm-badge-neutral">N/A</span>'}</td>
-                <td>${this.formatarData(user.dataRegistro)}</td>
-                <td>${user.dataExpiracao || 'Permanente'}</td>
-                ${acoes}
-            </tr>`;
-        }
-        
-        return `<tr>${colunasBase}<td colspan="4">${statusBadge}${acoes}</td></tr>`;
     }
-
+    
     renderizarStatusBadge(status) {
         const config = STATUS_CONFIG[status] || { cor: 'var(--text-dim)', icone: 'fa-question', label: status || 'Desconhecido' };
         return `<span class="adm-badge" style="background: ${config.cor}20; color: ${config.cor}; border-color: ${config.cor}40;">
             <i class="fas ${config.icone}"></i> ${config.label}
         </span>`;
     }
-
-    renderizarAcoes(user, aba, config) {
-        const isServicos = aba === 'Serviços Personalizados';
-        const isNaoPagos = aba === 'Usuários Não Pagos';
-        const isParceiros = aba === 'Parceiros';
+    
+    renderizarAcoes(user, idHTML) {
+        const config = MAPA_ABAS[idHTML];
+        if (!config) return '<td class="adm-actions"></td>';
         
-        let botoes = `<button class="adm-btn-icon adm-btn-view" onclick="adminPanel.abrirModalDetalhes('${user.id}', '${aba}')" title="Ver detalhes"><i class="fas fa-eye"></i></button>`;
+        const isServicos = idHTML === 'servicos';
+        const isNaoPagos = idHTML === 'naopagos';
+        const isParceiros = idHTML === 'parceiros';
+        
+        let botoes = `<button class="adm-btn-icon adm-btn-view" onclick="adminPanel.abrirModalDetalhes('${user.id}', '${idHTML}')" title="Ver detalhes"><i class="fas fa-eye"></i></button>`;
         
         if (isParceiros && user.status !== 'aprovado') {
-            botoes += `<button class="adm-btn-icon adm-btn-approve" onclick="adminPanel.aprovarUtilizador('${user.id}', '${aba}', '${this.escapeHtml(user.nome)}')" title="Aprovar"><i class="fas fa-check-circle"></i></button>`;
+            botoes += `<button class="adm-btn-icon adm-btn-approve" onclick="adminPanel.aprovarUtilizador('${user.id}', '${idHTML}', '${this.escapeHtml(user.nome)}')" title="Aprovar"><i class="fas fa-check-circle"></i></button>`;
         }
         
         if (!isNaoPagos && config.temStatus && user.status !== 'removido') {
-            botoes += `<button class="adm-btn-icon adm-btn-block" onclick="adminPanel.bloquearUtilizador('${user.id}', '${aba}', '${this.escapeHtml(user.nome)}')" title="Bloquear"><i class="fas fa-ban"></i></button>`;
+            botoes += `<button class="adm-btn-icon adm-btn-block" onclick="adminPanel.bloquearUtilizador('${user.id}', '${idHTML}', '${this.escapeHtml(user.nome)}')" title="Bloquear"><i class="fas fa-ban"></i></button>`;
         }
         
         if (!isServicos && !isNaoPagos) {
-            botoes += `<button class="adm-btn-icon adm-btn-renew" onclick="adminPanel.renovarAcesso('${user.email}', '${aba}')" title="Renovar acesso"><i class="fas fa-sync-alt"></i></button>`;
+            botoes += `<button class="adm-btn-icon adm-btn-renew" onclick="adminPanel.renovarAcesso('${user.email}', '${idHTML}')" title="Renovar acesso"><i class="fas fa-sync-alt"></i></button>`;
         }
         
-        botoes += `<button class="adm-btn-icon adm-btn-delete" onclick="adminPanel.removerUtilizador('${user.id}', '${aba}', '${this.escapeHtml(user.nome)}')" title="Remover"><i class="fas fa-trash-alt"></i></button>`;
+        botoes += `<button class="adm-btn-icon adm-btn-delete" onclick="adminPanel.removerUtilizador('${user.id}', '${idHTML}', '${this.escapeHtml(user.nome)}')" title="Remover"><i class="fas fa-trash-alt"></i></button>`;
         
         return `<td class="adm-actions">${botoes}</td>`;
     }
-
-    renderizarPaginacao(aba, total, porPagina, paginaActual) {
+    
+    renderizarPaginacao(idHTML, total, porPagina, paginaActual) {
         const totalPaginas = Math.ceil(total / porPagina);
-        const container = document.getElementById(`adm-paginacao-${aba.toLowerCase()}`);
+        const container = document.getElementById(`adm-paginacao-${idHTML}`);
         if (!container) return;
         
         if (totalPaginas <= 1) {
@@ -755,48 +1019,51 @@ class AdminPanel {
                 btn.addEventListener('click', () => {
                     const novaPagina = parseInt(btn.dataset.pag);
                     if (!isNaN(novaPagina)) {
-                        this.paginacao[aba] = this.paginacao[aba] || {};
-                        this.paginacao[aba].pagina = novaPagina;
-                        this.aplicarFiltros(aba);
+                        this.paginacao[idHTML] = this.paginacao[idHTML] || {};
+                        this.paginacao[idHTML].pagina = novaPagina;
+                        this.aplicarFiltros(idHTML);
                     }
                 });
             }
         });
     }
-
-    mostrarSkeleton(aba) {
-        const tbody = document.getElementById(`adm-table-body-${aba.toLowerCase()}`);
+    
+    mostrarSkeleton(idHTML) {
+        const tbody = document.getElementById(`adm-table-body-${idHTML}`);
         if (tbody) {
             tbody.innerHTML = '<tr><td colspan="10" class="adm-text-center"><div class="adm-skeleton"></div> Carregando...</td></tr>';
         }
     }
-
+    
     // ============================================================
-    // FILTROS E BUSCA
+    // 2.9 FILTROS E BUSCA
     // ============================================================
-    inicializarFiltros(aba, dados) {
-        const regioesUnicas = [...new Set(dados.map(u => u.regiao).filter(r => r))];
+    inicializarFiltros(idHTML, dados) {
+        const regioesUnicas = [...new Set(dados.map(u => u.regiao).filter(r => r && r !== '-'))];
         const statusUnicos = [...new Set(dados.map(u => u.status).filter(s => s))];
         
-        const regiaoSelect = document.getElementById(`adm-filtro-regiao-${aba.toLowerCase()}`);
+        const regiaoSelect = document.getElementById(`adm-filtro-regiao-${idHTML}`);
         if (regiaoSelect) {
             regiaoSelect.innerHTML = '<option value="">Todas as regiões</option>' + 
                 regioesUnicas.map(r => `<option value="${r}">${r}</option>`).join('');
         }
         
-        const statusSelect = document.getElementById(`adm-filtro-status-${aba.toLowerCase()}`);
-        if (statusSelect && aba !== 'naopagos') {
+        const statusSelect = document.getElementById(`adm-filtro-status-${idHTML}`);
+        if (statusSelect && MAPA_ABAS[idHTML]?.temStatus) {
             statusSelect.innerHTML = '<option value="">Todos os status</option>' + 
                 statusUnicos.map(s => `<option value="${s}">${STATUS_CONFIG[s]?.label || s}</option>`).join('');
         }
     }
-
-    aplicarFiltros(aba) {
-        const cacheKey = `aba_${aba === 'todos' ? 'todos_utilizadores' : `aba_${aba}`}`;
+    
+    aplicarFiltros(idHTML) {
+        const config = MAPA_ABAS[idHTML];
+        if (!config) return;
+        
+        const cacheKey = config.cacheKey;
         const cached = this.dadosCache.get(cacheKey);
         if (!cached) return;
         
-        const filtros = this.estadoFiltros[aba] || {};
+        const filtros = this.estadoFiltros[idHTML] || {};
         let dadosFiltrados = [...cached.dados];
         
         if (filtros.texto) {
@@ -811,11 +1078,11 @@ class AdminPanel {
             dadosFiltrados = dadosFiltrados.filter(u => u.regiao === filtros.regiao);
         }
         
-        if (filtros.status && aba !== 'naopagos') {
+        if (filtros.status && config.temStatus) {
             dadosFiltrados = dadosFiltrados.filter(u => u.status === filtros.status);
         }
         
-        if (aba === 'todos') {
+        if (idHTML === 'todos') {
             if (filtros.tipo) {
                 dadosFiltrados = dadosFiltrados.filter(u => u.tipo === filtros.tipo);
             }
@@ -824,59 +1091,78 @@ class AdminPanel {
             }
         }
         
-        this.renderizarTabela(aba, dadosFiltrados);
+        this.renderizarTabela(idHTML, dadosFiltrados);
         
-        const contadorSpan = document.getElementById(`adm-contador-${aba.toLowerCase()}`);
+        const contadorSpan = document.getElementById(`adm-contador-${idHTML}`);
         if (contadorSpan) contadorSpan.textContent = dadosFiltrados.length;
     }
-
-    limparFiltros(aba) {
-        this.estadoFiltros[aba] = {};
+    
+    limparFiltros(idHTML) {
+        this.estadoFiltros[idHTML] = {};
         
-        const searchInput = document.getElementById(`adm-search-${aba.toLowerCase()}`);
+        const searchInput = document.getElementById(`adm-search-${idHTML}`);
         if (searchInput) searchInput.value = '';
         
-        const regiaoSelect = document.getElementById(`adm-filtro-regiao-${aba.toLowerCase()}`);
+        const regiaoSelect = document.getElementById(`adm-filtro-regiao-${idHTML}`);
         if (regiaoSelect) regiaoSelect.value = '';
         
-        const statusSelect = document.getElementById(`adm-filtro-status-${aba.toLowerCase()}`);
+        const statusSelect = document.getElementById(`adm-filtro-status-${idHTML}`);
         if (statusSelect) statusSelect.value = '';
         
-        if (aba === 'todos') {
+        if (idHTML === 'todos') {
             const tipoSelect = document.getElementById('adm-filtro-tipo-todos');
             if (tipoSelect) tipoSelect.value = '';
             const abaSelect = document.getElementById('adm-filtro-aba-todos');
             if (abaSelect) abaSelect.value = '';
         }
         
-        this.aplicarFiltros(aba);
+        this.aplicarFiltros(idHTML);
     }
-
+    
     // ============================================================
-    // AÇÕES SOBRE UTILIZADORES
+    // 2.10 MODAL DE DETALHES COM SENHA TOGGLE
     // ============================================================
-    async abrirModalDetalhes(id, aba) {
+    async abrirModalDetalhes(id, idHTML) {
         const modal = document.getElementById('adm-modal-detalhes');
         const conteudo = document.getElementById('adm-detalhes-conteudo');
+        
+        if (!modal || !conteudo) return;
+        
         conteudo.innerHTML = '<div class="adm-detalhes-loading">Carregando dados...</div>';
         modal.style.display = 'flex';
         
         try {
-            const resultado = await this.chamarBackendGet({ acao: 'buscarUsuario', id: id, aba: aba });
-            if (resultado.status === 'success' && resultado.dados) {
-                const user = resultado.dados;
-                conteudo.innerHTML = this.renderizarDetalhesUsuario(user, aba);
+            let user = null;
+            const config = MAPA_ABAS[idHTML];
+            const cacheKey = config?.cacheKey;
+            
+            if (cacheKey && this.dadosCache.has(cacheKey)) {
+                const cached = this.dadosCache.get(cacheKey);
+                user = cached.dados.find(u => u.id == id);
+            }
+            
+            if (!user && config?.nomeAba) {
+                const resultado = await this.chamarBackendGet({ acao: 'buscarUsuario', id: id, aba: config.nomeAba });
+                if (resultado.status === 'success' && resultado.dados) {
+                    user = normalizarUser(resultado.dados);
+                }
+            }
+            
+            if (user) {
+                conteudo.innerHTML = this.renderizarDetalhesUsuario(user, idHTML);
             } else {
-                conteudo.innerHTML = '<div class="adm-detalhes-erro">Erro ao carregar dados do utilizador</div>';
+                conteudo.innerHTML = '<div class="adm-detalhes-erro">Utilizador não encontrado</div>';
             }
         } catch (error) {
+            console.error('Erro ao buscar detalhes:', error);
             conteudo.innerHTML = '<div class="adm-detalhes-erro">Erro ao carregar dados do utilizador</div>';
         }
     }
-
-    renderizarDetalhesUsuario(user, aba) {
-        const config = ABAS_CONFIG[aba] || {};
-        const campos = [
+    
+    renderizarDetalhesUsuario(user, idHTML) {
+        const config = MAPA_ABAS[idHTML];
+        
+        const camposBase = [
             { label: 'ID', valor: user.id },
             { label: 'Nome', valor: user.nome },
             { label: 'Email', valor: user.email },
@@ -885,183 +1171,244 @@ class AdminPanel {
             { label: 'Sexo', valor: user.sexo },
             { label: 'País', valor: user.pais },
             { label: 'Região', valor: user.regiao },
-            { label: 'Tipo de Usuário', valor: user.tipo || aba }
+            { label: 'Tipo de Usuário', valor: user.tipo || user.aba || idHTML }
         ];
         
-        if (config.temFuncao) campos.push({ label: 'Função', valor: user.funcao });
-        if (config.temTurma) campos.push({ label: 'Turma', valor: user.turma });
-        if (config.temInstituicao) campos.push({ label: 'Instituição', valor: user.instituicao });
-        if (config.temValor) campos.push({ label: 'Valor Pago', valor: user.valorPago });
-        if (user.descricao) campos.push({ label: 'Descrição', valor: user.descricao });
+        const camposCondicionais = [];
+        if (config?.temFuncao || idHTML === 'parceiros') camposCondicionais.push({ label: 'Função', valor: user.funcao });
+        if (config?.temTurma || idHTML === 'cursos' || idHTML === 'formacao') camposCondicionais.push({ label: 'Turma', valor: user.turma });
+        if (config?.temInstituicao || idHTML === 'formacao') camposCondicionais.push({ label: 'Instituição', valor: user.instituicao });
+        if (config?.temValor || idHTML !== 'naopagos') camposCondicionais.push({ label: 'Valor Pago', valor: user.valorPago });
+        if (user.descricao || idHTML === 'servicos') camposCondicionais.push({ label: 'Descrição', valor: user.descricao });
         
-        campos.push(
+        const camposFinais = [
+            ...camposBase,
+            ...camposCondicionais,
             { label: 'Data de Registo', valor: this.formatarData(user.dataRegistro) },
             { label: 'Data de Expiração', valor: user.dataExpiracao || 'Permanente' }
-        );
+        ];
+        
+        const senhaHtml = config?.temSenha && user.senha ? `
+            <div class="adm-detalhes-campo adm-detalhes-senha">
+                <label>Senha</label>
+                <div class="adm-senha-wrapper">
+                    <span id="adm-senha-valor" class="adm-senha-oculta">••••••••</span>
+                    <button type="button" class="adm-toggle-senha" onclick="adminPanel.toggleSenha('${this.escapeHtml(user.senha)}')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <small class="adm-senha-aviso">⚠️ Acesso restrito. Partilhar apenas após confirmação de identidade do utilizador.</small>
+            </div>
+        ` : '';
         
         return `
             <div class="adm-detalhes-grid">
-                ${campos.map(campo => `
+                ${camposFinais.map(campo => `
                     <div class="adm-detalhes-campo">
                         <label>${campo.label}</label>
                         <span>${this.escapeHtml(campo.valor || '-')}</span>
                     </div>
                 `).join('')}
+                ${senhaHtml}
                 <div class="adm-detalhes-campo adm-detalhes-status">
                     <label>Status</label>
                     ${this.renderizarStatusBadge(user.status)}
                 </div>
             </div>
             <div class="adm-detalhes-acoes">
-                ${this.renderizarAcoesDetalhes(user, aba)}
+                ${this.renderizarAcoesDetalhes(user, idHTML)}
             </div>
         `;
     }
-
-    renderizarAcoesDetalhes(user, aba) {
-        const isParceiros = aba === 'Parceiros';
-        const isServicos = aba === 'Serviços Personalizados';
-        const isNaoPagos = aba === 'Usuários Não Pagos';
+    
+    toggleSenha(senhaReal) {
+        const span = document.getElementById('adm-senha-valor');
+        const btn = document.querySelector('.adm-toggle-senha i');
+        
+        if (!span || !btn) return;
+        
+        if (span.classList.contains('adm-senha-oculta')) {
+            span.textContent = senhaReal;
+            span.classList.remove('adm-senha-oculta');
+            span.classList.add('adm-senha-visivel');
+            btn.classList.remove('fa-eye');
+            btn.classList.add('fa-eye-slash');
+        } else {
+            span.textContent = '••••••••';
+            span.classList.remove('adm-senha-visivel');
+            span.classList.add('adm-senha-oculta');
+            btn.classList.remove('fa-eye-slash');
+            btn.classList.add('fa-eye');
+        }
+    }
+    
+    renderizarAcoesDetalhes(user, idHTML) {
+        const isParceiros = idHTML === 'parceiros';
+        const isServicos = idHTML === 'servicos';
+        const isNaoPagos = idHTML === 'naopagos';
         
         let html = '';
         
         if (isParceiros && user.status !== 'aprovado') {
-            html += `<button class="adm-btn adm-btn-success" onclick="adminPanel.aprovarUtilizador('${user.id}', '${aba}', '${this.escapeHtml(user.nome)}'); adminPanel.fecharModal('adm-modal-detalhes')">Aprovar Parceiro</button>`;
+            html += `<button class="adm-btn adm-btn-success" onclick="adminPanel.aprovarUtilizador('${user.id}', '${idHTML}', '${this.escapeHtml(user.nome)}'); adminPanel.fecharModal('adm-modal-detalhes')">Aprovar Parceiro</button>`;
         }
         
         if (!isNaoPagos && user.status !== 'removido') {
-            html += `<button class="adm-btn adm-btn-warning" onclick="adminPanel.bloquearUtilizador('${user.id}', '${aba}', '${this.escapeHtml(user.nome)}'); adminPanel.fecharModal('adm-modal-detalhes')">Bloquear Acesso</button>`;
+            html += `<button class="adm-btn adm-btn-warning" onclick="adminPanel.bloquearUtilizador('${user.id}', '${idHTML}', '${this.escapeHtml(user.nome)}'); adminPanel.fecharModal('adm-modal-detalhes')">Bloquear Acesso</button>`;
         }
         
         if (!isServicos && !isNaoPagos) {
-            html += `<button class="adm-btn adm-btn-primary" onclick="adminPanel.renovarAcesso('${user.email}', '${aba}'); adminPanel.fecharModal('adm-modal-detalhes')">Renovar Acesso</button>`;
+            html += `<button class="adm-btn adm-btn-primary" onclick="adminPanel.renovarAcesso('${user.email}', '${idHTML}'); adminPanel.fecharModal('adm-modal-detalhes')">Renovar Acesso</button>`;
         }
         
         if (isServicos && user.status !== 'negociacao' && user.status !== 'fechado') {
-            html += `<button class="adm-btn adm-btn-info" onclick="adminPanel.mudarStatus('${user.id}', '${aba}', 'negociacao', '${this.escapeHtml(user.nome)}')">Marcar como Negociação</button>`;
+            html += `<button class="adm-btn adm-btn-info" onclick="adminPanel.mudarStatus('${user.id}', '${idHTML}', 'negociacao', '${this.escapeHtml(user.nome)}')">Marcar como Negociação</button>`;
         }
         
         if (isServicos && user.status !== 'fechado') {
-            html += `<button class="adm-btn adm-btn-secondary" onclick="adminPanel.mudarStatus('${user.id}', '${aba}', 'fechado', '${this.escapeHtml(user.nome)}')">Marcar como Fechado</button>`;
+            html += `<button class="adm-btn adm-btn-secondary" onclick="adminPanel.mudarStatus('${user.id}', '${idHTML}', 'fechado', '${this.escapeHtml(user.nome)}')">Marcar como Fechado</button>`;
         }
         
-        html += `<button class="adm-btn adm-btn-danger" onclick="adminPanel.removerUtilizador('${user.id}', '${aba}', '${this.escapeHtml(user.nome)}'); adminPanel.fecharModal('adm-modal-detalhes')">Remover Utilizador</button>`;
+        html += `<button class="adm-btn adm-btn-danger" onclick="adminPanel.removerUtilizador('${user.id}', '${idHTML}', '${this.escapeHtml(user.nome)}'); adminPanel.fecharModal('adm-modal-detalhes')">Remover Utilizador</button>`;
         
         return html;
     }
-
+    
+    // ============================================================
+    // 2.11 AÇÕES SOBRE UTILIZADORES
+    // ============================================================
     confirmarAcao(titulo, mensagem, callback) {
-        document.getElementById('adm-confirm-titulo').textContent = titulo;
-        document.getElementById('adm-confirm-mensagem').textContent = mensagem;
+        const tituloEl = document.getElementById('adm-confirm-titulo');
+        const mensagemEl = document.getElementById('adm-confirm-mensagem');
+        if (tituloEl) tituloEl.textContent = titulo;
+        if (mensagemEl) mensagemEl.textContent = mensagem;
+        
         this.aguardandoConfirmacao = { executar: callback };
-        document.getElementById('adm-modal-confirmacao').style.display = 'flex';
+        const modal = document.getElementById('adm-modal-confirmacao');
+        if (modal) modal.style.display = 'flex';
     }
-
-    async aprovarUtilizador(id, aba, nome) {
+    
+    async aprovarUtilizador(id, idHTML, nome) {
         this.confirmarAcao('Aprovar Utilizador', `Tens a certeza que pretendes APROVAR o utilizador "${nome}"?`, async () => {
-            const payload = aba === 'Parceiros' 
-                ? { acao: 'aprovar', id: id }
-                : { acao: 'atualizarStatus', id: id, aba: aba, novoStatus: 'aprovado' };
+            const config = MAPA_ABAS[idHTML];
+            let payload;
+            
+            if (idHTML === 'parceiros') {
+                payload = { acao: 'aprovar', id: id };
+            } else if (idHTML === 'servicos') {
+                payload = { acao: 'atualizarStatus', id: id, aba: config.nomeAba, novoStatus: 'fechado' };
+            } else {
+                payload = { acao: 'atualizarStatus', id: id, aba: config.nomeAba, novoStatus: 'aprovado' };
+            }
             
             const resultado = await this.chamarBackendPost(payload);
             if (resultado.status === 'success') {
                 this.mostrarToast(`Utilizador ${nome} aprovado com sucesso!`, 'sucesso');
-                this.invalidarCache(aba);
+                this.invalidarCache(idHTML);
                 await this.recarregarSecaoAtual();
             } else {
-                this.mostrarToast(`Erro ao aprovar ${nome}`, 'erro');
+                this.mostrarToast(`Erro ao aprovar ${nome}: ${resultado.mensagem || 'Erro desconhecido'}`, 'erro');
             }
         });
     }
-
-    async bloquearUtilizador(id, aba, nome) {
+    
+    async bloquearUtilizador(id, idHTML, nome) {
         this.confirmarAcao('Bloquear Utilizador', `Tens a certeza que pretendes BLOQUEAR o utilizador "${nome}"? O acesso será revogado.`, async () => {
-            const resultado = await this.chamarBackendPost({ acao: 'atualizarStatus', id: id, aba: aba, novoStatus: 'removido' });
+            const config = MAPA_ABAS[idHTML];
+            const resultado = await this.chamarBackendPost({ acao: 'atualizarStatus', id: id, aba: config.nomeAba, novoStatus: 'removido' });
             if (resultado.status === 'success') {
                 this.mostrarToast(`Utilizador ${nome} bloqueado com sucesso!`, 'sucesso');
-                this.invalidarCache(aba);
+                this.invalidarCache(idHTML);
                 await this.recarregarSecaoAtual();
             } else {
                 this.mostrarToast(`Erro ao bloquear ${nome}`, 'erro');
             }
         });
     }
-
-    async removerUtilizador(id, aba, nome) {
+    
+    async removerUtilizador(id, idHTML, nome) {
         this.confirmarAcao('Remover Utilizador', `Tens a certeza que pretendes REMOVER o utilizador "${nome}"? Esta acção não pode ser desfeita.`, async () => {
-            const resultado = await this.chamarBackendPost({ acao: 'remover', id: id, aba: aba });
+            const config = MAPA_ABAS[idHTML];
+            const resultado = await this.chamarBackendPost({ acao: 'remover', id: id, aba: config.nomeAba });
             if (resultado.status === 'success') {
                 this.mostrarToast(`Utilizador ${nome} removido com sucesso!`, 'sucesso');
-                this.invalidarCache(aba);
+                this.invalidarCache(idHTML);
                 await this.recarregarSecaoAtual();
             } else {
                 this.mostrarToast(`Erro ao remover ${nome}`, 'erro');
             }
         });
     }
-
-    async mudarStatus(id, aba, novoStatus, nome) {
+    
+    async mudarStatus(id, idHTML, novoStatus, nome) {
         const statusLabel = STATUS_CONFIG[novoStatus]?.label || novoStatus;
         this.confirmarAcao('Alterar Status', `Tens a certeza que pretendes alterar o status do utilizador "${nome}" para "${statusLabel}"?`, async () => {
-            const resultado = await this.chamarBackendPost({ acao: 'atualizarStatus', id: id, aba: aba, novoStatus: novoStatus });
+            const config = MAPA_ABAS[idHTML];
+            const resultado = await this.chamarBackendPost({ acao: 'atualizarStatus', id: id, aba: config.nomeAba, novoStatus: novoStatus });
             if (resultado.status === 'success') {
                 this.mostrarToast(`Status de ${nome} alterado para ${statusLabel}!`, 'sucesso');
-                this.invalidarCache(aba);
+                this.invalidarCache(idHTML);
                 await this.recarregarSecaoAtual();
             } else {
                 this.mostrarToast(`Erro ao alterar status de ${nome}`, 'erro');
             }
         });
     }
-
-    async renovarAcesso(email, aba) {
+    
+    async renovarAcesso(email, idHTML) {
         this.confirmarAcao('Renovar Acesso', `Tens a certeza que pretendes RENOVAR o acesso do utilizador com email "${email}"? Será adicionado +90 dias.`, async () => {
-            const resultado = await this.chamarBackendPost({ acao: 'renovar', email: email, aba: aba, novoComprovativo: 'Sim' });
+            const config = MAPA_ABAS[idHTML];
+            const resultado = await this.chamarBackendPost({ acao: 'renovar', email: email, aba: config.nomeAba, novoComprovativo: 'Sim' });
             if (resultado.status === 'success') {
                 this.mostrarToast(`Acesso renovado para ${email}!`, 'sucesso');
-                this.invalidarCache(aba);
+                this.invalidarCache(idHTML);
                 await this.recarregarSecaoAtual();
             } else {
                 this.mostrarToast(`Erro ao renovar acesso de ${email}`, 'erro');
             }
         });
     }
-
+    
     // ============================================================
-    // UTILITÁRIOS
+    // 2.12 UTILITÁRIOS
     // ============================================================
-    invalidarCache(aba) {
-        if (aba === 'todos') {
-            this.dadosCache.delete('todos_utilizadores');
-        } else {
-            this.dadosCache.delete(`aba_${aba}`);
+    invalidarCache(idHTML) {
+        const config = MAPA_ABAS[idHTML];
+        if (config) {
+            this.dadosCache.delete(config.cacheKey);
+        }
+        if (idHTML === 'todos') {
+            this.dadosCache.delete(MAPA_ABAS.todos.cacheKey);
         }
     }
-
+    
     async recarregarSecaoAtual() {
         await this.navegarPara(this.secaoActiva);
     }
-
-    exportarCSV(aba) {
-        const cacheKey = aba === 'todos' ? 'todos_utilizadores' : `aba_${aba}`;
+    
+    exportarCSV(idHTML) {
+        const config = MAPA_ABAS[idHTML];
+        if (!config) return;
+        
+        const cacheKey = config.cacheKey;
         const cached = this.dadosCache.get(cacheKey);
         if (!cached || !cached.dados) {
             this.mostrarToast('Aguardando dados para exportar...', 'aviso');
             return;
         }
         
-        let dados = cached.dados;
-        const filtros = this.estadoFiltros[aba === 'todos' ? 'todos' : aba.toLowerCase()] || {};
+        let dados = [...cached.dados];
+        const filtros = this.estadoFiltros[idHTML] || {};
         
         if (filtros.texto) {
             const textoLower = filtros.texto.toLowerCase();
             dados = dados.filter(u => (u.nome || '').toLowerCase().includes(textoLower) || (u.email || '').toLowerCase().includes(textoLower));
         }
         if (filtros.regiao) dados = dados.filter(u => u.regiao === filtros.regiao);
-        if (filtros.status && aba !== 'naopagos') dados = dados.filter(u => u.status === filtros.status);
+        if (filtros.status && config.temStatus) dados = dados.filter(u => u.status === filtros.status);
         
-        const cabecalhos = this.getCabecalhosCSV(aba);
-        const linhas = dados.map(user => this.userToCSVRow(user, aba));
+        const cabecalhos = config.colunas;
+        const linhas = dados.map(user => this.userToCSVRow(user, idHTML));
         
         const csvContent = [cabecalhos, ...linhas].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -1069,7 +1416,7 @@ class AdminPanel {
         const url = URL.createObjectURL(blob);
         const data = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
         link.setAttribute('href', url);
-        link.setAttribute('download', `teca_${aba.toLowerCase().replace(/\s/g, '_')}_${data}.csv`);
+        link.setAttribute('download', `teca_${idHTML}_${data}.csv`);
         link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
@@ -1078,29 +1425,26 @@ class AdminPanel {
         
         this.mostrarToast(`Exportação concluída: ${linhas.length} registos`, 'sucesso');
     }
-
-    getCabecalhosCSV(aba) {
-        const base = ['ID', 'Nome', 'Email', 'Telefone', 'Região'];
-        if (aba === 'Parceiros') return [...base, 'Função', 'Status', 'Data Registo', 'Expiração'];
-        if (aba === 'Simuladores-Bibliotecas') return [...base, 'Valor Pago', 'Status', 'Data Registo', 'Expiração'];
-        if (aba === 'Cursos Online') return [...base, 'Turma', 'Valor', 'Status', 'Data Registo', 'Expiração'];
-        if (aba === 'Formação Presencial') return [...base, 'Instituição', 'Turma', 'Valor', 'Status', 'Data Registo', 'Expiração'];
-        if (aba === 'Serviços Personalizados') return [...base, 'Proposta Valor', 'Descrição', 'Status', 'Data Registo'];
-        if (aba === 'Usuários Não Pagos') return [...base, 'Data Registo', 'Expiração'];
-        return [...base, 'Tipo', 'Planilha', 'Status', 'Data Registo', 'Expiração'];
+    
+    userToCSVRow(user, idHTML) {
+        switch(idHTML) {
+            case 'parceiros':
+                return [user.id, user.nome, user.email, user.telefone, user.regiao, user.funcao, user.status, user.dataRegistro, user.dataExpiracao];
+            case 'simuladores':
+                return [user.id, user.nome, user.email, user.telefone, user.regiao, user.valorPago, user.status, user.dataRegistro, user.dataExpiracao];
+            case 'cursos':
+                return [user.id, user.nome, user.email, user.telefone, user.regiao, user.turma, user.valorPago, user.status, user.dataRegistro, user.dataExpiracao];
+            case 'formacao':
+                return [user.id, user.nome, user.email, user.telefone, user.regiao, user.instituicao, user.turma, user.valorPago, user.status, user.dataRegistro, user.dataExpiracao];
+            case 'servicos':
+                return [user.id, user.nome, user.email, user.telefone, user.valorPago, user.descricao, user.status, user.dataRegistro];
+            case 'naopagos':
+                return [user.id, user.nome, user.email, user.telefone, user.regiao, user.dataRegistro, user.dataExpiracao];
+            default:
+                return [user.id, user.nome, user.email, user.telefone, user.regiao, user.tipo, user.aba, user.status, user.dataRegistro, user.dataExpiracao];
+        }
     }
-
-    userToCSVRow(user, aba) {
-        const base = [user.id || '', user.nome || '', user.email || '', user.telefone || '', user.regiao || ''];
-        if (aba === 'Parceiros') return [...base, user.funcao || '', user.status || '', user.dataRegistro || '', user.dataExpiracao || ''];
-        if (aba === 'Simuladores-Bibliotecas') return [...base, user.valorPago || '', user.status || '', user.dataRegistro || '', user.dataExpiracao || ''];
-        if (aba === 'Cursos Online') return [...base, user.turma || '', user.valorPago || '', user.status || '', user.dataRegistro || '', user.dataExpiracao || ''];
-        if (aba === 'Formação Presencial') return [...base, user.instituicao || '', user.turma || '', user.valorPago || '', user.status || '', user.dataRegistro || '', user.dataExpiracao || ''];
-        if (aba === 'Serviços Personalizados') return [...base, user.valorPago || '', user.descricao || '', user.status || '', user.dataRegistro || ''];
-        if (aba === 'Usuários Não Pagos') return [...base, user.dataRegistro || '', user.dataExpiracao || ''];
-        return [...base, user.tipo || '', user.aba || '', user.status || '', user.dataRegistro || '', user.dataExpiracao || ''];
-    }
-
+    
     formatarData(data) {
         if (!data) return '-';
         if (data.includes('/')) return data;
@@ -1112,12 +1456,12 @@ class AdminPanel {
             return data;
         }
     }
-
+    
     truncarTexto(texto, max) {
         if (!texto) return '-';
         return texto.length > max ? texto.substring(0, max) + '...' : texto;
     }
-
+    
     escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -1127,9 +1471,11 @@ class AdminPanel {
             return m;
         });
     }
-
+    
     mostrarToast(mensagem, tipo) {
         const container = document.getElementById('adm-toast-container');
+        if (!container) return;
+        
         const toast = document.createElement('div');
         toast.className = `adm-toast adm-toast-${tipo}`;
         toast.innerHTML = `
@@ -1144,13 +1490,16 @@ class AdminPanel {
             setTimeout(() => toast.remove(), 300);
         }, 4000);
     }
-
+    
     fecharModal(id) {
-        document.getElementById(id).style.display = 'none';
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'none';
     }
 }
 
-// Inicializar
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
 let adminPanel;
 document.addEventListener('DOMContentLoaded', () => {
     adminPanel = new AdminPanel();
@@ -1158,33 +1507,32 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================================
-// TECA CAPITAL EDTECH - PLUGIN DE INSIGHT ADMINISTRATIVO
+// SECÇÃO 3 — CLASSE TecaInsight (PLUGIN DE INSIGHTS)
 // ============================================================
-// Versão: 1.0
+// Versão: 2.0
 // Descrição: Ferramenta avançada para visualização e análise
 // de todos os dados da plataforma em tempo real
 // ============================================================
 
 class TecaInsight {
     constructor(config = {}) {
-        // Configuração
-        this.apiUrl = config.apiUrl || 'https://script.google.com/macros/s/AKfycbzeahMxXzXIDou1hTshRYLmSPeHRFx5RmQvEe5iFP717iKbvyTt1covpO-ydpzmiD_Abg/exec';
+        this.apiUrl = config.apiUrl || APPS_SCRIPT_URL;
         this.autoRefresh = config.autoRefresh !== false;
         this.refreshInterval = config.refreshInterval || 30000;
         this.debug = config.debug || false;
         
-        // Estado
         this.dados = {
             todos: [],
             porAba: {},
-            estatisticas: {}
+            estatisticas: {},
+            receitas: {}
         };
         this.filtros = {};
         this.refreshTimer = null;
         this.isLoading = false;
         this.modalAberto = false;
+        this.logs = [];
         
-        // Inicializar
         this.init();
     }
     
@@ -1211,7 +1559,6 @@ class TecaInsight {
     // CRIAÇÃO DA INTERFACE FLUTUANTE
     // ============================================================
     criarInterface() {
-        // Botão flutuante
         const btn = document.createElement('div');
         btn.id = 'teca-insight-btn';
         btn.innerHTML = '<i class="fas fa-chart-line"></i><span>Insight</span>';
@@ -1219,45 +1566,8 @@ class TecaInsight {
         btn.onclick = () => this.abrirModal();
         document.body.appendChild(btn);
         
-        // Estilos do botão
-        const styleBtn = document.createElement('style');
-        styleBtn.textContent = `
-            #teca-insight-btn {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                width: 60px;
-                height: 60px;
-                border-radius: 30px;
-                background: linear-gradient(135deg, rgb(214, 174, 100), rgb(160, 126, 60));
-                color: #050505;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-                transition: all 0.3s ease;
-                z-index: 9999;
-                font-family: 'Segoe UI', sans-serif;
-            }
-            #teca-insight-btn:hover {
-                transform: scale(1.1);
-                box-shadow: 0 6px 20px rgba(214, 174, 100, 0.4);
-            }
-            #teca-insight-btn i {
-                font-size: 1.5rem;
-            }
-            #teca-insight-btn span {
-                font-size: 0.7rem;
-                font-weight: bold;
-                margin-top: 2px;
-            }
-        `;
-        document.head.appendChild(styleBtn);
-        
-        // Criar modal
         this.criarModal();
+        this.adicionarEstilos();
     }
     
     criarModal() {
@@ -1314,10 +1624,6 @@ class TecaInsight {
         `;
         document.body.appendChild(modal);
         
-        // Estilos do modal
-        this.adicionarEstilos();
-        
-        // Eventos
         document.getElementById('teca-insight-close')?.addEventListener('click', () => this.fecharModal());
         document.getElementById('teca-insight-refresh')?.addEventListener('click', () => this.carregarDados(true));
         
@@ -1328,7 +1634,6 @@ class TecaInsight {
             });
         });
         
-        // Fechar ao clicar fora
         modal.addEventListener('click', (e) => {
             if (e.target === modal) this.fecharModal();
         });
@@ -1467,9 +1772,9 @@ class TecaInsight {
             /* Cards Dashboard */
             .teca-insight-stats-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
                 gap: 1rem;
-                margin-bottom: 2rem;
+                margin-bottom: 1.5rem;
             }
             .teca-insight-stat-card {
                 background: #111111;
@@ -1483,12 +1788,47 @@ class TecaInsight {
                 transform: translateY(-2px);
             }
             .teca-insight-stat-card h3 {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
                 color: #888888;
                 margin-bottom: 0.5rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
             .teca-insight-stat-card .value {
-                font-size: 2rem;
+                font-size: 1.8rem;
+                font-weight: bold;
+                color: rgb(214, 174, 100);
+            }
+            
+            /* Tabela de Receitas */
+            .teca-insight-receitas-table {
+                background: #111111;
+                border-radius: 12px;
+                overflow: hidden;
+                margin-top: 1rem;
+            }
+            .teca-insight-receitas-table table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .teca-insight-receitas-table th,
+            .teca-insight-receitas-table td {
+                padding: 0.75rem 1rem;
+                text-align: left;
+                border-bottom: 1px solid rgba(255,255,255,0.07);
+            }
+            .teca-insight-receitas-table th {
+                background: #0a0a0a;
+                color: rgb(214, 174, 100);
+                font-weight: 600;
+            }
+            .teca-insight-receitas-table td:last-child {
+                text-align: right;
+                font-weight: bold;
+                color: #00b45a;
+            }
+            .teca-insight-receitas-table tr.total-row td {
+                border-top: 2px solid rgb(214, 174, 100);
                 font-weight: bold;
                 color: rgb(214, 174, 100);
             }
@@ -1518,6 +1858,7 @@ class TecaInsight {
             }
             .teca-insight-table tr:hover {
                 background: rgba(255,255,255,0.03);
+                cursor: pointer;
             }
             
             /* Filtros */
@@ -1525,6 +1866,7 @@ class TecaInsight {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                 gap: 1rem;
+                margin-bottom: 1.5rem;
             }
             .teca-insight-filtro-group {
                 background: #111111;
@@ -1548,6 +1890,38 @@ class TecaInsight {
                 color: #f0f0f0;
             }
             
+            /* Tabs Secundárias */
+            .teca-insight-tabs-secondary {
+                display: flex;
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+            }
+            .teca-insight-tab-secondary {
+                background: #161616;
+                border: 1px solid rgba(255,255,255,0.1);
+                padding: 0.5rem 1rem;
+                border-radius: 8px;
+                color: #888888;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .teca-insight-tab-secondary:hover {
+                border-color: rgb(214, 174, 100);
+                color: rgb(214, 174, 100);
+            }
+            .teca-insight-tab-secondary.active {
+                background: rgba(214, 174, 100, 0.15);
+                border-color: rgb(214, 174, 100);
+                color: rgb(214, 174, 100);
+            }
+            .teca-insight-tabela-panel {
+                display: none;
+            }
+            .teca-insight-tabela-panel.active {
+                display: block;
+            }
+            
             /* Botões */
             .teca-insight-btn {
                 background: linear-gradient(135deg, rgb(214, 174, 100), rgb(160, 126, 60));
@@ -1566,32 +1940,126 @@ class TecaInsight {
             
             /* Logs */
             .teca-insight-logs-container {
-                background: #111111;
+                background: #0a0a0a;
                 border-radius: 12px;
                 padding: 1rem;
-                font-family: monospace;
+                font-family: 'Courier New', monospace;
                 font-size: 0.75rem;
-                max-height: 400px;
+                max-height: 500px;
                 overflow-y: auto;
             }
             .teca-insight-log-entry {
                 padding: 0.5rem;
                 border-bottom: 1px solid rgba(255,255,255,0.05);
-                color: #888888;
+                font-family: monospace;
             }
-            .teca-insight-log-entry.error {
-                color: #d63031;
+            .teca-insight-log-entry .log-timestamp {
+                color: #666666;
+                margin-right: 1rem;
             }
-            .teca-insight-log-entry.success {
+            .teca-insight-log-entry .log-type {
+                display: inline-block;
+                padding: 0.15rem 0.4rem;
+                border-radius: 4px;
+                font-size: 0.65rem;
+                font-weight: bold;
+                margin-right: 0.75rem;
+            }
+            .teca-insight-log-entry.success .log-type {
+                background: rgba(0, 180, 90, 0.2);
                 color: #00b45a;
             }
-            .teca-insight-log-entry.warning {
+            .teca-insight-log-entry.error .log-type {
+                background: rgba(214, 48, 49, 0.2);
+                color: #d63031;
+            }
+            .teca-insight-log-entry.warning .log-type {
+                background: rgba(243, 156, 18, 0.2);
                 color: #f39c12;
+            }
+            .teca-insight-log-entry.info .log-type {
+                background: rgba(136, 136, 136, 0.2);
+                color: #888888;
+            }
+            .teca-insight-log-entry .log-message {
+                color: #f0f0f0;
+            }
+            .teca-insight-log-entry .log-user {
+                color: rgb(214, 174, 100);
+                font-size: 0.7rem;
+                margin-left: 1rem;
+            }
+            
+            /* Gráfico de barras vertical */
+            .teca-insight-grafico-mensal {
+                margin-top: 1.5rem;
+            }
+            .teca-insight-barras-container {
+                display: flex;
+                align-items: flex-end;
+                gap: 1rem;
+                height: 200px;
+                margin-top: 1rem;
+            }
+            .teca-insight-barra-item {
+                flex: 1;
+                text-align: center;
+            }
+            .teca-insight-barra {
+                background: rgb(214, 174, 100);
+                width: 100%;
+                border-radius: 4px 4px 0 0;
+                transition: height 0.5s ease;
+                min-height: 4px;
+            }
+            .teca-insight-barra-label {
+                font-size: 0.7rem;
+                margin-top: 0.5rem;
+                color: #888;
+            }
+            .teca-insight-barra-valor {
+                font-size: 0.8rem;
+                font-weight: bold;
+                color: rgb(214, 174, 100);
+                margin-top: 0.25rem;
             }
             
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(10px); }
                 to { opacity: 1; transform: translateY(0); }
+            }
+            
+            /* Botão flutuante */
+            #teca-insight-btn {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                border-radius: 30px;
+                background: linear-gradient(135deg, rgb(214, 174, 100), rgb(160, 126, 60));
+                color: #050505;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                transition: all 0.3s ease;
+                z-index: 9999;
+                font-family: 'Segoe UI', sans-serif;
+            }
+            #teca-insight-btn:hover {
+                transform: scale(1.1);
+                box-shadow: 0 6px 20px rgba(214, 174, 100, 0.4);
+            }
+            #teca-insight-btn i {
+                font-size: 1.5rem;
+            }
+            #teca-insight-btn span {
+                font-size: 0.7rem;
+                font-weight: bold;
+                margin-top: 2px;
             }
         `;
         
@@ -1633,7 +2101,6 @@ class TecaInsight {
         const panelAtivo = document.getElementById(`teca-insight-${tabId}`);
         if (panelAtivo) panelAtivo.classList.add('active');
         
-        // Recarregar conteúdo específico
         if (tabId === 'tabelas') this.renderizarTabelas();
         if (tabId === 'filtros') this.renderizarFiltros();
         if (tabId === 'exportar') this.renderizarExportacao();
@@ -1676,10 +2143,8 @@ class TecaInsight {
     }
     
     processarDados(rawData) {
-        // Filtrar administrador
-        this.dados.todos = rawData.filter(u => u.aba !== 'Administrador');
+        this.dados.todos = rawData.filter(u => u.aba !== 'Administrador').map(normalizarUser);
         
-        // Organizar por aba
         this.dados.porAba = {
             'Parceiros': [],
             'Simuladores-Bibliotecas': [],
@@ -1695,13 +2160,10 @@ class TecaInsight {
             }
         });
         
-        // Calcular estatísticas
         this.calcularEstatisticas();
-        
-        // Renderizar dashboard
+        this.calcularReceitas();
         this.renderizarDashboard();
         
-        // Atualizar total
         const totalSpan = document.getElementById('teca-insight-total');
         if (totalSpan) totalSpan.textContent = this.dados.todos.length;
     }
@@ -1724,41 +2186,67 @@ class TecaInsight {
         trintaDiasFrente.setDate(hoje.getDate() + 30);
         
         this.dados.todos.forEach(user => {
-            // Contagem por aba
             stats.porAba[user.aba] = (stats.porAba[user.aba] || 0) + 1;
+            if (user.status) stats.porStatus[user.status] = (stats.porStatus[user.status] || 0) + 1;
+            if (user.regiao && user.regiao !== '-') stats.porRegiao[user.regiao] = (stats.porRegiao[user.regiao] || 0) + 1;
             
-            // Contagem por status
-            if (user.status) {
-                stats.porStatus[user.status] = (stats.porStatus[user.status] || 0) + 1;
-            }
-            
-            // Contagem por região
-            if (user.regiao) {
-                stats.porRegiao[user.regiao] = (stats.porRegiao[user.regiao] || 0) + 1;
-            }
-            
-            // Últimos 30 dias
             if (user.dataRegistro) {
                 const dataReg = this.parseData(user.dataRegistro);
-                if (dataReg && dataReg >= trintaDiasAtras) {
-                    stats.ultimos30Dias++;
-                }
+                if (dataReg && dataReg >= trintaDiasAtras) stats.ultimos30Dias++;
             }
             
-            // Expiração
             if (user.dataExpiracao && user.dataExpiracao !== 'Permanente') {
                 const dataExp = this.parseData(user.dataExpiracao);
                 if (dataExp) {
-                    if (dataExp < hoje) {
-                        stats.expirados++;
-                    } else if (dataExp <= trintaDiasFrente) {
-                        stats.aExpirar30Dias++;
-                    }
+                    if (dataExp < hoje) stats.expirados++;
+                    else if (dataExp <= trintaDiasFrente) stats.aExpirar30Dias++;
                 }
             }
         });
         
         this.dados.estatisticas = stats;
+    }
+    
+    calcularReceitas() {
+        const abas = ['Simuladores-Bibliotecas', 'Cursos Online', 'Formação Presencial', 'Serviços Personalizados'];
+        const receitas = {};
+        let totalGeral = 0;
+        
+        abas.forEach(aba => {
+            const utilizadoresDaAba = this.dados.todos.filter(u => u.aba === aba);
+            const soma = utilizadoresDaAba.reduce((acc, u) => {
+                const valor = this.parseValorMonetario(u.valorPago);
+                return acc + valor;
+            }, 0);
+            receitas[aba] = soma;
+            totalGeral += soma;
+        });
+        
+        receitas.total = totalGeral;
+        this.dados.receitas = receitas;
+    }
+    
+    parseValorMonetario(valorStr) {
+        if (!valorStr || valorStr === '-') return 0;
+        
+        let valor = valorStr.toString();
+        
+        valor = valor.replace(/[^\d,.-]/g, '');
+        
+        valor = valor.replace(/\.(?=\d{3})/g, '');
+        
+        valor = valor.replace(',', '.');
+        
+        const numero = parseFloat(valor);
+        return isNaN(numero) ? 0 : numero;
+    }
+    
+    formatarMoeda(valor) {
+        return new Intl.NumberFormat('pt-AO', {
+            style: 'currency',
+            currency: 'AOA',
+            minimumFractionDigits: 2
+        }).format(valor);
     }
     
     parseData(dataStr) {
@@ -1774,13 +2262,14 @@ class TecaInsight {
     }
     
     // ============================================================
-    // RENDERIZAÇÃO DO DASHBOARD
+    // RENDERIZAÇÃO DO DASHBOARD (com Painel Financeiro)
     // ============================================================
     renderizarDashboard() {
         const container = document.getElementById('teca-insight-dashboard');
         if (!container) return;
         
         const stats = this.dados.estatisticas;
+        const receitas = this.dados.receitas;
         
         container.innerHTML = `
             <div class="teca-insight-stats-grid">
@@ -1835,9 +2324,25 @@ class TecaInsight {
                 </div>
             </div>
             
-            <div class="teca-insight-stat-card">
-                <h3><i class="fas fa-chart-line"></i> Evolução Mensal (Últimos 6 meses)</h3>
-                <div id="teca-insight-grafico"></div>
+            <div class="teca-insight-receitas-table">
+                <h3 style="margin-bottom: 0.75rem; color: rgb(214, 174, 100);"><i class="fas fa-coins"></i> 💰 RECEITAS DA PLATAFORMA</h3>
+                <table>
+                    <thead>
+                        <tr><th>Categoria</th><th>Valor Total</th> </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Simuladores e Biblioteca</td><td>${this.formatarMoeda(receitas['Simuladores-Bibliotecas'] || 0)}</td></tr>
+                        <tr><td>Cursos Online</td><td>${this.formatarMoeda(receitas['Cursos Online'] || 0)}</td></tr>
+                        <tr><td>Formação Presencial</td><td>${this.formatarMoeda(receitas['Formação Presencial'] || 0)}</td></tr>
+                        <tr><td>Serviços Personalizados</td><td>${this.formatarMoeda(receitas['Serviços Personalizados'] || 0)}</td></tr>
+                        <tr class="total-row"><td><strong>TOTAL GERAL</strong></td><td><strong>${this.formatarMoeda(receitas.total || 0)}</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="teca-insight-grafico-mensal">
+                <h3 style="margin: 1.5rem 0 0.75rem 0; color: rgb(214, 174, 100);"><i class="fas fa-chart-line"></i> Evolução Mensal (Últimos 6 meses)</h3>
+                <div id="teca-insight-grafico-evolucao"></div>
             </div>
         `;
         
@@ -1845,10 +2350,9 @@ class TecaInsight {
     }
     
     renderizarGraficoEvolucao() {
-        const container = document.getElementById('teca-insight-grafico');
+        const container = document.getElementById('teca-insight-grafico-evolucao');
         if (!container) return;
         
-        // Agrupar por mês
         const meses = {};
         const hoje = new Date();
         
@@ -1872,12 +2376,12 @@ class TecaInsight {
         const maxValor = Math.max(...dadosGrafico.map(d => d.total), 1);
         
         container.innerHTML = `
-            <div style="display: flex; align-items: flex-end; gap: 1rem; height: 200px; margin-top: 1rem;">
+            <div class="teca-insight-barras-container">
                 ${dadosGrafico.map(mes => `
-                    <div style="flex: 1; text-align: center;">
-                        <div style="background: rgb(214, 174, 100); height: ${(mes.total / maxValor) * 180}px; width: 100%; border-radius: 4px 4px 0 0; transition: height 0.5s ease;"></div>
-                        <div style="font-size: 0.7rem; margin-top: 0.5rem; color: #888;">${mes.nome}</div>
-                        <div style="font-size: 0.8rem; font-weight: bold; color: rgb(214, 174, 100);">${mes.total}</div>
+                    <div class="teca-insight-barra-item">
+                        <div class="teca-insight-barra" style="height: ${(mes.total / maxValor) * 160}px;"></div>
+                        <div class="teca-insight-barra-label">${mes.nome}</div>
+                        <div class="teca-insight-barra-valor">${mes.total}</div>
                     </div>
                 `).join('')}
             </div>
@@ -1885,7 +2389,7 @@ class TecaInsight {
     }
     
     // ============================================================
-    // RENDERIZAÇÃO DE TABELAS
+    // RENDERIZAÇÃO DE TABELAS (com abas)
     // ============================================================
     renderizarTabelas() {
         const container = document.getElementById('teca-insight-tabelas');
@@ -1923,7 +2427,7 @@ class TecaInsight {
                             </thead>
                             <tbody>
                                 ${users.map(user => `
-                                    <tr>
+                                    <tr onclick="tecaInsight.verDetalhesUsuario('${user.id}', '${aba}')">
                                         <td>${user.id || '-'}</td>
                                         <td>${this.escapeHtml(user.nome || '-')}</td>
                                         <td>${this.escapeHtml(user.email || '-')}</td>
@@ -1944,7 +2448,6 @@ class TecaInsight {
         html += '</div>';
         container.innerHTML = html;
         
-        // Eventos das abas secundárias
         container.querySelectorAll('.teca-insight-tab-secondary').forEach(tab => {
             tab.addEventListener('click', (e) => {
                 const aba = tab.dataset.aba;
@@ -1968,6 +2471,7 @@ class TecaInsight {
         const stats = this.dados.estatisticas;
         const regioes = Object.keys(stats.porRegiao).sort();
         const statusList = Object.keys(stats.porStatus);
+        const categorias = Object.keys(this.dados.porAba);
         
         container.innerHTML = `
             <div class="teca-insight-filtros-container">
@@ -1993,7 +2497,7 @@ class TecaInsight {
                     <label><i class="fas fa-layer-group"></i> Categoria</label>
                     <select id="insight-filter-aba">
                         <option value="">Todas as categorias</option>
-                        ${Object.keys(this.dados.porAba).map(aba => `<option value="${aba}">${aba}</option>`).join('')}
+                        ${categorias.map(aba => `<option value="${aba}">${aba}</option>`).join('')}
                     </select>
                 </div>
                 <div class="teca-insight-filtro-group">
@@ -2018,12 +2522,12 @@ class TecaInsight {
                         <tbody></tbody>
                     </table>
                 </div>
+                <div id="insight-resultados-count" style="margin-top: 0.5rem; text-align: right; color: #888; font-size: 0.8rem;"></div>
             </div>
         `;
         
-        // Eventos
         document.getElementById('insight-aplicar-filtros')?.addEventListener('click', () => this.aplicarFiltros());
-        document.getElementById('insight-limpar-filtros')?.addEventListener('click', () => this.limparFiltros());
+        document.getElementById('insight-limpar-filtros')?.addEventListener('click', () => this.limparFiltrosUI());
     }
     
     aplicarFiltros() {
@@ -2067,7 +2571,7 @@ class TecaInsight {
         this.renderizarResultadosFiltrados(resultados);
     }
     
-    limparFiltros() {
+    limparFiltrosUI() {
         const inputs = ['insight-search-text', 'insight-filter-regiao', 'insight-filter-status', 'insight-filter-aba', 'insight-filter-data-inicio', 'insight-filter-data-fim'];
         inputs.forEach(id => {
             const el = document.getElementById(id);
@@ -2078,10 +2582,12 @@ class TecaInsight {
     
     renderizarResultadosFiltrados(resultados) {
         const tbody = document.querySelector('#insight-resultados-table tbody');
+        const countSpan = document.getElementById('insight-resultados-count');
+        
         if (!tbody) return;
         
         tbody.innerHTML = resultados.map(user => `
-            <tr onclick="window.tecaInsight?.verDetalhesUsuario(${user.id}, '${user.aba}')" style="cursor: pointer;">
+            <tr onclick="tecaInsight.verDetalhesUsuario('${user.id}', '${user.aba}')" style="cursor: pointer;">
                 <td>${user.id || '-'}</td>
                 <td>${this.escapeHtml(user.nome || '-')}</td>
                 <td>${this.escapeHtml(user.email || '-')}</td>
@@ -2090,6 +2596,10 @@ class TecaInsight {
                 <td>${this.renderizarBadgeStatus(user.status)}</td>
             </tr>
         `).join('');
+        
+        if (countSpan) {
+            countSpan.textContent = `${resultados.length} resultados encontrados`;
+        }
         
         this.registrarLog(`Filtro aplicado: ${resultados.length} resultados encontrados`, 'info');
     }
@@ -2101,6 +2611,8 @@ class TecaInsight {
         const container = document.getElementById('teca-insight-exportar');
         if (!container) return;
         
+        const categorias = Object.keys(this.dados.porAba);
+        
         container.innerHTML = `
             <div class="teca-insight-filtros-container">
                 <div class="teca-insight-filtro-group">
@@ -2111,7 +2623,7 @@ class TecaInsight {
                     <label><i class="fas fa-file-excel"></i> Exportar por Categoria</label>
                     <select id="insight-export-aba">
                         <option value="">Todas as categorias</option>
-                        ${Object.keys(this.dados.porAba).map(aba => `<option value="${aba}">${aba}</option>`).join('')}
+                        ${categorias.map(aba => `<option value="${aba}">${aba}</option>`).join('')}
                     </select>
                     <button id="insight-export-csv-aba" class="teca-insight-btn" style="margin-top: 0.5rem;">Exportar Categoria</button>
                 </div>
@@ -2172,6 +2684,8 @@ class TecaInsight {
     
     exportarRelatorio() {
         const stats = this.dados.estatisticas;
+        const receitas = this.dados.receitas;
+        
         const relatorio = {
             dataGeracao: new Date().toISOString(),
             totalUtilizadores: stats.total,
@@ -2181,6 +2695,13 @@ class TecaInsight {
             novosUltimos30Dias: stats.ultimos30Dias,
             acessosExpirados: stats.expirados,
             aExpirar30Dias: stats.aExpirar30Dias,
+            receitas: {
+                simuladores: receitas['Simuladores-Bibliotecas'] || 0,
+                cursos: receitas['Cursos Online'] || 0,
+                formacao: receitas['Formação Presencial'] || 0,
+                servicos: receitas['Serviços Personalizados'] || 0,
+                total: receitas.total || 0
+            },
             listaUtilizadores: this.dados.todos.map(u => ({
                 id: u.id,
                 nome: u.nome,
@@ -2217,20 +2738,22 @@ class TecaInsight {
     }
     
     // ============================================================
-    // LOGS DO SISTEMA
+    // LOGS DO SISTEMA (com logs reais do AdminPanel)
     // ============================================================
     renderizarLogs() {
         const container = document.getElementById('teca-insight-logs');
         if (!container) return;
         
-        const logs = this.logs || [];
+        const logs = this.logs;
         
         container.innerHTML = `
             <div class="teca-insight-logs-container">
                 ${logs.map(log => `
                     <div class="teca-insight-log-entry ${log.tipo}">
-                        <span style="color: #888;">[${log.timestamp}]</span>
-                        <span>${log.mensagem}</span>
+                        <span class="log-timestamp">[${log.timestamp}]</span>
+                        <span class="log-type">${log.acao || log.tipo?.toUpperCase() || 'INFO'}</span>
+                        <span class="log-message">${log.detalhes || log.mensagem}</span>
+                        ${log.utilizador ? `<span class="log-user">— ${log.utilizador} (${log.tipoUtilizador || 'Sistema'})</span>` : ''}
                     </div>
                 `).join('')}
                 ${logs.length === 0 ? '<div class="teca-insight-log-entry">Nenhum log registado</div>' : ''}
@@ -2238,6 +2761,7 @@ class TecaInsight {
             <div style="margin-top: 1rem; display: flex; gap: 1rem;">
                 <button id="insight-clear-logs" class="teca-insight-btn" style="background: #161616;">Limpar Logs</button>
                 <button id="insight-export-logs" class="teca-insight-btn">Exportar Logs</button>
+                <button id="insight-refresh-logs" class="teca-insight-btn">Actualizar Logs</button>
             </div>
         `;
         
@@ -2248,17 +2772,30 @@ class TecaInsight {
         });
         
         document.getElementById('insight-export-logs')?.addEventListener('click', () => this.exportarLogs());
+        document.getElementById('insight-refresh-logs')?.addEventListener('click', () => this.carregarLogsDoAdminPanel());
+    }
+    
+    carregarLogsDoAdminPanel() {
+        if (window.adminPanel && window.adminPanel.logsLogin) {
+            this.logs = [...window.adminPanel.logsLogin];
+            this.renderizarLogs();
+            this.registrarLog('Logs actualizados a partir do painel admin', 'success');
+        } else {
+            this.registrarLog('Não foi possível carregar logs do painel admin', 'warning');
+        }
     }
     
     registrarLog(mensagem, tipo = 'info') {
-        if (!this.logs) this.logs = [];
         this.logs.unshift({
             timestamp: new Date().toLocaleString('pt-PT'),
-            mensagem: mensagem,
-            tipo: tipo
+            tipo: tipo,
+            acao: tipo.toUpperCase(),
+            detalhes: mensagem,
+            utilizador: window.adminPanel?.adminInfo?.nome || 'Sistema',
+            tipoUtilizador: 'Sistema'
         });
         
-        if (this.logs.length > 100) this.logs.pop();
+        if (this.logs.length > 200) this.logs.pop();
         
         if (document.getElementById('teca-insight-logs')) {
             this.renderizarLogs();
@@ -2286,45 +2823,45 @@ class TecaInsight {
     // ============================================================
     verDetalhesUsuario(id, aba) {
         const user = this.dados.todos.find(u => u.id == id && u.aba === aba);
-        if (user) {
-            const detalhes = `
-                <div style="background: #111; border-radius: 12px; padding: 1rem;">
-                    <h3 style="color: rgb(214, 174, 100); margin-bottom: 1rem;">Detalhes do Utilizador</h3>
-                    ${Object.entries(user).map(([key, value]) => `
-                        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <span style="color: #888;">${key}:</span>
-                            <span style="color: #f0f0f0;">${this.escapeHtml(String(value || '-'))}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.9);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 10001;
-            `;
-            modal.innerHTML = `
-                <div style="background: #0d0d0d; border-radius: 16px; max-width: 600px; width: 90%; max-height: 80%; overflow-y: auto; padding: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h3 style="color: rgb(214, 174, 100);">Detalhes do Utilizador</h3>
-                        <button id="close-detalhes" style="background: none; border: none; color: #888; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        if (!user) return;
+        
+        const detalhes = `
+            <div style="background: #111; border-radius: 12px; padding: 1rem;">
+                <h3 style="color: rgb(214, 174, 100); margin-bottom: 1rem;">Detalhes do Utilizador</h3>
+                ${Object.entries(user).map(([key, value]) => `
+                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <span style="color: #888;">${key}:</span>
+                        <span style="color: #f0f0f0;">${this.escapeHtml(String(value || '-'))}</span>
                     </div>
-                    ${detalhes}
+                `).join('')}
+            </div>
+        `;
+        
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+        `;
+        modal.innerHTML = `
+            <div style="background: #0d0d0d; border-radius: 16px; max-width: 600px; width: 90%; max-height: 80%; overflow-y: auto; padding: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="color: rgb(214, 174, 100);">Detalhes do Utilizador</h3>
+                    <button id="close-detalhes" style="background: none; border: none; color: #888; font-size: 1.5rem; cursor: pointer;">&times;</button>
                 </div>
-            `;
-            document.body.appendChild(modal);
-            modal.querySelector('#close-detalhes').onclick = () => modal.remove();
-            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-        }
+                ${detalhes}
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.querySelector('#close-detalhes').onclick = () => modal.remove();
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
     }
     
     getStatusLabel(status) {
@@ -2400,692 +2937,12 @@ class TecaInsight {
 }
 
 // ============================================================
-// INICIALIZAÇÃO AUTOMÁTICA
+// INICIALIZAÇÃO DO TECAINSIGHT
 // ============================================================
 let tecaInsight;
 document.addEventListener('DOMContentLoaded', () => {
-    tecaInsight = new TecaInsight({ debug: false });
-    window.tecaInsight = tecaInsight;
+    setTimeout(() => {
+        tecaInsight = new TecaInsight({ debug: false });
+        window.tecaInsight = tecaInsight;
+    }, 500);
 });
-
-
-/**
- * ========================================================
- * TECA CAPITAL EDTECH - PLUGIN DE CORREÇÃO PARA PAINEL ADMIN
- * Versão: 1.0
- * Descrição: Corrige e completa funcionalidades do painel admin
- * ========================================================
- * 
- * PROBLEMAS RESOLVIDOS:
- * 1. Redirecionamento correto dos cards estatísticos
- * 2. Dados completos no dashboard de parceiros (telefone, região, função)
- * 3. Busca de dados em todas as tabelas (simuladores, cursos, formação, serviços, não pagos)
- * 4. Filtros funcionando em todas as tabelas
- * 5. Modal de detalhes com dados completos
- * 6. Ações (aprovar, bloquear, remover, renovar) funcionando em todas as tabelas
- * 7. Aprovação de usuários com status "aguardando validação"
- * 8. Estatísticas do dashboard com dados reais do banco
- * ========================================================
- */
-
-(function() {
-    'use strict';
-    
-    // Aguardar o AdminPanel ser inicializado
-    const waitForAdminPanel = setInterval(() => {
-        if (window.adminPanel && window.adminPanel.constructor === AdminPanel) {
-            clearInterval(waitForAdminPanel);
-            console.log('[AdminFix] Plugin de correção iniciado');
-            
-            // Aplicar todas as correções
-            aplicarCorrecoes();
-        }
-    }, 100);
-    
-    function aplicarCorrecoes() {
-        // 1. Corrigir redirecionamento dos cards estatísticos
-        corrigirRedirecionamentoCards();
-        
-        // 2. Melhorar renderização das tabelas
-        melhorarRenderizacaoTabelas();
-        
-        // 3. Corrigir carregamento de dados por aba
-        corrigirCarregamentoDados();
-        
-        // 4. Corrigir modal de detalhes
-        corrigirModalDetalhes();
-        
-        // 5. Melhorar ações sobre utilizadores
-        melhorarAcoesUtilizadores();
-        
-        // 6. Forçar atualização do dashboard com dados reais
-        forcarAtualizacaoDashboard();
-        
-        // 7. Adicionar observer para atualizar tabelas quando necessário
-        adicionarObserverTabelas();
-        
-        console.log('[AdminFix] Todas as correções aplicadas com sucesso');
-    }
-    
-    // ============================================================
-    // 1. CORREÇÃO DE REDIRECIONAMENTO DOS CARDS
-    // ============================================================
-    function corrigirRedirecionamentoCards() {
-        // Sobrescrever o método renderizarCards original
-        const originalRenderizarCards = window.adminPanel.renderizarCards;
-        
-        window.adminPanel.renderizarCards = function(stats) {
-            const grid = document.getElementById('adm-stats-grid');
-            if (!grid) return;
-            
-            const cards = [
-                { valor: stats.total, label: 'Total de Utilizadores', icone: 'fa-users', cor: 'gold', secao: 'todos' },
-                { valor: stats.parceiros, label: 'Parceiros', icone: 'fa-handshake', cor: 'gold', secao: 'parceiros' },
-                { valor: stats.aguardando, label: 'Aguardando Validação', icone: 'fa-clock', cor: 'gold', secao: 'parceiros' },
-                { valor: stats.simuladores || 0, label: 'Simuladores e Biblioteca', icone: 'fa-calculator', cor: 'blue', secao: 'simuladores' },
-                { valor: stats.cursos, label: 'Cursos Online', icone: 'fa-video', cor: 'blue', secao: 'cursos' },
-                { valor: stats.formacao, label: 'Formação Presencial', icone: 'fa-chalkboard-teacher', cor: 'blue', secao: 'formacao' },
-                { valor: stats.servicos, label: 'Serviços Personalizados', icone: 'fa-concierge-bell', cor: 'blue', secao: 'servicos' },
-                { valor: stats.naopagos, label: 'Usuários Não Pagos', icone: 'fa-user-slash', cor: 'red', secao: 'naopagos' }
-            ];
-            
-            grid.innerHTML = cards.map(card => `
-                <div class="adm-stat-card adm-stat-card-${card.cor}" data-secao="${card.secao}">
-                    <div class="adm-stat-icon"><i class="fas ${card.icone}"></i></div>
-                    <div class="adm-stat-info">
-                        <h3>${card.valor}</h3>
-                        <p>${card.label}</p>
-                    </div>
-                </div>
-            `).join('');
-            
-            // Adicionar evento de clique nos cards
-            grid.querySelectorAll('.adm-stat-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const secao = card.dataset.secao;
-                    if (secao) {
-                        // Chamar navegarPara diretamente
-                        window.adminPanel.navegarPara(secao);
-                    }
-                });
-            });
-        };
-        
-        console.log('[AdminFix] Cards corrigidos');
-    }
-    
-    // ============================================================
-    // 2. MELHORAR RENDERIZAÇÃO DAS TABELAS
-    // ============================================================
-    function melhorarRenderizacaoTabelas() {
-        // Sobrescrever renderizarLinhaTabela para garantir dados completos
-        const originalRenderizarLinhaTabela = window.adminPanel.renderizarLinhaTabela;
-        
-        window.adminPanel.renderizarLinhaTabela = function(user, aba, config) {
-            const statusBadge = config.temStatus ? this.renderizarStatusBadge(user.status) : '<span class="adm-badge adm-badge-neutral">N/A</span>';
-            const acoes = this.renderizarAcoes(user, aba, config);
-            
-            // Garantir que dados essenciais estão presentes
-            const telefone = user.telefone || user.TELEFONE || user['Número de Telefone'] || '-';
-            const regiao = user.regiao || user.REGIAO || user.Região || '-';
-            const dataRegistro = this.formatarData(user.dataRegistro || user['Data de Registro']);
-            const dataExpiracao = user.dataExpiracao || user['Data Para Expirar o Acesso'] || 'Permanente';
-            const nome = this.escapeHtml(user.nome || user['Nome do Usuário'] || '-');
-            const email = this.escapeHtml(user.email || user.Email || '-');
-            const funcao = user.funcao || user.FUNCAO || user.Função || '-';
-            const valorPago = user.valorPago || user['Valor Pago'] || '-';
-            const turma = user.turma || user.TURMA || user.Turma || '-';
-            const instituicao = user.instituicao || user.INSTITUICAO || user['Instituição Associada'] || '-';
-            const descricao = user.descricao || user.DESCRICAO || user.Descrição || '-';
-            
-            const colunasBase = `
-                <td>${user.id || '-'}</td>
-                <td>${nome}</td>
-                <td>${email}</td>
-                <td>${telefone}</td>
-                <td>${regiao}</td>
-            `;
-            
-            if (aba === 'Parceiros') {
-                return `<tr>
-                    ${colunasBase}
-                    <td>${funcao}</td>
-                    <td>${statusBadge}</td>
-                    <td>${dataRegistro}</td>
-                    <td>${dataExpiracao}</td>
-                    ${acoes}
-                </tr>`;
-            }
-            
-            if (aba === 'Simuladores-Bibliotecas') {
-                return `<tr>
-                    ${colunasBase}
-                    <td>${valorPago}</td>
-                    <td>${statusBadge}</td>
-                    <td>${dataRegistro}</td>
-                    <td>${dataExpiracao}</td>
-                    ${acoes}
-                </tr>`;
-            }
-            
-            if (aba === 'Cursos Online') {
-                return `<tr>
-                    ${colunasBase}
-                    <td>${turma}</td>
-                    <td>${valorPago}</td>
-                    <td>${statusBadge}</td>
-                    <td>${dataRegistro}</td>
-                    <td>${dataExpiracao}</td>
-                    ${acoes}
-                </tr>`;
-            }
-            
-            if (aba === 'Formação Presencial') {
-                return `<tr>
-                    ${colunasBase}
-                    <td>${instituicao}</td>
-                    <td>${turma}</td>
-                    <td>${valorPago}</td>
-                    <td>${statusBadge}</td>
-                    <td>${dataRegistro}</td>
-                    <td>${dataExpiracao}</td>
-                    ${acoes}
-                </tr>`;
-            }
-            
-            if (aba === 'Serviços Personalizados') {
-                return `<tr>
-                    <td>${user.id || '-'}</td>
-                    <td>${nome}</td>
-                    <td>${email}</td>
-                    <td>${telefone}</td>
-                    <td title="${valorPago}">${valorPago.length > 30 ? valorPago.substring(0, 30) + '...' : valorPago}</td>
-                    <td title="${descricao}">${descricao.length > 40 ? descricao.substring(0, 40) + '...' : descricao}</td>
-                    <td>${statusBadge}</td>
-                    <td>${dataRegistro}</td>
-                    ${acoes}
-                </tr>`;
-            }
-            
-            if (aba === 'Usuários Não Pagos') {
-                return `<tr>
-                    ${colunasBase}
-                    <td>${dataRegistro}</td>
-                    <td>${dataExpiracao}</td>
-                    ${acoes}
-                </tr>`;
-            }
-            
-            if (aba === 'todos') {
-                return `<tr>
-                    <td>${user.id || '-'}</td>
-                    <td>${nome}</td>
-                    <td>${email}</td>
-                    <td>${telefone}</td>
-                    <td>${regiao}</td>
-                    <td>${user.tipo || user.aba || '-'}</td>
-                    <td>${user.aba || '-'}</td>
-                    <td>${user.status ? this.renderizarStatusBadge(user.status) : '<span class="adm-badge adm-badge-neutral">N/A</span>'}</td>
-                    <td>${dataRegistro}</td>
-                    <td>${dataExpiracao}</td>
-                    ${acoes}
-                </tr>`;
-            }
-            
-            return `<tr>${colunasBase}<td colspan="4">${statusBadge}${acoes}</td></tr>`;
-        };
-        
-        console.log('[AdminFix] Renderização de tabelas melhorada');
-    }
-    
-    // ============================================================
-    // 3. CORRIGIR CARREGAMENTO DE DADOS POR ABA
-    // ============================================================
-    function corrigirCarregamentoDados() {
-        // Sobrescrever carregarDadosAba para garantir dados corretos
-        const originalCarregarDadosAba = window.adminPanel.carregarDadosAba;
-        
-        window.adminPanel.carregarDadosAba = async function(aba, forceReload = false) {
-            const cacheKey = `aba_${aba}`;
-            const agora = Date.now();
-            
-            if (!forceReload && this.dadosCache.has(cacheKey)) {
-                const cached = this.dadosCache.get(cacheKey);
-                if (agora - cached.timestamp < 60000) {
-                    this.dadosFiltrados = cached.dados;
-                    this.renderizarTabela(aba, cached.dados);
-                    this.inicializarFiltros(aba, cached.dados);
-                    return;
-                }
-            }
-            
-            this.mostrarSkeleton(aba);
-            
-            try {
-                // Chamar listar com filtro de aba
-                const resultado = await this.chamarBackendGet({ acao: 'listar', aba: aba });
-                if (resultado.status === 'success' && resultado.dados) {
-                    // Normalizar dados para garantir campos consistentes
-                    const dadosNormalizados = resultado.dados.map(user => ({
-                        ...user,
-                        telefone: user.telefone || user['Número de Telefone'] || user.TELEFONE || '-',
-                        regiao: user.regiao || user.REGIAO || user.Região || '-',
-                        funcao: user.funcao || user.FUNCAO || user.Função || '-',
-                        dataRegistro: user.dataRegistro || user['Data de Registro'],
-                        dataExpiracao: user.dataExpiracao || user['Data Para Expirar o Acesso'] || 'Permanente',
-                        valorPago: user.valorPago || user['Valor Pago'] || '-',
-                        turma: user.turma || user.TURMA || user.Turma || '-',
-                        instituicao: user.instituicao || user.INSTITUICAO || user['Instituição Associada'] || '-',
-                        descricao: user.descricao || user.DESCRICAO || user.Descrição || '-'
-                    }));
-                    
-                    this.dadosCache.set(cacheKey, {
-                        dados: dadosNormalizados,
-                        timestamp: agora
-                    });
-                    this.dadosFiltrados = dadosNormalizados;
-                    this.renderizarTabela(aba, dadosNormalizados);
-                    this.inicializarFiltros(aba, dadosNormalizados);
-                } else {
-                    this.mostrarToast(`Erro ao carregar ${aba}`, 'erro');
-                    this.renderizarTabela(aba, []);
-                }
-            } catch (error) {
-                console.error(`Erro ao carregar ${aba}:`, error);
-                this.mostrarToast(`Erro ao carregar ${aba}`, 'erro');
-                this.renderizarTabela(aba, []);
-            }
-        };
-        
-        // Sobrescrever carregarTodosUtilizadores
-        const originalCarregarTodosUtilizadores = window.adminPanel.carregarTodosUtilizadores;
-        
-        window.adminPanel.carregarTodosUtilizadores = async function(forceReload = false) {
-            const cacheKey = 'todos_utilizadores';
-            const agora = Date.now();
-            
-            if (!forceReload && this.dadosCache.has(cacheKey)) {
-                const cached = this.dadosCache.get(cacheKey);
-                if (agora - cached.timestamp < 60000) {
-                    this.dadosFiltrados = cached.dados;
-                    this.renderizarTabela('todos', cached.dados);
-                    this.inicializarFiltros('todos', cached.dados);
-                    return;
-                }
-            }
-            
-            this.mostrarSkeleton('todos');
-            
-            try {
-                const resultado = await this.chamarBackendGet({ acao: 'listar' });
-                if (resultado.status === 'success' && resultado.dados) {
-                    const dadosFiltrados = resultado.dados.filter(u => u.aba !== 'Administrador');
-                    
-                    // Normalizar dados
-                    const dadosNormalizados = dadosFiltrados.map(user => ({
-                        ...user,
-                        telefone: user.telefone || user['Número de Telefone'] || '-',
-                        regiao: user.regiao || user.REGIAO || '-'
-                    }));
-                    
-                    this.dadosCache.set(cacheKey, {
-                        dados: dadosNormalizados,
-                        timestamp: agora
-                    });
-                    this.dadosFiltrados = dadosNormalizados;
-                    this.renderizarTabela('todos', dadosNormalizados);
-                    this.inicializarFiltros('todos', dadosNormalizados);
-                    
-                    // Populate aba filter
-                    const abasUnicas = [...new Set(dadosNormalizados.map(u => u.aba))];
-                    const abaSelect = document.getElementById('adm-filtro-aba-todos');
-                    if (abaSelect) {
-                        abaSelect.innerHTML = '<option value="">Todas as planilhas</option>' + 
-                            abasUnicas.map(aba => `<option value="${aba}">${aba}</option>`).join('');
-                    }
-                } else {
-                    this.mostrarToast('Erro ao carregar todos os utilizadores', 'erro');
-                    this.renderizarTabela('todos', []);
-                }
-            } catch (error) {
-                console.error('Erro ao carregar todos:', error);
-                this.mostrarToast('Erro ao carregar todos os utilizadores', 'erro');
-                this.renderizarTabela('todos', []);
-            }
-        };
-        
-        console.log('[AdminFix] Carregamento de dados corrigido');
-    }
-    
-    // ============================================================
-    // 4. CORRIGIR MODAL DE DETALHES
-    // ============================================================
-    function corrigirModalDetalhes() {
-        // Sobrescrever renderizarDetalhesUsuario
-        const originalRenderizarDetalhesUsuario = window.adminPanel.renderizarDetalhesUsuario;
-        
-        window.adminPanel.renderizarDetalhesUsuario = function(user, aba) {
-            const config = ABAS_CONFIG[aba] || {};
-            
-            // Extrair todos os campos possíveis
-            const campos = [
-                { label: 'ID', valor: user.id },
-                { label: 'Nome', valor: user.nome || user['Nome do Usuário'] },
-                { label: 'Email', valor: user.email || user.Email },
-                { label: 'Telefone', valor: user.telefone || user['Número de Telefone'] },
-                { label: 'Data de Nascimento', valor: user.dataNascimento || user['Data de Nascimento'] },
-                { label: 'Sexo', valor: user.sexo || user.Sexo },
-                { label: 'País', valor: user.pais || user.País },
-                { label: 'Região', valor: user.regiao || user.Região },
-                { label: 'Tipo de Usuário', valor: user.tipo || user['Tipo de Usuario'] || aba }
-            ];
-            
-            if (config.temFuncao || aba === 'Parceiros') campos.push({ label: 'Função', valor: user.funcao || user.FUNCAO || user.Função });
-            if (config.temTurma || aba === 'Cursos Online' || aba === 'Formação Presencial') campos.push({ label: 'Turma', valor: user.turma || user.TURMA || user.Turma });
-            if (config.temInstituicao || aba === 'Formação Presencial') campos.push({ label: 'Instituição', valor: user.instituicao || user.INSTITUICAO || user['Instituição Associada'] });
-            if (config.temValor || aba !== 'Usuários Não Pagos') campos.push({ label: 'Valor Pago', valor: user.valorPago || user['Valor Pago'] });
-            if (user.descricao || aba === 'Serviços Personalizados') campos.push({ label: 'Descrição', valor: user.descricao || user.DESCRICAO || user.Descrição });
-            
-            campos.push(
-                { label: 'Data de Registo', valor: this.formatarData(user.dataRegistro || user['Data de Registro']) },
-                { label: 'Data de Expiração', valor: user.dataExpiracao || user['Data Para Expirar o Acesso'] || 'Permanente' }
-            );
-            
-            return `
-                <div class="adm-detalhes-grid">
-                    ${campos.map(campo => `
-                        <div class="adm-detalhes-campo">
-                            <label>${campo.label}</label>
-                            <span>${this.escapeHtml(campo.valor || '-')}</span>
-                        </div>
-                    `).join('')}
-                    <div class="adm-detalhes-campo adm-detalhes-status">
-                        <label>Status</label>
-                        ${this.renderizarStatusBadge(user.status)}
-                    </div>
-                </div>
-                <div class="adm-detalhes-acoes">
-                    ${this.renderizarAcoesDetalhes(user, aba)}
-                </div>
-            `;
-        };
-        
-        // Sobrescrever abrirModalDetalhes para garantir busca correta
-        const originalAbrirModalDetalhes = window.adminPanel.abrirModalDetalhes;
-        
-        window.adminPanel.abrirModalDetalhes = async function(id, aba) {
-            const modal = document.getElementById('adm-modal-detalhes');
-            const conteudo = document.getElementById('adm-detalhes-conteudo');
-            conteudo.innerHTML = '<div class="adm-detalhes-loading">Carregando dados...</div>';
-            modal.style.display = 'flex';
-            
-            try {
-                // Buscar dados do utilizador
-                let user = null;
-                const cacheKey = aba === 'todos' ? 'todos_utilizadores' : `aba_${aba}`;
-                const cached = this.dadosCache.get(cacheKey);
-                
-                if (cached && cached.dados) {
-                    user = cached.dados.find(u => u.id == id);
-                }
-                
-                if (!user) {
-                    const resultado = await this.chamarBackendGet({ acao: 'buscarUsuario', id: id, aba: aba });
-                    if (resultado.status === 'success' && resultado.dados) {
-                        user = resultado.dados;
-                    }
-                }
-                
-                if (user) {
-                    conteudo.innerHTML = this.renderizarDetalhesUsuario(user, aba);
-                } else {
-                    conteudo.innerHTML = '<div class="adm-detalhes-erro">Utilizador não encontrado</div>';
-                }
-            } catch (error) {
-                console.error('Erro ao buscar detalhes:', error);
-                conteudo.innerHTML = '<div class="adm-detalhes-erro">Erro ao carregar dados do utilizador</div>';
-            }
-        };
-        
-        console.log('[AdminFix] Modal de detalhes corrigido');
-    }
-    
-    // ============================================================
-    // 5. MELHORAR AÇÕES SOBRE UTILIZADORES
-    // ============================================================
-    function melhorarAcoesUtilizadores() {
-        // Garantir que aprovarUtilizador funciona para todos os tipos
-        const originalAprovarUtilizador = window.adminPanel.aprovarUtilizador;
-        
-        window.adminPanel.aprovarUtilizador = function(id, aba, nome) {
-            this.confirmarAcao('Aprovar Utilizador', `Tens a certeza que pretendes APROVAR o utilizador "${nome}"?`, async () => {
-                let payload;
-                
-                if (aba === 'Parceiros') {
-                    payload = { acao: 'aprovar', id: id };
-                } else if (aba === 'Serviços Personalizados') {
-                    payload = { acao: 'atualizarStatus', id: id, aba: aba, novoStatus: 'fechado' };
-                } else {
-                    payload = { acao: 'atualizarStatus', id: id, aba: aba, novoStatus: 'aprovado' };
-                }
-                
-                const resultado = await this.chamarBackendPost(payload);
-                if (resultado.status === 'success') {
-                    this.mostrarToast(`Utilizador ${nome} aprovado com sucesso!`, 'sucesso');
-                    this.invalidarCache(aba);
-                    await this.recarregarSecaoAtual();
-                } else {
-                    this.mostrarToast(`Erro ao aprovar ${nome}: ${resultado.mensagem || 'Erro desconhecido'}`, 'erro');
-                }
-            });
-        };
-        
-        // Melhorar renovarAcesso
-        const originalRenovarAcesso = window.adminPanel.renovarAcesso;
-        
-        window.adminPanel.renovarAcesso = function(email, aba) {
-            this.confirmarAcao('Renovar Acesso', `Tens a certeza que pretendes RENOVAR o acesso do utilizador com email "${email}"? Será adicionado +90 dias.`, async () => {
-                const resultado = await this.chamarBackendPost({ acao: 'renovar', email: email, aba: aba, novoComprovativo: 'Sim' });
-                if (resultado.status === 'success') {
-                    this.mostrarToast(`Acesso renovado para ${email}!`, 'sucesso');
-                    this.invalidarCache(aba);
-                    await this.recarregarSecaoAtual();
-                } else {
-                    this.mostrarToast(`Erro ao renovar acesso: ${resultado.mensagem || 'Erro desconhecido'}`, 'erro');
-                }
-            });
-        };
-        
-        console.log('[AdminFix] Ações de utilizadores corrigidas');
-    }
-    
-    // ============================================================
-    // 6. FORÇAR ATUALIZAÇÃO DO DASHBOARD
-    // ============================================================
-    function forcarAtualizacaoDashboard() {
-        // Sobrescrever carregarDashboard
-        const originalCarregarDashboard = window.adminPanel.carregarDashboard;
-        
-        window.adminPanel.carregarDashboard = async function() {
-            try {
-                const resultado = await this.chamarBackendGet({ acao: 'listar' });
-                if (resultado.status === 'success' && resultado.dados) {
-                    this.calcularEstatisticas(resultado.dados);
-                    this.renderizarUltimosCadastros(resultado.dados);
-                    this.renderizarGrafico(resultado.dados);
-                } else {
-                    this.mostrarToast('Erro ao carregar dashboard', 'erro');
-                }
-            } catch (error) {
-                console.error('Erro ao carregar dashboard:', error);
-                this.mostrarToast('Erro ao carregar dashboard', 'erro');
-            }
-        };
-        
-        // Sobrescrever calcularEstatisticas
-        const originalCalcularEstatisticas = window.adminPanel.calcularEstatisticas;
-        
-        window.adminPanel.calcularEstatisticas = function(dados) {
-            const stats = {
-                total: 0,
-                parceiros: 0,
-                simuladores: 0,
-                cursos: 0,
-                formacao: 0,
-                servicos: 0,
-                naopagos: 0,
-                aguardando: 0
-            };
-            
-            dados.forEach(user => {
-                if (user.aba !== 'Administrador') {
-                    stats.total++;
-                    
-                    switch(user.aba) {
-                        case 'Parceiros': stats.parceiros++; break;
-                        case 'Simuladores-Bibliotecas': stats.simuladores++; break;
-                        case 'Cursos Online': stats.cursos++; break;
-                        case 'Formação Presencial': stats.formacao++; break;
-                        case 'Serviços Personalizados': stats.servicos++; break;
-                        case 'Usuários Não Pagos': stats.naopagos++; break;
-                    }
-                    
-                    if (user.status === 'aguardando validacao') stats.aguardando++;
-                }
-            });
-            
-            this.renderizarCards(stats);
-        };
-        
-        // Forçar atualização do dashboard
-        setTimeout(() => {
-            if (window.adminPanel && window.adminPanel.secaoActiva === 'dashboard') {
-                window.adminPanel.carregarDashboard();
-            }
-        }, 1000);
-        
-        console.log('[AdminFix] Dashboard corrigido com dados reais');
-    }
-    
-    // ============================================================
-    // 7. ADICIONAR OBSERVER PARA ATUALIZAR TABELAS
-    // ============================================================
-    function adicionarObserverTabelas() {
-        // Observer para recarregar dados quando a aba é ativada
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                    const target = mutation.target;
-                    if (target.classList && target.classList.contains('active')) {
-                        const secaoId = target.id;
-                        if (secaoId && window.adminPanel) {
-                            const secao = secaoId.replace('adm-secao-', '');
-                            if (secao !== 'dashboard' && secao !== window.adminPanel.secaoActiva) {
-                                // Recarregar dados da secao
-                                setTimeout(() => {
-                                    switch(secao) {
-                                        case 'parceiros':
-                                            window.adminPanel.carregarDadosAba('Parceiros', true);
-                                            break;
-                                        case 'simuladores':
-                                            window.adminPanel.carregarDadosAba('Simuladores-Bibliotecas', true);
-                                            break;
-                                        case 'cursos':
-                                            window.adminPanel.carregarDadosAba('Cursos Online', true);
-                                            break;
-                                        case 'formacao':
-                                            window.adminPanel.carregarDadosAba('Formação Presencial', true);
-                                            break;
-                                        case 'servicos':
-                                            window.adminPanel.carregarDadosAba('Serviços Personalizados', true);
-                                            break;
-                                        case 'naopagos':
-                                            window.adminPanel.carregarDadosAba('Usuários Não Pagos', true);
-                                            break;
-                                        case 'todos':
-                                            window.adminPanel.carregarTodosUtilizadores(true);
-                                            break;
-                                    }
-                                }, 100);
-                            }
-                        }
-                    }
-                }
-            });
-        });
-        
-        // Observar mudanças nas seções
-        const secoes = document.querySelectorAll('.adm-secao');
-        secoes.forEach(secao => {
-            observer.observe(secao, { attributes: true });
-        });
-        
-        console.log('[AdminFix] Observer de tabelas adicionado');
-    }
-    
-    // ============================================================
-    // 8. CORRIGIR FILTROS NAS TABELAS
-    // ============================================================
-    function corrigirFiltros() {
-        // Adicionar event listeners para filtros de região e status
-        const adicionarEventListenersFiltros = () => {
-            const abas = ['parceiros', 'simuladores', 'cursos', 'formacao', 'servicos', 'naopagos', 'todos'];
-            
-            abas.forEach(aba => {
-                const regiaoSelect = document.getElementById(`adm-filtro-regiao-${aba}`);
-                const statusSelect = document.getElementById(`adm-filtro-status-${aba}`);
-                const tipoSelect = document.getElementById(`adm-filtro-tipo-${aba}`);
-                const abaSelect = document.getElementById(`adm-filtro-aba-${aba}`);
-                
-                if (regiaoSelect) {
-                    regiaoSelect.addEventListener('change', () => {
-                        if (window.adminPanel) {
-                            window.adminPanel.estadoFiltros[aba] = window.adminPanel.estadoFiltros[aba] || {};
-                            window.adminPanel.estadoFiltros[aba].regiao = regiaoSelect.value;
-                            window.adminPanel.aplicarFiltros(aba);
-                        }
-                    });
-                }
-                
-                if (statusSelect) {
-                    statusSelect.addEventListener('change', () => {
-                        if (window.adminPanel) {
-                            window.adminPanel.estadoFiltros[aba] = window.adminPanel.estadoFiltros[aba] || {};
-                            window.adminPanel.estadoFiltros[aba].status = statusSelect.value;
-                            window.adminPanel.aplicarFiltros(aba);
-                        }
-                    });
-                }
-                
-                if (tipoSelect && aba === 'todos') {
-                    tipoSelect.addEventListener('change', () => {
-                        if (window.adminPanel) {
-                            window.adminPanel.estadoFiltros.todos = window.adminPanel.estadoFiltros.todos || {};
-                            window.adminPanel.estadoFiltros.todos.tipo = tipoSelect.value;
-                            window.adminPanel.aplicarFiltros('todos');
-                        }
-                    });
-                }
-                
-                if (abaSelect && aba === 'todos') {
-                    abaSelect.addEventListener('change', () => {
-                        if (window.adminPanel) {
-                            window.adminPanel.estadoFiltros.todos = window.adminPanel.estadoFiltros.todos || {};
-                            window.adminPanel.estadoFiltros.todos.aba = abaSelect.value;
-                            window.adminPanel.aplicarFiltros('todos');
-                        }
-                    });
-                }
-            });
-        };
-        
-        // Executar após um pequeno delay para garantir que o DOM está pronto
-        setTimeout(adicionarEventListenersFiltros, 500);
-        
-        console.log('[AdminFix] Filtros corrigidos');
-    }
-    
-    // Iniciar correção de filtros após um delay
-    setTimeout(corrigirFiltros, 1000);
-    
-})();

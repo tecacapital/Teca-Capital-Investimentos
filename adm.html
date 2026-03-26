@@ -71,311 +71,374 @@
     </header>
 
     <main id="adm-main">
+        
+        <!-- ============================================================ -->
+        <!-- MODAIS DO SISTEMA -->
+        <!-- ============================================================ -->
 
-            <!-- Modal de aviso de sessão -->
-            <div id="adm-modal-sessao" class="adm-modal" style="display:none">
-                <div class="adm-modal-content">
-                    <div class="adm-modal-header">
-                        <i class="fas fa-clock"></i>
-                        <h3>Sessão prestes a expirar</h3>
-                    </div>
-                    <div class="adm-modal-body">
-                        <p>A sua sessão irá expirar em <span id="adm-tempo-restante">30</span> segundos por inatividade.</p>
-                        <p>Clique em "Continuar sessão" para permanecer conectado.</p>
-                    </div>
-                    <div class="adm-modal-footer">
-                        <button id="adm-continuar-sessao" class="adm-btn adm-btn-primary">Continuar Sessão</button>
-                    </div>
+        <!-- Modal de aviso de sessão -->
+        <div id="adm-modal-sessao" class="adm-modal" style="display:none">
+            <div class="adm-modal-content">
+                <div class="adm-modal-header">
+                    <i class="fas fa-clock"></i>
+                    <h3>Sessão prestes a expirar</h3>
+                </div>
+                <div class="adm-modal-body">
+                    <p>A sua sessão irá expirar em <span id="adm-tempo-restante">30</span> segundos por inatividade.</p>
+                    <p>Clique em "Continuar sessão" para permanecer conectado.</p>
+                </div>
+                <div class="adm-modal-footer">
+                    <button id="adm-continuar-sessao" class="adm-btn adm-btn-primary">Continuar Sessão</button>
                 </div>
             </div>
+        </div>
 
-            <!-- Modal de confirmação de acção -->
-            <div id="adm-modal-confirmacao" class="adm-modal" style="display:none">
-                <div class="adm-modal-content adm-modal-confirm">
-                    <div class="adm-modal-header">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h3 id="adm-confirm-titulo">Confirmar acção</h3>
-                    </div>
-                    <div class="adm-modal-body">
-                        <p id="adm-confirm-mensagem">Tens a certeza que pretendes executar esta acção?</p>
-                    </div>
-                    <div class="adm-modal-footer">
-                        <button id="adm-confirm-cancelar" class="adm-btn adm-btn-secondary">Cancelar</button>
-                        <button id="adm-confirm-ok" class="adm-btn adm-btn-danger">Confirmar</button>
-                    </div>
+        <!-- Modal de confirmação de acção -->
+        <div id="adm-modal-confirmacao" class="adm-modal" style="display:none">
+            <div class="adm-modal-content adm-modal-confirm">
+                <div class="adm-modal-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3 id="adm-confirm-titulo">Confirmar acção</h3>
+                </div>
+                <div class="adm-modal-body">
+                    <p id="adm-confirm-mensagem">Tens a certeza que pretendes executar esta acção?</p>
+                </div>
+                <div class="adm-modal-footer">
+                    <button id="adm-confirm-cancelar" class="adm-btn adm-btn-secondary">Cancelar</button>
+                    <button id="adm-confirm-ok" class="adm-btn adm-btn-danger">Confirmar</button>
                 </div>
             </div>
+        </div>
 
-            <!-- Modal de detalhes do utilizador -->
-            <div id="adm-modal-detalhes" class="adm-modal" style="display:none">
-                <div class="adm-modal-content adm-modal-large">
-                    <div class="adm-modal-header">
-                        <i class="fas fa-user-circle"></i>
-                        <h3>Detalhes do Utilizador</h3>
-                        <button class="adm-modal-close" onclick="adminPanel.fecharModal('adm-modal-detalhes')">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="adm-modal-body" id="adm-detalhes-conteudo">
-                        <div class="adm-detalhes-loading">Carregando...</div>
-                    </div>
+        <!-- Modal de detalhes do utilizador (com senha toggle) -->
+        <div id="adm-modal-detalhes" class="adm-modal" style="display:none">
+            <div class="adm-modal-content adm-modal-large">
+                <div class="adm-modal-header">
+                    <i class="fas fa-user-circle"></i>
+                    <h3>Detalhes do Utilizador</h3>
+                    <button class="adm-modal-close" onclick="adminPanel.fecharModal('adm-modal-detalhes')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="adm-modal-body" id="adm-detalhes-conteudo">
+                    <div class="adm-detalhes-loading">Carregando...</div>
                 </div>
             </div>
+        </div>
 
-            <!-- Toast de notificações -->
-            <div id="adm-toast-container" class="adm-toast-container"></div>
+        <!-- Container de Toast Notifications -->
+        <div id="adm-toast-container" class="adm-toast-container"></div>
 
-            <!-- Layout principal -->
-            <div class="adm-layout">
+        <!-- ============================================================ -->
+        <!-- LAYOUT PRINCIPAL -->
+        <!-- ============================================================ -->
+        <div class="adm-layout">
 
-                <!-- Sidebar -->
-                <aside id="adm-sidebar" class="adm-sidebar">
-                    <div class="adm-sidebar-header">
-                        <div class="adm-logo">
-                            <i class="fas fa-chart-line"></i>
-                            <span>TECA CAPITAL</span>
-                        </div>
-                        <div class="adm-admin-info">
-                            <i class="fas fa-user-shield"></i>
-                            <div>
-                                <span id="adm-admin-nome">Carregando...</span>
-                                <small>Administrador</small>
-                            </div>
+            <!-- SIDEBAR -->
+            <aside id="adm-sidebar" class="adm-sidebar">
+                <div class="adm-sidebar-header">
+                    <div class="adm-logo">
+                        <i class="fas fa-chart-line"></i>
+                        <span>TECA CAPITAL</span>
+                    </div>
+                    <div class="adm-admin-info">
+                        <i class="fas fa-user-shield"></i>
+                        <div>
+                            <span id="adm-admin-nome">Carregando...</span>
+                            <small>Administrador</small>
                         </div>
                     </div>
-                    <nav class="adm-sidebar-nav">
-                        <button class="adm-nav-item" data-secao="dashboard">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </button>
-                        <button class="adm-nav-item" data-secao="parceiros">
-                            <i class="fas fa-handshake"></i>
-                            <span>Parceiros</span>
-                        </button>
-                        <button class="adm-nav-item" data-secao="simuladores">
-                            <i class="fas fa-calculator"></i>
-                            <span>Simuladores e Biblioteca</span>
-                        </button>
-                        <button class="adm-nav-item" data-secao="cursos">
-                            <i class="fas fa-video"></i>
-                            <span>Cursos Online</span>
-                        </button>
-                        <button class="adm-nav-item" data-secao="formacao">
-                            <i class="fas fa-chalkboard-teacher"></i>
-                            <span>Formação Presencial</span>
-                        </button>
-                        <button class="adm-nav-item" data-secao="servicos">
-                            <i class="fas fa-concierge-bell"></i>
-                            <span>Serviços Personalizados</span>
-                        </button>
-                        <button class="adm-nav-item" data-secao="naopagos">
-                            <i class="fas fa-user-slash"></i>
-                            <span>Usuários Não Pagos</span>
-                        </button>
-                        <button class="adm-nav-item" data-secao="todos">
-                            <i class="fas fa-users"></i>
-                            <span>Todos os Utilizadores</span>
-                        </button>
-                    </nav>
-                    <div class="adm-sidebar-footer">
-                        <div class="adm-timer">
-                            <i class="fas fa-hourglass-half"></i>
-                            <span id="adm-timer-display">02:00</span>
-                        </div>
-                        <button id="adm-logout-btn" class="adm-logout-btn">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Sair</span>
-                        </button>
+                </div>
+                <nav class="adm-sidebar-nav">
+                    <button class="adm-nav-item" data-secao="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="adm-nav-item" data-secao="parceiros">
+                        <i class="fas fa-handshake"></i>
+                        <span>Parceiros</span>
+                    </button>
+                    <button class="adm-nav-item" data-secao="simuladores">
+                        <i class="fas fa-calculator"></i>
+                        <span>Simuladores e Biblioteca</span>
+                    </button>
+                    <button class="adm-nav-item" data-secao="cursos">
+                        <i class="fas fa-video"></i>
+                        <span>Cursos Online</span>
+                    </button>
+                    <button class="adm-nav-item" data-secao="formacao">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Formação Presencial</span>
+                    </button>
+                    <button class="adm-nav-item" data-secao="servicos">
+                        <i class="fas fa-concierge-bell"></i>
+                        <span>Serviços Personalizados</span>
+                    </button>
+                    <button class="adm-nav-item" data-secao="naopagos">
+                        <i class="fas fa-user-slash"></i>
+                        <span>Usuários Não Pagos</span>
+                    </button>
+                    <button class="adm-nav-item" data-secao="todos">
+                        <i class="fas fa-users"></i>
+                        <span>Todos os Utilizadores</span>
+                    </button>
+                </nav>
+                <div class="adm-sidebar-footer">
+                    <div class="adm-timer">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span id="adm-timer-display">02:00</span>
                     </div>
-                </aside>
+                    <button id="adm-logout-btn" class="adm-logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </button>
+                </div>
+            </aside>
 
-                <!-- Conteúdo principal -->
-                <div class="adm-content">
+            <!-- CONTEÚDO PRINCIPAL -->
+            <div class="adm-content">
 
-                    <!-- Topbar mobile -->
-                    <div class="adm-topbar">
-                        <button id="adm-menu-toggle" class="adm-menu-toggle">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                        <span class="adm-topbar-title">Painel de Administrador</span>
-                        <div class="adm-topbar-sessao">
-                            <i class="fas fa-hourglass-half"></i>
-                            <span id="adm-topbar-timer">02:00</span>
+                <!-- Topbar Mobile -->
+                <div class="adm-topbar" id="adm-topbar">
+                    <button id="adm-menu-toggle" class="adm-menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <span class="adm-topbar-title">Painel de Administrador</span>
+                    <div class="adm-topbar-sessao">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span id="adm-topbar-timer">02:00</span>
+                    </div>
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- SECÇÃO 1: DASHBOARD -->
+                <!-- ============================================================ -->
+                <section id="adm-secao-dashboard" class="adm-secao active">
+                    <div class="adm-secao-header">
+                        <h2><i class="fas fa-chart-line"></i> Dashboard</h2>
+                        <p>Visão geral da plataforma Teca Capital EdTech</p>
+                    </div>
+                    <div class="adm-stats-grid" id="adm-stats-grid">
+                        <div class="adm-stat-card adm-skeleton">Carregando...</div>
+                    </div>
+                    <div class="adm-grafico">
+                        <h3><i class="fas fa-chart-pie"></i> Distribuição por Categoria</h3>
+                        <div class="adm-grafico-barras" id="adm-grafico-barras">
+                            <div class="adm-skeleton">Carregando gráfico...</div>
                         </div>
                     </div>
-
-                    <!-- Áreas de conteúdo -->
-                    <section id="adm-secao-dashboard" class="adm-secao active">
-                        <div class="adm-secao-header">
-                            <h2><i class="fas fa-chart-line"></i> Dashboard</h2>
-                            <p>Visão geral da plataforma</p>
-                        </div>
-                        <div class="adm-stats-grid" id="adm-stats-grid">
-                            <div class="adm-stat-card adm-skeleton">Carregando...</div>
-                        </div>
-                        <div class="adm-grafico">
-                            <h3><i class="fas fa-chart-pie"></i> Distribuição por Categoria</h3>
-                            <div class="adm-grafico-barras" id="adm-grafico-barras">
-                                <div class="adm-skeleton">Carregando gráfico...</div>
-                            </div>
-                        </div>
-                        <div class="adm-recentes">
-                            <h3><i class="fas fa-clock"></i> Últimos Cadastros</h3>
-                            <div class="adm-table-responsive">
-                                <table class="adm-table" id="adm-ultimos-table">
-                                    <thead>
-                                        <tr><th>ID</th><th>Nome</th><th>Email</th><th>Tipo</th><th>Data</th></tr>
-                                    </thead>
-                                    <tbody id="adm-ultimos-body"><tr><td colspan="5" class="adm-text-center">Carregando...</td></tr></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section id="adm-secao-parceiros" class="adm-secao">
-                        <div class="adm-secao-header">
-                            <h2><i class="fas fa-handshake"></i> Parceiros</h2>
-                            <button class="adm-btn-refresh" data-aba="Parceiros"><i class="fas fa-sync-alt"></i> Actualizar</button>
-                        </div>
-                        <div class="adm-toolbar">
-                            <div class="adm-search-box">
-                                <i class="fas fa-search"></i>
-                                <input type="text" id="adm-search-parceiros" placeholder="Buscar por nome ou email...">
-                            </div>
-                            <div class="adm-filters">
-                                <select id="adm-filtro-regiao-parceiros"><option value="">Todas as regiões</option></select>
-                                <select id="adm-filtro-status-parceiros"><option value="">Todos os status</option></select>
-                                <button class="adm-btn-clear" data-aba="Parceiros"><i class="fas fa-eraser"></i> Limpar</button>
-                                <button class="adm-btn-export" data-aba="Parceiros"><i class="fas fa-download"></i> Exportar CSV</button>
-                            </div>
-                        </div>
-                        <div class="adm-resultados-info"><span id="adm-contador-parceiros">0</span> resultados encontrados</div>
+                    <div class="adm-recentes">
+                        <h3><i class="fas fa-clock"></i> Últimos Cadastros</h3>
                         <div class="adm-table-responsive">
-                            <table class="adm-table" id="adm-table-parceiros">
-                                <thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Região</th><th>Função</th><th>Status</th><th>Data Registo</th><th>Expiração</th><th>Acções</th></tr></thead>
-                                <tbody id="adm-table-body-parceiros"><tr><td colspan="10" class="adm-text-center">Carregando...</td></tr></tbody>
+                            <table class="adm-table" id="adm-ultimos-table">
+                                <thead>
+                                    <tr><th>ID</th><th>Nome</th><th>Email</th><th>Tipo</th><th>Data</th> </tr>
+                                </thead>
+                                <tbody id="adm-ultimos-body">
+                                    <tr><td colspan="5" class="adm-text-center">Carregando...</td></tr>
+                                </tbody>
                             </table>
                         </div>
-                        <div class="adm-paginacao" id="adm-paginacao-parceiros"></div>
-                    </section>
+                    </div>
+                </section>
 
-                    <section id="adm-secao-simuladores" class="adm-secao">
-                        <div class="adm-secao-header">
-                            <h2><i class="fas fa-calculator"></i> Simuladores e Biblioteca</h2>
-                            <button class="adm-btn-refresh" data-aba="Simuladores-Bibliotecas"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                <!-- ============================================================ -->
+                <!-- SECÇÃO 2: PARCEIROS -->
+                <!-- ============================================================ -->
+                <section id="adm-secao-parceiros" class="adm-secao">
+                    <div class="adm-secao-header">
+                        <h2><i class="fas fa-handshake"></i> Parceiros</h2>
+                        <button class="adm-btn-refresh" data-aba="Parceiros"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="adm-toolbar">
+                        <div class="adm-search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="adm-search-parceiros" placeholder="Buscar por nome ou email...">
                         </div>
-                        <div class="adm-toolbar">
-                            <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-simuladores" placeholder="Buscar por nome ou email..."></div>
-                            <div class="adm-filters">
-                                <select id="adm-filtro-regiao-simuladores"><option value="">Todas as regiões</option></select>
-                                <select id="adm-filtro-status-simuladores"><option value="">Todos os status</option></select>
-                                <button class="adm-btn-clear" data-aba="Simuladores-Bibliotecas"><i class="fas fa-eraser"></i> Limpar</button>
-                                <button class="adm-btn-export" data-aba="Simuladores-Bibliotecas"><i class="fas fa-download"></i> Exportar CSV</button>
-                            </div>
+                        <div class="adm-filters">
+                            <select id="adm-filtro-regiao-parceiros"><option value="">Todas as regiões</option></select>
+                            <select id="adm-filtro-status-parceiros"><option value="">Todos os status</option></select>
+                            <button class="adm-btn-clear" data-aba="Parceiros"><i class="fas fa-eraser"></i> Limpar</button>
+                            <button class="adm-btn-export" data-aba="Parceiros"><i class="fas fa-download"></i> Exportar CSV</button>
                         </div>
-                        <div class="adm-resultados-info"><span id="adm-contador-simuladores">0</span> resultados encontrados</div>
-                        <div class="adm-table-responsive"><table class="adm-table" id="adm-table-simuladores"><thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Região</th><th>Valor Pago</th><th>Status</th><th>Data Registo</th><th>Expiração</th><th>Acções</th></tr></thead><tbody id="adm-table-body-simuladores"><tr><td colspan="10" class="adm-text-center">Carregando...</td></tr></tbody></table></div>
-                        <div class="adm-paginacao" id="adm-paginacao-simuladores"></div>
-                    </section>
+                    </div>
+                    <div class="adm-resultados-info"><span id="adm-contador-parceiros">0</span> resultados encontrados</div>
+                    <div class="adm-table-responsive">
+                        <table class="adm-table" id="adm-table-parceiros">
+                            <thead>
+                                <tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Região</th><th>Função</th><th>Status</th><th>Data Registo</th><th>Expiração</th><th>Ações</th> </tr>
+                            </thead>
+                            <tbody id="adm-table-body-parceiros"><tr><td colspan="10" class="adm-text-center">Carregando...</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="adm-paginacao" id="adm-paginacao-parceiros"></div>
+                </section>
 
-                    <section id="adm-secao-cursos" class="adm-secao">
-                        <div class="adm-secao-header">
-                            <h2><i class="fas fa-video"></i> Cursos Online</h2>
-                            <button class="adm-btn-refresh" data-aba="Cursos Online"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                <!-- ============================================================ -->
+                <!-- SECÇÃO 3: SIMULADORES E BIBLIOTECA -->
+                <!-- ============================================================ -->
+                <section id="adm-secao-simuladores" class="adm-secao">
+                    <div class="adm-secao-header">
+                        <h2><i class="fas fa-calculator"></i> Simuladores e Biblioteca</h2>
+                        <button class="adm-btn-refresh" data-aba="Simuladores-Bibliotecas"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="adm-toolbar">
+                        <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-simuladores" placeholder="Buscar por nome ou email..."></div>
+                        <div class="adm-filters">
+                            <select id="adm-filtro-regiao-simuladores"><option value="">Todas as regiões</option></select>
+                            <select id="adm-filtro-status-simuladores"><option value="">Todos os status</option></select>
+                            <button class="adm-btn-clear" data-aba="Simuladores-Bibliotecas"><i class="fas fa-eraser"></i> Limpar</button>
+                            <button class="adm-btn-export" data-aba="Simuladores-Bibliotecas"><i class="fas fa-download"></i> Exportar CSV</button>
                         </div>
-                        <div class="adm-toolbar">
-                            <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-cursos" placeholder="Buscar por nome ou email..."></div>
-                            <div class="adm-filters">
-                                <select id="adm-filtro-regiao-cursos"><option value="">Todas as regiões</option></select>
-                                <select id="adm-filtro-status-cursos"><option value="">Todos os status</option></select>
-                                <button class="adm-btn-clear" data-aba="Cursos Online"><i class="fas fa-eraser"></i> Limpar</button>
-                                <button class="adm-btn-export" data-aba="Cursos Online"><i class="fas fa-download"></i> Exportar CSV</button>
-                            </div>
-                        </div>
-                        <div class="adm-resultados-info"><span id="adm-contador-cursos">0</span> resultados encontrados</div>
-                        <div class="adm-table-responsive"><table class="adm-table" id="adm-table-cursos"><thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Turma</th><th>Valor</th><th>Status</th><th>Data Registo</th><th>Expiração</th><th>Acções</th></tr></thead><tbody id="adm-table-body-cursos"><tr><td colspan="10" class="adm-text-center">Carregando...</td></tr></tbody></table></div>
-                        <div class="adm-paginacao" id="adm-paginacao-cursos"></div>
-                    </section>
+                    </div>
+                    <div class="adm-resultados-info"><span id="adm-contador-simuladores">0</span> resultados encontrados</div>
+                    <div class="adm-table-responsive">
+                        <table class="adm-table" id="adm-table-simuladores">
+                            <thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Região</th><th>Valor Pago</th><th>Status</th><th>Data Registo</th><th>Expiração</th><th>Ações</th></tr></thead>
+                            <tbody id="adm-table-body-simuladores"><tr><td colspan="10" class="adm-text-center">Carregando...</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="adm-paginacao" id="adm-paginacao-simuladores"></div>
+                </section>
 
-                    <section id="adm-secao-formacao" class="adm-secao">
-                        <div class="adm-secao-header">
-                            <h2><i class="fas fa-chalkboard-teacher"></i> Formação Presencial</h2>
-                            <button class="adm-btn-refresh" data-aba="Formação Presencial"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                <!-- ============================================================ -->
+                <!-- SECÇÃO 4: CURSOS ONLINE -->
+                <!-- ============================================================ -->
+                <section id="adm-secao-cursos" class="adm-secao">
+                    <div class="adm-secao-header">
+                        <h2><i class="fas fa-video"></i> Cursos Online</h2>
+                        <button class="adm-btn-refresh" data-aba="Cursos Online"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="adm-toolbar">
+                        <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-cursos" placeholder="Buscar por nome ou email..."></div>
+                        <div class="adm-filters">
+                            <select id="adm-filtro-regiao-cursos"><option value="">Todas as regiões</option></select>
+                            <select id="adm-filtro-status-cursos"><option value="">Todos os status</option></select>
+                            <button class="adm-btn-clear" data-aba="Cursos Online"><i class="fas fa-eraser"></i> Limpar</button>
+                            <button class="adm-btn-export" data-aba="Cursos Online"><i class="fas fa-download"></i> Exportar CSV</button>
                         </div>
-                        <div class="adm-toolbar">
-                            <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-formacao" placeholder="Buscar por nome ou email..."></div>
-                            <div class="adm-filters">
-                                <select id="adm-filtro-regiao-formacao"><option value="">Todas as regiões</option></select>
-                                <select id="adm-filtro-status-formacao"><option value="">Todos os status</option></select>
-                                <button class="adm-btn-clear" data-aba="Formação Presencial"><i class="fas fa-eraser"></i> Limpar</button>
-                                <button class="adm-btn-export" data-aba="Formação Presencial"><i class="fas fa-download"></i> Exportar CSV</button>
-                            </div>
-                        </div>
-                        <div class="adm-resultados-info"><span id="adm-contador-formacao">0</span> resultados encontrados</div>
-                        <div class="adm-table-responsive"><table class="adm-table" id="adm-table-formacao"><thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Instituição</th><th>Turma</th><th>Valor</th><th>Status</th><th>Data Registo</th><th>Expiração</th><th>Acções</th></tr></thead><tbody id="adm-table-body-formacao"><tr><td colspan="10" class="adm-text-center">Carregando...</td></tr></tbody></table></div>
-                        <div class="adm-paginacao" id="adm-paginacao-formacao"></div>
-                    </section>
+                    </div>
+                    <div class="adm-resultados-info"><span id="adm-contador-cursos">0</span> resultados encontrados</div>
+                    <div class="adm-table-responsive">
+                        <table class="adm-table" id="adm-table-cursos">
+                            <thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Região</th><th>Turma</th><th>Valor</th><th>Status</th><th>Data Registo</th><th>Expiração</th><th>Ações</th></tr></thead>
+                            <tbody id="adm-table-body-cursos"><tr><td colspan="11" class="adm-text-center">Carregando...</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="adm-paginacao" id="adm-paginacao-cursos"></div>
+                </section>
 
-                    <section id="adm-secao-servicos" class="adm-secao">
-                        <div class="adm-secao-header">
-                            <h2><i class="fas fa-concierge-bell"></i> Serviços Personalizados</h2>
-                            <button class="adm-btn-refresh" data-aba="Serviços Personalizados"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                <!-- ============================================================ -->
+                <!-- SECÇÃO 5: FORMAÇÃO PRESENCIAL -->
+                <!-- ============================================================ -->
+                <section id="adm-secao-formacao" class="adm-secao">
+                    <div class="adm-secao-header">
+                        <h2><i class="fas fa-chalkboard-teacher"></i> Formação Presencial</h2>
+                        <button class="adm-btn-refresh" data-aba="Formação Presencial"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="adm-toolbar">
+                        <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-formacao" placeholder="Buscar por nome ou email..."></div>
+                        <div class="adm-filters">
+                            <select id="adm-filtro-regiao-formacao"><option value="">Todas as regiões</option></select>
+                            <select id="adm-filtro-status-formacao"><option value="">Todos os status</option></select>
+                            <button class="adm-btn-clear" data-aba="Formação Presencial"><i class="fas fa-eraser"></i> Limpar</button>
+                            <button class="adm-btn-export" data-aba="Formação Presencial"><i class="fas fa-download"></i> Exportar CSV</button>
                         </div>
-                        <div class="adm-toolbar">
-                            <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-servicos" placeholder="Buscar por nome ou email..."></div>
-                            <div class="adm-filters">
-                                <select id="adm-filtro-regiao-servicos"><option value="">Todas as regiões</option></select>
-                                <select id="adm-filtro-status-servicos"><option value="">Todos os status</option></select>
-                                <button class="adm-btn-clear" data-aba="Serviços Personalizados"><i class="fas fa-eraser"></i> Limpar</button>
-                                <button class="adm-btn-export" data-aba="Serviços Personalizados"><i class="fas fa-download"></i> Exportar CSV</button>
-                            </div>
-                        </div>
-                        <div class="adm-resultados-info"><span id="adm-contador-servicos">0</span> resultados encontrados</div>
-                        <div class="adm-table-responsive"><table class="adm-table" id="adm-table-servicos"><thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Proposta Valor</th><th>Descrição</th><th>Status</th><th>Data Registo</th><th>Acções</th></tr></thead><tbody id="adm-table-body-servicos"><tr><td colspan="9" class="adm-text-center">Carregando...</td></tr></tbody></table></div>
-                        <div class="adm-paginacao" id="adm-paginacao-servicos"></div>
-                    </section>
+                    </div>
+                    <div class="adm-resultados-info"><span id="adm-contador-formacao">0</span> resultados encontrados</div>
+                    <div class="adm-table-responsive">
+                        <table class="adm-table" id="adm-table-formacao">
+                            <thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Região</th><th>Instituição</th><th>Turma</th><th>Valor</th><th>Status</th><th>Data Registo</th><th>Expiração</th><th>Ações</th></tr></thead>
+                            <tbody id="adm-table-body-formacao"><tr><td colspan="12" class="adm-text-center">Carregando...</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="adm-paginacao" id="adm-paginacao-formacao"></div>
+                </section>
 
-                    <section id="adm-secao-naopagos" class="adm-secao">
-                        <div class="adm-secao-header">
-                            <h2><i class="fas fa-user-slash"></i> Usuários Não Pagos</h2>
-                            <button class="adm-btn-refresh" data-aba="Usuários Não Pagos"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                <!-- ============================================================ -->
+                <!-- SECÇÃO 6: SERVIÇOS PERSONALIZADOS -->
+                <!-- ============================================================ -->
+                <section id="adm-secao-servicos" class="adm-secao">
+                    <div class="adm-secao-header">
+                        <h2><i class="fas fa-concierge-bell"></i> Serviços Personalizados</h2>
+                        <button class="adm-btn-refresh" data-aba="Serviços Personalizados"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="adm-toolbar">
+                        <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-servicos" placeholder="Buscar por nome ou email..."></div>
+                        <div class="adm-filters">
+                            <select id="adm-filtro-regiao-servicos"><option value="">Todas as regiões</option></select>
+                            <select id="adm-filtro-status-servicos"><option value="">Todos os status</option></select>
+                            <button class="adm-btn-clear" data-aba="Serviços Personalizados"><i class="fas fa-eraser"></i> Limpar</button>
+                            <button class="adm-btn-export" data-aba="Serviços Personalizados"><i class="fas fa-download"></i> Exportar CSV</button>
                         </div>
-                        <div class="adm-toolbar">
-                            <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-naopagos" placeholder="Buscar por nome ou email..."></div>
-                            <div class="adm-filters">
-                                <select id="adm-filtro-regiao-naopagos"><option value="">Todas as regiões</option></select>
-                                <button class="adm-btn-clear" data-aba="Usuários Não Pagos"><i class="fas fa-eraser"></i> Limpar</button>
-                                <button class="adm-btn-export" data-aba="Usuários Não Pagos"><i class="fas fa-download"></i> Exportar CSV</button>
-                            </div>
-                        </div>
-                        <div class="adm-resultados-info"><span id="adm-contador-naopagos">0</span> resultados encontrados</div>
-                        <div class="adm-table-responsive"><table class="adm-table" id="adm-table-naopagos"><thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Região</th><th>Data Registo</th><th>Expiração</th><th>Acções</th></tr></thead><tbody id="adm-table-body-naopagos"><tr><td colspan="8" class="adm-text-center">Carregando...</td></tr></tbody></table></div>
-                        <div class="adm-paginacao" id="adm-paginacao-naopagos"></div>
-                    </section>
+                    </div>
+                    <div class="adm-resultados-info"><span id="adm-contador-servicos">0</span> resultados encontrados</div>
+                    <div class="adm-table-responsive">
+                        <table class="adm-table" id="adm-table-servicos">
+                            <thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Proposta Valor</th><th>Descrição</th><th>Status</th><th>Data Registo</th><th>Ações</th></tr></thead>
+                            <tbody id="adm-table-body-servicos"><tr><td colspan="9" class="adm-text-center">Carregando...</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="adm-paginacao" id="adm-paginacao-servicos"></div>
+                </section>
 
-                    <section id="adm-secao-todos" class="adm-secao">
-                        <div class="adm-secao-header">
-                            <h2><i class="fas fa-users"></i> Todos os Utilizadores</h2>
-                            <button class="adm-btn-refresh" data-aba="todos"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                <!-- ============================================================ -->
+                <!-- SECÇÃO 7: USUÁRIOS NÃO PAGOS -->
+                <!-- ============================================================ -->
+                <section id="adm-secao-naopagos" class="adm-secao">
+                    <div class="adm-secao-header">
+                        <h2><i class="fas fa-user-slash"></i> Usuários Não Pagos</h2>
+                        <button class="adm-btn-refresh" data-aba="Usuários Não Pagos"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="adm-toolbar">
+                        <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-naopagos" placeholder="Buscar por nome ou email..."></div>
+                        <div class="adm-filters">
+                            <select id="adm-filtro-regiao-naopagos"><option value="">Todas as regiões</option></select>
+                            <button class="adm-btn-clear" data-aba="Usuários Não Pagos"><i class="fas fa-eraser"></i> Limpar</button>
+                            <button class="adm-btn-export" data-aba="Usuários Não Pagos"><i class="fas fa-download"></i> Exportar CSV</button>
                         </div>
-                        <div class="adm-toolbar">
-                            <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-todos" placeholder="Buscar por nome ou email..."></div>
-                            <div class="adm-filters">
-                                <select id="adm-filtro-tipo-todos"><option value="">Todos os tipos</option><option value="Parceiro">Parceiro</option><option value="Usuário da Plataforma">Usuário da Plataforma</option></select>
-                                <select id="adm-filtro-regiao-todos"><option value="">Todas as regiões</option></select>
-                                <select id="adm-filtro-status-todos"><option value="">Todos os status</option></select>
-                                <select id="adm-filtro-aba-todos"><option value="">Todas as planilhas</option></select>
-                                <button class="adm-btn-clear" data-aba="todos"><i class="fas fa-eraser"></i> Limpar</button>
-                                <button class="adm-btn-export" data-aba="todos"><i class="fas fa-download"></i> Exportar CSV</button>
-                            </div>
-                        </div>
-                        <div class="adm-resultados-info"><span id="adm-contador-todos">0</span> resultados encontrados</div>
-                        <div class="adm-table-responsive"><table class="adm-table" id="adm-table-todos"><thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Região</th><th>Tipo</th><th>Planilha</th><th>Status</th><th>Data Registo</th><th>Expiração</th><th>Acções</th></tr></thead><tbody id="adm-table-body-todos"><tr><td colspan="11" class="adm-text-center">Carregando...</td></tr></tbody></table></div>
-                        <div class="adm-paginacao" id="adm-paginacao-todos"></div>
-                    </section>
+                    </div>
+                    <div class="adm-resultados-info"><span id="adm-contador-naopagos">0</span> resultados encontrados</div>
+                    <div class="adm-table-responsive">
+                        <table class="adm-table" id="adm-table-naopagos">
+                            <thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Região</th><th>Data Registo</th><th>Expiração</th><th>Ações</th></tr></thead>
+                            <tbody id="adm-table-body-naopagos"><tr><td colspan="8" class="adm-text-center">Carregando...</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="adm-paginacao" id="adm-paginacao-naopagos"></div>
+                </section>
 
-                </div>
+                <!-- ============================================================ -->
+                <!-- SECÇÃO 8: TODOS OS UTILIZADORES -->
+                <!-- ============================================================ -->
+                <section id="adm-secao-todos" class="adm-secao">
+                    <div class="adm-secao-header">
+                        <h2><i class="fas fa-users"></i> Todos os Utilizadores</h2>
+                        <button class="adm-btn-refresh" data-aba="todos"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="adm-toolbar">
+                        <div class="adm-search-box"><i class="fas fa-search"></i><input type="text" id="adm-search-todos" placeholder="Buscar por nome ou email..."></div>
+                        <div class="adm-filters">
+                            <select id="adm-filtro-tipo-todos"><option value="">Todos os tipos</option><option value="Parceiro">Parceiro</option><option value="Usuário da Plataforma">Usuário da Plataforma</option></select>
+                            <select id="adm-filtro-regiao-todos"><option value="">Todas as regiões</option></select>
+                            <select id="adm-filtro-status-todos"><option value="">Todos os status</option></select>
+                            <select id="adm-filtro-aba-todos"><option value="">Todas as planilhas</option></select>
+                            <button class="adm-btn-clear" data-aba="todos"><i class="fas fa-eraser"></i> Limpar</button>
+                            <button class="adm-btn-export" data-aba="todos"><i class="fas fa-download"></i> Exportar CSV</button>
+                        </div>
+                    </div>
+                    <div class="adm-resultados-info"><span id="adm-contador-todos">0</span> resultados encontrados</div>
+                    <div class="adm-table-responsive">
+                        <table class="adm-table" id="adm-table-todos">
+                            <thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Telefone</th><th>Região</th><th>Tipo</th><th>Planilha</th><th>Status</th><th>Data Registo</th><th>Expiração</th><th>Ações</th></tr></thead>
+                            <tbody id="adm-table-body-todos"><tr><td colspan="11" class="adm-text-center">Carregando...</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="adm-paginacao" id="adm-paginacao-todos"></div>
+                </section>
+
             </div>
+        </div>
 
     </main>
     

@@ -1,9 +1,8 @@
 // ============================================================
-// TECA CAPITAL EDTECH - FRONTEND JAVASCRIPT (V6)
+// TECA CAPITAL EDTECH - FRONTEND JAVASCRIPT
 // ============================================================
 // Plataforma: Edtech Angolana
-// Comunicação: Google Apps Script + Google Sheets
-// Versão: Totalmente Compatível com Apps Script
+// Versão: 1.0 
 // ============================================================
 
 // Configuração Global
@@ -11,9 +10,6 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzeahMxXzXIDou1
 const WHATSAPP_NUMBER = '244974235284';
 
 // Mapeamento de tipos de cadastro para tipos de usuário no backend
-// IMPORTANTE: O Apps Script espera receber o tipoCadastro exato conforme a lista abaixo:
-// 'Parceiro', 'Simulador - Biblioteca', 'Curso Online', 'Formação Presencial', 'Serviços Personalizados', 'Usuário Não Pago'
-// O tipoUsuario é derivado automaticamente pelo backend
 const TIPO_USUARIO_MAP = {
     'Parceiro': 'Parceiro',
     'Simulador - Biblioteca': 'Usuário da Plataforma',
@@ -140,6 +136,29 @@ class TecaForm {
                 }
             });
         });
+
+        // Toggle dos termos de uso
+        const termosToggle = this.dynamicForm.querySelector('#teca-termos-toggle');
+        if (termosToggle) {
+            termosToggle.addEventListener('click', () => {
+                const conteudo = this.dynamicForm.querySelector('#teca-termos-conteudo');
+                const checkboxArea = this.dynamicForm.querySelector('#teca-termos-checkbox-area');
+                const chevron = termosToggle.querySelector('.teca-termos-chevron');
+                const expandido = conteudo && conteudo.style.display !== 'none';
+
+                if (expandido) {
+                    if (conteudo) conteudo.style.display = 'none';
+                    if (checkboxArea) checkboxArea.style.display = 'none';
+                    termosToggle.setAttribute('aria-expanded', 'false');
+                    if (chevron) chevron.style.transform = 'rotate(0deg)';
+                } else {
+                    if (conteudo) conteudo.style.display = 'block';
+                    if (checkboxArea) checkboxArea.style.display = 'block';
+                    termosToggle.setAttribute('aria-expanded', 'true');
+                    if (chevron) chevron.style.transform = 'rotate(180deg)';
+                }
+            });
+        }
 
         // Evento de checkbox de termos
         const termosCheckbox = this.dynamicForm.querySelector('#termos-checkbox');
@@ -276,7 +295,6 @@ class TecaForm {
                 </div>
             `;
         } else {
-            // Parceiro e Usuário da Plataforma - apenas Email e Senha
             return `
                 <div class="teca-form-group">
                     <label><i class="fas fa-envelope"></i> Email</label>
@@ -372,17 +390,19 @@ class TecaForm {
     renderTermosUso() {
         return `
             <div class="teca-termos-container">
-                <div class="teca-termos-header">
+                <button type="button" class="teca-termos-toggle" id="teca-termos-toggle" aria-expanded="false">
                     <i class="fas fa-file-contract"></i>
-                    <h4>Termos de Uso e Proteção de Dados</h4>
-                </div>
-                <div class="teca-termos-conteudo">
-                    <p>Ao se cadastrar na plataforma Teca Capital, o usuário declara que leu e concorda com os seguintes termos:</p>
+                    <span>Termos de Uso e Protecção de Dados</span>
+                    <i class="fas fa-chevron-down teca-termos-chevron"></i>
+                </button>
+
+                <div class="teca-termos-conteudo" id="teca-termos-conteudo" style="display: none;">
+                    <p>Ao se cadastrar na plataforma Teca Capital, o utilizador declara que leu e concorda com os seguintes termos:</p>
                     <ul>
-                        <li>Os dados pessoais fornecidos são protegidos nos termos da <strong>Lei n.º 22/11 (Lei da Proteção de Dados Pessoais de Angola)</strong>.</li>
-                        <li>A Teca Capital compromete-se a garantir a segurança, confidencialidade e integridade dos dados dos usuários.</li>
-                        <li>Nenhuma informação será partilhada com terceiros sem consentimento do usuário.</li>
-                        <li>Os dados não serão utilizados para fins ilícitos ou que possam prejudicar o usuário.</li>
+                        <li>Os dados pessoais fornecidos são protegidos nos termos da <strong>Lei n.º 22/11 (Lei da Protecção de Dados Pessoais de Angola)</strong>.</li>
+                        <li>A Teca Capital compromete-se a garantir a segurança, confidencialidade e integridade dos dados dos utilizadores.</li>
+                        <li>Nenhuma informação será partilhada com terceiros sem consentimento do utilizador.</li>
+                        <li>Os dados não serão utilizados para fins ilícitos ou que possam prejudicar o utilizador.</li>
                         <li>Os dados poderão ser utilizados para fins comerciais legítimos, incluindo:
                             <ul>
                                 <li>Personalização de serviços</li>
@@ -390,11 +410,12 @@ class TecaForm {
                                 <li>Contacto via e-mail, telefone ou redes sociais</li>
                             </ul>
                         </li>
-                        <li>O usuário autoriza o contacto direto e a possível inclusão em grupos ou comunidades oficiais da Teca Capital.</li>
-                        <li>O usuário pode, a qualquer momento, solicitar a alteração ou remoção dos seus dados.</li>
+                        <li>O utilizador autoriza o contacto directo e a possível inclusão em grupos ou comunidades oficiais da Teca Capital.</li>
+                        <li>O utilizador pode, a qualquer momento, solicitar a alteração ou remoção dos seus dados.</li>
                     </ul>
                 </div>
-                <div class="teca-termos-checkbox">
+
+                <div class="teca-termos-checkbox" id="teca-termos-checkbox-area" style="display: none;">
                     <label>
                         <input type="checkbox" id="termos-checkbox" required>
                         <span><i class="fas fa-check-circle"></i> Li e concordo com os Termos de Uso e Política de Privacidade</span>
@@ -436,7 +457,6 @@ class TecaForm {
     }
 
     renderBaseFields(mostrarDataSexo, mostrarTelefone) {
-        // Regra de validação do nome: apenas letras A-Z, sem limite de tamanho
         const nomePattern = "^[A-Za-zÀ-ÿ ]+$";
         
         return `
@@ -670,7 +690,6 @@ class TecaForm {
     }
 
     renderServicosPersonalizadosFields() {
-        // Serviços Personalizados: Nome com limite de 5-50 caracteres, apenas letras
         return `
             <div class="teca-form-group full-width">
                 <label><i class="fas fa-id-card"></i> Tipo de Cadastro</label>
@@ -879,13 +898,11 @@ class TecaForm {
     // VALIDAÇÕES
     // ============================================================
     validarNome(nome, tipoCadastro) {
-        // Serviços Personalizados: 5-50 caracteres, apenas letras
         if (tipoCadastro === 'Serviços Personalizados') {
             const regex = /^[A-Za-zÀ-ÿ\s]{5,50}$/;
             return regex.test(nome);
         }
         
-        // Demais tipos: apenas letras, sem limite de tamanho
         const regex = /^[A-Za-zÀ-ÿ\s]+$/;
         return regex.test(nome);
     }
@@ -917,17 +934,33 @@ class TecaForm {
             .replace(/[;{}]/g, '');
     }
 
-    gerarSenhaAleatoria() {
-        const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$';
-        let senha = '';
-        for (let i = 0; i < 10; i++) {
-            senha += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
-        }
-        return senha;
+    // NOVO MÉTODO: Geração de senha com algoritmo baseado no nome
+    gerarSenha(nome) {
+        // Extrair letras do nome (apenas letras, sem espaços ou acentos)
+        const letrasNome = (nome || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^A-Za-z]/g, '')
+            .toUpperCase();
+
+        const letra1 = letrasNome[0] || 'T';
+        const letra2 = letrasNome[1] || 'C';
+
+        // Dia actual com 2 dígitos
+        const dia = String(new Date().getDate()).padStart(2, '0');
+
+        // Letra aleatória (sem I, O, Q para evitar confusão visual)
+        const letrasAleatorias = 'ABCDEFGHJKLMNPRSTUVWXYZ';
+        const letraAleat = letrasAleatorias[Math.floor(Math.random() * letrasAleatorias.length)];
+
+        // Número aleatório 1–9
+        const numAleat = String(Math.floor(Math.random() * 9) + 1);
+
+        return `${letra1}${letra2}${dia}${letraAleat}${numAleat}`;
     }
 
     // ============================================================
-    // PROCESSAMENTO DE DADOS - CORRIGIDO
+    // PROCESSAMENTO DE DADOS
     // ============================================================
     processFormData(formData) {
         const data = {};
@@ -936,27 +969,18 @@ class TecaForm {
             data[key] = this.sanitizarInput(value);
         }
 
-        // O tipoCadastro é o que o usuário selecionou (ex: 'Simulador - Biblioteca')
-        // Este é o valor que o Apps Script espera no campo 'tipoUsuario'
         const tipoCadastro = this.currentUserType;
-        
-        // IMPORTANTE: O Apps Script espera receber o tipoCadastro no campo 'tipoUsuario'
-        // O backend faz o mapeamento internamente para 'Parceiro' ou 'Usuário da Plataforma'
         data.tipoUsuario = tipoCadastro;
-        
-        // Guardar também o tipoCadastro original para referência
         data.tipoCadastro = tipoCadastro;
         
-        // Gerar senha automaticamente para todos os tipos exceto Serviços Personalizados
         const tiposComSenhaAutomatica = ['Parceiro', 'Simulador - Biblioteca', 'Curso Online', 'Formação Presencial', 'Usuário Não Pago'];
         
         if (tiposComSenhaAutomatica.includes(tipoCadastro)) {
-            const senhaGerada = this.gerarSenhaAleatoria();
+            const senhaGerada = this.gerarSenha(data.nome || '');
             data.senha = senhaGerada;
             data.senhaGerada = senhaGerada;
         }
         
-        // Tratamento para Serviços Personalizados
         if (tipoCadastro === 'Serviços Personalizados') {
             const tipoPessoa = this.dynamicForm.querySelector('.teca-toggle-btn.active')?.dataset.type || 'singular';
             const nomeOriginal = data.nome;
@@ -968,7 +992,6 @@ class TecaForm {
             }
         }
 
-        // Tratamento para Formação Presencial
         if (tipoCadastro === 'Formação Presencial') {
             const tipo = this.dynamicForm.querySelector('#toggle-instituicao')?.classList.contains('active') ? 'instituicao' : 'individual';
             
@@ -989,7 +1012,6 @@ class TecaForm {
         if (!data.pais) data.pais = 'Angola';
         if (!data.comprovativoEnviado) data.comprovativoEnviado = 'Não';
         
-        // Registrar consentimento dos termos
         const termosCheckbox = this.dynamicForm.querySelector('#termos-checkbox');
         data.termosAceite = termosCheckbox ? termosCheckbox.checked : false;
         data.dataConsentimento = new Date().toISOString();
@@ -1050,6 +1072,9 @@ class TecaForm {
         }
     }
 
+    // ============================================================
+    // LOGIN CORRIGIDO
+    // ============================================================
     async fazerLogin(dados) {
         const dadosLogin = { acao: 'login', senha: dados.senha };
 
@@ -1057,6 +1082,13 @@ class TecaForm {
             dadosLogin.id = parseInt(dados.id);
             dadosLogin.email = dados.email;
             dadosLogin.tipo = 'Administrador';
+        } else if (this.currentUserType === 'Parceiro') {
+            dadosLogin.email = dados.email;
+            dadosLogin.tipo = 'Parceiro';
+            
+            if (!dadosLogin.email) {
+                return { sucesso: false, mensagem: 'Email é obrigatório para login' };
+            }
         } else {
             dadosLogin.email = dados.email;
             
@@ -1076,19 +1108,28 @@ class TecaForm {
             this.exibirMensagem('sucesso', `Bem-vindo, ${dadosUsuario.nome}!`);
             
             setTimeout(() => this.redirecionarPorTipo(dadosUsuario.tipo), 1500);
-        } else if (resultado.status === 'expirado') {
-            this.exibirMensagem('erro', 'Acesso expirado. Contacte o administrador.');
-        } else if (resultado.status === 'removido') {
-            this.exibirMensagem('erro', 'Acesso revogado. Contacte o administrador.');
         } else {
-            this.exibirMensagem('erro', resultado.mensagem || 'Credenciais inválidas');
+            // Mensagem específica para parceiros
+            if (this.currentUserType === 'Parceiro') {
+                this.exibirMensagem('aviso', 
+                    'Parceiros: a senha de acesso é fornecida pelo administrador após aprovação do cadastro. Se ainda não recebeu as credenciais, contacte a Teca Capital.'
+                );
+            } else if (resultado.status === 'expirado') {
+                this.exibirMensagem('erro', 'Acesso expirado. Contacte o administrador.');
+            } else if (resultado.status === 'removido') {
+                this.exibirMensagem('erro', 'Acesso revogado. Contacte o administrador.');
+            } else {
+                this.exibirMensagem('erro', resultado.mensagem || 'Credenciais inválidas');
+            }
         }
 
         return resultado;
     }
 
+    // ============================================================
+    // CADASTRO CORRIGIDO
+    // ============================================================
     async cadastrarUtilizador(dados) {
-        // Validações prévias
         if (!this.validarNome(dados.nome, dados.tipoCadastro)) {
             if (dados.tipoCadastro === 'Serviços Personalizados') {
                 return { sucesso: false, mensagem: 'Nome deve ter entre 5 e 50 caracteres, apenas letras (A-Z)' };
@@ -1105,25 +1146,20 @@ class TecaForm {
             return { sucesso: false, mensagem: 'Data de nascimento inválida' };
         }
         
-        // Validar termos de uso
         if (!dados.termosAceite) {
             return { sucesso: false, mensagem: 'Você deve concordar com os Termos de Uso para continuar.' };
         }
 
-        // Validar comprovativo obrigatório para tipos específicos
         const validacaoComprovativo = this.validarComprovativoObrigatorio(dados.tipoCadastro, dados.comprovativoEnviado);
         if (!validacaoComprovativo.valido) {
             return { sucesso: false, mensagem: validacaoComprovativo.mensagem };
         }
 
-        // Verificar email
         const verificacao = await this.verificarEmail(dados.email);
         if (verificacao.existe) {
             return { sucesso: false, mensagem: 'Este email já está cadastrado no sistema' };
         }
 
-        // Preparar dados para envio - CORRIGIDO
-        // O campo 'tipoUsuario' recebe exatamente o tipoCadastro que o Apps Script espera
         const dadosParaEnviar = {
             acao: 'cadastrar',
             nome: dados.nome,
@@ -1133,7 +1169,7 @@ class TecaForm {
             regiao: dados.regiao || '',
             email: dados.email,
             telefone: dados.telefone || '',
-            tipoUsuario: dados.tipoUsuario, // Envia exatamente o tipo selecionado (Parceiro, Simulador - Biblioteca, etc.)
+            tipoUsuario: dados.tipoUsuario,
             senha: dados.senha || '',
             valorPago: dados.valorPago || '',
             comprovativo: dados.comprovativoEnviado || 'Não',
@@ -1149,22 +1185,30 @@ class TecaForm {
         const resultado = await this.chamarBackend(dadosParaEnviar);
 
         if (resultado.status === 'success' || resultado.sucesso) {
-            // Mensagem específica por tipo
+            const tiposComSenha = ['Simulador - Biblioteca', 'Curso Online', 'Formação Presencial', 'Usuário Não Pago'];
+            
             if (this.currentUserType === 'Parceiro') {
                 this.exibirMensagem('sucesso', 'A sua senha foi gerada com sucesso. Para ter acesso aos seus credenciais, aguarde o contacto do administrador da Teca Capital, que enviará as informações através dos canais oficiais.');
-            } else if (['Simulador - Biblioteca', 'Curso Online', 'Formação Presencial', 'Usuário Não Pago'].includes(this.currentUserType)) {
+                
+                // Reset após 3 segundos para parceiro
+                setTimeout(() => {
+                    this.currentUserType = null;
+                    this.renderForm();
+                    this.attachFormEvents();
+                }, 3000);
+            } else if (tiposComSenha.includes(this.currentUserType)) {
                 if (dados.senhaGerada) {
                     this.exibirSenhaTemporaria(dados.senhaGerada, dados.email);
                 }
             } else {
                 this.exibirMensagem('sucesso', 'Cadastro realizado com sucesso!');
+                
+                setTimeout(() => {
+                    this.currentUserType = null;
+                    this.renderForm();
+                    this.attachFormEvents();
+                }, 3000);
             }
-            
-            setTimeout(() => {
-                this.currentUserType = null;
-                this.renderForm();
-                this.attachFormEvents();
-            }, 3000);
         } else {
             this.exibirMensagem('erro', resultado.mensagem || 'Erro ao cadastrar');
         }
@@ -1173,40 +1217,117 @@ class TecaForm {
     }
 
     // ============================================================
-    // FUNÇÃO DE SENHA TEMPORÁRIA (60 segundos)
+    // SENHA TEMPORÁRIA MELHORADA (com botão copiar e barra de progresso)
     // ============================================================
     exibirSenhaTemporaria(senha, email) {
+        // Limpar qualquer senha temporária anterior
+        this.dynamicForm.querySelector('.teca-senha-temporaria')?.remove();
+
         let tempoRestante = 60;
         const containerSenha = document.createElement('div');
         containerSenha.className = 'teca-senha-temporaria';
         containerSenha.innerHTML = `
-            <h4><i class="fas fa-key"></i> Senha de Acesso Gerada</h4>
-            <p>Anote esta senha imediatamente:</p>
-            <div class="teca-senha-valor">${senha}</div>
-            <p><i class="fas fa-envelope"></i> Email: ${email}</p>
-            <div class="teca-timer">
-                <i class="fas fa-hourglass-half"></i> 
-                Aponte a tua senha antes dos <span id="teca-timer-count">60</span> segundos acabar, porque vai desaparecer.
+            <div class="teca-senha-header">
+                <i class="fas fa-key"></i>
+                <h4>Senha de Acesso Gerada</h4>
+            </div>
+
+            <div class="teca-senha-seguranca">
+                <i class="fas fa-shield-alt"></i>
+                <p>Por segurança, as senhas são geradas automaticamente para proteger os nossos servidores contra acessos maliciosos. Guarda esta senha — é a única forma de aceder à plataforma.</p>
+            </div>
+
+            <p class="teca-senha-label">A tua senha de acesso:</p>
+            <div class="teca-senha-valor" id="teca-senha-display">${senha}</div>
+
+            <button type="button" class="teca-copiar-btn" id="teca-copiar-senha">
+                <i class="fas fa-copy"></i>
+                <span>Copiar Senha</span>
+            </button>
+
+            <p class="teca-senha-email"><i class="fas fa-envelope"></i> Email: <strong>${email}</strong></p>
+
+            <div class="teca-timer-wrapper">
+                <div class="teca-timer-barra">
+                    <div class="teca-timer-progresso" id="teca-timer-progresso"></div>
+                </div>
+                <div class="teca-timer">
+                    <i class="fas fa-hourglass-half"></i>
+                    Esta senha desaparece em <span id="teca-timer-count">60</span>s. Anota-a antes que desapareça.
+                </div>
             </div>
         `;
-        
+
+        // Inserir DEPOIS do formulário
         const formContainer = this.dynamicForm.querySelector('form');
         if (formContainer) {
             formContainer.insertAdjacentElement('afterend', containerSenha);
         } else {
             this.dynamicForm.appendChild(containerSenha);
         }
-        
-        const timerElement = containerSenha.querySelector('#teca-timer-count');
-        
+
+        // Scroll suave para a senha
+        containerSenha.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Botão copiar
+        const btnCopiar = containerSenha.querySelector('#teca-copiar-senha');
+        if (btnCopiar) {
+            btnCopiar.addEventListener('click', () => {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(senha).then(() => {
+                        btnCopiar.innerHTML = '<i class="fas fa-check"></i><span>Copiada!</span>';
+                        btnCopiar.classList.add('copiada');
+                        setTimeout(() => {
+                            btnCopiar.innerHTML = '<i class="fas fa-copy"></i><span>Copiar Senha</span>';
+                            btnCopiar.classList.remove('copiada');
+                        }, 2000);
+                    });
+                } else {
+                    // Fallback para browsers sem clipboard API
+                    const el = document.createElement('textarea');
+                    el.value = senha;
+                    el.style.position = 'fixed';
+                    el.style.opacity = '0';
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                    btnCopiar.innerHTML = '<i class="fas fa-check"></i><span>Copiada!</span>';
+                    btnCopiar.classList.add('copiada');
+                    setTimeout(() => {
+                        btnCopiar.innerHTML = '<i class="fas fa-copy"></i><span>Copiar Senha</span>';
+                        btnCopiar.classList.remove('copiada');
+                    }, 2000);
+                }
+            });
+        }
+
+        // Timer com barra de progresso
+        const timerEl = containerSenha.querySelector('#teca-timer-count');
+        const progressoEl = containerSenha.querySelector('#teca-timer-progresso');
+
         const interval = setInterval(() => {
             tempoRestante--;
-            if (timerElement) timerElement.textContent = tempoRestante;
-            
+            if (timerEl) timerEl.textContent = tempoRestante;
+            if (progressoEl) {
+                const pct = (tempoRestante / 60) * 100;
+                progressoEl.style.width = pct + '%';
+                progressoEl.style.background = tempoRestante <= 15
+                    ? 'var(--red)'
+                    : 'var(--gold)';
+            }
+
             if (tempoRestante <= 0) {
                 clearInterval(interval);
                 containerSenha.remove();
-                this.exibirMensagem('aviso', 'Se não conseguiu apontar a senha gerada, solicita por ela através dos nossos contactos (WhatsApp, telefone ou redes sociais) para recuperar o acesso.');
+                this.exibirMensagem('aviso', 'Se não conseguiu anotar a senha, solicita-a através dos nossos contactos (WhatsApp, telefone ou redes sociais) para recuperar o acesso.');
+
+                // Reset do formulário após os 60 segundos
+                setTimeout(() => {
+                    this.currentUserType = null;
+                    this.renderForm();
+                    this.attachFormEvents();
+                }, 4000);
             }
         }, 1000);
     }
@@ -1332,5 +1453,3 @@ class TecaForm {
 document.addEventListener('DOMContentLoaded', () => {
     new TecaForm();
 });
-
-
